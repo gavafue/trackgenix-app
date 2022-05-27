@@ -4,22 +4,47 @@ import styles from './employees.module.css';
 function Employees() {
   const [employees, saveEmployees] = useState([]);
 
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users`)
-      .then((response) => response.json())
-      .then((response) => {
-        saveEmployees(response);
-      });
+  useEffect(async () => {
+    try {
+      const URL = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${URL}/employees`);
+      const data = await response.json();
+      saveEmployees(data.data);
+      console.log(data.data);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <div>
-        {employees.map((employee) => {
-          return <div key={employee.id}>{employee.name}</div>;
-        })}
-      </div>
+      <table className={styles.redTable}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Active</th>
+            <th>E</th>
+            <th>D</th>
+          </tr>
+        </thead>
+        <tbody>
+          {employees.map((employee) => {
+            return (
+              <tr key={employee._id} id={employee._id}>
+                <td>{employee.firstName}</td>
+                <td>{employee.lastName}</td>
+                <td>{employee.email}</td>
+                <td>{JSON.stringify(employee.active)}</td>
+                <td>E</td>
+                <td>X</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </section>
   );
 }
