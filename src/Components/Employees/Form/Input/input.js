@@ -8,7 +8,7 @@ const Input = (props) => {
     return string[0].toUpperCase() + string.slice(1);
   };
   return (
-    <span>
+    <div>
       <label>{title(props.name)}</label>
       <input
         className={styles.formInput}
@@ -19,7 +19,7 @@ const Input = (props) => {
         onChange={props.onChange}
         required={props.required}
       ></input>
-    </span>
+    </div>
   );
 };
 

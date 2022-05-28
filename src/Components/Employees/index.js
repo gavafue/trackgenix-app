@@ -19,6 +19,9 @@ function Employees() {
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
+      <a href="/employees/form" className={styles.button}>
+        Add +
+      </a>
       <table className={styles.redTable}>
         <thead>
           <tr>
