@@ -1,6 +1,49 @@
 .container {
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.container table{
+  border: 2px solid #a40808;
+  background-color: #eee7db;
+  width: 50%;
+  text-align: center;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.container td,
+.container th {
+  border: 1px solid #aaaaaa;
+  padding: 3px 2px;
+}
+
+.container tbody td {
+  font-size: 13px;
+}
+
+.container tr:nth-child(even) {
+  background: #f5c8bf;
+}
+
+.container thead {
+  background: #ea3354;
+}
+
+.container thead th {
+  font-size: 19px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  border-left: 2px solid #a40808;
+}
+
+.container thead th:first-child {
+  border-left: none;
+}
+
+button #addAdmin {
+  display: flex;
 }
