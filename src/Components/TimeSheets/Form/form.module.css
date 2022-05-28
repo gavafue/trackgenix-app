@@ -1,0 +1,29 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input, select {
+  width: 10%;
+  margin: 0.5%;
+}
+
+.workInput{
+  height: 50px;
+}
+
+label{
+  font-size: 15px;
+}
+
+.submitButton{
+  margin:2%;
+  width: 8%;
+  padding: 0.3%;
+  background-color: #EA3354;
+  color:antiquewhite;
+  border-radius: 10px;
+  border: 1px solid #000;
+}

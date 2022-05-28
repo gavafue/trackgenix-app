@@ -4,7 +4,7 @@ import styles from './time-sheets.module.css';
 const TimeSheets = () => {
   const [timeSheets, saveTimeSheets] = useState([]);
   console.log(timeSheets);
-  const url = `${process.env.REACT_APP_API_URL}timesheets`;
+  const url = `${process.env.REACT_APP_API_URL}/timesheets`;
   useEffect(async () => {
     try {
       const response = await fetch(url);
@@ -17,7 +17,7 @@ const TimeSheets = () => {
 
   return (
     <section className={styles.container}>
-      <h2>TimeSheets</h2>
+      <h2>Timesheets</h2>
       <table className={styles.table}>
         <thead>
           <th>Project</th>
@@ -46,6 +46,9 @@ const TimeSheets = () => {
           })}
         </tbody>
       </table>
+      <button className={styles.addBtn}>
+        <a href="/time-sheets/form">Add New Timesheet</a>
+      </button>
     </section>
   );
 };
