@@ -26,8 +26,8 @@ function Employees() {
             <th>Last Name</th>
             <th>Email</th>
             <th>Active</th>
-            <th>E</th>
-            <th>D</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -38,8 +38,12 @@ function Employees() {
                 <td>{employee.lastName}</td>
                 <td>{employee.email}</td>
                 <td>{JSON.stringify(employee.active)}</td>
-                <td>E</td>
-                <td>X</td>
+                <td>
+                  <button>edit</button>
+                </td>
+                <td>
+                  <button>X</button>
+                </td>
               </tr>
             );
           })}

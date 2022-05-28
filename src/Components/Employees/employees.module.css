@@ -6,11 +6,12 @@
   align-items: center;
 }
 table.redTable {
-  border: 2px solid #A40808;
+  border: 2px solid #ea3354;
   background-color: #EEE7DB;
   width: 80%;
   text-align: center;
   border-collapse: collapse;
+  margin-bottom:50px;
 }
 table.redTable td, table.redTable th {
   border: 1px solid #AAAAAA;
@@ -30,7 +31,7 @@ table.redTable thead th {
   font-weight: bold;
   color: #FFFFFF;
   text-align: center;
-  border-left: 2px solid #A40808;
+  border-left: 2px solid #ea3354;
 }
 table.redTable thead th:first-child {
   border-left: none;
@@ -45,7 +46,7 @@ table.redTable tfoot .links {
 table.redTable tfoot .links a{
   display: inline-block;
   background: #FFFFFF;
-  color: #A40808;
+  color:  #ea3354;
   padding: 2px 8px;
   border-radius: 5px;
 }
