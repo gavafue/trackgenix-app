@@ -14,6 +14,11 @@ function Admins() {
       console.error(error);
     }
   }, []);
+
+  const OnClickForm = () => {
+    window.location.href = '/admins/form';
+  };
+
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
@@ -40,20 +45,20 @@ function Admins() {
                 <td>{admin.email}</td>
                 <td>{JSON.stringify(admin.active)}</td>
                 <td>
-                  <button> ... </button>
+                  <input type="button" value=". . ." />
                 </td>
                 <td>
-                  <button>Edit</button>
+                  <input type="button" value="Edit" onClick={OnClickForm} />
                 </td>
                 <td>
-                  <button>Delete</button>
+                  <input type="button" value="Delete" />
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-      <button id="addAdmin">Add Admin</button>
+      <input type="button" value="Add Admin" onClick={OnClickForm} />
     </section>
   );
 }
