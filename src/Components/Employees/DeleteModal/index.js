@@ -1,8 +1,9 @@
 import styles from './deletemodal.module.css';
 import { useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
+
 const DeleteModal = (props) => {
-  var modalOfFeedback = document.getElementById('myModal');
+  let modalOfFeedback = document.getElementById('myModal');
   const changeVisibilityFeedbackModal = (string) => {
     modalOfFeedback.style.display = string;
   };

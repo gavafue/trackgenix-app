@@ -14,7 +14,7 @@ const Form = () => {
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  var modalOfFeedback = document.getElementById('myModal');
+  let modalOfFeedback = document.getElementById('myModal');
   const changeVisibilityFeedbackModal = (string) => {
     modalOfFeedback.style.display = string;
   };
@@ -174,7 +174,7 @@ const Form = () => {
           value={countryValue}
           onChange={onChangeCountryValue}
           required
-        />{' '}
+        />
         <Input
           name="city"
           type="text"
