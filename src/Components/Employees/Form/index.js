@@ -3,7 +3,6 @@ import styles from './form.module.css';
 import Input from './Input/input.js';
 
 const Form = () => {
-  // const [employeeFound, setEmployeeFound] = useState('');
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -16,6 +15,7 @@ const Form = () => {
   const [birthdayValue, setBirthdayValue] = useState('');
 
   let title = 'Add an employee';
+  let idInput = '';
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
   const paramEmployeeId = params.get('employeeId');
@@ -71,14 +71,14 @@ const Form = () => {
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    fetch(options.url, options).then((response) => {
+    fetch(options.url, options).then(async (response) => {
+      const res = await response.json();
       if (response.status !== 201) {
-        return response.json().then(({ message }) => {
-          throw new Error(message);
-        });
+        throw new Error(res.message);
       }
-      return response.json();
+      alert(res.message);
     });
+    window.location = '/employees';
   };
 
   if (paramEmployeeId) {
@@ -104,11 +104,13 @@ const Form = () => {
     }, []);
     options.method = 'PUT';
     options.url = `${process.env.REACT_APP_API_URL}/employees/${paramEmployeeId}`;
+    idInput = <Input name="employee-id" type="text" disabled value={paramEmployeeId} />;
   }
   return (
     <div className={styles.container}>
       <h1>{title}</h1>
       <form onSubmit={onSubmit}>
+        {idInput}
         <Input
           name="first-name"
           type="text"
@@ -189,7 +191,9 @@ const Form = () => {
           onChange={onChangePhotoValue}
           required
         />
-        <button type="submit">Enviar</button>
+        <button type="submit" className={styles.button}>
+          Enviar
+        </button>
       </form>
     </div>
   );

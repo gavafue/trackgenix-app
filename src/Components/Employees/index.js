@@ -3,6 +3,17 @@ import styles from './employees.module.css';
 const editEmployee = (string) => {
   window.location = `/employees/form?employeeId=${string}`;
 };
+const deleteEmployee = (string) => {
+  const options = {
+    method: 'DELETE',
+    url: `${process.env.REACT_APP_API_URL}/employees/${string}`
+  };
+  fetch(options.url, options).then(async (response) => {
+    const res = await response.json();
+    alert(res.message);
+  });
+  window.location.reload;
+};
 
 function Employees() {
   const [employees, saveEmployees] = useState([]);
@@ -23,7 +34,7 @@ function Employees() {
     <section className={styles.container}>
       <h2>Employees</h2>
       <a href="/employees/form" className={styles.button}>
-        Add +
+        Add new employee +
       </a>
       <table className={styles.redTable}>
         <thead>
@@ -48,7 +59,7 @@ function Employees() {
                   <button onClick={() => editEmployee(employee._id)}>edit</button>
                 </td>
                 <td>
-                  <button>X</button>
+                  <button onClick={() => deleteEmployee(employee._id)}>X</button>
                 </td>
               </tr>
             );

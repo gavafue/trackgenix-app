@@ -18,6 +18,7 @@ const Input = (props) => {
         value={props.value}
         onChange={props.onChange}
         required={props.required}
+        disabled={props.disabled}
       ></input>
     </div>
   );
