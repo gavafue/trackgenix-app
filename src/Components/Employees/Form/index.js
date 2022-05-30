@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './form.module.css';
 import Input from './Input/input.js';
-
+import FeedbackModal from '../FeedbackModal';
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
@@ -13,12 +13,17 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
-
+  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
+  var modalOfFeedback = document.getElementById('myModal');
+  const changeVisibilityFeedbackModal = (string) => {
+    modalOfFeedback.style.display = string;
+  };
   let title = 'Add an employee';
   let idInput = '';
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
   const paramEmployeeId = params.get('employeeId');
+
   const onChangeNameValue = (e) => {
     setNameValue(e.target.value);
   };
@@ -73,12 +78,15 @@ const Form = () => {
     event.preventDefault();
     fetch(options.url, options).then(async (response) => {
       const res = await response.json();
-      if (response.status !== 201) {
-        throw new Error(res.message);
+      if (response.status == 201 || response.status == 200) {
+        setContentFeedbackModal({ title: 'Request done!', description: res.message });
+        setTimeout(() => {
+          window.location = '/employees';
+        }, 3000);
+      } else {
+        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
       }
-      alert(res.message);
     });
-    window.location = '/employees';
   };
 
   if (paramEmployeeId) {
@@ -191,10 +199,18 @@ const Form = () => {
           onChange={onChangePhotoValue}
           required
         />
-        <button type="submit" className={styles.button}>
+        <button
+          type="submit"
+          className={styles.button}
+          onClick={() => changeVisibilityFeedbackModal('block')}
+        >
           Enviar
         </button>
       </form>
+      <FeedbackModal
+        feedbackTitle={contentFeedbackModal.title}
+        messageContent={contentFeedbackModal.description}
+      />
     </div>
   );
 };
