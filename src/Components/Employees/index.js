@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './employees.module.css';
+const editEmployee = (string) => {
+  window.location = `/employees/form?employeeId=${string}`;
+};
 
 function Employees() {
   const [employees, saveEmployees] = useState([]);
@@ -42,7 +45,7 @@ function Employees() {
                 <td>{employee.email}</td>
                 <td>{JSON.stringify(employee.active)}</td>
                 <td>
-                  <button>edit</button>
+                  <button onClick={() => editEmployee(employee._id)}>edit</button>
                 </td>
                 <td>
                   <button>X</button>
