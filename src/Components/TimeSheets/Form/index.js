@@ -1,5 +1,6 @@
 import styles from './form.module.css';
 import { useEffect, useState } from 'react';
+import FeedbackModal from '../FeedbackModal';
 
 const Form = () => {
   const [projects, setProjects] = useState([]);
@@ -59,47 +60,98 @@ const Form = () => {
     setWorkDescriptionValue(event.target.value);
     console.log(event.target.value);
   };
-  const onSumbmit = (event) => {
-    event.preventDefault();
-    // const options = {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     project: projectValue,
-    //     employee: employeeValue,
-    //     weekSprint: weekSprintValue,
-    //     date: dateValue,
-    //     hoursWorked: hoursWorkedValue,
-    //     hoursProject: projectHoursValue,
-    //     workDescrption: workDescriptionValue
-    //   })
-    // };
-    // fetch(`${URL}/timesheets`, options).then((response) => {
-    //   if (response.status !== 201) {
-    //     return response.json().then(({ message }) => {
-    //       throw new Error(message);
-    //     });
-    //   }
-    //   return response.json();
-    // });
+  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
+  let modalOfFeedback = document.getElementById('myModal');
+  const changeVisibilityFeedbackModal = (string) => {
+    modalOfFeedback.style.display = string;
   };
+  let title = 'Add Timesheet';
+  const querystring = window.location.search;
+  const params = new URLSearchParams(querystring);
+  const timesheetId = params.get('timesheetId');
+  const options = {
+    method: 'POST',
+    url: `${process.env.REACT_APP_API_URL}/timesheets`,
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      project: projectValue,
+      employee: employeeValue,
+      weekSprint: weekSprintValue,
+      date: dateValue,
+      hoursWorked: hoursWorkedValue,
+      hoursProject: projectHoursValue,
+      workDescription: workDescriptionValue
+    })
+  };
+  const onSubmit = (event) => {
+    event.preventDefault();
+    fetch(options.url, options).then(async (response) => {
+      const res = await response.json();
+      if (response.status == 201 || response.status == 200) {
+        setContentFeedbackModal({ title: 'Request done!', description: res.message });
+        setTimeout(() => {
+          window.location = '/time-sheets';
+        }, 2000);
+      } else {
+        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
+      }
+    });
+  };
+  if (timesheetId) {
+    title = 'Update Timesheet';
+    useEffect(async () => {
+      try {
+        const URL = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${URL}/timesheets/${timesheetId}`);
+        const data = await response.json();
+        setProjectValue(data.data.project);
+        setEmployeeValue(data.data.employee);
+        setWeekSprintValue(data.data.weekSprint);
+        setDateValue(data.data.date);
+        setHoursWorkedValue(data.data.hoursWorked);
+        setProjectHoursValue(data.data.hoursProject);
+        setWorkDescriptionValue(data.data.workDescription);
+      } catch (error) {
+        console.error(error);
+      }
+    }, []);
+    options.method = 'PUT';
+    options.url = `${process.env.REACT_APP_API_URL}/timesheets/${timesheetId}`;
+    options.body = JSON.stringify({
+      project: projectValue._id,
+      employee: employeeValue._id,
+      weekSprint: weekSprintValue,
+      date: dateValue,
+      hoursWorked: hoursWorkedValue,
+      hoursProject: projectHoursValue,
+      workDescription: workDescriptionValue
+    });
+  }
+  console.log(projects);
   return (
     <div>
-      <form className={styles.container} onSubmit={onSumbmit}>
-        <h2>Timesheet</h2>
+      <form className={styles.container} onSubmit={onSubmit}>
+        <h2>{title}</h2>
         <label>Project</label>
         <select
           className={styles.input}
           id="project"
           name="project"
-          value={projectValue}
+          value={projectValue._id}
           onChange={onChangeProjectSelect}
           required
         >
           {projects.map((project) => {
-            return <option key={project._id}>{`${project.name}`}</option>;
+            return (
+              <option
+                id="projectOption"
+                selected={Boolean(project._id === projectValue)}
+                value={project._id}
+                key={project._id}
+              >{`${project.name}`}</option>
+            );
           })}
           ;
           <option value="" disabled selected hidden>
@@ -116,9 +168,11 @@ const Form = () => {
         >
           {employees.map((employee) => {
             return (
-              <option key={employee._id}>{`${
-                employee.firstName + ' ' + employee.lastName
-              }`}</option>
+              <option
+                selected={Boolean(employee._id === employeeValue)}
+                value={employee._id}
+                key={employee._id}
+              >{`${employee.firstName + ' ' + employee.lastName}`}</option>
             );
           })}
           ;
@@ -136,14 +190,7 @@ const Form = () => {
           required
         ></input>
         <label>Date</label>
-        <input
-          type="datetime-local"
-          id="date"
-          name="date"
-          value={dateValue}
-          onChange={onChangeDate}
-          required
-        ></input>
+        <input id="date" name="date" value={dateValue} onChange={onChangeDate} required></input>
         <label>Hours Worked</label>
         <input
           type="number"
@@ -172,10 +219,18 @@ const Form = () => {
           onChange={onChangeWorkDescription}
           required
         ></input>
-        <button type="submit" className={styles.submitButton}>
+        <button
+          type="submit"
+          className={styles.submitButton}
+          onClick={() => changeVisibilityFeedbackModal('block')}
+        >
           Submit
         </button>
       </form>
+      <FeedbackModal
+        feedbackTitle={contentFeedbackModal.title}
+        messageContent={contentFeedbackModal.description}
+      />
     </div>
   );
 };
