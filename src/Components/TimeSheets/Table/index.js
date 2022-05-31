@@ -49,7 +49,11 @@ const TimesheetsTable = (props) => {
           );
         })}
       </tbody>
-      <DeleteModal modalId={infoForDelete.id} />
+      <DeleteModal
+        deleteTimesheet={props.deleteTimesheet}
+        modalId={infoForDelete.id}
+        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
+      />
     </table>
   );
 };
