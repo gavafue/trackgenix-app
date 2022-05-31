@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from '../time-sheets.module.css';
+import styles from './table.module.css';
 import DeleteModal from '../DeleteModal';
 
 const TimesheetsTable = () => {

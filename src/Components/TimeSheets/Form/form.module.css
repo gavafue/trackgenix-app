@@ -23,7 +23,7 @@ label{
   width: 8%;
   padding: 0.3%;
   background-color: #EA3354;
-  color: #fff;
-  border-radius: 10px;
   border: 1px solid #000;
+  border-radius: 10px;
+  color: #fff;
 }
