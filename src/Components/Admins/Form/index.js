@@ -1,5 +1,5 @@
 import styles from './form.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -14,9 +14,17 @@ function Form() {
   const onChangeEmailInput = (event) => {
     setEmailValue(event.target.value);
   };
+  const [passwordValue, setPasswordValue] = useState('');
+  const onChangePasswordInput = (event) => {
+    setPasswordValue(event.target.value);
+  };
   const [phoneValue, setPhoneValue] = useState('');
   const onChangePhoneInput = (event) => {
     setPhoneValue(event.target.value);
+  };
+  const [genderValue, setGenderValue] = useState('');
+  const onChangeGenderInput = (event) => {
+    setGenderValue(event.target.value);
   };
   const [birthDateValue, setBirthDateValue] = useState('');
   const onChangeBirthDateInput = (event) => {
@@ -30,9 +38,67 @@ function Form() {
   const onChangeZipInput = (event) => {
     setZipValue(event.target.value);
   };
-
+  const [activeValue, setActiveValue] = useState('');
+  const onChangeActiveInput = (event) => {
+    setActiveValue(event.target.value);
+  };
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: nameValue,
+      lastName: lastNameValue,
+      email: emailValue,
+      password: passwordValue,
+      gender: genderValue,
+      phone: phoneValue,
+      dateBirth: birthDateValue,
+      city: cityValue,
+      zip: zipValue,
+      active: activeValue
+    })
+  };
+  const querystring = window.location.search;
+  const params = new URLSearchParams(querystring);
+  const paramAdminId = params.get('adminId');
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const url = `${process.env.REACT_APP_API_URL}/admins`;
+    fetch(url, options).then(async (response) => {
+      if (response.status !== 200 && response.status !== 201) {
+        const { message } = await response.json();
+        throw new Error(message);
+      }
+      return response.json();
+    });
+  };
+  if (paramAdminId) {
+    useEffect(async () => {
+      try {
+        const URL = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${URL}/admins/${paramAdminId}`);
+        const data = await response.json();
+        setNameValue(data.data.name);
+        setLastNameValue(data.data.lastName);
+        setEmailValue(data.data.email);
+        setPasswordValue(data.data.password);
+        setCityValue(data.data.city);
+        setBirthDateValue(data.data.birthDate);
+        setGenderValue(data.data.gender);
+        setPhoneValue(data.data.phone);
+        setZipValue(data.data.zip);
+        setActiveValue(data.data.active);
+      } catch (error) {
+        console.error(error);
+      }
+    }, []);
+    options.method = 'PUT';
+    options.url = `${process.env.REACT_APP_API_URL}/employees/${paramAdminId}`;
+  }
   return (
-    <div className={styles.container}>
+    <form onSubmit={onSubmit} className={styles.container}>
       <h2>Admin</h2>
       <label htmlFor="name">Name</label>
       <input
@@ -58,11 +124,27 @@ function Form() {
         value={emailValue}
         onChange={onChangeEmailInput}
       />
+      <label htmlFor="password">Password</label>
+      <input
+        className={styles.input}
+        type="text"
+        id="password"
+        value={passwordValue}
+        onChange={onChangePasswordInput}
+      />
       <label htmlFor="gender">Gender</label>
-      <select className={styles.input} id="gender">
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-        <option value="male">Male</option>
+      <select
+        className={styles.input}
+        id="gender"
+        value={genderValue}
+        onChange={onChangeGenderInput}
+      >
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+        <option value="Male">Male</option>
+        <option value="" disabled selected hidden>
+          Choose gender
+        </option>
       </select>
       <label htmlFor="phone">Phone</label>
       <input
@@ -96,13 +178,23 @@ function Form() {
         value={zipValue}
         onChange={onChangeZipInput}
       />
-      <label htmlFor="status">Status</label>
-      <select className={styles.input} id="active">
+      <label htmlFor="active">Status</label>
+      <select
+        className={styles.input}
+        id="active"
+        value={activeValue}
+        onChange={onChangeActiveInput}
+      >
         <option value="true">Active</option>
         <option value="false">Inactive</option>
+        <option value="" disabled selected hidden>
+          Is active?
+        </option>
       </select>
-      <input className={styles.input} type="submit" value="Submit" />
-    </div>
+      <button className={styles.input} type="submit" value="Submit">
+        Submit
+      </button>
+    </form>
   );
 }
 

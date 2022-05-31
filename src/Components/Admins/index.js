@@ -15,8 +15,24 @@ function Admins() {
     }
   }, []);
 
-  const OnClickForm = () => {
-    window.location.href = '/admins/form';
+  const OnClickEdit = (string) => {
+    window.location = `/admins/form?adminId=${string}`;
+  };
+
+  const OnClickDelete = (string) => {
+    const options = {
+      method: 'DELETE',
+      url: `${process.env.REACT_APP_API_URL}/admins/${string}`
+    };
+    fetch(options.url, options).then(async (response) => {
+      await response.json();
+      if (response.error === false) {
+        return response.json();
+      }
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
 
   return (
@@ -38,27 +54,31 @@ function Admins() {
         <tbody>
           {admins.map((admin) => {
             return (
-              <tr key={admin}>
+              <tr key={admin._id}>
                 <td>{admin.name}</td>
                 <td>{admin.lastName}</td>
                 <td>{admin.phone}</td>
                 <td>{admin.email}</td>
                 <td>{JSON.stringify(admin.active)}</td>
                 <td>
-                  <input type="button" value=". . ." />
+                  <input type="button" value="..." />
                 </td>
                 <td>
-                  <input type="button" value="Edit" onClick={OnClickForm} />
+                  <input type="button" value="Edit" onClick={() => OnClickEdit(admin._id)} />
                 </td>
                 <td>
-                  <input type="button" value="Delete" />
+                  <input type="button" value="Delete" onClick={() => OnClickDelete(admin._id)} />
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-      <input type="button" value="Add Admin" onClick={OnClickForm} />
+      <input
+        type="button"
+        value="Add Admin"
+        onClick={() => (window.location.href = '/admins/form')}
+      />
     </section>
   );
 }
