@@ -8,32 +8,11 @@ const DeleteModal = (props) => {
     modalOfFeedback.style.display = string;
   };
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-
-  const changeVisibilityDeleteModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-  const deleteTask = (string) => {
-    const options = {
-      method: 'DELETE',
-      url: `${process.env.REACT_APP_API_URL}/tasks/${string}`
-    };
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      if (response.error === true) {
-        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
-      } else {
-        setContentFeedbackModal({ title: 'Request done!', description: res.message });
-      }
-    });
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  };
   return (
     <div>
       <div id="id01" className={styles.modal}>
         <span
-          onClick={() => changeVisibilityDeleteModal('none')}
+          onClick={() => props.changeVisibilityDeleteModal('none')}
           className={styles.close}
           title="Close Modal"
         ></span>
@@ -46,7 +25,7 @@ const DeleteModal = (props) => {
               <button
                 type="button"
                 className={styles.cancelbtn}
-                onClick={() => changeVisibilityDeleteModal('none')}
+                onClick={() => props.changeVisibilityDeleteModal('none')}
               >
                 Cancel
               </button>
@@ -54,7 +33,7 @@ const DeleteModal = (props) => {
                 type="button"
                 className={styles.deletebtn}
                 onClick={() => {
-                  deleteTask(props.modalId, props.modalName);
+                  props.deleteTask(props.modalId, setContentFeedbackModal);
                   changeVisibilityFeedbackModal('block');
                 }}
               >

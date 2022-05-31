@@ -51,7 +51,11 @@ const TasksTable = (props) => {
           );
         })}
       </tbody>
-      <DeleteModal modalId={infoForDelete.id} />
+      <DeleteModal
+        modalId={infoForDelete.id}
+        deleteTask={props.deleteTask}
+        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
+      />
     </table>
   );
 };
