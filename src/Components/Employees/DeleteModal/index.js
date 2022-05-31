@@ -3,38 +3,18 @@ import { useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
 
 const DeleteModal = (props) => {
+  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
+
   let modalOfFeedback = document.getElementById('myModal');
   const changeVisibilityFeedbackModal = (string) => {
     modalOfFeedback.style.display = string;
-  };
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-
-  const changeVisibilityDeleteModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-  const deleteEmployee = (string) => {
-    const options = {
-      method: 'DELETE',
-      url: `${process.env.REACT_APP_API_URL}/employees/${string}`
-    };
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      if (response.error === true) {
-        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
-      } else {
-        setContentFeedbackModal({ title: 'Request done!', description: res.message });
-      }
-    });
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
   };
 
   return (
     <div>
       <div id="id01" className={styles.modal}>
         <span
-          onClick={() => changeVisibilityDeleteModal('none')}
+          onClick={() => props.changeVisibilityDeleteModal('none')}
           className={styles.close}
           title="Close Modal"
         ></span>
@@ -42,12 +22,11 @@ const DeleteModal = (props) => {
           <div className={styles.container}>
             <h1>Delete Account</h1>
             <p>Are you sure you want to delete the {props.namecomplete} account?</p>
-
             <div className={styles.clearfix}>
               <button
                 type="button"
                 className={styles.cancelbtn}
-                onClick={() => changeVisibilityDeleteModal('none')}
+                onClick={() => props.changeVisibilityDeleteModal('none')}
               >
                 Cancel
               </button>
@@ -55,7 +34,7 @@ const DeleteModal = (props) => {
                 type="button"
                 className={styles.deletebtn}
                 onClick={() => {
-                  deleteEmployee(props.modalId);
+                  props.deleteEmployee(props.modalId, setContentFeedbackModal);
                   changeVisibilityFeedbackModal('block');
                 }}
               >

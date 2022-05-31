@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './form.module.css';
-import Input from './Input/input.js';
+import Input from './Input/Text';
 import FeedbackModal from '../FeedbackModal';
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
@@ -204,7 +204,7 @@ const Form = () => {
           className={styles.button}
           onClick={() => changeVisibilityFeedbackModal('block')}
         >
-          Enviar
+          Submit
         </button>
       </form>
       <FeedbackModal

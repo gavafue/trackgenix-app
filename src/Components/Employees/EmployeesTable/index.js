@@ -1,31 +1,20 @@
-import { useEffect, useState } from 'react';
-import styles from '../employees.module.css';
+import { useState } from 'react';
+import styles from './employeestable.module.css';
 import DeleteModal from '../DeleteModal';
 
-const EmployeesTable = () => {
+const EmployeesTable = (props) => {
   const editEmployee = (string) => {
     window.location = `/employees/form?employeeId=${string}`;
   };
   const changeDisplayModal = (property) => {
     document.getElementById('id01').style.display = property;
   };
-  const [employees, saveEmployees] = useState([]);
+
   const [infoForDelete, setInfoToDelete] = useState({
     id: '',
     name: '',
     lastname: ''
   });
-
-  useEffect(async () => {
-    try {
-      const URL = process.env.REACT_APP_API_URL;
-      const response = await fetch(`${URL}/employees`);
-      const data = await response.json();
-      saveEmployees(data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
   return (
     <table className={styles.redTable}>
@@ -42,7 +31,7 @@ const EmployeesTable = () => {
         </tr>
       </thead>
       <tbody>
-        {employees.map((employee) => {
+        {props.employees.map((employee) => {
           return (
             <tr key={employee._id} id={employee._id}>
               <td>{employee.firstName}</td>
@@ -78,6 +67,8 @@ const EmployeesTable = () => {
       <DeleteModal
         modalId={infoForDelete.id}
         namecomplete={`${infoForDelete.name} ${infoForDelete.lastname}`}
+        deleteEmployee={props.deleteEmployee}
+        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
       />
     </table>
   );
