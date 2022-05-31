@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styles from './super-admins.module.css';
-import Form from './form/form.js';
 
 const URL = `${process.env.REACT_APP_API_URL}/super-admin`;
 
@@ -17,8 +16,8 @@ const SuperAdmins = () => {
     }
   }, []);
 
-  const onClickForm = () => {
-    window.location.href = '/super-admin/form';
+  const editSuperAdmin = (_id) => {
+    window.location = `/super-admins/form?super-adminId=${_id}`;
   };
 
   const deleteSuperAdmin = (_id) => {
@@ -35,7 +34,6 @@ const SuperAdmins = () => {
 
   return (
     <section className={styles.container}>
-      <Form />
       <table className={styles}>
         <thead>
           <tr>
@@ -52,7 +50,7 @@ const SuperAdmins = () => {
                 <td>{superAdmin.lastName}</td>
                 <td>{superAdmin.active ? 'Active' : 'Inactive'}</td>
                 <td>
-                  <button onClick={onClickForm}>Edit</button>
+                  <button onClick={() => editSuperAdmin(superAdmin._id)}>Edit</button>
                 </td>
                 <td>
                   <button onClick={() => deleteSuperAdmin(superAdmin._id)}>Delete</button>
@@ -62,7 +60,7 @@ const SuperAdmins = () => {
           })}
         </tbody>
       </table>
-      <button onClick={onClickForm}>Create</button>
+      {/* <button onClick={onClickForm}>Create</button> */}
     </section>
   );
 };
