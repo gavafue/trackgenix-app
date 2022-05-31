@@ -1,29 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './table.module.css';
 import DeleteModal from '../DeleteModal';
 
-const TimesheetsTable = () => {
+const TimesheetsTable = (props) => {
   const editTimesheet = (string) => {
     window.location = `/time-sheets/form?timesheetId=${string}`;
   };
   const changeDisplayModal = (property) => {
     document.getElementById('id01').style.display = property;
   };
-  const [timeSheets, saveTimeSheets] = useState([]);
   const [infoForDelete, setInfoToDelete] = useState({
     id: ''
   });
-  const url = `${process.env.REACT_APP_API_URL}/timesheets`;
-  useEffect(async () => {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      saveTimeSheets(data.data);
-      console.log(data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
   return (
     <table className={styles.table}>
       <thead>
@@ -35,7 +23,7 @@ const TimesheetsTable = () => {
         <th></th>
       </thead>
       <tbody>
-        {timeSheets.map((timeSheet) => {
+        {props.timeSheets.map((timeSheet) => {
           return (
             <tr key={timeSheet._id}>
               <td>{JSON.stringify(timeSheet.project.name)}</td>
