@@ -1,71 +1,17 @@
-import { useEffect, useState } from 'react';
 import styles from './super-admins.module.css';
+import SuperAdminsTable from './Table';
 
-const SuperAdmins = () => {
-  const URL = `${process.env.REACT_APP_API_URL}/super-admin`;
-  const [superAdmins, setSuperAdmins] = useState([]);
-  console.log(superAdmins);
-  useEffect(async () => {
-    try {
-      const response = await fetch(URL);
-      const data = await response.json();
-      setSuperAdmins(data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+const createSuperAdmin = () => {
+  window.location.href = '/super-admins/form';
+};
 
-  const editSuperAdmin = (_id) => {
-    window.location = `/super-admins/form?superadminId=${_id}`;
-  };
-
-  const createSuperAdmin = () => {
-    window.location.href = '/super-admins/form';
-  };
-
-  const deleteSuperAdmin = (_id) => {
-    // if (modal);
-    fetch(`${process.env.REACT_APP_API_URL}/super-admin/${_id}`, {
-      method: 'DELETE'
-    }).then((result) => {
-      result.json().then((response) => {
-        setSuperAdmins([...superAdmins.filter((superAdmin) => superAdmin._id !== _id)]);
-        alert(response.message);
-      });
-    });
-  };
-
+function SuperAdmins() {
   return (
     <section className={styles.container}>
-      <table className={styles}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Lastname</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {superAdmins.map((superAdmin) => {
-            return (
-              <tr key={superAdmin._id}>
-                <td>{superAdmin.firstName}</td>
-                <td>{superAdmin.lastName}</td>
-                <td>{superAdmin.active ? 'Active' : 'Inactive'}</td>
-                <td>
-                  <button onClick={() => editSuperAdmin(superAdmin._id)}>Edit</button>
-                </td>
-                <td>
-                  <button onClick={() => deleteSuperAdmin(superAdmin._id)}>Delete</button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <button onClick={createSuperAdmin}>Create</button>
+      <SuperAdminsTable />
+      <button onClick={createSuperAdmin}>Add SuperAdmin</button>
     </section>
   );
-};
+}
 
 export default SuperAdmins;

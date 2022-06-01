@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './form.module.css';
 import Input from '../input/input.js';
+import FeedbackModal from '../FeedbackModal';
 
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
@@ -9,6 +10,13 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
   const [roleValue, setRoleValue] = useState('');
+  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
+
+  let modalOfFeedback = document.getElementById('myModal');
+
+  const changeVisibilityFeedbackModal = (string) => {
+    modalOfFeedback.style.display = string;
+  };
 
   const onChangeNameInput = (e) => {
     setNameValue(e.target.value);
@@ -84,75 +92,90 @@ const Form = () => {
     e.preventDefault();
     fetch(options.url, options).then(async (response) => {
       const res = await response.json();
-      console.log(res.message);
+      console.log(response.message);
       if (response.status == 201 || response.status == 200) {
-        setTimeout(() => {
-          window.location = '/super-admin';
-          console.log(res.message);
-        }, 3000);
-      } else {
-        alert('alert');
+        setContentFeedbackModal({ title: res.message, description: 'Request done!' });
       }
+      setContentFeedbackModal({ title: res.message, description: 'There has been an error!' });
+      setTimeout(() => {
+        window.location = '/super-admins';
+      }, 2000);
     });
   };
 
+  const handleCancel = () => {
+    window.location = '/super-admins';
+  };
+
   return (
-    <form onSubmit={handleSubmit} className={styles.container}>
-      <h1>Information</h1>
-      <div>
-        <label>First Name</label>
-        <Input
-          name="firstName"
-          type="text"
-          value={nameValue}
-          placeholder="Write your first name"
-          onChange={onChangeNameInput}
-          required
-        />
-        <label>Last Name</label>
-        <Input
-          name="lastName"
-          type="text"
-          value={lastNameValue}
-          placeholder="Write your last name"
-          onChange={onChangeLastNameInput}
-          required
-        />
-        <label>Email</label>
-        <Input
-          name="email"
-          type="text"
-          value={emailValue}
-          placeholder="Write your email"
-          onChange={onChangeEmailInput}
-          required
-        />
-        <label>Password</label>
-        <Input
-          name="password"
-          type="text"
-          value={passwordValue}
-          placeholder="Write your password"
-          onChange={onChangePasswordInput}
-          required
-        />
-        <Input
-          name="role"
-          type="text"
-          value={roleValue}
-          placeholder="Select role"
-          onChange={onChangeRoleInput}
-          required
-        />
-        <label>Status</label>
-        <select value={activeValue} onChange={onChangeActiveInput}>
-          <option value="true"> Active </option>
-          <option value="false"> Inactive </option>
-        </select>
-        <button type="submit"> Save </button>
-        <button>Cancel</button>
-      </div>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit} className={styles.container}>
+        <h1>Information</h1>
+        <div>
+          <label>First Name</label>
+          <Input
+            name="firstName"
+            type="text"
+            value={nameValue}
+            placeholder="Write your first name"
+            onChange={onChangeNameInput}
+            required
+          />
+          <label>Last Name</label>
+          <Input
+            name="lastName"
+            type="text"
+            value={lastNameValue}
+            placeholder="Write your last name"
+            onChange={onChangeLastNameInput}
+            required
+          />
+          <label>Email</label>
+          <Input
+            name="email"
+            type="text"
+            value={emailValue}
+            placeholder="Write your email"
+            onChange={onChangeEmailInput}
+            required
+          />
+          <label>Password</label>
+          <Input
+            name="password"
+            type="text"
+            value={passwordValue}
+            placeholder="Write your password"
+            onChange={onChangePasswordInput}
+            required
+          />
+          <label>Role</label>
+          <select value={roleValue} onChange={onChangeRoleInput}>
+            <option defaultValue=""> Select an option </option>
+            <option value="SA"> Superadmin </option>
+          </select>
+          <label>Status</label>
+          <select value={activeValue} onChange={onChangeActiveInput}>
+            <option defaultValue=""> Select an option </option>
+            <option value="true"> Active </option>
+            <option value="false"> Inactive </option>
+          </select>
+          <div className={styles.buttoncontainer}>
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              onClick={() => changeVisibilityFeedbackModal('block')}
+            >
+              Submit
+            </button>
+            <button onClick={handleCancel}>Cancel</button>
+          </div>
+        </div>
+      </form>
+      <FeedbackModal
+        feedbackTitle={contentFeedbackModal.title}
+        feedbackContent={contentFeedbackModal.description}
+      />
+    </div>
   );
 };
 
