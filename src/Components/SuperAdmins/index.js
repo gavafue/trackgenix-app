@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './super-admins.module.css';
 
-const URL = `${process.env.REACT_APP_API_URL}/super-admin`;
-
 const SuperAdmins = () => {
+  const URL = `${process.env.REACT_APP_API_URL}/super-admin`;
   const [superAdmins, setSuperAdmins] = useState([]);
   console.log(superAdmins);
   useEffect(async () => {
@@ -17,7 +16,11 @@ const SuperAdmins = () => {
   }, []);
 
   const editSuperAdmin = (_id) => {
-    window.location = `/super-admins/form?super-adminId=${_id}`;
+    window.location = `/super-admins/form?superadminId=${_id}`;
+  };
+
+  const createSuperAdmin = () => {
+    window.location.href = '/super-admins/form';
   };
 
   const deleteSuperAdmin = (_id) => {
@@ -60,7 +63,7 @@ const SuperAdmins = () => {
           })}
         </tbody>
       </table>
-      {/* <button onClick={onClickForm}>Create</button> */}
+      <button onClick={createSuperAdmin}>Create</button>
     </section>
   );
 };

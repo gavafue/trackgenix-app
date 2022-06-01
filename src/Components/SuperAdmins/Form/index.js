@@ -33,8 +33,9 @@ const Form = () => {
   const onChangeRoleInput = (e) => {
     setRoleValue(e.target.value);
   };
+
   const params = new URLSearchParams(window.location.search);
-  const _id = params.get('_id');
+  const superadminId = params.get('superadminId');
 
   const options = {
     method: 'POST',
@@ -50,10 +51,11 @@ const Form = () => {
     })
   };
 
-  if (_id) {
+  if (superadminId) {
     useEffect(async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/super-admin/${_id}`);
+        const response = await fetch(`
+        ${process.env.REACT_APP_API_URL}/super-admin/${superadminId}`);
         const data = await response.json();
         setNameValue(data.data.firstName);
         setLastNameValue(data.data.lastName);
@@ -66,7 +68,7 @@ const Form = () => {
       }
     }, []);
     options.method = 'PUT';
-    options.url = `${process.env.REACT_APP_API_URL}/super-admin/${_id}`;
+    options.url = `${process.env.REACT_APP_API_URL}/super-admin/${superadminId}`;
     options.body = JSON.stringify({
       firstName: nameValue,
       lastName: lastNameValue,
@@ -85,7 +87,7 @@ const Form = () => {
       console.log(res.message);
       if (response.status == 201 || response.status == 200) {
         setTimeout(() => {
-          // window.location = '/super-admin';
+          window.location = '/super-admin';
           console.log(res.message);
         }, 3000);
       } else {
@@ -142,19 +144,11 @@ const Form = () => {
           onChange={onChangeRoleInput}
           required
         />
-        {/* <label>Status</label>
+        <label>Status</label>
         <select value={activeValue} onChange={onChangeActiveInput}>
           <option value="true"> Active </option>
           <option value="false"> Inactive </option>
-        </select> */}
-        <Input
-          name="status"
-          type="boolean"
-          value={activeValue}
-          placeholder="active?"
-          onChange={onChangeActiveInput}
-          required
-        />
+        </select>
         <button type="submit"> Save </button>
         <button>Cancel</button>
       </div>
