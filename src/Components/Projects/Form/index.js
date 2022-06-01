@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import FeedbackModal from '../FeedbackModal';
 import styles from './form.module.css';
 
 function Form() {
@@ -51,6 +52,11 @@ function Form() {
   const onChangeMembersRateInput = (event) => {
     setMembersRateValue(event.target.value);
   };
+  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
+  let modalOfFeedback = document.getElementById('myModal');
+  const changeVisibilityFeedbackModal = (string) => {
+    modalOfFeedback.style.display = string;
+  };
 
   let title = 'Add a Project';
   const querystring = window.location.search;
@@ -99,11 +105,14 @@ function Form() {
     event.preventDefault();
     fetch(options.url, options).then(async (response) => {
       const res = await response.json();
-      if (response.status !== 200 && response.status !== 201) {
-        throw new Error(res.message);
+      if (response.status == 201 || response.status == 200) {
+        setContentFeedbackModal({ title: 'Request done!', description: res.message });
+        setTimeout(() => {
+          window.location = '/projects';
+        }, 2000);
+      } else {
+        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
       }
-      alert(res.message);
-      window.location = '/projects';
     });
   };
 
@@ -231,10 +240,18 @@ function Form() {
             placeholder="Enter the employee's rate"
           />
         </fieldset>
-        <button className={styles.smallBtn} type="submit">
+        <button
+          type="submit"
+          className={styles.submitBtn}
+          onClick={() => changeVisibilityFeedbackModal('block')}
+        >
           Submit
         </button>
       </form>
+      <FeedbackModal
+        feedbackTitle={contentFeedbackModal.title}
+        messageContent={contentFeedbackModal.description}
+      />
     </div>
   );
 }

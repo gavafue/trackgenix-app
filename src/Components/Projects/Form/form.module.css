@@ -38,3 +38,12 @@ label {
   border-radius: 10px;
   border: 1px solid #000;
 }
+
+.submitBtn {
+  margin:1%;
+  background-color: #EA3354;
+  color:antiquewhite;
+  border-radius: 10px;
+  border: 1px solid #000;
+  width: 15%;
+}

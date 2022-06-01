@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './projects.module.css';
+// import DeleteModal from '../DeleteModal';
 
-const ProjectsTable = () => {
+const ProjectsTable = (/*props*/) => {
   const [projects, setProjects] = useState([]);
   const URL = `${process.env.REACT_APP_API_URL}/projects`;
   const editProject = (string) => {
@@ -21,13 +22,19 @@ const ProjectsTable = () => {
     window.location.href = '/projects/form';
   };
 
-  const deleteProject = (_id) => {
+  // const changeVisibilityDeleteModal = (property) => {
+  //   document.getElementById('id01').style.display = property;
+  // };
+
+  const deleteProject = (_id /*, setContentFeedbackModal*/) => {
     fetch(`${URL}/${_id}`, {
       method: 'DELETE'
     }).then((result) => {
       result.json().then((response) => {
         setProjects(projects.filter((project) => project._id !== _id));
         alert(response.message);
+        // setContentFeedbackModal({ title: 'Request done!', description: response.message });
+        // changeVisibilityDeleteModal('none');
       });
     });
   };
@@ -59,7 +66,7 @@ const ProjectsTable = () => {
                   <td>{project.client}</td>
                   <td>{project.startDate}</td>
                   <td>{project.endDate}</td>
-                  <td>{project.members[0].rate}</td>
+                  <td>{project.members[0]._id}</td>
                   <td>
                     <button className={styles.smallBtn} onClick={() => editProject(project._id)}>
                       Edit
@@ -73,9 +80,14 @@ const ProjectsTable = () => {
             })}
         </tbody>
       </table>
-      <button onClick={onClickForm} className={styles.smallBtn}>
+      <button onClick={onClickForm} className={styles.submitBtn}>
         Add Project
       </button>
+      {/* <DeleteModal
+        deleteProject={props.deleteProject}
+        modalId={projects._id}
+        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
+      /> */}
     </section>
   );
 };
