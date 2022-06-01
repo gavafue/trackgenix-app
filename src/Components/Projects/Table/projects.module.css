@@ -1,0 +1,47 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+table {
+  border: 2px solid #EA3354;
+  background-color: #EEE7DB;
+  width: 80%;
+  text-align: center;
+  border-collapse: collapse;
+  font-weight: bold;
+}
+table td, table th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table tbody td {
+  font-size: 13px;
+}
+table tr:nth-child(even) {
+  background: #F5C8BF;
+}
+table thead {
+  background: #EA3354;
+}
+table thead th {
+  font-size: 19px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 2px solid #EA3354;
+}
+table thead th:first-child {
+  border-left: none;
+}
+
+.smallBtn {
+  margin:1%;
+  background-color: #EA3354;
+  color:antiquewhite;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
