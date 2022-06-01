@@ -44,6 +44,17 @@
   border-left: none;
 }
 
-button #addAdmin {
-  display: flex;
+.buttonEdit {
+  width: 100%;
+  margin: auto;
+  padding: 5px 5px;
+  background-color: #EA3354;
+  border: none;
+  opacity: 0.8;
+  color: white;
+  cursor: pointer;
+}
+
+.buttonEdit:hover {
+  opacity: 1;
 }
