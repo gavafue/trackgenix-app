@@ -14,15 +14,81 @@ const Form = () => {
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  let modalOfFeedback = document.getElementById('myModal');
-  const changeVisibilityFeedbackModal = (string) => {
-    modalOfFeedback.style.display = string;
-  };
-  let title = 'Add an employee';
-  let idInput = '';
+  const [title, setTitle] = useState('Add an employee');
+  const [idInput, setIdInput] = useState('');
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
   const paramEmployeeId = params.get('employeeId');
+  console.log(paramEmployeeId);
+  const options = {
+    method: 'POST',
+    url: `${process.env.REACT_APP_API_URL}/employees`,
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      firstName: nameValue,
+      lastName: lastNameValue,
+      email: emailValue,
+      country: countryValue,
+      city: cityValue,
+      zip: zipValue,
+      phone: telephoneValue,
+      birthDate: birthdayValue,
+      photo: photoValue,
+      password: passwordValue,
+      active: false
+    })
+  };
+  useEffect(() => {
+    if (paramEmployeeId) {
+      setTitle(`Editing ${nameValue} ${lastNameValue} information.`);
+      options.method = 'PUT';
+      options.url = `${process.env.REACT_APP_API_URL}/employees/${paramEmployeeId}`;
+      setIdInput(<Input name="employee-id" type="text" disabled value={paramEmployeeId} />);
+
+      const URL = process.env.REACT_APP_API_URL;
+      fetch(`${URL}/employees/${paramEmployeeId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setNameValue(data.data.firstName);
+          setLastNameValue(data.data.lastName);
+          setEmailValue(data.data.email);
+          setPasswordValue(data.data.password);
+          setCityValue(data.data.city);
+          setBirthdayValue(data.data.birthDate);
+          setPhotoValue(data.data.photo);
+          setTelephoneValue(data.data.phone);
+          setZipValue(data.data.zip);
+          setCountryValue(data.data.country);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, []);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    fetch(options.url, options)
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.status == 201 || response.status == 200) {
+          setContentFeedbackModal({
+            title: 'Request done!',
+            description: response.message
+          });
+          setShowFeedbackModal(true);
+        } else {
+          setContentFeedbackModal({
+            title: 'Something went wrong',
+            description: response.message
+          });
+          setShowFeedbackModal(true);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 
   const onChangeNameValue = (e) => {
     setNameValue(e.target.value);
@@ -54,66 +120,7 @@ const Form = () => {
   const onChangeBirthdayValue = (e) => {
     setBirthdayValue(e.target.value);
   };
-  const options = {
-    method: 'POST',
-    url: `${process.env.REACT_APP_API_URL}/employees`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      firstName: nameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      country: countryValue,
-      city: cityValue,
-      zip: zipValue,
-      phone: telephoneValue,
-      birthDate: birthdayValue,
-      photo: photoValue,
-      password: passwordValue,
-      active: false
-    })
-  };
-  const onSubmit = (event) => {
-    event.preventDefault();
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      if (response.status == 201 || response.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: res.message });
-        setTimeout(() => {
-          window.location = '/employees';
-        }, 3000);
-      } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
-      }
-    });
-  };
 
-  if (paramEmployeeId) {
-    title = `Editing ${nameValue} ${lastNameValue} information.`;
-    useEffect(async () => {
-      try {
-        const URL = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${URL}/employees/${paramEmployeeId}`);
-        const data = await response.json();
-        setNameValue(data.data.firstName);
-        setLastNameValue(data.data.lastName);
-        setEmailValue(data.data.email);
-        setPasswordValue(data.data.password);
-        setCityValue(data.data.city);
-        setBirthdayValue(data.data.birthDate);
-        setPhotoValue(data.data.photo);
-        setTelephoneValue(data.data.phone);
-        setZipValue(data.data.zip);
-        setCountryValue(data.data.country);
-      } catch (error) {
-        console.error(error);
-      }
-    }, []);
-    options.method = 'PUT';
-    options.url = `${process.env.REACT_APP_API_URL}/employees/${paramEmployeeId}`;
-    idInput = <Input name="employee-id" type="text" disabled value={paramEmployeeId} />;
-  }
   return (
     <div className={styles.container}>
       <h1>{title}</h1>
@@ -199,18 +206,17 @@ const Form = () => {
           onChange={onChangePhotoValue}
           required
         />
-        <button
-          type="submit"
-          className={styles.button}
-          onClick={() => changeVisibilityFeedbackModal('block')}
-        >
+        <button type="submit" className={styles.button}>
           Submit
         </button>
       </form>
-      <FeedbackModal
-        feedbackTitle={contentFeedbackModal.title}
-        messageContent={contentFeedbackModal.description}
-      />
+      {showFeedbackModal && (
+        <FeedbackModal
+          feedbackTitle={contentFeedbackModal.title}
+          messageContent={contentFeedbackModal.description}
+          setShowFeedbackModal={setShowFeedbackModal}
+        />
+      )}
     </div>
   );
 };

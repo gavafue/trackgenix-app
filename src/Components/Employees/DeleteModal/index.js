@@ -5,16 +5,11 @@ import FeedbackModal from '../FeedbackModal';
 const DeleteModal = (props) => {
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
 
-  let modalOfFeedback = document.getElementById('myModal');
-  const changeVisibilityFeedbackModal = (string) => {
-    modalOfFeedback.style.display = string;
-  };
-
   return (
     <div>
       <div id="id01" className={styles.modal}>
         <span
-          onClick={() => props.changeVisibilityDeleteModal('none')}
+          onClick={() => props.setShowDeleteModal(false)}
           className={styles.close}
           title="Close Modal"
         ></span>
@@ -26,7 +21,7 @@ const DeleteModal = (props) => {
               <button
                 type="button"
                 className={styles.cancelbtn}
-                onClick={() => props.changeVisibilityDeleteModal('none')}
+                onClick={() => props.setShowDeleteModal(false)}
               >
                 Cancel
               </button>
@@ -35,7 +30,7 @@ const DeleteModal = (props) => {
                 className={styles.deletebtn}
                 onClick={() => {
                   props.deleteEmployee(props.modalId, setContentFeedbackModal);
-                  changeVisibilityFeedbackModal('block');
+                  props.setShowFeedbackModal(true);
                 }}
               >
                 Delete
@@ -44,10 +39,13 @@ const DeleteModal = (props) => {
           </div>
         </form>
       </div>
-      <FeedbackModal
-        feedbackTitle={contentFeedbackModal.title}
-        messageContent={contentFeedbackModal.description}
-      />
+      {props.showFeedbackModal && (
+        <FeedbackModal
+          setShowFeedbackModal={props.setShowFeedbackModal}
+          feedbackTitle={contentFeedbackModal.title}
+          messageContent={contentFeedbackModal.description}
+        />
+      )}
     </div>
   );
 };

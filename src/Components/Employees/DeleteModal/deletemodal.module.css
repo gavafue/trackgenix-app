@@ -40,7 +40,7 @@ button:hover {
 
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
+  display: flex; 
   position: fixed; /* Stay in place */
   align-items: center;
   justify-content: center;

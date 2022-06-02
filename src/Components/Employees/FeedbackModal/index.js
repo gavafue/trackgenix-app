@@ -1,14 +1,5 @@
 import styles from './feedbackmodal.module.css';
 const FeedbackModal = (props) => {
-  // Get the modal
-  let modalOfFeedback = document.getElementById('myModal');
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-    if (event.target == modalOfFeedback) {
-      modalOfFeedback.style.display = 'none';
-    }
-  };
   return (
     <div>
       <div id="myModal" className={styles.modal}>
@@ -17,7 +8,7 @@ const FeedbackModal = (props) => {
             <span
               className={styles.close}
               onClick={() => {
-                modalOfFeedback.style.display = 'none';
+                props.setShowFeedbackModal(false);
               }}
             >
               X

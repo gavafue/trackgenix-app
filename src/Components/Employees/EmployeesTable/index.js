@@ -6,16 +6,13 @@ const EmployeesTable = (props) => {
   const editEmployee = (string) => {
     window.location = `/employees/form?employeeId=${string}`;
   };
-  const changeDisplayModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-
   const [infoForDelete, setInfoToDelete] = useState({
     id: '',
     name: '',
     lastname: ''
   });
-
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   return (
     <table className={styles.redTable}>
       <thead>
@@ -54,7 +51,7 @@ const EmployeesTable = (props) => {
                       name: employee.firstName,
                       lastname: employee.lastName
                     });
-                    changeDisplayModal('flex');
+                    setShowDeleteModal(true);
                   }}
                 >
                   X
@@ -64,12 +61,16 @@ const EmployeesTable = (props) => {
           );
         })}
       </tbody>
-      <DeleteModal
-        modalId={infoForDelete.id}
-        namecomplete={`${infoForDelete.name} ${infoForDelete.lastname}`}
-        deleteEmployee={props.deleteEmployee}
-        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
-      />
+      {showDeleteModal && (
+        <DeleteModal
+          setShowDeleteModal={setShowDeleteModal}
+          showFeedbackModal={showFeedbackModal}
+          setShowFeedbackModal={setShowFeedbackModal}
+          modalId={infoForDelete.id}
+          namecomplete={`${infoForDelete.name} ${infoForDelete.lastname}`}
+          deleteEmployee={props.deleteEmployee}
+        />
+      )}
     </table>
   );
 };
