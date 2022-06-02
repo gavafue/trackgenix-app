@@ -3,27 +3,24 @@ import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
 
 const Form = () => {
+  const URL = process.env.REACT_APP_API_URL;
   const [projects, setProjects] = useState([]);
-  useEffect(async () => {
-    try {
-      const URL = process.env.REACT_APP_API_URL;
-      const response = await fetch(`${URL}/projects`);
-      const data = await response.json();
-      setProjects(data.data);
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+    fetch(`${URL}/projects`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProjects(data.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
   const [employees, setEmployees] = useState([]);
-  useEffect(async () => {
-    try {
-      const URL = process.env.REACT_APP_API_URL;
-      const response = await fetch(`${URL}/employees`);
-      const data = await response.json();
-      setEmployees(data.data);
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+    fetch(`${URL}/employees`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEmployees(data.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
   const [projectValue, setProjectValue] = useState('');
   const onChangeProjectSelect = (event) => {
@@ -61,17 +58,14 @@ const Form = () => {
     console.log(event.target.value);
   };
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  let modalOfFeedback = document.getElementById('myModal');
-  const changeVisibilityFeedbackModal = (string) => {
-    modalOfFeedback.style.display = string;
-  };
-  let title = 'Add Timesheet';
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
   const timesheetId = params.get('timesheetId');
+  const title = timesheetId ? 'Update Timesheet' : 'Add Timesheet';
   const options = {
-    method: 'POST',
-    url: `${process.env.REACT_APP_API_URL}/timesheets`,
+    method: timesheetId ? 'PUT' : 'POST',
+    url: `${process.env.REACT_APP_API_URL}/timesheets/${timesheetId ? timesheetId : ''} `,
     headers: {
       'Content-type': 'application/json'
     },
@@ -85,51 +79,38 @@ const Form = () => {
       workDescription: workDescriptionValue
     })
   };
-  const onSubmit = (event) => {
-    event.preventDefault();
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      if (response.status == 201 || response.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: res.message });
-        setTimeout(() => {
-          window.location = '/time-sheets';
-        }, 2000);
+  useEffect(() => {
+    if (timesheetId) {
+      fetch(`${URL}/timesheets/${timesheetId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setProjectValue(data.data.project._id);
+          setEmployeeValue(data.data.employee._id);
+          setWeekSprintValue(data.data.weekSprint);
+          setDateValue(data.data.date);
+          setHoursWorkedValue(data.data.hoursWorked);
+          setProjectHoursValue(data.data.hoursProject);
+          setWorkDescriptionValue(data.data.workDescription);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+  const onSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const res = await fetch(options.url, options);
+      const data = await res.json();
+      if (res.status == 201 || res.status == 200) {
+        setContentFeedbackModal({ title: 'Request done!', description: data.message });
+        setShowFeedbackModal(true);
       } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
+        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
+        setShowFeedbackModal(true);
       }
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-  if (timesheetId) {
-    title = 'Update Timesheet';
-    useEffect(async () => {
-      try {
-        const URL = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${URL}/timesheets/${timesheetId}`);
-        const data = await response.json();
-        setProjectValue(data.data.project);
-        setEmployeeValue(data.data.employee);
-        setWeekSprintValue(data.data.weekSprint);
-        setDateValue(data.data.date);
-        setHoursWorkedValue(data.data.hoursWorked);
-        setProjectHoursValue(data.data.hoursProject);
-        setWorkDescriptionValue(data.data.workDescription);
-      } catch (error) {
-        console.error(error);
-      }
-    }, []);
-    options.method = 'PUT';
-    options.url = `${process.env.REACT_APP_API_URL}/timesheets/${timesheetId}`;
-    options.body = JSON.stringify({
-      project: projectValue._id,
-      employee: employeeValue._id,
-      weekSprint: weekSprintValue,
-      date: dateValue,
-      hoursWorked: hoursWorkedValue,
-      hoursProject: projectHoursValue,
-      workDescription: workDescriptionValue
-    });
-  }
-  console.log(projects);
   return (
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
@@ -139,7 +120,7 @@ const Form = () => {
           className={styles.input}
           id="project"
           name="project"
-          value={projectValue._id}
+          value={projectValue}
           onChange={onChangeProjectSelect}
           required
         >
@@ -219,18 +200,18 @@ const Form = () => {
           onChange={onChangeWorkDescription}
           required
         ></input>
-        <button
-          type="submit"
-          className={styles.submitButton}
-          onClick={() => changeVisibilityFeedbackModal('block')}
-        >
+        <button type="submit" className={styles.submitButton}>
           Submit
         </button>
       </form>
-      <FeedbackModal
-        feedbackTitle={contentFeedbackModal.title}
-        messageContent={contentFeedbackModal.description}
-      />
+      {showFeedbackModal && (
+        <FeedbackModal
+          feedbackTitle={contentFeedbackModal.title}
+          messageContent={contentFeedbackModal.description}
+          setShowFeedbackModal={setShowFeedbackModal}
+          showFeedbackModal={showFeedbackModal}
+        />
+      )}
     </div>
   );
 };

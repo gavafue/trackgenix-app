@@ -2,14 +2,18 @@ import { useState } from 'react';
 import styles from './table.module.css';
 import DeleteModal from '../DeleteModal';
 
-const TimesheetsTable = (props) => {
+const TimesheetsTable = ({
+  setShowFeedbackModal,
+  showFeedbackModal,
+  timeSheets,
+  deleteTimesheet,
+  showModal,
+  setShowModal
+}) => {
   const editTimesheet = (string) => {
     window.location = `/time-sheets/form?timesheetId=${string}`;
   };
-  const changeDisplayModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-  const [infoForDelete, setInfoToDelete] = useState({
+  const [infoForDelete, setInfoForDelete] = useState({
     id: ''
   });
   return (
@@ -23,7 +27,7 @@ const TimesheetsTable = (props) => {
         <th></th>
       </thead>
       <tbody>
-        {props.timeSheets.map((timeSheet) => {
+        {timeSheets.map((timeSheet) => {
           return (
             <tr key={timeSheet._id}>
               <td>{JSON.stringify(timeSheet.project.name)}</td>
@@ -36,10 +40,10 @@ const TimesheetsTable = (props) => {
               <td>
                 <button
                   onClick={() => {
-                    setInfoToDelete({
+                    setShowModal(!showModal);
+                    setInfoForDelete({
                       id: timeSheet._id
                     });
-                    changeDisplayModal('flex');
                   }}
                 >
                   delete
@@ -49,11 +53,17 @@ const TimesheetsTable = (props) => {
           );
         })}
       </tbody>
-      <DeleteModal
-        deleteTimesheet={props.deleteTimesheet}
-        modalId={infoForDelete.id}
-        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
-      />
+      {showModal && (
+        <DeleteModal
+          deleteTimesheet={deleteTimesheet}
+          modalId={infoForDelete.id}
+          setInfoFoDelete={setInfoForDelete}
+          showFeedbackModal={showFeedbackModal}
+          setShowFeedbackModal={setShowFeedbackModal}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      )}
     </table>
   );
 };

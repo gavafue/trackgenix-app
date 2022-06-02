@@ -35,7 +35,7 @@ button:hover {
 }
 
 .modal {
-  display: none;
+  display: flex;
   position: fixed;
   align-items: center;
   justify-content: center;
