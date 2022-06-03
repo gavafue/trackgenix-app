@@ -3,6 +3,8 @@ import styles from './form.module.css';
 import Input from '../input/input.js';
 import FeedbackModal from '../FeedbackModal';
 
+const URL = process.env.REACT_APP_API_URL;
+
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
@@ -11,12 +13,7 @@ const Form = () => {
   const [activeValue, setActiveValue] = useState('');
   const [roleValue, setRoleValue] = useState('');
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-
-  let modalOfFeedback = document.getElementById('myModal');
-
-  const changeVisibilityFeedbackModal = (string) => {
-    modalOfFeedback.style.display = string;
-  };
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const onChangeNameInput = (e) => {
     setNameValue(e.target.value);
@@ -43,11 +40,11 @@ const Form = () => {
   };
 
   const params = new URLSearchParams(window.location.search);
-  const superadminId = params.get('superadminId');
+  const superAdminId = params.get('superAdminId');
 
   const options = {
-    method: 'POST',
-    url: `${process.env.REACT_APP_API_URL}/super-admin`,
+    method: superAdminId ? 'PUT' : 'POST',
+    url: `${URL}/super-admin/${superAdminId ? superAdminId : ''}`,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       firstName: nameValue,
@@ -59,48 +56,37 @@ const Form = () => {
     })
   };
 
-  if (superadminId) {
-    useEffect(async () => {
-      try {
-        const response = await fetch(`
-        ${process.env.REACT_APP_API_URL}/super-admin/${superadminId}`);
-        const data = await response.json();
-        setNameValue(data.data.firstName);
-        setLastNameValue(data.data.lastName);
-        setEmailValue(data.data.email);
-        setPasswordValue(data.data.password);
-        setActiveValue(data.data.active);
-        setRoleValue(data.data.role);
-      } catch (error) {
-        console.error(error);
-      }
-    }, []);
-    options.method = 'PUT';
-    options.url = `${process.env.REACT_APP_API_URL}/super-admin/${superadminId}`;
-    options.body = JSON.stringify({
-      firstName: nameValue,
-      lastName: lastNameValue,
-      active: activeValue,
-      email: emailValue,
-      password: passwordValue,
-      role: roleValue
-    });
-  }
+  useEffect(() => {
+    if (superAdminId) {
+      fetch(`${URL}/super-admin/${superAdminId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setNameValue(data.data.firstName);
+          setLastNameValue(data.data.lastName);
+          setEmailValue(data.data.email);
+          setPasswordValue(data.data.password);
+          setActiveValue(data.data.active);
+          setRoleValue(data.data.role);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, []);
 
-  const handleSubmit = (e) => {
-    console.log(options);
-    e.preventDefault();
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      console.log(response.message);
-      if (response.status == 201 || response.status == 200) {
-        setContentFeedbackModal({ title: res.message, description: 'Request done!' });
+  const onSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const res = await fetch(options.url, options);
+      const data = await res.json();
+      if (res.status == 201 || res.status == 200) {
+        setContentFeedbackModal({ title: 'Request done!', description: data.message });
+        setShowFeedbackModal(true);
+      } else {
+        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
+        setShowFeedbackModal(true);
       }
-      setContentFeedbackModal({ title: res.message, description: 'There has been an error!' });
-      setTimeout(() => {
-        window.location = '/super-admins';
-      }, 2000);
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleCancel = () => {
@@ -109,7 +95,7 @@ const Form = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className={styles.container}>
+      <form className={styles.container} onSubmit={onSubmit}>
         <h1>Information</h1>
         <div>
           <label>First Name</label>
@@ -138,6 +124,7 @@ const Form = () => {
             placeholder="Write your email"
             onChange={onChangeEmailInput}
             required
+            pattern="[/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]"
           />
           <label>Password</label>
           <Input
@@ -147,11 +134,12 @@ const Form = () => {
             placeholder="Write your password"
             onChange={onChangePasswordInput}
             required
+            pattern="[/^(?=.*?[a-zA-Z])(?=.*?[0-9])/]"
           />
           <label>Role</label>
           <select value={roleValue} onChange={onChangeRoleInput}>
             <option defaultValue=""> Select an option </option>
-            <option value="SA"> Superadmin </option>
+            <option value="SA"> SuperAdmin </option>
           </select>
           <label>Status</label>
           <select value={activeValue} onChange={onChangeActiveInput}>
@@ -160,21 +148,23 @@ const Form = () => {
             <option value="false"> Inactive </option>
           </select>
           <div className={styles.buttoncontainer}>
-            <button
-              type="submit"
-              className={styles.submitBtn}
-              onClick={() => changeVisibilityFeedbackModal('block')}
-            >
+            <button type="submit" className={styles.submitBtn}>
               Submit
             </button>
-            <button onClick={handleCancel}>Cancel</button>
+            <button type="submit" onClick={handleCancel}>
+              Cancel
+            </button>
           </div>
         </div>
       </form>
-      <FeedbackModal
-        feedbackTitle={contentFeedbackModal.title}
-        feedbackContent={contentFeedbackModal.description}
-      />
+      {showFeedbackModal && (
+        <FeedbackModal
+          feedbackTitle={contentFeedbackModal.title}
+          messageContent={contentFeedbackModal.description}
+          setShowFeedbackModal={setShowFeedbackModal}
+          showFeedbackModal={showFeedbackModal}
+        />
+      )}
     </div>
   );
 };
