@@ -9,39 +9,24 @@ import Projects from '../Projects';
 import TimeSheets from '../TimeSheets';
 import TimeSheetsForm from '../TimeSheets/Form';
 import Tasks from '../Tasks/index';
-
+import { Switch, Route, Redirect } from 'react-router-dom';
 function Layout() {
-  let currentScreen = <Home />;
-  switch (window.location.pathname) {
-    case '/admins':
-      currentScreen = <Admins />;
-      break;
-    case '/super-admins':
-      currentScreen = <SuperAdmins />;
-      break;
-    case '/employees':
-      currentScreen = <Employees />;
-      break;
-    case '/projects':
-      currentScreen = <Projects />;
-      break;
-    case '/time-sheets':
-      currentScreen = <TimeSheets />;
-      break;
-    case '/time-sheets/form':
-      currentScreen = <TimeSheetsForm />;
-      break;
-    case '/tasks':
-      currentScreen = <Tasks />;
-      break;
-    default:
-      break;
-  }
-
   return (
     <div className={styles.container}>
       <Header />
-      {currentScreen}
+      <Switch>
+        <Route path="/home" component={Home} />
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
+        <Route path="/admins" component={Admins} />
+        <Route path="/super-admins" component={SuperAdmins} />
+        <Route path="/employees" component={Employees} />
+        <Route path="/projects" component={Projects} />
+        <Route path="/time-sheets" component={TimeSheets} />
+        <Route path="/time-sheets/form" component={TimeSheetsForm} />
+        <Route path="/tasks" component={Tasks} />
+      </Switch>
       <Footer />
     </div>
   );
