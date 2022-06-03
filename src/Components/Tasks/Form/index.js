@@ -3,16 +3,14 @@ import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
 
 const Form = () => {
+  const URL = process.env.REACT_APP_API_URL;
   const [projects, setProjects] = useState([]);
-  useEffect(async () => {
-    try {
-      const URL = process.env.REACT_APP_API_URL;
-      const response = await fetch(`${URL}/projects`);
-      const data = await response.json();
-      setProjects(data.data);
-    } catch (error) {
-      console.error(error);
-    }
+  useEffect(() => {
+    fetch(`${URL}/projects`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProjects(data.data);
+      });
   }, []);
   const [projectValue, setProjectValue] = useState('');
   const onChangeProject = (event) => {
@@ -40,17 +38,14 @@ const Form = () => {
     console.log(event.target.value);
   };
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  let modalOfFeedback = document.getElementById('myModal');
-  const changeVisibilityFeedbackModal = (string) => {
-    modalOfFeedback.style.display = string;
-  };
-  let title = 'Add Task';
+  const [showFeedBackModal, setShowFeedbackModal] = useState(false);
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
   const taskId = params.get('taskId');
+  const title = taskId ? 'Update Task' : 'Add Task';
   const options = {
-    method: 'POST',
-    url: `${process.env.REACT_APP_API_URL}/tasks`,
+    method: taskId ? 'PUT' : 'POST',
+    url: `${process.env.REACT_APP_API_URL}/tasks/${taskId ? taskId : ''}`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -62,46 +57,36 @@ const Form = () => {
       hours: hoursValue
     })
   };
-  const onSubmit = (event) => {
-    event.preventDefault();
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      if (response.status == 201 || response.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: res.message });
-        setTimeout(() => {
-          window.location = '/tasks';
-        }, 2000);
+  useEffect(() => {
+    if (taskId) {
+      fetch(`${URL}/tasks/${taskId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setProjectValue(data.data.nameProject);
+          setWeekValue(data.data.week);
+          setDayValue(data.data.day);
+          setDescriptionValue(data.data.description);
+          setHoursValue(data.data.hours);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+  const onSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const res = await fetch(options.url, options);
+      const data = await res.json();
+      if (res.status == 201 || res.status == 200) {
+        setContentFeedbackModal({ title: 'Request done!', description: data.message });
+        setShowFeedbackModal(true);
       } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
+        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
+        setShowFeedbackModal(true);
       }
-    });
+    } catch (err) {
+      console.log(err);
+    }
   };
-  if (taskId) {
-    title = 'Update Task';
-    useEffect(async () => {
-      try {
-        const URL = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${URL}/tasks/${taskId}`);
-        const data = await response.json();
-        setProjectValue(data.data.nameProject);
-        setWeekValue(data.data.week);
-        setDayValue(data.data.day);
-        setDescriptionValue(data.data.description);
-        setHoursValue(data.data.hours);
-      } catch (error) {
-        console.error(error);
-      }
-    }, []);
-    options.method = 'PUT';
-    options.url = `${process.env.REACT_APP_API_URL}/tasks/${taskId}`;
-    options.body = JSON.stringify({
-      nameProject: projectValue._id,
-      week: weekValue,
-      day: dayValue,
-      description: descriptionValue,
-      hours: hoursValue
-    });
-  }
   return (
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
@@ -167,18 +152,18 @@ const Form = () => {
           onChange={onChangeHours}
           required
         ></input>
-        <button
-          type="submit"
-          className={styles.submitButton}
-          onClick={() => changeVisibilityFeedbackModal('block')}
-        >
+        <button type="submit" className={styles.submitButton}>
           Submit
         </button>
       </form>
-      <FeedbackModal
-        feedbackTitle={contentFeedbackModal.title}
-        messageContent={contentFeedbackModal.description}
-      />
+      {showFeedBackModal && (
+        <FeedbackModal
+          feedbackTitle={contentFeedbackModal.title}
+          messageContent={contentFeedbackModal.description}
+          setShowFeedbackModal={setShowFeedbackModal}
+          showFeedbackModal={showFeedBackModal}
+        />
+      )}
     </div>
   );
 };

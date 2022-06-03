@@ -2,16 +2,21 @@ import styles from './table.module.css';
 import DeleteModal from '../DeleteModal';
 import { useState } from 'react';
 
-const TasksTable = (props) => {
+const TasksTable = ({
+  tasks,
+  deleteTask,
+  showDeleteModal,
+  setShowDeleteModal,
+  setShowFeedbackModal,
+  showFeedBackModal
+}) => {
   const editTask = (string) => {
     window.location = `/tasks/form?taskId=${string}`;
   };
-  const changeDisplayModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-  const [infoForDelete, setInfoToDelete] = useState({
+  const [infoForDelete, setInfoForDelete] = useState({
     id: ''
   });
+  console.log(showFeedBackModal);
   return (
     <table className={styles.table}>
       <thead>
@@ -24,7 +29,7 @@ const TasksTable = (props) => {
         <th></th>
       </thead>
       <tbody>
-        {props.tasks.map((task) => {
+        {tasks.map((task) => {
           return (
             <tr key={task._id}>
               <td>{JSON.stringify(task.nameProject.name)}</td>
@@ -38,10 +43,10 @@ const TasksTable = (props) => {
               <td>
                 <button
                   onClick={() => {
-                    setInfoToDelete({
+                    setInfoForDelete({
                       id: task._id
                     });
-                    changeDisplayModal('flex');
+                    setShowDeleteModal(!showDeleteModal);
                   }}
                 >
                   delete
@@ -51,11 +56,17 @@ const TasksTable = (props) => {
           );
         })}
       </tbody>
-      <DeleteModal
-        modalId={infoForDelete.id}
-        deleteTask={props.deleteTask}
-        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
-      />
+      {showDeleteModal && (
+        <DeleteModal
+          modalId={infoForDelete.id}
+          deleteTask={deleteTask}
+          setInfoForDelete={setInfoForDelete}
+          showFeedBackModal={showFeedBackModal}
+          setShowFeedbackModal={setShowFeedbackModal}
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+        />
+      )}
     </table>
   );
 };

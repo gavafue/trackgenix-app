@@ -4,35 +4,32 @@ import { useEffect, useState } from 'react';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  const changeVisibilityDeleteModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-  const url = `${process.env.REACT_APP_API_URL}/tasks`;
-  useEffect(async () => {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setTasks(data.data);
-      console.log(data.data);
-    } catch (error) {
-      console.error(error);
-    }
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const url = `${process.env.REACT_APP_API_URL}`;
+  useEffect(() => {
+    fetch(`${url}/tasks`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTasks(data.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
   const deleteTask = (string, setContentFeedbackModal) => {
     const options = {
       method: 'DELETE',
       url: `${process.env.REACT_APP_API_URL}/tasks/${string}`
     };
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      if (response.error === true) {
-        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
-      } else {
-        setContentFeedbackModal({ title: 'Request done!', description: res.message });
-        setTasks(tasks.filter((task) => task._id !== string));
-        changeVisibilityDeleteModal('none');
-      }
-    });
+    fetch(options.url, options)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error === true) {
+          setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
+        } else {
+          setContentFeedbackModal({ title: 'Request done!', description: res.message });
+          setTasks(tasks.filter((task) => task._id !== string));
+        }
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <section className={styles.container}>
@@ -40,7 +37,8 @@ const Tasks = () => {
       <TasksTable
         tasks={tasks}
         deleteTask={deleteTask}
-        changeVisibilityDeleteModal={changeVisibilityDeleteModal}
+        showDeleteModal={showDeleteModal}
+        setShowDeleteModal={setShowDeleteModal}
       />
       <button className={styles.addBtn}>
         <a href="/tasks/form">Add New Task</a>
