@@ -17,14 +17,15 @@ const Form = () => {
   const [title, setTitle] = useState('Add an employee');
   const [idInput, setIdInput] = useState('');
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const URL = process.env.REACT_APP_API_URL;
 
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
   const paramEmployeeId = params.get('employeeId');
   console.log(paramEmployeeId);
   const options = {
-    method: 'POST',
-    url: `${process.env.REACT_APP_API_URL}/employees`,
+    method: paramEmployeeId ? 'PUT' : 'POST',
+    url: paramEmployeeId ? `${URL}/employees/${paramEmployeeId}` : `${URL}/employees`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -44,12 +45,6 @@ const Form = () => {
   };
   useEffect(() => {
     if (paramEmployeeId) {
-      setTitle(`Editing ${nameValue} ${lastNameValue} information.`);
-      options.method = 'PUT';
-      options.url = `${process.env.REACT_APP_API_URL}/employees/${paramEmployeeId}`;
-      setIdInput(<Input name="employee-id" type="text" disabled value={paramEmployeeId} />);
-
-      const URL = process.env.REACT_APP_API_URL;
       fetch(`${URL}/employees/${paramEmployeeId}`)
         .then((response) => response.json())
         .then((data) => {
@@ -63,6 +58,8 @@ const Form = () => {
           setTelephoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setCountryValue(data.data.country);
+          setTitle(`Editing ${nameValue} ${lastNameValue} information.`);
+          setIdInput(<Input name="employee-id" type="text" disabled value={paramEmployeeId} />);
         })
         .catch((error) => console.log(error));
     }
