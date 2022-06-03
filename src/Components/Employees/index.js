@@ -14,10 +14,6 @@ function Employees() {
       .catch((error) => console.log(error));
   }, []);
 
-  const changeVisibilityDeleteModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-
   const deleteEmployee = (string, setContentFeedbackModal) => {
     const options = {
       method: 'DELETE',
