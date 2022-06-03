@@ -58,3 +58,19 @@
 .buttonEdit:hover {
   opacity: 1;
 }
+.addBtn{
+  align-self: flex-end;
+  margin-top: 1%;
+  width: 10%;
+  padding: 0.5%;
+  background-color: #EA3354;
+  border-radius: 10px;
+  border: 1px solid #000;
+  color: #fff;
+}
+
+.addBtn a{
+  align-items: center;
+  text-decoration: none;
+  color:#fff;
+}

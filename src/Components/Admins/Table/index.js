@@ -1,32 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../admins.module.css';
 import DeleteModal from '../DeleteModal';
 
-const AdminsTable = (props) => {
-  const changeDisplayModal = (property) => {
-    document.getElementById('id01').style.display = property;
-  };
-  const [infoForDelete, setInfoToDelete] = useState({
-    id: ''
-  });
-
-  const [admins, saveAdmins] = useState([]);
-  const URL = `${process.env.REACT_APP_API_URL}/admins`;
-  useEffect(async () => {
-    try {
-      const response = await fetch(URL);
-      const data = await response.json();
-      saveAdmins(data.data);
-      console.log(data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
+const AdminsTable = ({
+  setShowFeedbackModal,
+  showFeedbackModal,
+  admins,
+  deleteAdmin,
+  showModal,
+  setShowModal
+}) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-
+  const [infoForDelete, setInfoForDelete] = useState({
+    id: ''
+  });
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
@@ -56,22 +45,15 @@ const AdminsTable = (props) => {
                   <input type="button" value="..." />
                 </td>
                 <td>
-                  <button
-                    className="buttonEdit"
-                    type="button"
-                    value="Edit"
-                    onClick={() => OnClickEdit(admin._id)}
-                  >
-                    Edit
-                  </button>
+                  <button onClick={() => OnClickEdit(admin._id)}>Edit</button>
                 </td>
                 <td>
                   <button
                     onClick={() => {
-                      setInfoToDelete({
+                      setShowModal(!showModal);
+                      setInfoForDelete({
                         id: admin._id
                       });
-                      changeDisplayModal('flex');
                     }}
                   >
                     Delete
@@ -81,17 +63,18 @@ const AdminsTable = (props) => {
             );
           })}
         </tbody>
-        <DeleteModal
-          deleteTimesheet={props.deleteTimesheet}
-          modalId={infoForDelete.id}
-          changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
-        />
+        {showModal && (
+          <DeleteModal
+            setShowModal={setShowModal}
+            showFeedbackModal={showFeedbackModal}
+            setShowFeedbackModal={setShowFeedbackModal}
+            modalId={infoForDelete.id}
+            deleteAdmin={deleteAdmin}
+            setInfoFoDelete={setInfoForDelete}
+            showModal={showModal}
+          />
+        )}
       </table>
-      <input
-        type="button"
-        value="Add Admin"
-        onClick={() => (window.location.href = '/admins/form')}
-      />
     </section>
   );
 };
