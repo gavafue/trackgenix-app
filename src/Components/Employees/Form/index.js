@@ -13,7 +13,10 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
+  const [contentFeedbackModal, setContentFeedbackModal] = useState({
+    title: '',
+    description: ''
+  });
   const [title, setTitle] = useState('Add an employee');
   const [idInput, setIdInput] = useState('');
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -67,10 +70,14 @@ const Form = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    let correctStatus;
     fetch(options.url, options)
-      .then((response) => response.json())
       .then((response) => {
-        if (response.status == 201 || response.status == 200) {
+        correctStatus = response.status === 201 || response.status === 200;
+        return response.json();
+      })
+      .then((response) => {
+        if (correctStatus) {
           setContentFeedbackModal({
             title: 'Request done!',
             description: response.message

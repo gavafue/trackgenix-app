@@ -19,6 +19,8 @@ button:hover {
 .deletebtn {
   float: left;
   width: 50%;
+  padding: 14px 20px;
+
 }
 
 /* Add a color to the cancel button */

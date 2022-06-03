@@ -66,6 +66,7 @@ const EmployeesTable = (props) => {
           setShowDeleteModal={setShowDeleteModal}
           showFeedbackModal={showFeedbackModal}
           setShowFeedbackModal={setShowFeedbackModal}
+          showDeleteModal={showDeleteModal}
           modalId={infoForDelete.id}
           namecomplete={`${infoForDelete.name} ${infoForDelete.lastname}`}
           deleteEmployee={props.deleteEmployee}

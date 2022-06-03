@@ -4,7 +4,6 @@ import FeedbackModal from '../FeedbackModal';
 
 const DeleteModal = (props) => {
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-
   return (
     <div>
       <div id="id01" className={styles.modal}>
@@ -30,6 +29,7 @@ const DeleteModal = (props) => {
                 className={styles.deletebtn}
                 onClick={() => {
                   props.deleteEmployee(props.modalId, setContentFeedbackModal);
+                  props.setShowDeleteModal(false);
                   props.setShowFeedbackModal(true);
                 }}
               >
@@ -41,7 +41,6 @@ const DeleteModal = (props) => {
       </div>
       {props.showFeedbackModal && (
         <FeedbackModal
-          setShowFeedbackModal={props.setShowFeedbackModal}
           feedbackTitle={contentFeedbackModal.title}
           messageContent={contentFeedbackModal.description}
         />

@@ -33,7 +33,6 @@ function Employees() {
             description: response.message
           });
           saveEmployees(employees.filter((employee) => string !== employee._id));
-          changeVisibilityDeleteModal('none');
         }
       })
       .catch((error) => console.log(error));
@@ -45,12 +44,7 @@ function Employees() {
       <a href="/employees/form" className={styles.button}>
         Add new employee +
       </a>
-      <EmployeesTable
-        employees={employees}
-        deleteEmployee={deleteEmployee}
-        changeVisibilityDeleteModal={changeVisibilityDeleteModal}
-        showDeleteModal
-      />
+      <EmployeesTable employees={employees} deleteEmployee={deleteEmployee} />
     </section>
   );
 }
