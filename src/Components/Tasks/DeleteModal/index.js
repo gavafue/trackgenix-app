@@ -10,7 +10,6 @@ const DeleteModal = ({
   showFeedbackModal
 }) => {
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  console.log(showFeedbackModal);
   return (
     <div>
       <div id="id01" className={styles.modal}>
