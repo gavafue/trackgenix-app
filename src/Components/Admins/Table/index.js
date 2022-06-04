@@ -48,16 +48,17 @@ const AdminsTable = ({
                 </td>
                 <td>{<Button text="Edit" onClick={() => OnClickEdit(admin._id)} />}</td>
                 <td>
-                  <button
-                    onClick={() => {
-                      setShowModal(!showModal);
-                      setInfoForDelete({
-                        id: admin._id
-                      });
-                    }}
-                  >
-                    Delete
-                  </button>
+                  {
+                    <Button
+                      text="Delete"
+                      onClick={() => {
+                        setShowModal(!showModal);
+                        setInfoForDelete({
+                          id: admin._id
+                        });
+                      }}
+                    />
+                  }
                 </td>
               </tr>
             );
