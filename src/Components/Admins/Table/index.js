@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from '../admins.module.css';
 import Modal from '../../Shared/Modal';
+import Button from '../../Shared/Button';
 
 const AdminsTable = ({
   // setShowFeedbackModal,
@@ -45,9 +46,7 @@ const AdminsTable = ({
                 <td>
                   <input type="button" value="..." />
                 </td>
-                <td>
-                  <button onClick={() => OnClickEdit(admin._id)}>Edit</button>
-                </td>
+                <td>{<Button text="Edit" onClick={() => OnClickEdit(admin._id)} />}</td>
                 <td>
                   <button
                     onClick={() => {
