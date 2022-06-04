@@ -9,8 +9,7 @@ const AdminsTable = ({
   admins,
   deleteAdmin,
   showModal,
-  setShowModal,
-  modalId
+  setShowModal
 }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
@@ -69,20 +68,18 @@ const AdminsTable = ({
             title={<h1>Delete admins</h1>}
             message={<p>Are you sure you want to delete this admin?</p>}
             extras={
-              <button
-                type="button"
+              <Button
+                text="Delete"
                 className={styles.deletebtn}
                 onClick={() => {
-                  deleteAdmin(modalId);
+                  deleteAdmin(infoForDelete.id);
                   setShowModal(false);
+                  window.location.reload();
                 }}
-              >
-                Delete
-              </button>
+              />
             }
             deleteAdmin={deleteAdmin}
             setInfoFoDelete={setInfoForDelete}
-            modalId={infoForDelete.id}
             setShowModal={setShowModal}
             showModal={showModal}
           />

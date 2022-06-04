@@ -1,4 +1,4 @@
-.modal {
+/* .modal {
   display: flex;
   position: fixed;
   z-index: 1;
@@ -67,4 +67,4 @@
 @keyframes fadeIn {
   from {opacity: 0}
   to {opacity: 1}
-}
+} */
