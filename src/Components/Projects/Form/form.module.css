@@ -1,0 +1,52 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10px;
+  border-color: #000;
+  box-shadow:0 0 10px #999;
+}
+
+input, select {
+  width: 10%;
+  margin: .5%;
+  text-align: center;
+  border-radius: 5px;
+}
+
+label {
+  font-size: 15px;
+  margin-left: 2%;
+}
+
+.smallBtn {
+  margin:1%;
+  background-color: #EA3354;
+  color:antiquewhite;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+
+.submitBtn {
+  margin:1%;
+  background-color: #EA3354;
+  color:antiquewhite;
+  border-radius: 10px;
+  border: 1px solid #000;
+  width: 15%;
+}

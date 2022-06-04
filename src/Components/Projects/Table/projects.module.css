@@ -14,19 +14,24 @@ table {
   border-collapse: collapse;
   font-weight: bold;
 }
+
 table td, table th {
   border: 1px solid #AAAAAA;
   padding: 3px 2px;
 }
+
 table tbody td {
   font-size: 13px;
 }
+
 table tr:nth-child(even) {
   background: #F5C8BF;
 }
+
 table thead {
   background: #EA3354;
 }
+
 table thead th {
   font-size: 19px;
   font-weight: bold;
@@ -34,6 +39,7 @@ table thead th {
   text-align: center;
   border-left: 2px solid #EA3354;
 }
+
 table thead th:first-child {
   border-left: none;
 }
@@ -46,19 +52,11 @@ table thead th:first-child {
   border: 1px solid #000;
 }
 
-.addBtn{
-  align-self: flex-end;
-  margin-top: 1%;
-  margin-right: 10%;
-  width: 10%;
-  padding: 0.5%;
+.submitBtn {
+  margin:1%;
   background-color: #EA3354;
+  color:antiquewhite;
   border-radius: 10px;
   border: 1px solid #000;
-  color: #fff;
-}
-
-.addBtn a{
-  text-decoration: none;
-  color:#fff;
+  width: 15%;
 }
