@@ -1,43 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './projects.module.css';
-// import DeleteModal from '../DeleteModal';
+import DeleteModal from '../DeleteModal';
 
-const ProjectsTable = (/*props*/) => {
-  const [projects, setProjects] = useState([]);
-  const URL = `${process.env.REACT_APP_API_URL}/projects`;
+const ProjectsTable = ({
+  setShowFeedbackModal,
+  showFeedbackModal,
+  projects,
+  deleteProject,
+  showModal,
+  setShowModal
+}) => {
   const editProject = (string) => {
     window.location = `/projects/form?projectId=${string}`;
   };
-  useEffect(async () => {
-    try {
-      const response = await fetch(URL);
-      const data = await response.json();
-      setProjects(data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-  const onClickForm = () => {
-    window.location.href = '/projects/form';
-  };
-
-  // const changeVisibilityDeleteModal = (property) => {
-  //   document.getElementById('id01').style.display = property;
-  // };
-
-  const deleteProject = (_id /*, setContentFeedbackModal*/) => {
-    fetch(`${URL}/${_id}`, {
-      method: 'DELETE'
-    }).then((result) => {
-      result.json().then((response) => {
-        setProjects(projects.filter((project) => project._id !== _id));
-        alert(response.message);
-        // setContentFeedbackModal({ title: 'Request done!', description: response.message });
-        // changeVisibilityDeleteModal('none');
-      });
-    });
-  };
+  const [infoForDelete, setInfoForDelete] = useState({
+    id: ''
+  });
 
   return (
     <section className={styles.container}>
@@ -56,38 +34,45 @@ const ProjectsTable = (/*props*/) => {
           </tr>
         </thead>
         <tbody>
-          {projects &&
-            projects.map((project) => {
-              return (
-                <tr key={project._id}>
-                  <td>{project.name}</td>
-                  <td>{project.active ? 'Active' : 'Inactive'}</td>
-                  <td>{project.description}</td>
-                  <td>{project.client}</td>
-                  <td>{project.startDate}</td>
-                  <td>{project.endDate}</td>
-                  <td>{project.members[0]._id}</td>
-                  <td>
-                    <button className={styles.smallBtn} onClick={() => editProject(project._id)}>
-                      Edit
-                    </button>
-                    <button className={styles.smallBtn} onClick={() => deleteProject(project._id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+          {projects.map((project) => {
+            return (
+              <tr key={project._id}>
+                <td>{project.name}</td>
+                <td>{project.active ? 'Active' : 'Inactive'}</td>
+                <td>{project.description}</td>
+                <td>{project.client}</td>
+                <td>{project.startDate}</td>
+                <td>{project.endDate}</td>
+                <td>{project.members[0]._id}</td>
+                <td>
+                  <button onClick={() => editProject(project._id)}>edit</button>
+                  <button
+                    onClick={() => {
+                      setShowModal(!showModal);
+                      setInfoForDelete({
+                        id: project._id
+                      });
+                    }}
+                  >
+                    delete
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
+        {showModal && (
+          <DeleteModal
+            deleteProject={deleteProject}
+            modalId={infoForDelete.id}
+            setInfoFoDelete={setInfoForDelete}
+            showFeedbackModal={showFeedbackModal}
+            setShowFeedbackModal={setShowFeedbackModal}
+            showModal={showModal}
+            setShowModal={setShowModal}
+          />
+        )}
       </table>
-      <button onClick={onClickForm} className={styles.submitBtn}>
-        Add Project
-      </button>
-      {/* <DeleteModal
-        deleteProject={props.deleteProject}
-        modalId={projects._id}
-        changeVisibilityDeleteModal={props.changeVisibilityDeleteModal}
-      /> */}
     </section>
   );
 };

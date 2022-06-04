@@ -2,17 +2,16 @@ import { useState, useEffect } from 'react';
 import FeedbackModal from '../FeedbackModal';
 import styles from './form.module.css';
 
-function Form() {
+const Form = () => {
   const [employees, setEmployees] = useState([]);
-  useEffect(async () => {
-    try {
-      const URL = process.env.REACT_APP_API_URL;
-      const response = await fetch(`${URL}/employees`);
-      const data = await response.json();
-      setEmployees(data.data);
-    } catch (error) {
-      console.error(error);
-    }
+  const URL = process.env.REACT_APP_API_URL;
+  useEffect(() => {
+    fetch(`${URL}/employees`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEmployees(data.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const [nameValue, setNameValue] = useState('');
@@ -53,19 +52,15 @@ function Form() {
     setMembersRateValue(event.target.value);
   };
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  let modalOfFeedback = document.getElementById('myModal');
-  const changeVisibilityFeedbackModal = (string) => {
-    modalOfFeedback.style.display = string;
-  };
-
-  let title = 'Add a Project';
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
-  const paramProjectId = params.get('projectId');
+  const projectId = params.get('projectId');
+  const title = projectId ? `Editing ${nameValue} projects's information.` : 'Add a Project';
 
   const options = {
-    method: 'POST',
-    url: `${process.env.REACT_APP_API_URL}/projects`,
+    method: projectId ? 'PUT' : 'POST',
+    url: `${URL}/projects/${projectId ? projectId : ''}`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -86,72 +81,42 @@ function Form() {
     })
   };
 
-  const onSubmit = (event) => {
-    console.log({
-      name: nameValue,
-      startDate: startDateValue,
-      endDate: endDateValue,
-      description: descriptionValue,
-      client: clientValue,
-      members: [
-        {
-          name: membersValue,
-          role: membersRoleValue,
-          rate: membersRateValue
-        }
-      ],
-      active: activeValue
-    });
-    event.preventDefault();
-    fetch(options.url, options).then(async (response) => {
-      const res = await response.json();
-      if (response.status == 201 || response.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: res.message });
-        setTimeout(() => {
-          window.location = '/projects';
-        }, 2000);
-      } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: res.message });
-      }
-    });
-  };
+  useEffect(() => {
+    if (projectId) {
+      fetch(`${URL}/projects/${projectId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setNameValue(data.data.name);
+          setStartDateValue(data.data.startDate);
+          setEndDateValue(data.data.endDate);
+          setDescriptionValue(data.data.description);
+          setClientValue(data.data.client);
+          setMembersValue(data.data.members);
+          setActiveValue(data.data.active);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
 
-  if (paramProjectId) {
-    title = `Editing ${nameValue} projects's information.`;
-    useEffect(async () => {
-      try {
-        const URL = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${URL}/projects/${paramProjectId}`);
-        const data = await response.json();
-        setNameValue(data.data.name);
-        setStartDateValue(data.data.startDate);
-        setEndDateValue(data.data.endDate);
-        setDescriptionValue(data.data.description);
-        setClientValue(data.data.client);
-        setMembersValue(data.data.members);
-        setActiveValue(data.data.active);
-      } catch (error) {
-        console.error(error);
+  const onSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const res = await fetch(options.url, options);
+      const data = await res.json();
+      if (data.status !== 201 && data.status !== 200) {
+        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
+        setShowFeedbackModal(true);
+      } else {
+        setContentFeedbackModal({ title: 'Request done!', description: data.message });
+        setShowFeedbackModal(true);
+        // setTimeout(() => {
+        //   window.location = '/projects';
+        // }, 3000);
       }
-    }, []);
-    options.method = 'PUT';
-    options.url = `${process.env.REACT_APP_API_URL}/projects/${paramProjectId}`;
-    options.body = JSON.stringify({
-      name: nameValue,
-      startDate: startDateValue,
-      endDate: endDateValue,
-      description: descriptionValue,
-      client: clientValue,
-      members: [
-        {
-          name: membersValue,
-          role: membersRoleValue,
-          rate: membersRateValue
-        }
-      ],
-      active: activeValue
-    });
-  }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -240,20 +205,20 @@ function Form() {
             placeholder="Enter the employee's rate"
           />
         </fieldset>
-        <button
-          type="submit"
-          className={styles.submitBtn}
-          onClick={() => changeVisibilityFeedbackModal('block')}
-        >
+        <button type="submit" className={styles.submitBtn}>
           Submit
         </button>
       </form>
-      <FeedbackModal
-        feedbackTitle={contentFeedbackModal.title}
-        messageContent={contentFeedbackModal.description}
-      />
+      {showFeedbackModal && (
+        <FeedbackModal
+          feedbackTitle={contentFeedbackModal.title}
+          messageContent={contentFeedbackModal.description}
+          setShowFeedbackModal={setShowFeedbackModal}
+          showFeedbackModal={showFeedbackModal}
+        />
+      )}
     </div>
   );
-}
+};
 
 export default Form;
