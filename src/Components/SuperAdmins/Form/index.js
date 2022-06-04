@@ -3,9 +3,8 @@ import styles from './form.module.css';
 import Input from '../input/input.js';
 import FeedbackModal from '../FeedbackModal';
 
-const URL = process.env.REACT_APP_API_URL;
-
 const Form = () => {
+  const URL = process.env.REACT_APP_API_URL;
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -40,7 +39,7 @@ const Form = () => {
   };
 
   const params = new URLSearchParams(window.location.search);
-  const superAdminId = params.get('superAdminId');
+  const superAdminId = params.get('superadminId');
 
   const options = {
     method: superAdminId ? 'PUT' : 'POST',
@@ -90,7 +89,7 @@ const Form = () => {
   };
 
   const handleCancel = () => {
-    window.location = '/super-admins';
+    window.location = '/super-admin';
   };
 
   return (
@@ -124,7 +123,6 @@ const Form = () => {
             placeholder="Write your email"
             onChange={onChangeEmailInput}
             required
-            pattern="[/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]"
           />
           <label>Password</label>
           <Input
@@ -134,7 +132,6 @@ const Form = () => {
             placeholder="Write your password"
             onChange={onChangePasswordInput}
             required
-            pattern="[/^(?=.*?[a-zA-Z])(?=.*?[0-9])/]"
           />
           <label>Role</label>
           <select value={roleValue} onChange={onChangeRoleInput}>

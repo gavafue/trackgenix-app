@@ -10,7 +10,6 @@ const SuperAdmins = () => {
     fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
       .then((res) => res.json())
       .then((data) => {
-        console.log('data', data);
         setSuperAdmins(data.data);
       })
       .catch((err) => console.log(err));
@@ -19,23 +18,34 @@ const SuperAdmins = () => {
   const createSuperAdmin = () => {
     window.location.href = '/super-admins/form';
   };
-  const deleteSuperAdmin = (_id, setContentFeedbackModal) => {
-    fetch(`${process.env.REACT_APP_API_URL}/super-admin/${_id}`, {
-      method: 'DELETE'
-    })
+
+  // const deleteSuperAdmin = (_id) => {
+  //   // if (modal);
+  //   fetch(`${process.env.REACT_APP_API_URL}/super-admin/${_id}`, {
+  //     method: 'DELETE'
+  //   }).then((result) => {
+  //     result.json().then((response) => {
+  //       setSuperAdmins([...superAdmins.filter((superAdmin) => superAdmin._id !== _id)]);
+  //       alert(response.message);
+  //     });
+  //   });
+  // };
+  const deleteSuperAdmin = (string, setContentFeedbackModal) => {
+    const options = {
+      method: 'DELETE',
+      url: `${`${process.env.REACT_APP_API_URL}`}/super-admin/${string}`
+    };
+    fetch(options.url, options)
+      .then((response) => response.json())
       .then((response) => {
-        response.json().then((response) => {
-          if (response.error === true) {
-            setContentFeedbackModal({
-              title: 'Something went wrong',
-              description: response.message
-            });
-          } else {
-            setContentFeedbackModal({ title: 'Request done!', description: response.message });
-            setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== _id));
-            alert(response.message);
-          }
-        });
+        if (response.error === true) {
+          // setShowModal(false);
+          setContentFeedbackModal({ title: 'Something went wrong', description: response.message });
+        } else {
+          // setShowModal(false);
+          setContentFeedbackModal({ title: 'Request done!', description: response.message });
+          setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== string));
+        }
       })
       .catch((err) => console.log(err));
   };

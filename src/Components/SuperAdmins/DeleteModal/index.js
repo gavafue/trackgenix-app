@@ -2,7 +2,7 @@ import styles from './deletemodal.module.css';
 import { useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
 
-const DeleteModal = ({ deleteTimesheet, modalId, showModal, setShowModal, showFeedbackModal }) => {
+const DeleteModal = ({ deleteSuperAdmin, modalId, showModal, setShowModal, showFeedbackModal }) => {
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
   return (
     <div>
@@ -10,7 +10,7 @@ const DeleteModal = ({ deleteTimesheet, modalId, showModal, setShowModal, showFe
         <form className={styles.modalContent}>
           <div className={styles.container}>
             <h1>Delete Account</h1>
-            <p>Are you sure you want to delete this timesheet?</p>
+            <p>Are you sure you want to delete this project?</p>
 
             <div className={styles.clearfix}>
               <button
@@ -24,7 +24,7 @@ const DeleteModal = ({ deleteTimesheet, modalId, showModal, setShowModal, showFe
                 type="button"
                 className={styles.deletebtn}
                 onClick={() => {
-                  deleteTimesheet(modalId, setContentFeedbackModal);
+                  deleteSuperAdmin(modalId, setContentFeedbackModal);
                   setShowModal(false);
                 }}
               >
