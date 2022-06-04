@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './super-admins.module.css';
-import SuperAdminsTable from './Table';
+import Table from '../Shared/Table';
 
 const SuperAdmins = () => {
   const [superAdmins, setSuperAdmins] = useState([]);
@@ -49,11 +49,21 @@ const SuperAdmins = () => {
       })
       .catch((err) => console.log(err));
   };
-
+  const superAdminData = superAdmins.map((superAdmin) => {
+    return {
+      firstName: superAdmin.firstName,
+      lastName: superAdmin.lastName,
+      email: superAdmin.email,
+      password: superAdmin.password,
+      role: superAdmin.role,
+      active: JSON.stringify(superAdmin.active)
+    };
+  });
   return (
     <section className={styles.container}>
-      <SuperAdminsTable
-        superAdmins={superAdmins}
+      <Table
+        data={superAdminData}
+        headers={['firstName', 'lastName', 'email', 'password', 'role', 'active']}
         deleteSuperAdmin={deleteSuperAdmin}
         showModal={showModal}
         setShowModal={setShowModal}
