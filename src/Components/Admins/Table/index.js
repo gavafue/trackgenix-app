@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import styles from '../admins.module.css';
-import DeleteModal from '../DeleteModal';
+import Modal from '../../Shared/Modal';
 
 const AdminsTable = ({
-  setShowFeedbackModal,
-  showFeedbackModal,
+  // setShowFeedbackModal,
+  // showFeedbackModal,
   admins,
   deleteAdmin,
   showModal,
-  setShowModal
+  setShowModal,
+  modalId
 }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
@@ -64,13 +65,25 @@ const AdminsTable = ({
           })}
         </tbody>
         {showModal && (
-          <DeleteModal
-            setShowModal={setShowModal}
-            showFeedbackModal={showFeedbackModal}
-            setShowFeedbackModal={setShowFeedbackModal}
-            modalId={infoForDelete.id}
+          <Modal
+            title={<h1>Delete admins</h1>}
+            message={<p>Are you sure you want to delete this admin?</p>}
+            extras={
+              <button
+                type="button"
+                className={styles.deletebtn}
+                onClick={() => {
+                  deleteAdmin(modalId);
+                  setShowModal(false);
+                }}
+              >
+                Delete
+              </button>
+            }
             deleteAdmin={deleteAdmin}
             setInfoFoDelete={setInfoForDelete}
+            modalId={infoForDelete.id}
+            setShowModal={setShowModal}
             showModal={showModal}
           />
         )}
