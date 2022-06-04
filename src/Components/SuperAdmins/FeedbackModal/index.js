@@ -1,4 +1,4 @@
-import styles from './feedbackModal.module.css';
+import styles from './feedbackmodal.module.css';
 
 const FeedbackModal = ({ setShowFeedbackModal, feedbackTitle, messageContent }) => {
   return (
