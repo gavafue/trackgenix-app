@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../admins.module.css';
+//import styles from '../admins.module.css';
 import DeleteModal from '../DeleteModal';
 
 const AdminsTable = ({
@@ -17,7 +17,7 @@ const AdminsTable = ({
     id: ''
   });
   return (
-    <section className={styles.container}>
+    <section /*className={styles.container}*/>
       <h2>Admins</h2>
       <table>
         <thead>

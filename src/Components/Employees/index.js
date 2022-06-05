@@ -1,7 +1,13 @@
-import EmployeesTable from './EmployeesTable';
+// import EmployeesTable from './EmployeesTable';
 import { useEffect, useState } from 'react';
 import styles from './employees.module.css';
+import Table from '../Shared/Table';
+
 const URL = process.env.REACT_APP_API_URL;
+
+const editData = (string) => {
+  window.location = `/employees/form?employeeId=${string}`;
+};
 
 function Employees() {
   const [employees, saveEmployees] = useState([]);
@@ -39,12 +45,20 @@ function Employees() {
   };
 
   return (
-    <section className={styles.container}>
+    <section>
       <h2>Employees</h2>
+      <div>
+        <Table
+          data={employees}
+          headersName={['Name', 'Last Name', 'Email', 'Phone']}
+          headers={['firstName', 'lastName', 'email', 'phone']}
+          deleteEmployee={deleteEmployee}
+          editData={editData}
+        />
+      </div>
       <a href="/employees/form" className={styles.button}>
-        Add new employee +
+        Add new employee
       </a>
-      <EmployeesTable employees={employees} deleteEmployee={deleteEmployee} />
     </section>
   );
 }

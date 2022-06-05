@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './table.module.css';
+//import styles from './table.module.css';
 import DeleteModal from '../DeleteModal';
 
 const TimesheetsTable = ({
@@ -17,7 +17,7 @@ const TimesheetsTable = ({
     id: ''
   });
   return (
-    <table className={styles.table}>
+    <table /*className={styles.table}*/>
       <thead>
         <th>Project</th>
         <th>Date</th>
