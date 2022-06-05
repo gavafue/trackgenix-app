@@ -14,7 +14,7 @@ const Admins = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  const deleteAdmin = (string, setContentFeedbackModal) => {
+  const deleteAdmin = (string /*, setContentFeedbackModal*/) => {
     const options = {
       method: 'DELETE',
       url: `${`${process.env.REACT_APP_API_URL}`}/admins/${string}`
@@ -23,9 +23,9 @@ const Admins = () => {
       .then((response) => response.json())
       .then((response) => {
         if (response.error === true) {
-          setContentFeedbackModal({ title: 'Something went wrong', description: response.message });
+          // setContentFeedbackModal({ title: 'Something went wrong', description: response.message });
         } else {
-          setContentFeedbackModal({ title: 'Request done!', description: response.message });
+          // setContentFeedbackModal({ title: 'Request done!', description: response.message });
           setAdmins(admins.filter((admin) => admin._id !== string));
         }
       })

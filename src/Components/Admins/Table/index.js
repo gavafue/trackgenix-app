@@ -63,28 +63,27 @@ const AdminsTable = ({
             );
           })}
         </tbody>
-        {showModal && (
-          <Modal
-            title={<h1>Delete admins</h1>}
-            message={<p>Are you sure you want to delete this admin?</p>}
-            extras={
-              <Button
-                text="Delete"
-                className={styles.deletebtn}
-                onClick={() => {
-                  deleteAdmin(infoForDelete.id);
-                  setShowModal(false);
-                  window.location.reload();
-                }}
-              />
-            }
-            deleteAdmin={deleteAdmin}
-            setInfoFoDelete={setInfoForDelete}
-            setShowModal={setShowModal}
-            showModal={showModal}
-          />
-        )}
       </table>
+      {showModal && (
+        <Modal
+          title={<h1>Delete admins</h1>}
+          message={<p>Are you sure you want to delete this admin?</p>}
+          extras={
+            <Button
+              text="Delete"
+              className={styles.deletebtn}
+              onClick={() => {
+                deleteAdmin(infoForDelete.id);
+                setShowModal(false);
+              }}
+            />
+          }
+          deleteAdmin={deleteAdmin}
+          setInfoFoDelete={setInfoForDelete}
+          setShowModal={setShowModal}
+          showModal={showModal}
+        />
+      )}
     </section>
   );
 };

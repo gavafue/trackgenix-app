@@ -13,6 +13,7 @@ function Form() {
   const [cityValue, setCityValue] = useState('');
   const [zipValue, setZipValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
+  console.log(birthDateValue);
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -82,7 +83,7 @@ function Form() {
           setEmailValue(data.data.email);
           setPasswordValue(data.data.password);
           setCityValue(data.data.city);
-          setBirthDateValue(data.data.birthDate);
+          setBirthDateValue(data.data.dateBirth);
           setGenderValue(data.data.gender);
           setPhoneValue(data.data.phone);
           setZipValue(data.data.zip);
@@ -138,7 +139,7 @@ function Form() {
           <option value="Female">Female</option>
           <option value="Other">Other</option>
           <option value="Male">Male</option>
-          <option value="" disabled selected hidden>
+          <option value="" disabled defaultValue={genderValue} hidden>
             Choose gender
           </option>
         </select>
@@ -160,7 +161,7 @@ function Form() {
         <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
           <option value="true">Active</option>
           <option value="false">Inactive</option>
-          <option value="" disabled selected hidden>
+          <option value="" disabled defaultValue={activeValue} hidden>
             Is active?
           </option>
         </select>
