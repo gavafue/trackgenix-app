@@ -5,9 +5,9 @@ const Modal = ({ title, message, showModal, setShowModal, extras }) => {
     <div>
       <div id="id01" className={styles.modal}>
         <form className={styles.modalContent}>
+          {title}
+          {message}
           <div className={styles.container}>
-            {title}
-            {message}
             <div className={styles.clearfix}>
               <button
                 type="button"
