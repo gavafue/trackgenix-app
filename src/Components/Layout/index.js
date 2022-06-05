@@ -24,17 +24,17 @@ function Layout() {
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
-        <Route path="/admins" component={Admins} />
+        <Route exact path="/admins" component={Admins} />
         <Route path="/admins/form" component={AdminsForm} />
-        <Route path="/super-admins" component={SuperAdmins} />
+        <Route exact path="/super-admins" component={SuperAdmins} />
         <Route path="/super-admins/form" component={SuperAdminsForm} />
-        <Route path="/employees" component={Employees} />
+        <Route exact path="/employees" component={Employees} />
         <Route path="/employees/form" component={EmployeesForm} />
-        <Route path="/projects" component={Projects} />
+        <Route exact path="/projects" component={Projects} />
         <Route path="/projects/form" component={ProjectsForm} />
-        <Route path="/time-sheets" component={TimeSheets} />
+        <Route exact path="/time-sheets" component={TimeSheets} />
         <Route path="/time-sheets/form" component={TimeSheetsForm} />
-        <Route path="/tasks" component={Tasks} />
+        <Route exact path="/tasks" component={Tasks} />
         <Route path="/tasks/form" component={TasksForm} />
       </Switch>
       <Footer />
