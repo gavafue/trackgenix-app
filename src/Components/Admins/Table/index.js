@@ -37,7 +37,9 @@ const AdminsTable = ({ admins }) => {
                 <td>
                   <input type="button" value="..." />
                 </td>
-                <td><Button text="Edit" onClick={() => OnClickEdit(admin._id)} /></td>
+                <td>
+                  <Button text="Edit" onClick={() => OnClickEdit(admin._id)} />
+                </td>
                 <td>
                   <Button
                     isDisabled={true}
