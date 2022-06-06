@@ -1,22 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from '../admins.module.css';
-import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
+import Modal from '../../Shared/Modal';
 
-const AdminsTable = ({
-  // setShowFeedbackModal,
-  // showFeedbackModal,
-  admins,
-  deleteAdmin,
-  showModal,
-  setShowModal
-}) => {
+const AdminsTable = ({ admins }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  const [infoForDelete, setInfoForDelete] = useState({
-    id: ''
-  });
+  const [isDeleting, setIsDeleting] = useState(false);
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
@@ -45,47 +36,30 @@ const AdminsTable = ({
                 <td>
                   <input type="button" value="..." />
                 </td>
-                <td>{<Button text="Edit" onClick={() => OnClickEdit(admin._id)} />}</td>
                 <td>
-                  {
-                    <Button
-                      isDisabled={true}
-                      className={styles.buttonEdit}
-                      text="Delete"
-                      onClick={() => {
-                        setShowModal(!showModal);
-                        setInfoForDelete({
-                          id: admin._id
-                        });
-                      }}
-                    />
-                  }
+                  <Button label="Edit" onClick={() => OnClickEdit(admin._id)} />
+                </td>
+                <td>
+                  <Button
+                    label="Delete"
+                    onClick={() => {
+                      setIsDeleting(true);
+                    }}
+                  />
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-      {showModal && (
-        <Modal
-          title={<h1>Delete admins</h1>}
-          message={<p>Are you sure you want to delete this admin?</p>}
-          extras={
-            <Button
-              text="Delete"
-              className={styles.deletebtn}
-              onClick={() => {
-                deleteAdmin(infoForDelete.id);
-                setShowModal(false);
-              }}
-            />
-          }
-          deleteAdmin={deleteAdmin}
-          setInfoFoDelete={setInfoForDelete}
-          setShowModal={setShowModal}
-          showModal={showModal}
-        />
-      )}
+      <Modal
+        isOpen={isDeleting}
+        handleClose={() => {
+          setIsDeleting(false);
+        }}
+      >
+        <p>A proper pseudo title for this modal</p>
+      </Modal>
     </section>
   );
 };

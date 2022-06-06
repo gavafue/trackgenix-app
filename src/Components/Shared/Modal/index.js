@@ -1,25 +1,18 @@
+import React from 'react';
 import styles from './modal.module.css';
 
-const Modal = ({ title, message, showModal, setShowModal, extras }) => {
+const Modal = ({ children, isOpen, handleClose }) => {
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <div>
-      <div id="id01" className={styles.modal}>
-        <form className={styles.modalContent}>
-          <div className={styles.container}>
-            {title}
-            {message}
-            <div className={styles.clearfix}>
-              <button
-                type="button"
-                className={styles.cancelbtn}
-                onClick={() => setShowModal(!showModal)}
-              >
-                Close
-              </button>
-              {extras}
-            </div>
-          </div>
-        </form>
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalWrapper}>
+        <button onClick={handleClose} className={styles.closeButton}>
+          X
+        </button>
+        {children}
       </div>
     </div>
   );

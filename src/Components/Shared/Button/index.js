@@ -1,15 +1,25 @@
 import React from 'react';
 import styles from './button.module.css';
 
-const Button = ({ type, className, onClick, text, isDisabled }) => {
+const Button = ({
+  type = 'button',
+  label,
+  onClick,
+  disabled,
+  style,
+  hidden,
+  theme = 'primary'
+}) => {
   return (
     <button
       type={type}
-      className={isDisabled == true ? className : styles.button}
+      className={`${styles[theme]} ${style} ${disabled && styles.disabled}
+      ${hidden && styles.hidden}`}
       onClick={onClick}
-      disabled={isDisabled}
+      disabled={disabled}
+      hidden={hidden}
     >
-      {text}
+      {label}
     </button>
   );
 };
