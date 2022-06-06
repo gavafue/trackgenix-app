@@ -29,7 +29,7 @@ function Layout() {
         <Route path="/admins/form" component={AdminsForm} />
         <Route exact path="/super-admins" component={SuperAdmins} />
         <Route path="/super-admins/form/:id" component={SuperAdminsForm} />
-        <Route path="/super-admins/form" component={SuperAdminsForm} />
+        <Route path="/super-admins/form/" component={SuperAdminsForm} />
         <Route exact path="/employees" component={Employees} />
         <Route path="/employees/form/:id" component={EmployeesForm} />
         <Route path="/employees/form" component={EmployeesForm} />

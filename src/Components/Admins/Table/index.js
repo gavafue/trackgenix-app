@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+// import styles from '../admins.module.css';
 import Button from '../../Shared/Button';
+import Modal from '../../Shared/Modal';
 
 const AdminsTable = ({ admins }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  const [setInfoForDelete] = useState({
-    id: ''
-  });
+  const [isDeleting, setIsDeleting] = useState(false);
   return (
     <section /*className={styles.container}*/>
       <h2>Admins</h2>
@@ -43,9 +43,7 @@ const AdminsTable = ({ admins }) => {
                   <Button
                     label="Delete"
                     onClick={() => {
-                      setInfoForDelete({
-                        id: admin._id
-                      });
+                      setIsDeleting(true);
                     }}
                   />
                 </td>
@@ -54,6 +52,14 @@ const AdminsTable = ({ admins }) => {
           })}
         </tbody>
       </table>
+      <Modal
+        isOpen={isDeleting}
+        handleClose={() => {
+          setIsDeleting(false);
+        }}
+      >
+        <p>A proper pseudo title for this modal</p>
+      </Modal>
     </section>
   );
 };

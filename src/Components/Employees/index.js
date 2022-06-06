@@ -2,12 +2,11 @@
 import { useEffect, useState } from 'react';
 import styles from './employees.module.css';
 import Table from '../Shared/Table';
-import { useParams } from 'react-router-dom';
 
 const URL = process.env.REACT_APP_API_URL;
 
-const editData = () => {
-  useParams();
+const editData = (string) => {
+  window.location = `/employees/form?employeeId=${string}`;
 };
 
 function Employees() {
