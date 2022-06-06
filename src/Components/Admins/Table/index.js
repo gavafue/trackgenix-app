@@ -49,6 +49,8 @@ const AdminsTable = ({
                 <td>
                   {
                     <Button
+                      isDisabled={true}
+                      className={styles.buttonEdit}
                       text="Delete"
                       onClick={() => {
                         setShowModal(!showModal);

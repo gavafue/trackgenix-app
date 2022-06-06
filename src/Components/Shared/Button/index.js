@@ -1,6 +1,14 @@
-const Button = ({ type, className, onClick, text }) => {
+import React from 'react';
+import styles from './button.module.css';
+
+const Button = ({ type, className, onClick, text, isDisabled }) => {
   return (
-    <button type={type} className={className} onClick={onClick}>
+    <button
+      type={type}
+      className={isDisabled == true ? className : styles.button}
+      onClick={onClick}
+      disabled={isDisabled}
+    >
       {text}
     </button>
   );
