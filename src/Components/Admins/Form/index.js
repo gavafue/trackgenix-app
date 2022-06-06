@@ -112,7 +112,7 @@ function Form() {
     <div className={styles.adminForm}>
       <h2>{title}</h2>
       <form onSubmit={onSubmit} className={styles.container}>
-        <fieldset>
+        <fieldset className={styles.adminFieldset}>
           <label htmlFor="name">Name</label>
           <input type="text" id="name" value={nameValue} onChange={onChangeNameInput} required />
           <label htmlFor="lastName">Last Name</label>
@@ -165,8 +165,8 @@ function Form() {
             </option>
           </select>
         </fieldset>
+        <Button type="submit" label="Submit" />
       </form>
-      <Button type="submit" label="Submit" />
     </div>
   );
 }
