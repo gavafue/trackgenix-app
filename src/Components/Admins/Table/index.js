@@ -37,20 +37,18 @@ const AdminsTable = ({ admins }) => {
                 <td>
                   <input type="button" value="..." />
                 </td>
-                <td>{<Button text="Edit" onClick={() => OnClickEdit(admin._id)} />}</td>
+                <td><Button text="Edit" onClick={() => OnClickEdit(admin._id)} /></td>
                 <td>
-                  {
-                    <Button
-                      isDisabled={true}
-                      className={styles.buttonEdit}
-                      text="Delete"
-                      onClick={() => {
-                        setInfoForDelete({
-                          id: admin._id
-                        });
-                      }}
-                    />
-                  }
+                  <Button
+                    isDisabled={true}
+                    className={styles.buttonEdit}
+                    text="Delete"
+                    onClick={() => {
+                      setInfoForDelete({
+                        id: admin._id
+                      });
+                    }}
+                  />
                 </td>
               </tr>
             );
