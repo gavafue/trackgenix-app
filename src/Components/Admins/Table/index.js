@@ -4,11 +4,10 @@ import Button from '../../Shared/Button';
 import Modal from '../../Shared/Modal';
 
 const AdminsTable = ({ admins }) => {
-  admins;
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  const [isAdding, setIsAdding] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
@@ -59,7 +58,7 @@ const AdminsTable = ({ admins }) => {
           setIsAdding(false);
         }}
       >
-        {/* <p>Hellooooooooooooooooooooooo</p> */}
+        <p>A proper pseudo title for this modal</p>
       </Modal>
     </section>
   );
