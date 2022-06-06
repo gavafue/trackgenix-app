@@ -1,13 +1,17 @@
 import Button from '../Button';
-
-const DeleteMessage = ({ resourceName }) => {
+import styles from './deleteMessage.module.css';
+const DeleteMessage = ({ resourceName, deleteItem, handleClose }) => {
   return (
     <div>
-      <h1>Delete {resourceName}</h1>
+      <h1 className={styles.title}>Delete {resourceName}</h1>
       <p>Are you sure you want to delete?</p>
-      <div>
-        <Button />
-        <Button />
+      <div className={styles.container}>
+        <div className={styles.buttons}>
+          <Button label="Delete" theme="secondary" onClick={deleteItem} />
+        </div>
+        <div className={styles.buttons}>
+          <Button label="Cancel" onClick={handleClose} />
+        </div>
       </div>
     </div>
   );

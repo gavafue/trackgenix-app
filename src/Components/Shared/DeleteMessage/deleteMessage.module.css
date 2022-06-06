@@ -1,0 +1,14 @@
+
+.title{
+  text-align: center;
+}
+
+.container{
+  display:flex
+}
+
+.buttons{
+  width: 40%;
+  justify-content: space-between;
+  margin:3%;
+}
