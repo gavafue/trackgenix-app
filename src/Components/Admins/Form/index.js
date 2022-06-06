@@ -107,65 +107,66 @@ function Form() {
   const monthInput = birthDateValue.substring(8, 10);
   const yearInput = birthDateValue.substring(0, 4);
   const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
-  console.log(dateFormat);
 
   return (
-    <div>
+    <div className={styles.adminForm}>
+      <h2>{title}</h2>
       <form onSubmit={onSubmit} className={styles.container}>
-        <h2>{title}</h2>
-        <label htmlFor="name">Name</label>
-        <input type="text" id="name" value={nameValue} onChange={onChangeNameInput} required />
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          type="text"
-          id="lastName"
-          value={lastNameValue}
-          onChange={onChangeLastNameInput}
-          required
-        />
-        <label htmlFor="email">E-mail</label>
-        <input type="text" id="email" value={emailValue} onChange={onChangeEmailInput} required />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          value={passwordValue}
-          onChange={onChangePasswordInput}
-          required
-        />
-        <label htmlFor="gender">Gender</label>
-        <select id="gender" value={genderValue} onChange={onChangeGenderInput} required>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-          <option value="Male">Male</option>
-          <option value="" disabled defaultValue={genderValue} hidden>
-            Choose gender
-          </option>
-        </select>
-        <label htmlFor="phone">Phone</label>
-        <input type="text" id="phone" value={phoneValue} onChange={onChangePhoneInput} required />
-        <label htmlFor="dateBirth">Date of Birth</label>
-        <input
-          type="date"
-          id="dateBirth"
-          value={dateFormat}
-          onChange={onChangeBirthDateInput}
-          required
-        />
-        <label htmlFor="city">City</label>
-        <input type="text" id="city" value={cityValue} onChange={onChangeCityInput} required />
-        <label htmlFor="zip">Postal Code</label>
-        <input type="text" id="zip" value={zipValue} onChange={onChangeZipInput} required />
-        <label htmlFor="active">Status</label>
-        <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
-          <option value="" disabled defaultValue={activeValue} hidden>
-            Is active?
-          </option>
-        </select>
-        <Button type="submit" label="Submit" />
+        <fieldset>
+          <label htmlFor="name">Name</label>
+          <input type="text" id="name" value={nameValue} onChange={onChangeNameInput} required />
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            type="text"
+            id="lastName"
+            value={lastNameValue}
+            onChange={onChangeLastNameInput}
+            required
+          />
+          <label htmlFor="email">E-mail</label>
+          <input type="text" id="email" value={emailValue} onChange={onChangeEmailInput} required />
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={passwordValue}
+            onChange={onChangePasswordInput}
+            required
+          />
+          <label htmlFor="gender">Gender</label>
+          <select id="gender" value={genderValue} onChange={onChangeGenderInput} required>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+            <option value="Male">Male</option>
+            <option value="" disabled defaultValue={genderValue} hidden>
+              Choose gender
+            </option>
+          </select>
+          <label htmlFor="phone">Phone</label>
+          <input type="text" id="phone" value={phoneValue} onChange={onChangePhoneInput} required />
+          <label htmlFor="dateBirth">Date of Birth</label>
+          <input
+            type="date"
+            id="dateBirth"
+            value={dateFormat}
+            onChange={onChangeBirthDateInput}
+            required
+          />
+          <label htmlFor="city">City</label>
+          <input type="text" id="city" value={cityValue} onChange={onChangeCityInput} required />
+          <label htmlFor="zip">Postal Code</label>
+          <input type="text" id="zip" value={zipValue} onChange={onChangeZipInput} required />
+          <label htmlFor="active">Status</label>
+          <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+            <option value="" disabled defaultValue={activeValue} hidden>
+              Is active?
+            </option>
+          </select>
+        </fieldset>
       </form>
+      <Button type="submit" label="Submit" />
     </div>
   );
 }
