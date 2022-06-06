@@ -1,6 +1,6 @@
 import styles from './form.module.css';
 import { useState, useEffect } from 'react';
-import FeedbackModal from '../FeedbackModal';
+import Button from '../../Shared/Button';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -13,7 +13,6 @@ function Form() {
   const [cityValue, setCityValue] = useState('');
   const [zipValue, setZipValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
-  console.log(birthDateValue);
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -45,9 +44,6 @@ function Form() {
   const onChangeActiveInput = (event) => {
     setActiveValue(event.target.value);
   };
-
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
@@ -98,17 +94,20 @@ function Form() {
       event.preventDefault();
       const res = await fetch(options.url, options);
       const data = await res.json();
-      if (res.status == 201 || res.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: data.message });
-        setShowFeedbackModal(true);
+      if (data.status == 201 || data.status == 200) {
+        alert(data.message);
       } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
-        setShowFeedbackModal(true);
+        alert(data.message);
       }
     } catch (err) {
       console.log(err);
     }
   };
+  const dayInput = birthDateValue.substring(5, 7);
+  const monthInput = birthDateValue.substring(8, 10);
+  const yearInput = birthDateValue.substring(0, 4);
+  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
+  console.log(dateFormat);
 
   return (
     <div>
@@ -128,7 +127,7 @@ function Form() {
         <input type="text" id="email" value={emailValue} onChange={onChangeEmailInput} required />
         <label htmlFor="password">Password</label>
         <input
-          type="text"
+          type="password"
           id="password"
           value={passwordValue}
           onChange={onChangePasswordInput}
@@ -149,7 +148,7 @@ function Form() {
         <input
           type="date"
           id="dateBirth"
-          value={birthDateValue}
+          value={dateFormat}
           onChange={onChangeBirthDateInput}
           required
         />
@@ -165,17 +164,8 @@ function Form() {
             Is active?
           </option>
         </select>
-        <button type="submit" value="Submit">
-          Submit
-        </button>
+        <Button type="submit" label="Submit" />
       </form>
-      {showFeedbackModal && (
-        <FeedbackModal
-          feedbackTitle={contentFeedbackModal.title}
-          messageContent={contentFeedbackModal.description}
-          setShowFeedbackModal={setShowFeedbackModal}
-        />
-      )}
     </div>
   );
 }

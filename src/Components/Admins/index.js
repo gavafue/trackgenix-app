@@ -33,15 +33,16 @@ const Admins = () => {
   };
   return (
     <section className={styles.container}>
+      <h2>Projects</h2>
+      <a href="/admins/form" className={styles.button}>
+        Add new admin +
+      </a>
       <AdminsTable
         admins={admins}
         deleteAdmin={deleteAdmin}
         showModal={showModal}
         setShowModal={setShowModal}
       />
-      <button className={styles.addBtn}>
-        <a href="/admins/form">Add New Admin</a>
-      </button>
     </section>
   );
 };

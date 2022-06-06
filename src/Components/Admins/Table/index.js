@@ -10,7 +10,6 @@ const AdminsTable = ({ admins }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   return (
     <section className={styles.container}>
-      <h2>Admins</h2>
       <table>
         <thead>
           <tr>
@@ -32,9 +31,14 @@ const AdminsTable = ({ admins }) => {
                 <td>{admin.lastName}</td>
                 <td>{admin.phone}</td>
                 <td>{admin.email}</td>
-                <td>{JSON.stringify(admin.active)}</td>
+                <td>{admin.active ? 'Active' : 'Inactive'}</td>
                 <td>
-                  <input type="button" value="..." />
+                  <Button
+                    label="..."
+                    disabled={true}
+                    theme="disabled"
+                    // onClick={() => "a function that shows the additional data"}
+                  />
                 </td>
                 <td>
                   <Button label="Edit" onClick={() => OnClickEdit(admin._id)} />

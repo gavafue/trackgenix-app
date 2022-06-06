@@ -4,11 +4,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 .container table{
   border: 2px solid #a40808;
   background-color: #eee7db;
-  width: 50%;
+  width: 80%;
   text-align: center;
   border-collapse: collapse;
   margin-bottom: 20px;
@@ -42,6 +43,20 @@
 
 .container thead th:first-child {
   border-left: none;
+}
+
+.button {
+  background-color: black;
+  border: none;
+  color: white;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-self: flex-start;
+  font-size: 16px;
+  margin: 0px 0px 5px 10%;
+  cursor: pointer;
 }
 
 .buttonEdit {
