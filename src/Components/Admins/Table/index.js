@@ -43,7 +43,7 @@ const AdminsTable = ({ admins }) => {
                   <Button
                     label="Delete"
                     onClick={() => {
-                      setIsAdding(true);
+                      setIsDeleting(true);
                     }}
                   />
                 </td>
@@ -53,9 +53,9 @@ const AdminsTable = ({ admins }) => {
         </tbody>
       </table>
       <Modal
-        isOpen={isAdding}
+        isOpen={isDeleting}
         handleClose={() => {
-          setIsAdding(false);
+          setIsDeleting(false);
         }}
       >
         <p>A proper pseudo title for this modal</p>
