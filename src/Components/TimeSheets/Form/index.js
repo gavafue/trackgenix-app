@@ -1,6 +1,8 @@
 import styles from './form.module.css';
 import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
+import Select from '../../Shared/Input/InputSelect/Index';
+import Input from '../../Shared/Input';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -79,6 +81,14 @@ const Form = () => {
       workDescription: workDescriptionValue
     })
   };
+
+  const arrayToMap = employees.map((item) => {
+    return {
+      id: item._id,
+      label: `${item.firstName + ' ' + item.lastName}`
+    };
+  });
+
   useEffect(() => {
     if (timesheetId) {
       fetch(`${URL}/timesheets/${timesheetId}`)
@@ -111,6 +121,7 @@ const Form = () => {
       console.log(err);
     }
   };
+
   return (
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
@@ -140,7 +151,29 @@ const Form = () => {
           </option>
         </select>
         <label>Employee</label>
-        <select
+        <Select
+          arrayToMap={arrayToMap}
+          id="employee"
+          name="employee"
+          value={employeeValue}
+          onChange={onChangeEmployeeSelect}
+          required
+        />
+        {/* {employees.map((employee) => {
+            return (
+              <option
+                selected={Boolean(employee._id === employeeValue)}
+                value={employee._id}
+                key={employee._id}
+              >{`${employee.firstName + ' ' + employee.lastName}`}</option>
+            );
+          })}
+          ; */}
+        {/* <option value="" disabled selected hidden>
+            Choose Employee
+          </option>
+         */}
+        {/* <select
           id="employee"
           name="employee"
           value={employeeValue}
@@ -160,16 +193,16 @@ const Form = () => {
           <option value="" disabled selected hidden>
             Choose Employee
           </option>
-        </select>
+        </select> */}
         <label>Week Sprint</label>
-        <input
-          type="number"
-          id="weekSprint"
+        <Input
           name="weekSprint"
+          type="text"
+          placeholder="Write your last name."
           value={weekSprintValue}
           onChange={onChangeWeekSprint}
           required
-        ></input>
+        />
         <label>Date</label>
         <input id="date" name="date" value={dateValue} onChange={onChangeDate} required></input>
         <label>Hours Worked</label>
