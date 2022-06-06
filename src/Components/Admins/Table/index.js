@@ -1,22 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from '../admins.module.css';
+import Button from '../../Shared/Button';
 import Modal from '../../Shared/Modal';
 
-const AdminsTable = ({
-  // setShowFeedbackModal,
-  // showFeedbackModal,
-  admins,
-  deleteAdmin,
-  showModal,
-  setShowModal,
-  modalId
-}) => {
+const AdminsTable = ({ admins }) => {
+  admins;
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  const [infoForDelete, setInfoForDelete] = useState({
-    id: ''
-  });
+  const [isAdding, setIsAdding] = useState(false);
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
@@ -46,48 +38,27 @@ const AdminsTable = ({
                   <input type="button" value="..." />
                 </td>
                 <td>
-                  <button onClick={() => OnClickEdit(admin._id)}>Edit</button>
+                  <Button label="Edit" onClick={() => OnClickEdit(admin._id)} />
                 </td>
                 <td>
-                  <button
+                  <Button
+                    label="Delete"
                     onClick={() => {
-                      setShowModal(!showModal);
-                      setInfoForDelete({
-                        id: admin._id
-                      });
+                      setIsAdding(true);
                     }}
-                  >
-                    Delete
-                  </button>
+                  />
                 </td>
               </tr>
             );
           })}
         </tbody>
-        {showModal && (
-          <Modal
-            title={<h1>Delete admins</h1>}
-            message={<p>Are you sure you want to delete this admin?</p>}
-            extras={
-              <button
-                type="button"
-                className={styles.deletebtn}
-                onClick={() => {
-                  deleteAdmin(modalId);
-                  setShowModal(false);
-                }}
-              >
-                Delete
-              </button>
-            }
-            deleteAdmin={deleteAdmin}
-            setInfoFoDelete={setInfoForDelete}
-            modalId={infoForDelete.id}
-            setShowModal={setShowModal}
-            showModal={showModal}
-          />
-        )}
       </table>
+      <Modal
+        isOpen={isAdding}
+        handleClose={() => {
+          setIsAdding(false);
+        }}
+      />
     </section>
   );
 };
