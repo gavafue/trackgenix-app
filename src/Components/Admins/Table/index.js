@@ -1,19 +1,11 @@
 import { useState } from 'react';
-//import styles from '../admins.module.css';
-import DeleteModal from '../DeleteModal';
+import Button from '../../Shared/Button';
 
-const AdminsTable = ({
-  setShowFeedbackModal,
-  showFeedbackModal,
-  admins,
-  deleteAdmin,
-  showModal,
-  setShowModal
-}) => {
+const AdminsTable = ({ admins }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  const [infoForDelete, setInfoForDelete] = useState({
+  const [setInfoForDelete] = useState({
     id: ''
   });
   return (
@@ -45,35 +37,22 @@ const AdminsTable = ({
                   <input type="button" value="..." />
                 </td>
                 <td>
-                  <button onClick={() => OnClickEdit(admin._id)}>Edit</button>
+                  <Button label="Edit" onClick={() => OnClickEdit(admin._id)} />
                 </td>
                 <td>
-                  <button
+                  <Button
+                    label="Delete"
                     onClick={() => {
-                      setShowModal(!showModal);
                       setInfoForDelete({
                         id: admin._id
                       });
                     }}
-                  >
-                    Delete
-                  </button>
+                  />
                 </td>
               </tr>
             );
           })}
         </tbody>
-        {showModal && (
-          <DeleteModal
-            setShowModal={setShowModal}
-            showFeedbackModal={showFeedbackModal}
-            setShowFeedbackModal={setShowFeedbackModal}
-            modalId={infoForDelete.id}
-            deleteAdmin={deleteAdmin}
-            setInfoFoDelete={setInfoForDelete}
-            showModal={showModal}
-          />
-        )}
       </table>
     </section>
   );

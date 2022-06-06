@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './tableContent.module.css';
+import Button from '../../Button';
 
 const TableContent = ({ headers, data, editData }) => {
   return (
@@ -15,10 +16,10 @@ const TableContent = ({ headers, data, editData }) => {
               );
             })}
             <td>
-              <button onClick={() => editData(row._id)}>edit</button>
+              <Button onClick={() => editData(row._id)} label="Edit" />
             </td>
             <td>
-              <button />
+              <Button label="Delete" theme="secondary" />
             </td>
           </tr>
         );
