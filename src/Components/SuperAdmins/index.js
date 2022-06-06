@@ -19,17 +19,6 @@ const SuperAdmins = () => {
     window.location.href = '/super-admins/form';
   };
 
-  // const deleteSuperAdmin = (_id) => {
-  //   // if (modal);
-  //   fetch(`${process.env.REACT_APP_API_URL}/super-admin/${_id}`, {
-  //     method: 'DELETE'
-  //   }).then((result) => {
-  //     result.json().then((response) => {
-  //       setSuperAdmins([...superAdmins.filter((superAdmin) => superAdmin._id !== _id)]);
-  //       alert(response.message);
-  //     });
-  //   });
-  // };
   const deleteSuperAdmin = (string, setContentFeedbackModal) => {
     const options = {
       method: 'DELETE',
@@ -39,10 +28,8 @@ const SuperAdmins = () => {
       .then((response) => response.json())
       .then((response) => {
         if (response.error === true) {
-          // setShowModal(false);
           setContentFeedbackModal({ title: 'Something went wrong', description: response.message });
         } else {
-          // setShowModal(false);
           setContentFeedbackModal({ title: 'Request done!', description: response.message });
           setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== string));
         }
@@ -56,13 +43,15 @@ const SuperAdmins = () => {
       email: superAdmin.email,
       password: superAdmin.password,
       role: superAdmin.role,
-      active: JSON.stringify(superAdmin.active)
+      ...superAdmin,
+      active: superAdmin.active ? 'Yes' : 'No'
     };
   });
   return (
     <section className={styles.container}>
       <Table
         data={superAdminData}
+        headersName={['Name', 'Last Name', 'Email', 'Password', 'Role', 'Active']}
         headers={['firstName', 'lastName', 'email', 'password', 'role', 'active']}
         deleteSuperAdmin={deleteSuperAdmin}
         showModal={showModal}
