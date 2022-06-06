@@ -2,10 +2,7 @@ import { useState } from 'react';
 import styles from '../admins.module.css';
 import Button from '../../Shared/Button';
 
-const AdminsTable = ({
-  admins,
-
-}) => {
+const AdminsTable = ({ admins }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };

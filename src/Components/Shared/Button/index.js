@@ -5,7 +5,7 @@ const Button = ({ type, className, onClick, text, isDisabled }) => {
   return (
     <button
       type={type}
-      className={isDisabled ? className : styles.button}
+      className={isDisabled ? className : styles.sharedButton}
       onClick={onClick}
       disabled={isDisabled}
     >
