@@ -38,13 +38,11 @@ const AdminsTable = ({ admins }) => {
                   <input type="button" value="..." />
                 </td>
                 <td>
-                  <Button text="Edit" onClick={() => OnClickEdit(admin._id)} />
+                  <Button label="Edit" onClick={() => OnClickEdit(admin._id)} />
                 </td>
                 <td>
                   <Button
-                    isDisabled={true}
-                    className={styles.buttonEdit}
-                    text="Delete"
+                    label="Delete"
                     onClick={() => {
                       setInfoForDelete({
                         id: admin._id
