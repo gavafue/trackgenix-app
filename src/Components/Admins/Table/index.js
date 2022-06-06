@@ -4,14 +4,12 @@ import Button from '../../Shared/Button';
 
 const AdminsTable = ({
   admins,
-  showModal,
-  setShowModal,
 
 }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  const [infoForDelete, setInfoForDelete] = useState({
+  const [setInfoForDelete] = useState({
     id: ''
   });
   return (
@@ -50,7 +48,6 @@ const AdminsTable = ({
                       className={styles.buttonEdit}
                       text="Delete"
                       onClick={() => {
-                        setShowModal(!showModal);
                         setInfoForDelete({
                           id: admin._id
                         });
