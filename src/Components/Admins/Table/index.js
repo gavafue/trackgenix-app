@@ -59,7 +59,7 @@ const AdminsTable = ({ admins }) => {
           setIsAdding(false);
         }}
       >
-        <p>Hellooooooooooooooooooooooo</p>
+        {/* <p>Hellooooooooooooooooooooooo</p> */}
       </Modal>
     </section>
   );
