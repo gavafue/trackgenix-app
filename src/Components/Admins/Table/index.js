@@ -1,16 +1,12 @@
 import { useState } from 'react';
 import styles from '../admins.module.css';
-import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
 
 const AdminsTable = ({
-  // setShowFeedbackModal,
-  // showFeedbackModal,
   admins,
-  deleteAdmin,
   showModal,
   setShowModal,
-  modalId
+
 }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
@@ -48,44 +44,24 @@ const AdminsTable = ({
                 </td>
                 <td>{<Button text="Edit" onClick={() => OnClickEdit(admin._id)} />}</td>
                 <td>
-                  <button
-                    onClick={() => {
-                      setShowModal(!showModal);
-                      setInfoForDelete({
-                        id: admin._id
-                      });
-                    }}
-                  >
-                    Delete
-                  </button>
+                  {
+                    <Button
+                      isDisabled={true}
+                      className={styles.buttonEdit}
+                      text="Delete"
+                      onClick={() => {
+                        setShowModal(!showModal);
+                        setInfoForDelete({
+                          id: admin._id
+                        });
+                      }}
+                    />
+                  }
                 </td>
               </tr>
             );
           })}
         </tbody>
-        {showModal && (
-          <Modal
-            title={<h1>Delete admins</h1>}
-            message={<p>Are you sure you want to delete this admin?</p>}
-            extras={
-              <button
-                type="button"
-                className={styles.deletebtn}
-                onClick={() => {
-                  deleteAdmin(modalId);
-                  setShowModal(false);
-                }}
-              >
-                Delete
-              </button>
-            }
-            deleteAdmin={deleteAdmin}
-            setInfoFoDelete={setInfoForDelete}
-            modalId={infoForDelete.id}
-            setShowModal={setShowModal}
-            showModal={showModal}
-          />
-        )}
       </table>
     </section>
   );
