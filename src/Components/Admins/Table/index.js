@@ -58,7 +58,9 @@ const AdminsTable = ({ admins }) => {
         handleClose={() => {
           setIsAdding(false);
         }}
-      />
+      >
+        <p>Hellooooooooooooooooooooooo</p>
+      </Modal>
     </section>
   );
 };

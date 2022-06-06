@@ -22,10 +22,12 @@
 
 .closeButton {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    width: auto;
+    top: 1%;
+    right: 1%;
     border: none;
     background-color: #FFF;
     font-weight: 800;
     cursor: pointer;
+    color: #000;
 }
