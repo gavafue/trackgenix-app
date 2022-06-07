@@ -10,7 +10,7 @@ const editData = (id) => {
   window.location = `/projects/form/${id}`;
 };
 
-const Projects = () => {
+const Projects = (props) => {
   const [projects, setProjects] = useState([]);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
@@ -19,10 +19,12 @@ const Projects = () => {
   const URL = `${process.env.REACT_APP_API_URL}`;
 
   useEffect(() => {
+    props.setShowLoader(true);
     fetch(`${URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
+        props.setShowLoader(false);
       })
       .catch((err) => console.log(err));
   }, []);
