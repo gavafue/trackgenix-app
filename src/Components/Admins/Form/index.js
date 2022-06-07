@@ -1,6 +1,8 @@
 import styles from './form.module.css';
 import { useState, useEffect } from 'react';
 import Button from '../../Shared/Button';
+import Input from '../../Shared/Input/InputText';
+// import Select from '../../Shared/Input/InputSelect';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -113,22 +115,42 @@ function Form() {
       <h2>{title}</h2>
       <form onSubmit={onSubmit} className={styles.container}>
         <fieldset className={styles.adminFieldset}>
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" value={nameValue} onChange={onChangeNameInput} required />
-          <label htmlFor="lastName">Last Name</label>
-          <input
+          <Input
+            label="Name"
+            id="name"
+            name="name"
             type="text"
+            placeholder="Enter admin's name"
+            value={nameValue}
+            onChange={onChangeNameInput}
+            required
+          />
+          <Input
+            label="Last&nbsp;name"
             id="lastName"
+            name="lastName"
+            type="text"
+            placeholder="Enter admin's last name"
             value={lastNameValue}
             onChange={onChangeLastNameInput}
             required
           />
-          <label htmlFor="email">E-mail</label>
-          <input type="text" id="email" value={emailValue} onChange={onChangeEmailInput} required />
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
+          <Input
+            label="E-mail"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Enter a valid email"
+            value={emailValue}
+            onChange={onChangeEmailInput}
+            required
+          />
+          <Input
+            label="Password"
             id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
             value={passwordValue}
             onChange={onChangePasswordInput}
             required
@@ -142,20 +164,46 @@ function Form() {
               Choose gender
             </option>
           </select>
-          <label htmlFor="phone">Phone</label>
-          <input type="text" id="phone" value={phoneValue} onChange={onChangePhoneInput} required />
-          <label htmlFor="dateBirth">Date of Birth</label>
-          <input
-            type="date"
+          <Input
+            label="Phone"
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="Enter admin's phone number"
+            value={phoneValue}
+            onChange={onChangePhoneInput}
+            required
+          />
+          <Input
+            label="Date&nbsp;of&nbsp;birth"
             id="dateBirth"
+            name="dateBirth"
+            type="date"
+            placeholder="Enter admin's date of birth"
             value={dateFormat}
             onChange={onChangeBirthDateInput}
             required
           />
-          <label htmlFor="city">City</label>
-          <input type="text" id="city" value={cityValue} onChange={onChangeCityInput} required />
-          <label htmlFor="zip">Postal Code</label>
-          <input type="text" id="zip" value={zipValue} onChange={onChangeZipInput} required />
+          <Input
+            label="City"
+            id="city"
+            name="city"
+            type="text"
+            placeholder="Enter admin's city"
+            value={cityValue}
+            onChange={onChangeCityInput}
+            required
+          />
+          <Input
+            label="Postal&nbsp;code"
+            id="zip"
+            name="zip"
+            type="text"
+            placeholder="Enter admin's postal code"
+            value={zipValue}
+            onChange={onChangeZipInput}
+            required
+          />
           <label htmlFor="active">Status</label>
           <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
             <option value="true">Active</option>
