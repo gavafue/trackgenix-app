@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../admins.module.css';
+// import styles from '../admins.module.css';
 import Button from '../../Shared/Button';
 import Modal from '../Shared/Modal';
 import DeleteMessage from '../Shared/DeleteMessage';

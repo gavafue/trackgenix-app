@@ -1,16 +1,16 @@
+.container {
+  flex: 1;
+  display: flex;
+  text-align: center;
+  margin: 1%;
+}
+
 .adminForm {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   text-align: center;
-}
-
-.container {
-  flex: 1;
-  display: flex;
-  text-align: center;
-  margin: 1%;
 }
 
 .adminFieldset {

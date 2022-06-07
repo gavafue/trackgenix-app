@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './super-admins.module.css';
-import SuperAdminsTable from './Table';
+import Table from '../Shared/Table';
 
 const SuperAdmins = () => {
   const [superAdmins, setSuperAdmins] = useState([]);
@@ -19,17 +19,6 @@ const SuperAdmins = () => {
     window.location.href = '/super-admins/form';
   };
 
-  // const deleteSuperAdmin = (_id) => {
-  //   // if (modal);
-  //   fetch(`${process.env.REACT_APP_API_URL}/super-admin/${_id}`, {
-  //     method: 'DELETE'
-  //   }).then((result) => {
-  //     result.json().then((response) => {
-  //       setSuperAdmins([...superAdmins.filter((superAdmin) => superAdmin._id !== _id)]);
-  //       alert(response.message);
-  //     });
-  //   });
-  // };
   const deleteSuperAdmin = (string, setContentFeedbackModal) => {
     const options = {
       method: 'DELETE',
@@ -39,21 +28,31 @@ const SuperAdmins = () => {
       .then((response) => response.json())
       .then((response) => {
         if (response.error === true) {
-          // setShowModal(false);
           setContentFeedbackModal({ title: 'Something went wrong', description: response.message });
         } else {
-          // setShowModal(false);
           setContentFeedbackModal({ title: 'Request done!', description: response.message });
           setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== string));
         }
       })
       .catch((err) => console.log(err));
   };
-
+  const superAdminData = superAdmins.map((superAdmin) => {
+    return {
+      firstName: superAdmin.firstName,
+      lastName: superAdmin.lastName,
+      email: superAdmin.email,
+      password: superAdmin.password,
+      role: superAdmin.role,
+      ...superAdmin,
+      active: superAdmin.active ? 'Yes' : 'No'
+    };
+  });
   return (
     <section className={styles.container}>
-      <SuperAdminsTable
-        superAdmins={superAdmins}
+      <Table
+        data={superAdminData}
+        headersName={['Name', 'Last Name', 'Email', 'Password', 'Role', 'Active']}
+        headers={['firstName', 'lastName', 'email', 'password', 'role', 'active']}
         deleteSuperAdmin={deleteSuperAdmin}
         showModal={showModal}
         setShowModal={setShowModal}

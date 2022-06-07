@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './projects.module.css';
+//import styles from './projects.module.css';
 import DeleteModal from '../DeleteModal';
 
 const ProjectsTable = ({
@@ -18,9 +18,9 @@ const ProjectsTable = ({
   });
 
   return (
-    <section className={styles.container}>
+    <section /*className={styles.container}*/>
       <h2>Projects</h2>
-      <table className={styles.table}>
+      <table /*className={styles.table}*/>
         <thead>
           <tr>
             <th>Project</th>
