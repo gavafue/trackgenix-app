@@ -1,4 +1,4 @@
-import styles from './projects.module.css';
+//import styles from './projects.module.css';
 import ProjectsTable from './Table';
 import { useEffect, useState } from 'react';
 
@@ -36,14 +36,14 @@ const Projects = () => {
   };
 
   return (
-    <section className={styles.container}>
+    <section /*className={styles.container}*/>
       <ProjectsTable
         projects={projects}
         deleteProject={deleteProject}
         showModal={showModal}
         setShowModal={setShowModal}
       />
-      <button className={styles.addBtn}>
+      <button /*className={styles.addBtn}*/>
         <a href="/projects/form">Add a Project</a>
       </button>
     </section>
