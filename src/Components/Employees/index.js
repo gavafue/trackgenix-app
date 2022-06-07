@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
+//import { useParams } from 'react-router-dom';
 import styles from './employees.module.css';
 import Table from '../Shared/Table';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
-const URL = process.env.REACT_APP_API_URL;
+import Button from '../Shared/Button';
+// import { useParams } from 'react-router-dom';
 
-const editData = (string) => {
-  window.location = `/employees/form?employeeId=${string}`;
+const URL = process.env.REACT_APP_API_URL;
+// const paramEmployeeId = useParams();
+const editData = (id) => {
+  window.location = `/employees/form/${id}`;
 };
 
 function Employees() {
@@ -16,8 +20,6 @@ function Employees() {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
-  // console.log(infoForFeedback);
-  // console.log(infoForDelete);
   useEffect(() => {
     fetch(`${URL}/employees`)
       .then((res) => res.json())
@@ -27,10 +29,10 @@ function Employees() {
       .catch((error) => console.log(error));
   }, []);
 
-  const deleteEmployee = (string) => {
+  const deleteEmployee = (_id) => {
     const options = {
       method: 'DELETE',
-      url: `${URL}/employees/${string}`
+      url: `${URL}/employees/${_id}`
     };
     fetch(options.url, options)
       .then((response) => response.json())
@@ -46,15 +48,23 @@ function Employees() {
             title: 'Request done!',
             description: response.message
           });
-          saveEmployees(employees.filter((employee) => string !== employee._id));
+          saveEmployees(employees.filter((employee) => _id !== employee._id));
           setShowFeedbackMessage(true);
         }
       })
       .catch((error) => console.log(error));
   };
   return (
-    <section>
-      <h2>Employees</h2>
+    <section className={styles.container}>
+      <h2 className={styles.title}>Employees</h2>
+      <div className={styles.button}>
+        <Button
+          type="button"
+          label="Add new employee"
+          theme="secondary"
+          onClick={() => (window.location = `/employees/form`)}
+        />
+      </div>
       <div>
         <Table
           data={employees}
@@ -89,9 +99,6 @@ function Employees() {
           <FeedbackMessage infoForFeedback={infoForFeedback} />
         </Modal>
       </div>
-      <a href="/employees/form" className={styles.button}>
-        Add new employee
-      </a>
     </section>
   );
 }

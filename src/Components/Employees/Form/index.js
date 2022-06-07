@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Input from '../../Shared/Input/InputText';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Modal from '../../Shared/Modal';
+import Button from '../../Shared/Button';
 import styles from './form.module.css';
-import Input from './Input/Text';
-import FeedbackModal from '../FeedbackModal';
+
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
@@ -13,22 +17,16 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({
-    title: '',
-    description: ''
-  });
-  const [title, setTitle] = useState('Add an employee');
-  const [idInput, setIdInput] = useState('');
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
 
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const paramEmployeeId = params.get('employeeId');
-  console.log(paramEmployeeId);
+  const paramEmployeeId = useParams();
+
+  const title = paramEmployeeId.id ? `${nameValue} ${lastNameValue}` : 'Add Employee';
   const options = {
-    method: paramEmployeeId ? 'PUT' : 'POST',
-    url: paramEmployeeId ? `${URL}/employees/${paramEmployeeId}` : `${URL}/employees`,
+    method: paramEmployeeId.id ? 'PUT' : 'POST',
+    url: paramEmployeeId.id ? `${URL}/employees/${paramEmployeeId.id}` : `${URL}/employees`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -47,8 +45,8 @@ const Form = () => {
     })
   };
   useEffect(() => {
-    if (paramEmployeeId) {
-      fetch(`${URL}/employees/${paramEmployeeId}`)
+    if (paramEmployeeId.id) {
+      fetch(`${URL}/employees/${paramEmployeeId.id}`)
         .then((response) => response.json())
         .then((data) => {
           setNameValue(data.data.firstName);
@@ -61,8 +59,6 @@ const Form = () => {
           setTelephoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setCountryValue(data.data.country);
-          setTitle(`Editing ${nameValue} ${lastNameValue} information.`);
-          setIdInput(<Input name="employee-id" type="text" disabled value={paramEmployeeId} />);
         })
         .catch((error) => console.log(error));
     }
@@ -78,17 +74,17 @@ const Form = () => {
       })
       .then((response) => {
         if (correctStatus) {
-          setContentFeedbackModal({
+          setInfoForFeedback({
             title: 'Request done!',
             description: response.message
           });
-          setShowFeedbackModal(true);
+          setShowFeedbackMessage(true);
         } else {
-          setContentFeedbackModal({
+          setInfoForFeedback({
             title: 'Something went wrong',
             description: response.message
           });
-          setShowFeedbackModal(true);
+          setShowFeedbackMessage(true);
         }
       })
       .catch((error) => console.log(error));
@@ -126,11 +122,13 @@ const Form = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1>{title}</h1>
+    <div>
+      <h1 className={styles.title}>{title}</h1>
       <form onSubmit={onSubmit}>
-        {idInput}
         <Input
+          className={styles.input}
+          id={paramEmployeeId.id}
+          label="First Name"
           name="first-name"
           type="text"
           placeholder="Write your name."
@@ -139,7 +137,9 @@ const Form = () => {
           required
         />
         <Input
+          label="Last Name"
           name="last-name"
+          id="last-name"
           type="text"
           placeholder="Write your last name."
           value={lastNameValue}
@@ -147,7 +147,9 @@ const Form = () => {
           required
         />
         <Input
+          label="E-mail"
           name="email"
+          id="email"
           type="text"
           placeholder="Write your email."
           value={emailValue}
@@ -155,7 +157,9 @@ const Form = () => {
           required
         />
         <Input
+          label="Password"
           name="password"
+          id="password"
           type="text"
           placeholder="Write your password."
           value={passwordValue}
@@ -163,7 +167,9 @@ const Form = () => {
           required
         />
         <Input
+          label="Date of birth"
           name="birthday"
+          id="birthday"
           type="text"
           placeholder="Write your birthday on format dd/mm/yyyy"
           value={birthdayValue}
@@ -171,7 +177,9 @@ const Form = () => {
           required
         />
         <Input
+          label="Phone"
           name="phone"
+          id="phone"
           type="text"
           placeholder="Write your telephone."
           value={telephoneValue}
@@ -179,7 +187,9 @@ const Form = () => {
           required
         />
         <Input
+          label="Country"
           name="country"
+          id="country"
           type="text"
           placeholder="Write your country."
           value={countryValue}
@@ -187,7 +197,9 @@ const Form = () => {
           required
         />
         <Input
+          label="City"
           name="city"
+          id="city"
           type="text"
           placeholder="Write your city."
           value={cityValue}
@@ -195,32 +207,41 @@ const Form = () => {
           required
         />
         <Input
+          label="Postal Code"
           name="ZIP"
+          id="ZIP"
           type="text"
-          placeholder="Write your city."
+          placeholder="Write your postal code."
           value={zipValue}
           onChange={onChangeZipValue}
           required
         />
         <Input
+          label="Profile picture"
           name="profile-picture"
+          id="profile-picture"
           type="text"
           placeholder="Write your profile picture url."
           value={photoValue}
           onChange={onChangePhotoValue}
           required
         />
-        <button type="submit" className={styles.button}>
-          Submit
-        </button>
+        <div className={styles.button}>
+          <Button
+            label={paramEmployeeId.id ? 'Update Employee' : 'Add Employee'}
+            theme="secondary"
+            type="submit"
+          />
+        </div>
       </form>
-      {showFeedbackModal && (
-        <FeedbackModal
-          feedbackTitle={contentFeedbackModal.title}
-          messageContent={contentFeedbackModal.description}
-          setShowFeedbackModal={setShowFeedbackModal}
-        />
-      )}
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
     </div>
   );
 };
