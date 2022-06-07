@@ -5,9 +5,8 @@ import { useEffect, useState } from 'react';
 const TimeSheets = () => {
   const [timeSheets, setTimeSheets] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const url = `${process.env.REACT_APP_API_URL}`;
   useEffect(() => {
-    fetch(`${url}/timesheets`)
+    fetch(`${process.env.REACT_APP_API_URL}/timesheets`)
       .then((res) => res.json())
       .then((data) => {
         setTimeSheets(data.data);
