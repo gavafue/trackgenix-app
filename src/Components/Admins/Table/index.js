@@ -1,80 +1,87 @@
-import React /*, { useState }*/ from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../admins.module.css';
-import Button from '../../Shared/Button';
-// import Modal from '../../Shared/Modal';
-// import DeleteMessage from '../../Shared/DeleteMessage';
-// import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Table from '../../Shared/Table';
+import Modal from '../../Shared/Modal';
+import DeleteMessage from '../../Shared/DeleteMessage';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
 
-const AdminsTable = ({ admins }) => {
-  const OnClickEdit = (string) => {
+const AdminsTable = ({ deleteAdmin }) => {
+  const URL = process.env.REACT_APP_API_URL;
+  const [admins, setAdmins] = useState([]);
+  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [infoForDelete, setInfoForDelete] = useState('');
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const editData = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  // const [InfoForDelete, setInfoForDelete] = useState({
-  //   id: ''
-  // });
-  // console.log(isDeleting);
+  useEffect(() => {
+    fetch(`${URL}/admins`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAdmins(data.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+  const deleteEmployee = (string) => {
+    const options = {
+      method: 'DELETE',
+      url: `${URL}/admins/${string}`
+    };
+    fetch(options.url, options)
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.error === true) {
+          setInfoForFeedback({
+            title: 'Something went wrong',
+            description: response.message
+          });
+          setShowFeedbackMessage(true);
+        } else {
+          setInfoForFeedback({
+            title: 'Request done!',
+            description: response.message
+          });
+          setAdmins(admins.filter((admin) => string !== admin._id));
+          setShowFeedbackMessage(true);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <section className={styles.container}>
-      <table>
-        <thead>
-          <tr>
-            <th id="name">Name</th>
-            <th id="lastName">Last Name</th>
-            <th id="phone">Phone</th>
-            <th id="e-mail">E-mail</th>
-            <th id="status">Active</th>
-            <th id="moreInfo">Show more</th>
-            <th id="edit">Edit</th>
-            <th id="delete">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {admins.map((admin) => {
-            return (
-              <tr key={admin._id}>
-                <td>{admin.name}</td>
-                <td>{admin.lastName}</td>
-                <td>{admin.phone}</td>
-                <td>{admin.email}</td>
-                <td>{admin.active ? 'Active' : 'Inactive'}</td>
-                <td>
-                  <Button
-                    label="..."
-                    disabled={true}
-                    theme="disabled"
-                    // onClick={() => "a function that shows the additional data"}
-                  />
-                </td>
-                <td>
-                  <Button label="Edit" onClick={() => OnClickEdit(admin._id)} />
-                </td>
-                <td>
-                  <Button
-                    label="Delete"
-                    // onClick={() => {
-                    //   setShowModal(!showModal);
-                    //   setInfoForDelete({
-                    //     id: superAdmin._id
-                    //   });
-                    // }}
-                  />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      {/* {showModal && (
-        <DeleteModal
-          setShowModal={setShowModal}
-          showFeedbackModal={showFeedbackModal}
-          setShowFeedbackModal={setShowFeedbackModal}
-          modalId={InfoForDelete.id}
-          deleteSuperAdmin={deleteSuperAdmin}
-          setInfoFoDelete={setInfoForDelete}
-          showModal={showModal}
+      <Table
+        data={admins}
+        headersName={['Name', 'Last Name', 'Phone', 'E-mail', 'Status', 'More information']}
+        headers={['name', 'lastName', 'phone', 'email', 'active', 'moreInfo']}
+        deleteAdmin={deleteAdmin}
+        editData={editData}
+        setShowModal={setShowDeleteMessage}
+        setInfoForDelete={setInfoForDelete}
+      />
+      <Modal
+        isOpen={showDeleteMessage}
+        handleClose={() => {
+          setShowDeleteMessage(false);
+        }}
+      >
+        <DeleteMessage
+          handleClose={() => {
+            setShowDeleteMessage(false);
+          }}
+          infoForDelete={infoForDelete}
+          deleteItem={deleteEmployee}
+          setShowModal={setShowDeleteMessage}
         />
-      )} */}
+      </Modal>
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
     </section>
   );
 };
