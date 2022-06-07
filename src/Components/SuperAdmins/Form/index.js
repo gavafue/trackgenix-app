@@ -48,11 +48,11 @@ const Form = () => {
     { id: 'false', optionContent: 'Inactive' }
   ];
   const superAdminId = useParams();
-  const title = superAdminId ? 'Update Super Admin' : 'Add Super Admin';
+  const title = superAdminId.id ? 'Update Super Admin' : 'Add Super Admin';
 
   const options = {
-    method: superAdminId ? 'PUT' : 'POST',
-    url: `${URL}/super-admin/${superAdminId ? superAdminId.id : ''}`,
+    method: superAdminId.id ? 'PUT' : 'POST',
+    url: `${URL}/super-admin/${superAdminId.id ?? ''}`,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       firstName: nameValue,

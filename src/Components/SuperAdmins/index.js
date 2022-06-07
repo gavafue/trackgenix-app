@@ -67,6 +67,9 @@ const SuperAdmins = () => {
   return (
     <section className={styles.container}>
       <h1>Super Admins</h1>
+      <div className={styles.buttonContainer}>
+        <Button onClick={createSuperAdmin} label="Add Super Admin" theme="secondary" />
+      </div>
       <Table
         data={superAdminData}
         headersName={['Name', 'Last Name', 'Email', 'Password', 'Role', 'Active']}
@@ -98,9 +101,6 @@ const SuperAdmins = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      <div className={styles.buttonContainer}>
-        <Button onClick={createSuperAdmin} label="Add Super Admin" theme="secondary" />
-      </div>
     </section>
   );
 };
