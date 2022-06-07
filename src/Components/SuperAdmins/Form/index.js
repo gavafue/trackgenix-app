@@ -148,10 +148,10 @@ const Form = () => {
           <option value="true"> Active </option>
           <option value="false"> Inactive </option>
         </select>
+        <div className={styles.buttoncontainer}>
+          <Button type="submit" label="Submit" theme="secondary" />
+        </div>
       </form>
-      <div className={styles.buttoncontainer}>
-        <Button type="submit" label="Submit" theme="secondary" />
-      </div>
       <Modal
         isOpen={showFeedbackMessage}
         handleClose={() => {
