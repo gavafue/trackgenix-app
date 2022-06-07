@@ -4,6 +4,7 @@ import Table from '../../Shared/Table';
 import Modal from '../../Shared/Modal';
 import DeleteMessage from '../../Shared/DeleteMessage';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Button from '../../Shared/Button';
 
 const AdminsTable = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -50,11 +51,11 @@ const AdminsTable = () => {
   };
   const adminData = admins.map((admin) => {
     return {
-      firstName: admin.firstName,
+      name: admin.name,
       lastName: admin.lastName,
+      phone: admin.phone,
       email: admin.email,
-      password: admin.password,
-      role: admin.role,
+      moreInfo: <Button label="..." disabled={true} theme="disabled" />,
       ...admin,
       active: admin.active ? 'Active' : 'Inactive'
     };
