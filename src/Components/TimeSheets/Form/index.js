@@ -1,9 +1,12 @@
 import styles from './form.module.css';
 import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
+import Select from '../../Shared/Input/InputSelect';
+import Input from '../../Shared/Input/InputText';
+
+const URL = process.env.REACT_APP_API_URL;
 
 const Form = () => {
-  const URL = process.env.REACT_APP_API_URL;
   const [projects, setProjects] = useState([]);
   useEffect(() => {
     fetch(`${URL}/projects`)
@@ -79,6 +82,21 @@ const Form = () => {
       workDescription: workDescriptionValue
     })
   };
+
+  const arrayToMapEmployees = employees.map((item) => {
+    return {
+      id: item._id,
+      optionContent: `${item.firstName + ' ' + item.lastName}`
+    };
+  });
+
+  const arrayToMapProjects = projects.map((item) => {
+    return {
+      id: item._id,
+      optionContent: `${item.name}`
+    };
+  });
+
   useEffect(() => {
     if (timesheetId) {
       fetch(`${URL}/timesheets/${timesheetId}`)
@@ -101,105 +119,91 @@ const Form = () => {
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: data.message });
+        setContentFeedbackModal({ title: 'Request Done!', description: data.message });
         setShowFeedbackModal(true);
       } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
+        setContentFeedbackModal({ title: 'Something Went wrong', description: data.message });
         setShowFeedbackModal(true);
       }
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
         <h2>{title}</h2>
-        <label>Project</label>
-        <select
-          className={styles.input}
+        <Select
+          label="Project"
+          arrayToMap={arrayToMapProjects}
           id="project"
           name="project"
           value={projectValue}
           onChange={onChangeProjectSelect}
+          placeholder="Choose the project"
           required
-        >
-          {projects.map((project) => {
-            return (
-              <option
-                id="projectOption"
-                selected={Boolean(project._id === projectValue)}
-                value={project._id}
-                key={project._id}
-              >{`${project.name}`}</option>
-            );
-          })}
-          ;
-          <option value="" disabled selected hidden>
-            Choose Project
-          </option>
-        </select>
-        <label>Employee</label>
-        <select
+        />
+        <Select
+          label="Employees"
+          arrayToMap={arrayToMapEmployees}
           id="employee"
           name="employee"
           value={employeeValue}
           onChange={onChangeEmployeeSelect}
+          placeholder="Choose the employee"
           required
-        >
-          {employees.map((employee) => {
-            return (
-              <option
-                selected={Boolean(employee._id === employeeValue)}
-                value={employee._id}
-                key={employee._id}
-              >{`${employee.firstName + ' ' + employee.lastName}`}</option>
-            );
-          })}
-          ;
-          <option value="" disabled selected hidden>
-            Choose Employee
-          </option>
-        </select>
-        <label>Week Sprint</label>
-        <input
-          type="number"
-          id="weekSprint"
-          name="weekSprint"
+        />
+        <Input
+          label="Week Sprint"
+          id="weeksprint"
+          name="weeksprint"
+          type="text"
+          placeholder="Write the week sprint"
           value={weekSprintValue}
           onChange={onChangeWeekSprint}
           required
-        ></input>
-        <label>Date</label>
-        <input id="date" name="date" value={dateValue} onChange={onChangeDate} required></input>
-        <label>Hours Worked</label>
-        <input
+        />
+        <Input
+          label="Date"
+          id="date"
+          name="date"
+          type="text"
+          placeholder="Write the date"
+          value={dateValue}
+          onChange={onChangeDate}
+          required
+        />
+        <Input
+          label="Hours worked"
           type="number"
           id="hoursWorked"
           name="hoursWorked"
           value={hoursWorkedValue}
+          placeholder="Write the hours worked"
           onChange={onChangeHoursWork}
           required
-        ></input>
-        <label>Project Hours</label>
-        <input
-          type="number"
+        />
+        <Input
+          label="Project Hours"
           id="projectHours"
           name="projectHours"
+          type="number"
+          placeholder="Write the project hours"
           value={projectHoursValue}
           onChange={onChangeProjectHours}
           required
-        ></input>
-        <label>Work Description</label>
-        <input
-          className={styles.workInput}
-          type="text"
+        />
+        <Input
+          label="Work description"
           id="workDescription"
           name="workDescription"
+          type="text"
+          placeholder="Write the work description"
           value={workDescriptionValue}
           onChange={onChangeWorkDescription}
           required
-        ></input>
+        />
         <button type="submit" className={styles.submitButton}>
           Submit
         </button>
