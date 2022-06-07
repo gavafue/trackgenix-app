@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../admins.module.css';
+// import styles from '../admins.module.css';
 import Button from '../../Shared/Button';
 import Modal from '../../Shared/Modal';
 
@@ -9,7 +9,7 @@ const AdminsTable = ({ admins }) => {
   };
   const [isDeleting, setIsDeleting] = useState(false);
   return (
-    <section className={styles.container}>
+    <section /*className={styles.container}*/>
       <h2>Admins</h2>
       <table>
         <thead>
