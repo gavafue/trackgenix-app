@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
@@ -46,13 +47,12 @@ const Form = () => {
     { id: 'true', optionContent: 'Active' },
     { id: 'false', optionContent: 'Inactive' }
   ];
-  const params = new URLSearchParams(window.location.search);
-  const superAdminId = params.get('superAdminId');
+  const superAdminId = useParams();
   const title = superAdminId ? 'Update Super Admin' : 'Add Super Admin';
 
   const options = {
     method: superAdminId ? 'PUT' : 'POST',
-    url: `${URL}/super-admin/${superAdminId ? superAdminId : ''}`,
+    url: `${URL}/super-admin/${superAdminId ? superAdminId.id : ''}`,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       firstName: nameValue,
@@ -65,7 +65,7 @@ const Form = () => {
   };
   useEffect(() => {
     if (superAdminId) {
-      fetch(`${URL}/super-admin/${superAdminId}`)
+      fetch(`${URL}/super-admin/${superAdminId.id}`)
         .then((response) => response.json())
         .then((data) => {
           setNameValue(data.data.firstName);
@@ -103,7 +103,7 @@ const Form = () => {
   };
   return (
     <div className={styles.container}>
-      <form className={styles.container} onSubmit={onSubmit}>
+      <form onSubmit={onSubmit}>
         <h2>{title}</h2>
         <Input
           id="firstName"

@@ -12,8 +12,8 @@ const SuperAdmins = () => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
-  const editData = (string) => {
-    window.location = `/super-admins/form?superAdminId=${string}`;
+  const editData = (id) => {
+    window.location = `/super-admins/form/${id}`;
   };
 
   useEffect(() => {
