@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './select.module.css';
+import styles from './inputSelect.module.css';
 
 const Select = ({
   arrayToMap,
@@ -10,7 +10,7 @@ const Select = ({
   onChange,
   required,
   value,
-  defaultValue
+  placeholder
 }) => {
   return (
     <div className={styles.container}>
@@ -25,14 +25,14 @@ const Select = ({
       >
         {arrayToMap.map((item) => {
           return (
-            <option selected={Boolean(item.id === itemValue)} key={item.id} value={item.id}>
-              {`${item.params}`}
+            <option defaultValue={Boolean(item.id === itemValue)} key={item.id} value={item.id}>
+              {`${item.optionContent}`}
             </option>
           );
         })}
         ;
-        <option value="" disabled selected hidden>
-          {defaultValue}
+        <option value="" disabled defaultValue hidden>
+          {placeholder}
         </option>
       </select>
     </div>

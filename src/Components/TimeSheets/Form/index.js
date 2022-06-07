@@ -1,11 +1,12 @@
 import styles from './form.module.css';
 import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
-import Select from '../../Shared/Input/InputSelect/Index';
+import Select from '../../Shared/Input/InputSelect';
 import Input from '../../Shared/Input/InputText';
 
+const URL = process.env.REACT_APP_API_URL;
+
 const Form = () => {
-  const URL = process.env.REACT_APP_API_URL;
   const [projects, setProjects] = useState([]);
   useEffect(() => {
     fetch(`${URL}/projects`)
@@ -85,14 +86,14 @@ const Form = () => {
   const arrayToMapEmployees = employees.map((item) => {
     return {
       id: item._id,
-      params: `${item.firstName + ' ' + item.lastName}`
+      optionContent: `${item.firstName + ' ' + item.lastName}`
     };
   });
 
   const arrayToMapProjects = projects.map((item) => {
     return {
       id: item._id,
-      params: `${item.name}`
+      optionContent: `${item.name}`
     };
   });
 
@@ -133,29 +134,6 @@ const Form = () => {
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
         <h2>{title}</h2>
-        {/* <select
-          className={styles.input}
-          id="project"
-          name="project"
-          value={projectValue}
-          onChange={onChangeProjectSelect}
-          required
-        >
-          {projects.map((project) => {
-            return (
-              <option
-                id="projectOption"
-                selected={Boolean(project._id === projectValue)}
-                value={project._id}
-                key={project._id}
-              >{`${project.name}`}</option>
-            );
-          })}
-          ;
-          <option value="" disabled selected hidden>
-            Choose Project
-          </option>
-        </select> */}
         <Select
           label="Project"
           arrayToMap={arrayToMapProjects}
@@ -163,7 +141,7 @@ const Form = () => {
           name="project"
           value={projectValue}
           onChange={onChangeProjectSelect}
-          defaultValue="Choose the project"
+          placeholder="Choose the project"
           required
         />
         <Select
@@ -173,7 +151,7 @@ const Form = () => {
           name="employee"
           value={employeeValue}
           onChange={onChangeEmployeeSelect}
-          defaultValue="Choose the employee"
+          placeholder="Choose the employee"
           required
         />
         <Input

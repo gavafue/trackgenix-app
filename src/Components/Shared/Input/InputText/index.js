@@ -1,4 +1,5 @@
-import styles from './input.module.css';
+import React from 'react';
+import styles from './inputText.module.css';
 
 const Input = ({ label, name, id, type, placeholder, value, onChange, required }) => {
   return (
