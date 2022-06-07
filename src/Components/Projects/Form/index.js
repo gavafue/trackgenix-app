@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import FeedbackModal from '../FeedbackModal';
 import styles from './form.module.css';
 
 const Form = () => {
@@ -53,6 +52,8 @@ const Form = () => {
   };
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  console.log(contentFeedbackModal);
+  console.log(showFeedbackModal);
   const querystring = window.location.search;
   const params = new URLSearchParams(querystring);
   const projectId = params.get('projectId');
@@ -209,14 +210,6 @@ const Form = () => {
           Submit
         </button>
       </form>
-      {showFeedbackModal && (
-        <FeedbackModal
-          feedbackTitle={contentFeedbackModal.title}
-          messageContent={contentFeedbackModal.description}
-          setShowFeedbackModal={setShowFeedbackModal}
-          showFeedbackModal={showFeedbackModal}
-        />
-      )}
     </div>
   );
 };
