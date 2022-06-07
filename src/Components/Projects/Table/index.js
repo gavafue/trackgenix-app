@@ -43,7 +43,7 @@ const ProjectsTable = ({
                 <td>{project.client}</td>
                 <td>{project.startDate}</td>
                 <td>{project.endDate}</td>
-                <td>{project.members[0]._id}</td>
+                <td>{project.members.name}</td>
                 <td>
                   <button onClick={() => editProject(project._id)}>edit</button>
                   <button
