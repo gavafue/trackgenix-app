@@ -119,10 +119,10 @@ const Form = () => {
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: data.message });
+        setContentFeedbackModal({ title: 'Request Done!', description: data.message });
         setShowFeedbackModal(true);
       } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
+        setContentFeedbackModal({ title: 'Something Went wrong', description: data.message });
         setShowFeedbackModal(true);
       }
     } catch (err) {
