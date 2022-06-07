@@ -4,21 +4,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom:10%;
 }
 
-.addBtn{
-  align-self: flex-end;
-  margin-top: 1%;
-  margin-right: 10%;
-  width: 10%;
-  padding: 0.5%;
-  background-color: #EA3354;
-  border-radius: 10px;
-  border: 1px solid #000;
-  color: #fff;
-}
-
-.addBtn a{
-  text-decoration: none;
-  color:#fff;
+.buttonContainer{
+  width: 15%;
+  margin: 5%;
 }

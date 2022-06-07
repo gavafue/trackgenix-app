@@ -1,6 +1,7 @@
 import styles from './form.module.css';
 import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
+import { useParams } from 'react-router-dom';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -39,13 +40,11 @@ const Form = () => {
   };
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
   const [showFeedBackModal, setShowFeedbackModal] = useState(false);
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const taskId = params.get('taskId');
-  const title = taskId ? 'Update Task' : 'Add Task';
+  const taskId = useParams();
+  const title = taskId.id ? 'Update Task' : 'Add Task';
   const options = {
-    method: taskId ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/tasks/${taskId ? taskId : ''}`,
+    method: taskId.id ? 'PUT' : 'POST',
+    url: `${process.env.REACT_APP_API_URL}/tasks/${taskId.id ?? ''}`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -59,7 +58,7 @@ const Form = () => {
   };
   useEffect(() => {
     if (taskId) {
-      fetch(`${URL}/tasks/${taskId}`)
+      fetch(`${URL}/tasks/${taskId.id}`)
         .then((res) => res.json())
         .then((data) => {
           setProjectValue(data.data.nameProject);
