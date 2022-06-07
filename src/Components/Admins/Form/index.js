@@ -2,7 +2,7 @@ import styles from './form.module.css';
 import { useState, useEffect } from 'react';
 import Button from '../../Shared/Button';
 import Input from '../../Shared/Input/InputText';
-// import Select from '../../Shared/Input/InputSelect';
+import Select from '../../Shared/Input/InputSelect';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -155,15 +155,16 @@ function Form() {
             onChange={onChangePasswordInput}
             required
           />
-          <label htmlFor="gender">Gender</label>
-          <select id="gender" value={genderValue} onChange={onChangeGenderInput} required>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-            <option value="Male">Male</option>
-            <option value="" disabled defaultValue={genderValue} hidden>
-              Choose gender
-            </option>
-          </select>
+          <Select
+            label="Gender"
+            arrayToMap={['Male', 'Female', 'Other']}
+            id="gender"
+            name="gender"
+            value={genderValue}
+            onChange={onChangeGenderInput}
+            placeholder={['Male', 'Female', 'Other']}
+            required
+          />
           <Input
             label="Phone"
             id="phone"
@@ -204,14 +205,16 @@ function Form() {
             onChange={onChangeZipInput}
             required
           />
-          <label htmlFor="active">Status</label>
-          <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
-            <option value="" disabled defaultValue={activeValue} hidden>
-              Is active?
-            </option>
-          </select>
+          <Select
+            label="Status"
+            arrayToMap={['Active', 'Inactive']}
+            id="active"
+            name="active"
+            value={activeValue ? 'Active' : 'Inactive'}
+            onChange={onChangeActiveInput}
+            placeholder={activeValue ? 'Active' : 'Inactive'}
+            required
+          />
         </fieldset>
         <Button type="submit" label="Submit" />
       </form>
