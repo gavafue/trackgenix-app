@@ -33,7 +33,7 @@ const Admins = () => {
   };
   return (
     <section className={styles.container}>
-      <h2>Projects</h2>
+      <h2>Admins</h2>
       <a href="/admins/form" className={styles.button}>
         Add new admin +
       </a>

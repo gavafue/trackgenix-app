@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../admins.module.css';
 import Button from '../../Shared/Button';
-import Modal from '../../Shared/Modal';
+import Modal from '../Shared/Modal';
+import DeleteMessage from '../Shared/DeleteMessage';
+import FeedbackMessage from '../Shared/FeedbackMessage';
 
 const AdminsTable = ({ admins }) => {
   const OnClickEdit = (string) => {
