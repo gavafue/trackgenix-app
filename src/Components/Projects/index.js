@@ -4,6 +4,7 @@ import Table from '../Shared/Table/index';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
+import Button from '../Shared/Button';
 
 const editData = (id) => {
   window.location = `/projects/form/${id}`;
@@ -55,6 +56,7 @@ const Projects = () => {
   return (
     <section /*className={styles.container}*/>
       <div>
+        <Button label="Add a Project" onClick={() => (window.location = '/projects/form')} />
         <Table
           data={projects}
           headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date', 'Members']}
@@ -88,9 +90,6 @@ const Projects = () => {
           <FeedbackMessage infoForFeedback={infoForFeedback} />
         </Modal>
       </div>
-      <button /*className={styles.addBtn}*/>
-        <a href="/projects/form">Add a Project</a>
-      </button>
     </section>
   );
 };

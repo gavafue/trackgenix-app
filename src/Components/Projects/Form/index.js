@@ -5,6 +5,7 @@ import InputSelect from '../../Shared/Input/InputSelect';
 import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Button from '../../Shared/Button';
 
 const Form = () => {
   const [employees, setEmployees] = useState([]);
@@ -214,9 +215,7 @@ const Form = () => {
           value={membersRateValue}
         />
 
-        <button type="submit" className={styles.submitBtn}>
-          Submit
-        </button>
+        <Button type="submit" label="Submit"></Button>
       </form>
       <Modal
         isOpen={showFeedbackMessage}
