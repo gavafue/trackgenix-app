@@ -1,0 +1,20 @@
+.container{
+  margin:auto;
+  background-color:#fff;
+  border:#37386720 2px solid;
+  border-radius: 5px;
+}
+.container td{
+  margin:none;
+}
+.headers{
+  width: 100%;
+  margin: 0px;
+  padding: 3px 2px;
+  background-color: #37386720;
+  border:#373867 1px solid;
+  border-radius: 10px;
+  border-collapse: collapse;
+  text-align: center;
+  font-weight: bold;
+}
