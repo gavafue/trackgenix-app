@@ -5,6 +5,7 @@ import Button from '../../Shared/Button';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -17,6 +18,8 @@ function Form() {
   const [cityValue, setCityValue] = useState('');
   const [zipValue, setZipValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -49,11 +52,21 @@ function Form() {
     setActiveValue(event.target.value);
   };
 
+  const arrayToMapGender = [
+    { id: 'male', optionContent: 'Male' },
+    { id: 'female', optionContent: 'Female' },
+    { id: 'other', optionContent: 'Other' }
+  ];
+  const arrayToMapActive = [
+    { id: 'true', optionContent: 'Active' },
+    { id: 'false', optionContent: 'Inactive' }
+  ];
+
   const adminId = useParams();
-  const title = adminId ? `${nameValue} ${lastNameValue}` : 'Add admin';
+  const title = adminId.id ? `${nameValue} ${lastNameValue}` : 'Add admin';
   const options = {
-    method: adminId ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/admins/${adminId ? adminId.id : ''}`,
+    method: adminId.id ? 'PUT' : 'POST',
+    url: `${process.env.REACT_APP_API_URL}/admins/${adminId.id ? adminId.id : ''}`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -72,7 +85,7 @@ function Form() {
   };
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    if (adminId) {
+    if (adminId.id) {
       fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -96,20 +109,18 @@ function Form() {
       event.preventDefault();
       const res = await fetch(options.url, options);
       const data = await res.json();
-      if (data.status == 201 || data.status == 200) {
-        return (
-          <Modal>
-            <h2>Request done!</h2>
-            <p>{data.message}</p>
-          </Modal>
-        );
+      if (res.status == 201 || res.status == 200) {
+        setInfoForFeedback({
+          title: 'Request done!',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
       } else {
-        return (
-          <Modal>
-            <h2>Something went wrong</h2>
-            <p>{data.message}</p>
-          </Modal>
-        );
+        setInfoForFeedback({
+          title: 'Something went wrong',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
       }
     } catch (err) {
       console.log(err);
@@ -167,7 +178,7 @@ function Form() {
           />
           <Select
             label="Gender"
-            arrayToMap={['Male', 'Female', 'Other']}
+            arrayToMap={arrayToMapGender}
             id="gender"
             name="gender"
             value={genderValue}
@@ -216,17 +227,25 @@ function Form() {
           />
           <Select
             label="Status"
-            arrayToMap={['Active', 'Inactive']}
+            arrayToMap={arrayToMapActive}
             id="active"
             name="active"
-            value={activeValue ? 'Active' : 'Inactive'}
+            value={activeValue}
             onChange={onChangeActiveInput}
-            placeholder={activeValue ? 'Active' : 'Inactive'}
+            placeholder={activeValue ? activeValue : 'Enter Active status'}
             required
           />
         </fieldset>
         <Button type="submit" label="Submit" />
       </form>
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
     </div>
   );
 }
