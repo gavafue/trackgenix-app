@@ -1,48 +1,45 @@
-//import styles from './projects.module.css';
-import ProjectsTable from './Table';
 import { useEffect, useState } from 'react';
-
+import Table from '../Shared/Table/index';
 const Projects = () => {
   const [projects, setProjects] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const URL = `${process.env.REACT_APP_API_URL}/projects`;
+  const URL = `${process.env.REACT_APP_API_URL}`;
+
   useEffect(() => {
-    fetch(URL)
+    fetch(`${URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
       })
       .catch((err) => console.log(err));
   }, []);
-
-  const deleteProject = (string, setContentFeedbackModal) => {
-    const options = {
-      method: 'DELETE',
-      url: `${URL}/${string}`
+  const ProjectData = projects.map((project) => {
+    return {
+      name: project.name,
+      description: project.description,
+      client: project.client,
+      startDate: project.startDate,
+      endDate: project.endDate,
+      active: project.active ? 'Yes' : 'No'
     };
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          // setShowModal(false);
-          setContentFeedbackModal({ title: 'Something went wrong', description: response.message });
-        } else {
-          // setShowModal(false);
-          setContentFeedbackModal({ title: 'Request done!', description: response.message });
-          setProjects(projects.filter((project) => project._id !== string));
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+  });
 
   return (
     <section /*className={styles.container}*/>
-      <ProjectsTable
-        projects={projects}
-        deleteProject={deleteProject}
-        showModal={showModal}
-        setShowModal={setShowModal}
-      />
+      <div>
+        <Table
+          data={ProjectData}
+          headersName={[
+            'Project',
+            'Active',
+            'Description',
+            'Client',
+            'Start Date',
+            'End Date',
+            'Members'
+          ]}
+          headers={['name', 'active', 'description', 'client', 'startDate', 'endDate']}
+        />
+      </div>
       <button /*className={styles.addBtn}*/>
         <a href="/projects/form">Add a Project</a>
       </button>
