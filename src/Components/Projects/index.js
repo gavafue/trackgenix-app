@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
+
 import Table from '../Shared/Table/index';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
-const editData = (string) => {
-  window.location = `/projects/form/${string}`;
+
+const editData = (id) => {
+  window.location = `/projects/form/${id}`;
 };
+
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);

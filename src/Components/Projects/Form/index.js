@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import InputText from '../../Shared/Input/InputText';
 import styles from './form.module.css';
 
 const Form = () => {
@@ -54,9 +56,8 @@ const Form = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   console.log(contentFeedbackModal);
   console.log(showFeedbackModal);
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const projectId = params.get('projectId');
+
+  const projectId = useParams();
   const title = projectId ? `Editing ${nameValue} projects's information.` : 'Add a Project';
 
   const options = {
@@ -84,9 +85,10 @@ const Form = () => {
 
   useEffect(() => {
     if (projectId) {
-      fetch(`${URL}/projects/${projectId}`)
+      fetch(`${URL}/projects/${projectId.id}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           setNameValue(data.data.name);
           setStartDateValue(data.data.startDate);
           setEndDateValue(data.data.endDate);
@@ -123,89 +125,104 @@ const Form = () => {
     <div className={styles.container}>
       <h2>{title}</h2>
       <form onSubmit={onSubmit}>
-        <fieldset>
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" value={nameValue} onChange={onChangeNameInput} required />
-          <label htmlFor="startDate">Start Date:</label>
-          <input
-            type="date"
-            id="startDate"
-            value={startDateValue}
-            onChange={onChangeStartDateInput}
-            required
-          />
-          <label htmlFor="endDate">End Date:</label>
-          <input type="date" id="endDate" value={endDateValue} onChange={onChangeEndDateInput} />
-          <label htmlFor="description">Description:</label>
-          <input
-            type="text"
-            id="description"
-            value={descriptionValue}
-            onChange={onChangeDescriptionInput}
-            required
-          />
-          <label htmlFor="client">Client:</label>
-          <input
-            type="text"
-            id="client"
-            value={clientValue}
-            onChange={onChangeClientInput}
-            required
-          />
-          <label htmlFor="active">Active:</label>
-          <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
-            <option defaultValue value={true}>
-              True
-            </option>
-            <option value={false}>False</option>
-          </select>
-          <label>Employee</label>
-          <select
-            id="employee"
-            name="employee"
-            value={membersValue}
-            onChange={onChangeMembersInput}
-            required
-          >
-            {employees &&
-              employees.map((employee) => {
-                return (
-                  <option
-                    defaultValue={Boolean(employee._id === membersValue)}
-                    value={employee._id}
-                    key={employee._id}
-                  >{`${employee.firstName + ' ' + employee.lastName}`}</option>
-                );
-              })}
-            ;
-            <option disabled defaultValue hidden>
-              Choose Member
-            </option>
-          </select>
-          <label>Role</label>
-          <select
-            id="role"
-            name="role"
-            value={membersRoleValue}
-            onChange={onChangeMembersRoleInput}
-            required
-          >
-            <option value={'TL'}>TL</option>
-            <option value={'QA'}>QA</option>
-            <option value={'DEV'}>DEV</option>
-            <option value={'PM'}>PM</option>
-            <option disabled defaultValue hidden>
-              Choose Member
-            </option>
-          </select>
-          <label>Rate</label>
-          <input
-            type="num"
-            value={membersRateValue}
-            onChange={onChangeMembersRateInput}
-            placeholder="Enter the employee's rate"
-          />
-        </fieldset>
+        <label htmlFor="name">Name</label>
+        <InputText
+          name="Name"
+          type="text"
+          onChange={onChangeNameInput}
+          placeholder="Write the project's name"
+          value={nameValue}
+          required
+        />
+        <label htmlFor="startDate">Start Date:</label>
+        <InputText
+          name="startDate"
+          type="text"
+          onChange={onChangeStartDateInput}
+          placeholder="Write the start date"
+          value={startDateValue}
+          required
+        />
+        <label htmlFor="endDate">End Date:</label>
+        <InputText
+          name="endDate"
+          type="text"
+          onChange={onChangeEndDateInput}
+          placeholder="Write the end date"
+          value={endDateValue}
+        />
+        <label htmlFor="description">Description:</label>
+        <InputText
+          name="description"
+          type="text"
+          onChange={onChangeDescriptionInput}
+          placeholder="Write the description"
+          value={descriptionValue}
+          required
+        />
+        <label htmlFor="client">Client:</label>
+        <InputText
+          name="client"
+          type="text"
+          onChange={onChangeClientInput}
+          placeholder="Write the Client's name"
+          value={clientValue}
+          required
+        />
+        <label htmlFor="active">Active:</label>
+        <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
+          <option defaultValue value={true}>
+            True
+          </option>
+          <option value={false}>False</option>
+        </select>
+        <label>Employee</label>
+        <select
+          id="employee"
+          name="employee"
+          value={membersValue}
+          onChange={onChangeMembersInput}
+          required
+        >
+          {employees &&
+            employees.map((employee) => {
+              return (
+                <option
+                  defaultValue={Boolean(employee._id === membersValue)}
+                  value={employee._id}
+                  key={employee._id}
+                >{`${employee.firstName + ' ' + employee.lastName}`}</option>
+              );
+            })}
+          ;
+          <option disabled defaultValue hidden>
+            Choose Member
+          </option>
+        </select>
+        <label>Role</label>
+        <select
+          id="role"
+          name="role"
+          value={membersRoleValue}
+          onChange={onChangeMembersRoleInput}
+          required
+        >
+          <option value={'TL'}>TL</option>
+          <option value={'QA'}>QA</option>
+          <option value={'DEV'}>DEV</option>
+          <option value={'PM'}>PM</option>
+          <option disabled defaultValue hidden>
+            Choose Member
+          </option>
+        </select>
+        <label>Rate</label>
+        <input
+          type="num"
+          value={membersRateValue}
+          onChange={onChangeMembersRateInput}
+          placeholder="Enter the employee's rate"
+        />
+
         <button type="submit" className={styles.submitBtn}>
           Submit
         </button>
