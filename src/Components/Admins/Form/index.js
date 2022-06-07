@@ -1,8 +1,10 @@
 import styles from './form.module.css';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from '../../Shared/Button';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
+import Modal from '../../Shared/Modal';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -47,13 +49,11 @@ function Form() {
     setActiveValue(event.target.value);
   };
 
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const adminId = params.get('adminId');
+  const adminId = useParams();
   const title = adminId ? `${nameValue} ${lastNameValue}` : 'Add admin';
   const options = {
     method: adminId ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/admins/${adminId ? adminId : ''}`,
+    url: `${process.env.REACT_APP_API_URL}/admins/${adminId ? adminId.id : ''}`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -73,7 +73,7 @@ function Form() {
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     if (adminId) {
-      fetch(`${URL}/admins/${adminId}`)
+      fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
         .then((data) => {
           setNameValue(data.data.name);
@@ -97,9 +97,19 @@ function Form() {
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (data.status == 201 || data.status == 200) {
-        alert(data.message);
+        return (
+          <Modal>
+            <h2>Request done!</h2>
+            <p>{data.message}</p>
+          </Modal>
+        );
       } else {
-        alert(data.message);
+        return (
+          <Modal>
+            <h2>Something went wrong</h2>
+            <p>{data.message}</p>
+          </Modal>
+        );
       }
     } catch (err) {
       console.log(err);
@@ -162,7 +172,7 @@ function Form() {
             name="gender"
             value={genderValue}
             onChange={onChangeGenderInput}
-            placeholder={['Male', 'Female', 'Other']}
+            placeholder={[genderValue ? genderValue : 'Enter your gender']}
             required
           />
           <Input
@@ -180,7 +190,6 @@ function Form() {
             id="dateBirth"
             name="dateBirth"
             type="date"
-            placeholder="Enter admin's date of birth"
             value={dateFormat}
             onChange={onChangeBirthDateInput}
             required

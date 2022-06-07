@@ -12,8 +12,8 @@ const AdminsTable = ({ deleteAdmin }) => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
-  const editData = (string) => {
-    window.location = `/admins/form?adminId=${string}`;
+  const editData = (id) => {
+    window.location = `/admins/form/${id}`;
   };
   useEffect(() => {
     fetch(`${URL}/admins`)

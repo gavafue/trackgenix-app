@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './admins.module.css';
 import AdminsTable from './Table';
+import Modal from '../Shared/Modal';
 
 const Admins = () => {
   const [admins, setAdmins] = useState([]);
@@ -23,9 +24,15 @@ const Admins = () => {
       .then((response) => response.json())
       .then((response) => {
         if (response.error === true) {
-          // setContentFeedbackModal({ title: 'Something went wrong', description: response.message });
+          <Modal>
+            <h2>Something went wrong</h2>
+            <p>{response.message}</p>
+          </Modal>;
         } else {
-          // setContentFeedbackModal({ title: 'Request done!', description: response.message });
+          <Modal>
+            <h2>Request done!</h2>
+            <p>{response.message}</p>
+          </Modal>;
           setAdmins(admins.filter((admin) => admin._id !== string));
         }
       })
