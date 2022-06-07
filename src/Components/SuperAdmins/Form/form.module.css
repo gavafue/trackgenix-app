@@ -2,30 +2,14 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
-
-label{
-  font-size: 15px;
-  font-family: 'Open Sans', BlinkMacSystemFont,
-  'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-  'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-weight: bold;
-  display: flex;
-  justify-content: left;
+.container form {
+  width: 100%;
 }
 
 .buttoncontainer {
   margin: auto;
-  width: 15%;
-}
-
-select {
-  display: flex;
-  align-self: center;
-  margin: 5px;
-  border: 1px solid #373867;
-  border-radius: 4px;
-  padding: 10px 12px;
-  width: 100%;
+  width: 10%;
 }

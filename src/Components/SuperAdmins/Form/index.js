@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './form.module.css';
-import Input from '../input/input.js';
+import Input from '../../Shared/Input/InputText';
+import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Button from '../../Shared/Button';
@@ -40,6 +41,11 @@ const Form = () => {
     setRoleValue(e.target.value);
   };
 
+  const arrayToMapRole = [{ id: 'SA', optionContent: 'SuperAdmin' }];
+  const arrayToMapStatus = [
+    { id: 'true', optionContent: 'Active' },
+    { id: 'false', optionContent: 'Inactive' }
+  ];
   const params = new URLSearchParams(window.location.search);
   const superAdminId = params.get('superAdminId');
   const title = superAdminId ? 'Update Super Admin' : 'Add Super Admin';
@@ -57,7 +63,6 @@ const Form = () => {
       active: activeValue
     })
   };
-
   useEffect(() => {
     if (superAdminId) {
       fetch(`${URL}/super-admin/${superAdminId}`)
@@ -96,58 +101,70 @@ const Form = () => {
       console.log(err);
     }
   };
-
   return (
     <div className={styles.container}>
-      <form onSubmit={onSubmit}>
+      <form className={styles.container} onSubmit={onSubmit}>
         <h2>{title}</h2>
-        <label>First Name</label>
         <Input
+          id="firstName"
           name="firstName"
           type="text"
           value={nameValue}
           placeholder="Write your first name"
           onChange={onChangeNameInput}
           required
+          label="Name"
         />
-        <label>Last Name</label>
         <Input
           name="lastName"
+          id="lastName"
           type="text"
           value={lastNameValue}
           placeholder="Write your last name"
           onChange={onChangeLastNameInput}
+          label="Last Name"
           required
         />
-        <label>Email</label>
         <Input
           name="email"
+          id="email"
           type="text"
           value={emailValue}
           placeholder="Write your email"
           onChange={onChangeEmailInput}
+          label="Email"
           required
         />
-        <label>Password</label>
         <Input
           name="password"
+          id="password"
           type="text"
           value={passwordValue}
           placeholder="Write your password"
           onChange={onChangePasswordInput}
+          label="Password"
           required
         />
-        <label>Role</label>
-        <select value={roleValue} onChange={onChangeRoleInput}>
-          <option defaultValue=""> Select an option </option>
-          <option value="SA"> SuperAdmin </option>
-        </select>
-        <label>Status</label>
-        <select value={activeValue} onChange={onChangeActiveInput}>
-          <option defaultValue=""> Select an option </option>
-          <option value="true"> Active </option>
-          <option value="false"> Inactive </option>
-        </select>
+        <Select
+          label="Role"
+          arrayToMap={arrayToMapRole}
+          id="role"
+          name="role"
+          value={roleValue}
+          onChange={onChangeRoleInput}
+          placeholder="Choose Role"
+          required
+        />
+        <Select
+          label="Status"
+          arrayToMap={arrayToMapStatus}
+          id="status"
+          name="status"
+          value={activeValue}
+          onChange={onChangeActiveInput}
+          placeholder="Choose Status"
+          required
+        />
         <div className={styles.buttoncontainer}>
           <Button type="submit" label="Submit" theme="secondary" />
         </div>
