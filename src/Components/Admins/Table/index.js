@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-// import styles from '../admins.module.css';
+import React /*, { useState }*/ from 'react';
+import styles from '../admins.module.css';
 import Button from '../../Shared/Button';
-import Modal from '../Shared/Modal';
-import DeleteMessage from '../Shared/DeleteMessage';
-import FeedbackMessage from '../Shared/FeedbackMessage';
+// import Modal from '../../Shared/Modal';
+// import DeleteMessage from '../../Shared/DeleteMessage';
+// import FeedbackMessage from '../../Shared/FeedbackMessage';
 
 const AdminsTable = ({ admins }) => {
   const OnClickEdit = (string) => {
     window.location = `/admins/form?adminId=${string}`;
   };
-  const [isDeleting, setIsDeleting] = useState(false);
+  // const [InfoForDelete, setInfoForDelete] = useState({
+  //   id: ''
+  // });
+  // console.log(isDeleting);
   return (
     <section className={styles.container}>
       <table>
@@ -48,9 +51,12 @@ const AdminsTable = ({ admins }) => {
                 <td>
                   <Button
                     label="Delete"
-                    onClick={() => {
-                      setIsDeleting(true);
-                    }}
+                    // onClick={() => {
+                    //   setShowModal(!showModal);
+                    //   setInfoForDelete({
+                    //     id: superAdmin._id
+                    //   });
+                    // }}
                   />
                 </td>
               </tr>
@@ -58,14 +64,17 @@ const AdminsTable = ({ admins }) => {
           })}
         </tbody>
       </table>
-      <Modal
-        isOpen={isDeleting}
-        handleClose={() => {
-          setIsDeleting(false);
-        }}
-      >
-        <p>A proper pseudo title for this modal</p>
-      </Modal>
+      {/* {showModal && (
+        <DeleteModal
+          setShowModal={setShowModal}
+          showFeedbackModal={showFeedbackModal}
+          setShowFeedbackModal={setShowFeedbackModal}
+          modalId={InfoForDelete.id}
+          deleteSuperAdmin={deleteSuperAdmin}
+          setInfoFoDelete={setInfoForDelete}
+          showModal={showModal}
+        />
+      )} */}
     </section>
   );
 };

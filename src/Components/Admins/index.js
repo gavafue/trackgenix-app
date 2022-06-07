@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-// import styles from './admins.module.css';
+import styles from './admins.module.css';
 import AdminsTable from './Table';
 
 const Admins = () => {
