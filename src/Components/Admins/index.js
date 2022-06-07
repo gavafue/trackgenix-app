@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from './admins.module.css';
+// import styles from './admins.module.css';
 import AdminsTable from './Table';
 
 const Admins = () => {
@@ -32,14 +32,14 @@ const Admins = () => {
       .catch((err) => console.log(err));
   };
   return (
-    <section className={styles.container}>
+    <section /* className={styles.container}*/>
       <AdminsTable
         admins={admins}
         deleteAdmin={deleteAdmin}
         showModal={showModal}
         setShowModal={setShowModal}
       />
-      <button className={styles.addBtn}>
+      <button /* className={styles.addBtn} */>
         <a href="/admins/form">Add New Admin</a>
       </button>
     </section>
