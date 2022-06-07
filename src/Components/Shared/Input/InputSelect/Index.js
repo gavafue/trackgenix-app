@@ -2,32 +2,40 @@ import React from 'react';
 import styles from './select.module.css';
 
 const Select = ({
-  className = styles,
   arrayToMap,
   itemValue,
+  label,
   id,
   name,
   onChange,
   required,
-  value
+  value,
+  defaultValue
 }) => {
   return (
-    <select
-      className={className}
-      id={id}
-      name={name}
-      onChange={onChange}
-      value={value}
-      required={required}
-    >
-      {arrayToMap.map((item) => {
-        return (
-          <option selected={Boolean(item._id === itemValue)} key={item._id} value={item._id}>
-            {`${item.params}`}
-          </option>
-        );
-      })}
-    </select>
+    <div className={styles.container}>
+      <label className={styles.label}>{label}</label>
+      <select
+        className={styles.select}
+        id={id}
+        name={name}
+        onChange={onChange}
+        value={value}
+        required={required}
+      >
+        {arrayToMap.map((item) => {
+          return (
+            <option selected={Boolean(item.id === itemValue)} key={item.id} value={item.id}>
+              {`${item.params}`}
+            </option>
+          );
+        })}
+        ;
+        <option value="" disabled selected hidden>
+          {defaultValue}
+        </option>
+      </select>
+    </div>
   );
 };
 

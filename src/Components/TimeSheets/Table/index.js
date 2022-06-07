@@ -19,12 +19,14 @@ const TimesheetsTable = ({
   return (
     <table className={styles.table}>
       <thead>
-        <th>Project</th>
-        <th>Date</th>
-        <th>Hours Worked</th>
-        <th>Week Sprint</th>
-        <th></th>
-        <th></th>
+        <tr>
+          <th>Project</th>
+          <th>Date</th>
+          <th>Hours Worked</th>
+          <th>Week Sprint</th>
+          <th></th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
         {timeSheets.map((timeSheet) => {

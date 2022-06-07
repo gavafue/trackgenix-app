@@ -2,7 +2,7 @@ import styles from './form.module.css';
 import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
 import Select from '../../Shared/Input/InputSelect/Index';
-import Input from '../../Shared/Input';
+import Input from '../../Shared/Input/InputText';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -82,10 +82,17 @@ const Form = () => {
     })
   };
 
-  const arrayToMap = employees.map((item) => {
+  const arrayToMapEmployees = employees.map((item) => {
     return {
       id: item._id,
-      label: `${item.firstName + ' ' + item.lastName}`
+      params: `${item.firstName + ' ' + item.lastName}`
+    };
+  });
+
+  const arrayToMapProjects = projects.map((item) => {
+    return {
+      id: item._id,
+      params: `${item.name}`
     };
   });
 
@@ -126,8 +133,7 @@ const Form = () => {
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
         <h2>{title}</h2>
-        <label>Project</label>
-        <select
+        {/* <select
           className={styles.input}
           id="project"
           name="project"
@@ -149,90 +155,77 @@ const Form = () => {
           <option value="" disabled selected hidden>
             Choose Project
           </option>
-        </select>
-        <label>Employee</label>
+        </select> */}
         <Select
-          arrayToMap={arrayToMap}
-          id="employee"
-          name="employee"
-          value={employeeValue}
-          onChange={onChangeEmployeeSelect}
+          label="Project"
+          arrayToMap={arrayToMapProjects}
+          id="project"
+          name="project"
+          value={projectValue}
+          onChange={onChangeProjectSelect}
+          defaultValue="Choose the project"
           required
         />
-        {/* {employees.map((employee) => {
-            return (
-              <option
-                selected={Boolean(employee._id === employeeValue)}
-                value={employee._id}
-                key={employee._id}
-              >{`${employee.firstName + ' ' + employee.lastName}`}</option>
-            );
-          })}
-          ; */}
-        {/* <option value="" disabled selected hidden>
-            Choose Employee
-          </option>
-         */}
-        {/* <select
+        <Select
+          label="Employees"
+          arrayToMap={arrayToMapEmployees}
           id="employee"
           name="employee"
           value={employeeValue}
           onChange={onChangeEmployeeSelect}
+          defaultValue="Choose the employee"
           required
-        >
-          {employees.map((employee) => {
-            return (
-              <option
-                selected={Boolean(employee._id === employeeValue)}
-                value={employee._id}
-                key={employee._id}
-              >{`${employee.firstName + ' ' + employee.lastName}`}</option>
-            );
-          })}
-          ;
-          <option value="" disabled selected hidden>
-            Choose Employee
-          </option>
-        </select> */}
-        <label>Week Sprint</label>
+        />
         <Input
-          name="weekSprint"
+          label="Week Sprint"
+          id="weeksprint"
+          name="weeksprint"
           type="text"
-          placeholder="Write your last name."
+          placeholder="Write the week sprint"
           value={weekSprintValue}
           onChange={onChangeWeekSprint}
           required
         />
-        <label>Date</label>
-        <input id="date" name="date" value={dateValue} onChange={onChangeDate} required></input>
-        <label>Hours Worked</label>
-        <input
+        <Input
+          label="Date"
+          id="date"
+          name="date"
+          type="text"
+          placeholder="Write the date"
+          value={dateValue}
+          onChange={onChangeDate}
+          required
+        />
+        <Input
+          label="Hours worked"
           type="number"
           id="hoursWorked"
           name="hoursWorked"
           value={hoursWorkedValue}
+          placeholder="Write the hours worked"
           onChange={onChangeHoursWork}
           required
-        ></input>
-        <label>Project Hours</label>
-        <input
-          type="number"
+        />
+        <Input
+          label="Project Hours"
           id="projectHours"
           name="projectHours"
+          type="number"
+          placeholder="Write the project hours"
           value={projectHoursValue}
           onChange={onChangeProjectHours}
           required
-        ></input>
-        <label>Work Description</label>
-        <input
-          className={styles.workInput}
-          type="text"
+        />
+        <Input
+          label="Work description"
           id="workDescription"
           name="workDescription"
+          type="text"
+          placeholder="Write the work description"
           value={workDescriptionValue}
           onChange={onChangeWorkDescription}
           required
-        ></input>
+        />
         <button type="submit" className={styles.submitButton}>
           Submit
         </button>
