@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import InputText from '../../Shared/Input/InputText';
+import InputSelect from '../../Shared/Input/InputSelect';
 import styles from './form.module.css';
+import Modal from '../../Shared/Modal';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
 
 const Form = () => {
   const [employees, setEmployees] = useState([]);
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [infoForFeedback, setInfoForFeedback] = useState({});
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     fetch(`${URL}/employees`)
@@ -52,12 +57,8 @@ const Form = () => {
   const onChangeMembersRateInput = (event) => {
     setMembersRateValue(event.target.value);
   };
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  console.log(contentFeedbackModal);
-  console.log(showFeedbackModal);
 
-  const projectId = useParams();
+  const projectId = useParams().id;
   const title = projectId ? `Editing ${nameValue} projects's information.` : 'Add a Project';
 
   const options = {
@@ -85,17 +86,19 @@ const Form = () => {
 
   useEffect(() => {
     if (projectId) {
-      fetch(`${URL}/projects/${projectId.id}`)
+      fetch(`${URL}/projects/${projectId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setNameValue(data.data.name);
           setStartDateValue(data.data.startDate);
           setEndDateValue(data.data.endDate);
           setDescriptionValue(data.data.description);
           setClientValue(data.data.client);
-          setMembersValue(data.data.members);
+          setMembersValue(data.data.members[0]._id);
           setActiveValue(data.data.active);
+          setMembersRateValue(data.data.members[0].rate);
+          setMembersRoleValue(data.data.members[0].role);
+          console.log(data);
         })
         .catch((err) => console.log(err));
     }
@@ -106,20 +109,20 @@ const Form = () => {
       event.preventDefault();
       const res = await fetch(options.url, options);
       const data = await res.json();
-      if (data.status !== 201 && data.status !== 200) {
-        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
-        setShowFeedbackModal(true);
+      if (res.status === 201 || res.status === 200) {
+        setInfoForFeedback({ title: 'Request done!', description: data.message });
+        setShowFeedbackMessage(true);
       } else {
-        setContentFeedbackModal({ title: 'Request done!', description: data.message });
-        setShowFeedbackModal(true);
-        // setTimeout(() => {
-        //   window.location = '/projects';
-        // }, 3000);
+        setInfoForFeedback({ title: 'Something went wrong!', description: data.message });
+        setShowFeedbackMessage(true);
       }
     } catch (err) {
       console.log(err);
     }
   };
+  const arrayToMapEmployees = employees.map((employee) => {
+    return { id: employee._id, optionContent: employee.firstName + employee.lastName };
+  });
 
   return (
     <div className={styles.container}>
@@ -170,63 +173,59 @@ const Form = () => {
           required
         />
         <label htmlFor="active">Active:</label>
-        <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
-          <option defaultValue value={true}>
-            True
-          </option>
-          <option value={false}>False</option>
-        </select>
-        <label>Employee</label>
-        <select
-          id="employee"
-          name="employee"
+        <InputSelect
+          arrayToMap={[
+            { id: true, optionContent: 'True' },
+            { id: false, optionContent: 'False' }
+          ]}
+          id="active"
+          name="active"
+          value={activeValue}
+          onChange={onChangeActiveInput}
+        />
+
+        <label>Members</label>
+        <InputSelect
+          arrayToMap={arrayToMapEmployees}
+          id="members"
+          name="members"
           value={membersValue}
           onChange={onChangeMembersInput}
-          required
-        >
-          {employees &&
-            employees.map((employee) => {
-              return (
-                <option
-                  defaultValue={Boolean(employee._id === membersValue)}
-                  value={employee._id}
-                  key={employee._id}
-                >{`${employee.firstName + ' ' + employee.lastName}`}</option>
-              );
-            })}
-          ;
-          <option disabled defaultValue hidden>
-            Choose Member
-          </option>
-        </select>
+        />
         <label>Role</label>
-        <select
+        <InputSelect
+          arrayToMap={[
+            { id: 'TL', optionContent: 'TL' },
+            { id: 'QA', optionContent: 'QA' },
+            { id: 'DEV', optionContent: 'DEV' },
+            { id: 'PM', optionContent: 'PM' }
+          ]}
           id="role"
           name="role"
           value={membersRoleValue}
           onChange={onChangeMembersRoleInput}
-          required
-        >
-          <option value={'TL'}>TL</option>
-          <option value={'QA'}>QA</option>
-          <option value={'DEV'}>DEV</option>
-          <option value={'PM'}>PM</option>
-          <option disabled defaultValue hidden>
-            Choose Member
-          </option>
-        </select>
+        />
         <label>Rate</label>
-        <input
-          type="num"
-          value={membersRateValue}
+        <InputText
+          name="rate"
+          type="text"
           onChange={onChangeMembersRateInput}
-          placeholder="Enter the employee's rate"
+          placeholder="Write the rate"
+          value={membersRateValue}
         />
 
         <button type="submit" className={styles.submitBtn}>
           Submit
         </button>
       </form>
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
     </div>
   );
 };

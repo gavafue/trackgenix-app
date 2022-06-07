@@ -31,7 +31,7 @@ const Select = ({
           );
         })}
         ;
-        <option value="" disabled selected hidden>
+        <option value="" disabled defaultValue hidden>
           {placeholder}
         </option>
       </select>
