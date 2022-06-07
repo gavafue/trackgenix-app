@@ -5,7 +5,7 @@ import Modal from '../../Shared/Modal';
 import DeleteMessage from '../../Shared/DeleteMessage';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 
-const AdminsTable = ({ deleteAdmin }) => {
+const AdminsTable = () => {
   const URL = process.env.REACT_APP_API_URL;
   const [admins, setAdmins] = useState([]);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
@@ -23,7 +23,7 @@ const AdminsTable = ({ deleteAdmin }) => {
       })
       .catch((error) => console.log(error));
   }, []);
-  const deleteEmployee = (string) => {
+  const deleteAdmin = (string) => {
     const options = {
       method: 'DELETE',
       url: `${URL}/admins/${string}`
@@ -48,10 +48,21 @@ const AdminsTable = ({ deleteAdmin }) => {
       })
       .catch((error) => console.log(error));
   };
+  const adminData = admins.map((admin) => {
+    return {
+      firstName: admin.firstName,
+      lastName: admin.lastName,
+      email: admin.email,
+      password: admin.password,
+      role: admin.role,
+      ...admin,
+      active: admin.active ? 'Active' : 'Inactive'
+    };
+  });
   return (
     <section className={styles.container}>
       <Table
-        data={admins}
+        data={adminData}
         headersName={['Name', 'Last Name', 'Phone', 'E-mail', 'Status', 'More information']}
         headers={['name', 'lastName', 'phone', 'email', 'active', 'moreInfo']}
         deleteAdmin={deleteAdmin}
@@ -70,7 +81,7 @@ const AdminsTable = ({ deleteAdmin }) => {
             setShowDeleteMessage(false);
           }}
           infoForDelete={infoForDelete}
-          deleteItem={deleteEmployee}
+          deleteItem={deleteAdmin}
           setShowModal={setShowDeleteMessage}
         />
       </Modal>
