@@ -1,13 +1,25 @@
-import styles from './form.module.css';
 import { useEffect, useState } from 'react';
-import FeedbackModal from '../FeedbackModal';
+import { useParams } from 'react-router-dom';
+import styles from './form.module.css';
 import Select from '../../Shared/Input/InputSelect';
 import Input from '../../Shared/Input/InputText';
+import Modal from '../../Shared/Modal';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Button from '../../Shared/Button';
 
 const URL = process.env.REACT_APP_API_URL;
 
 const Form = () => {
   const [projects, setProjects] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [projectValue, setProjectValue] = useState('');
+  const [employeeValue, setEmployeeValue] = useState('');
+  const [weekSprintValue, setWeekSprintValue] = useState('');
+  const [hoursWorkedValue, setHoursWorkedValue] = useState('');
+  const [dateValue, setDateValue] = useState('');
+  const [projectHoursValue, setProjectHoursValue] = useState('');
+  const [workDescriptionValue, setWorkDescriptionValue] = useState('');
+
   useEffect(() => {
     fetch(`${URL}/projects`)
       .then((res) => res.json())
@@ -16,7 +28,7 @@ const Form = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  const [employees, setEmployees] = useState([]);
+
   useEffect(() => {
     fetch(`${URL}/employees`)
       .then((res) => res.json())
@@ -25,50 +37,46 @@ const Form = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  const [projectValue, setProjectValue] = useState('');
+
   const onChangeProjectSelect = (event) => {
     setProjectValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [employeeValue, setEmployeeValue] = useState('');
+
   const onChangeEmployeeSelect = (event) => {
     setEmployeeValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [weekSprintValue, setWeekSprintValue] = useState('');
+
   const onChangeWeekSprint = (event) => {
     setWeekSprintValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [dateValue, setDateValue] = useState('');
+
   const onChangeDate = (event) => {
     setDateValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [hoursWorkedValue, setHoursWorkedValue] = useState('');
+
   const onChangeHoursWork = (event) => {
     setHoursWorkedValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [projectHoursValue, setProjectHoursValue] = useState('');
+
   const onChangeProjectHours = (event) => {
     setProjectHoursValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [workDescriptionValue, setWorkDescriptionValue] = useState('');
+
   const onChangeWorkDescription = (event) => {
     setWorkDescriptionValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const timesheetId = params.get('timesheetId');
-  const title = timesheetId ? 'Update Timesheet' : 'Add Timesheet';
+
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+
+  const timesheetId = useParams();
+
+  const title = timesheetId.id ? 'Update Timesheet' : 'Add Timesheet';
+
   const options = {
-    method: timesheetId ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/timesheets/${timesheetId ? timesheetId : ''} `,
+    method: timesheetId.id ? 'PUT' : 'POST',
+    url: `${process.env.REACT_APP_API_URL}/timesheets/${timesheetId ? timesheetId.id : ''} `,
     headers: {
       'Content-type': 'application/json'
     },
@@ -99,7 +107,7 @@ const Form = () => {
 
   useEffect(() => {
     if (timesheetId) {
-      fetch(`${URL}/timesheets/${timesheetId}`)
+      fetch(`${URL}/timesheets/${timesheetId.id}`)
         .then((res) => res.json())
         .then((data) => {
           setProjectValue(data.data.project._id);
@@ -119,11 +127,17 @@ const Form = () => {
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
-        setContentFeedbackModal({ title: 'Request Done!', description: data.message });
-        setShowFeedbackModal(true);
+        setInfoForFeedback({
+          title: 'Request done!',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
       } else {
-        setContentFeedbackModal({ title: 'Something Went wrong', description: data.message });
-        setShowFeedbackModal(true);
+        setInfoForFeedback({
+          title: 'Something went wrong',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
       }
     } catch (err) {
       console.log(err);
@@ -204,20 +218,19 @@ const Form = () => {
           onChange={onChangeWorkDescription}
           required
         />
-        <button type="submit" className={styles.submitButton}>
-          Submit
-        </button>
+        <div className={styles.buttoncontainer}>
+          <Button type="submit" label="Submit" theme="secondary" />
+        </div>
       </form>
-      {showFeedbackModal && (
-        <FeedbackModal
-          feedbackTitle={contentFeedbackModal.title}
-          messageContent={contentFeedbackModal.description}
-          setShowFeedbackModal={setShowFeedbackModal}
-          showFeedbackModal={showFeedbackModal}
-        />
-      )}
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
     </div>
   );
 };
-
 export default Form;

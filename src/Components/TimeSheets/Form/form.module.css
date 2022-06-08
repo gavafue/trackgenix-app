@@ -18,12 +18,7 @@ label{
   font-size: 15px;
 }
 
-.submitButton{
-  margin:2%;
-  width: 8%;
-  padding: 0.3%;
-  background-color: #EA3354;
-  border: 1px solid #000;
-  border-radius: 10px;
-  color: #fff;
+.buttoncontainer {
+  margin: 3%;
+  width: 10%;
 }
