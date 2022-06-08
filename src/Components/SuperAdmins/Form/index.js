@@ -165,7 +165,7 @@ const Form = () => {
           placeholder="Choose Status"
           required
         />
-        <div className={styles.buttoncontainer}>
+        <div className={styles.buttonContainer}>
           <Button type="submit" label="Submit" theme="secondary" />
         </div>
       </form>

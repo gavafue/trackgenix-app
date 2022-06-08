@@ -5,6 +5,7 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
+import { useHistory } from 'react-router-dom';
 
 const SuperAdmins = () => {
   const [superAdmins, setSuperAdmins] = useState([]);
@@ -12,8 +13,9 @@ const SuperAdmins = () => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const history = useHistory();
   const editData = (id) => {
-    window.location = `/super-admins/form/${id}`;
+    history.push(`/super-admins/form/${id}`);
   };
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const SuperAdmins = () => {
   }, []);
 
   const createSuperAdmin = () => {
-    window.location.href = '/super-admins/form';
+    history.push('/super-admins/form');
   };
 
   const deleteSuperAdmin = (string) => {
@@ -55,11 +57,6 @@ const SuperAdmins = () => {
   };
   const superAdminData = superAdmins.map((superAdmin) => {
     return {
-      firstName: superAdmin.firstName,
-      lastName: superAdmin.lastName,
-      email: superAdmin.email,
-      password: superAdmin.password,
-      role: superAdmin.role,
       ...superAdmin,
       active: superAdmin.active ? 'Yes' : 'No'
     };
