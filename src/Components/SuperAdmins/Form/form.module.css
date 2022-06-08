@@ -6,10 +6,10 @@
   align-items: center;
 }
 .container form {
-  width: 100%;
+  width: 30%;
 }
 
 .buttonContainer {
-  margin: 3%;
-  width: 10%;
+  margin: 5%;
+  width: 40%;
 }

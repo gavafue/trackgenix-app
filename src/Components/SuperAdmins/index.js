@@ -6,6 +6,7 @@ import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import { useHistory } from 'react-router-dom';
+import Preloader from '../Shared/Preloader';
 
 const SuperAdmins = () => {
   const [superAdmins, setSuperAdmins] = useState([]);
@@ -13,16 +14,19 @@ const SuperAdmins = () => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showPreloader, setShowPreloader] = useState(false);
   const history = useHistory();
   const editData = (id) => {
     history.push(`/super-admins/form/${id}`);
   };
 
   useEffect(() => {
+    setShowPreloader(true);
     fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
       .then((res) => res.json())
       .then((data) => {
         setSuperAdmins(data.data);
+        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -36,6 +40,7 @@ const SuperAdmins = () => {
       method: 'DELETE',
       url: `${`${process.env.REACT_APP_API_URL}`}/super-admin/${string}`
     };
+    setShowPreloader(true);
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -44,6 +49,7 @@ const SuperAdmins = () => {
             title: 'Something went wrong',
             description: response.message
           });
+          setShowPreloader(false);
         } else {
           setInfoForFeedback({
             title: 'Request done!',
@@ -51,6 +57,7 @@ const SuperAdmins = () => {
           });
           setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== string));
           setShowFeedbackMessage(true);
+          setShowPreloader(false);
         }
       })
       .catch((err) => console.log(err));
@@ -69,8 +76,8 @@ const SuperAdmins = () => {
       </div>
       <Table
         data={superAdminData}
-        headersName={['Name', 'Last Name', 'Email', 'Password', 'Role', 'Active']}
-        headers={['firstName', 'lastName', 'email', 'password', 'role', 'active']}
+        headersName={['Name', 'Last Name', 'Email', 'Role', 'Active']}
+        headers={['firstName', 'lastName', 'email', 'role', 'active']}
         setShowModal={setShowDeleteMessage}
         setInfoForDelete={setInfoForDelete}
         editData={editData}
@@ -98,6 +105,7 @@ const SuperAdmins = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
+      {showPreloader && <Preloader />}
     </section>
   );
 };

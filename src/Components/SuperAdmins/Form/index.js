@@ -6,6 +6,7 @@ import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Button from '../../Shared/Button';
+import Preloader from '../../Shared/Preloader';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -17,6 +18,7 @@ const Form = () => {
   const [roleValue, setRoleValue] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(false);
 
   const onChangeNameInput = (e) => {
     setNameValue(e.target.value);
@@ -64,6 +66,7 @@ const Form = () => {
     })
   };
   useEffect(() => {
+    setShowPreloader(true);
     if (superAdminId) {
       fetch(`${URL}/super-admin/${superAdminId.id}`)
         .then((response) => response.json())
@@ -74,14 +77,17 @@ const Form = () => {
           setPasswordValue(data.data.password);
           setActiveValue(data.data.active);
           setRoleValue(data.data.role);
+          setShowPreloader(false);
         })
         .catch((error) => console.log(error));
     }
+    setShowPreloader(false);
   }, []);
 
   const onSubmit = async (event) => {
     try {
       event.preventDefault();
+      setShowPreloader(true);
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
@@ -90,12 +96,14 @@ const Form = () => {
           description: data.message
         });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       } else {
         setInfoForFeedback({
           title: 'Something went wrong',
           description: data.message
         });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       }
     } catch (err) {
       console.log(err);
@@ -177,6 +185,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
+      {showPreloader && <Preloader />}
     </div>
   );
 };
