@@ -43,9 +43,21 @@
   text-decoration: none;
   text-transform: capitalize;
   color: white;
+  -webkit-transition: all 0.5s 0s ease;
+  -moz-transition: all 0.5s 0s ease;
+  -o-transition: all 0.5s 0s ease;
+  transition: all 0.5s 0s ease;
 }
 .rutes > li > a::before {
   color: white;
   margin-right: 5px;
   content: '⋄';
+}
+.rutes > li > a:hover {
+  color: rgba(255, 255, 255, 0.354);
+  margin-left: 10px;
+  -webkit-transition: all 0.5s 0s ease;
+  -moz-transition: all 0.5s 0s ease;
+  -o-transition: all 0.5s 0s ease;
+  transition: all 0.5s 0s ease;
 }
