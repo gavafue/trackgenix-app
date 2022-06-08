@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './admins.module.css';
 import AdminsTable from './Table';
 import Preloader from '../Shared/Preloader';
+import Button from '../Shared/Button';
 
 const Admins = () => {
   const [admins, setAdmins] = useState([]);
@@ -22,9 +23,7 @@ const Admins = () => {
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
-      <a href="/admins/form" className={styles.button}>
-        Add new admin +
-      </a>
+      <Button label="Add new admin +" onClick={() => (window.location = `/admins/form/`)} />
       <AdminsTable admins={admins} showModal={showModal} setShowModal={setShowModal} />
       {showPreloader && <Preloader />}
     </section>
