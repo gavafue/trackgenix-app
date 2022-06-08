@@ -54,10 +54,10 @@ const Projects = () => {
           });
           setProjects(projects.filter((project) => string !== project._id));
           setShowFeedbackMessage(true);
-          setShowLoader(false);
         }
       })
       .catch((error) => console.log(error));
+    setShowLoader(false);
   };
 
   return (
