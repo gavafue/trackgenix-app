@@ -106,6 +106,7 @@ function Form() {
         })
         .catch((error) => console.log(error));
     }
+    setShowPreloader(false);
   }, []);
 
   const onSubmit = async (event) => {
@@ -131,6 +132,7 @@ function Form() {
       }
     } catch (err) {
       console.log(err);
+      setShowPreloader(false);
     }
   };
   const dayInput = birthDateValue.substring(5, 7);
