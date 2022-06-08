@@ -14,16 +14,6 @@ const Form = () => {
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
-  useEffect(() => {
-    setShowLoader(true);
-    fetch(`${URL}/employees`)
-      .then((res) => res.json())
-      .then((data) => {
-        setEmployees(data.data);
-        setShowLoader(false);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   const [nameValue, setNameValue] = useState('');
   const onChangeNameInput = (event) => {
@@ -90,8 +80,15 @@ const Form = () => {
   };
 
   useEffect(() => {
+    setShowLoader(true);
+    fetch(`${URL}/employees`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEmployees(data.data);
+      })
+      .catch((err) => console.log(err));
+
     if (projectId) {
-      setShowLoader(true);
       fetch(`${URL}/projects/${projectId}`)
         .then((res) => res.json())
         .then((data) => {
@@ -104,10 +101,10 @@ const Form = () => {
           setActiveValue(data.data.active);
           setMembersRateValue(data.data.members[0].rate);
           setMembersRoleValue(data.data.members[0].role);
-          setShowLoader(false);
         })
         .catch((err) => console.log(err));
     }
+    setShowLoader(false);
   }, []);
 
   const onSubmit = async (event) => {
@@ -123,11 +120,12 @@ const Form = () => {
         setInfoForFeedback({ title: 'Something went wrong!', description: data.message });
         setShowFeedbackMessage(true);
       }
-      setShowLoader(false);
     } catch (err) {
       console.log(err);
     }
+    setShowLoader(false);
   };
+
   const arrayToMapEmployees = employees.map((employee) => {
     return { id: employee._id, optionContent: employee.firstName + employee.lastName };
   });
