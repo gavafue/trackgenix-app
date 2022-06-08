@@ -6,6 +6,7 @@ import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Preloader from '../../Shared/Preloader';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -20,6 +21,7 @@ function Form() {
   const [activeValue, setActiveValue] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(false);
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -86,6 +88,7 @@ function Form() {
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     if (adminId.id) {
+      setShowPreloader(true);
       fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -99,6 +102,7 @@ function Form() {
           setPhoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setActiveValue(data.data.active);
+          setShowPreloader(false);
         })
         .catch((error) => console.log(error));
     }
@@ -107,6 +111,7 @@ function Form() {
   const onSubmit = async (event) => {
     try {
       event.preventDefault();
+      setShowPreloader(true);
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
@@ -115,12 +120,14 @@ function Form() {
           description: data.message
         });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       } else {
         setInfoForFeedback({
           title: 'Something went wrong',
           description: data.message
         });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       }
     } catch (err) {
       console.log(err);
@@ -245,6 +252,7 @@ function Form() {
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
+        {showPreloader && <Preloader />}
       </Modal>
     </div>
   );
