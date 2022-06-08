@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import styles from './form.module.css';
 import Select from '../../Shared/Input/InputSelect';
@@ -23,6 +24,7 @@ const Form = () => {
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [showPreloader, setShowPreloader] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setShowPreloader(true);
@@ -128,6 +130,7 @@ const Form = () => {
     }
     setShowPreloader(false);
   }, []);
+
   const onSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -153,81 +156,90 @@ const Form = () => {
       console.log(err);
     }
   };
+  const dayInput = dateValue.substring(5, 7);
+  const monthInput = dateValue.substring(8, 10);
+  const yearInput = dateValue.substring(0, 4);
+  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
+  const routeValidation = () => {
+    history.push('/time-sheets');
+  };
 
   return (
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
         <h2>{title}</h2>
-        <Select
-          label="Project"
-          arrayToMap={arrayToMapProjects}
-          id="project"
-          name="project"
-          value={projectValue}
-          onChange={onChangeProjectSelect}
-          placeholder="Choose the project"
-          required
-        />
-        <Select
-          label="Employees"
-          arrayToMap={arrayToMapEmployees}
-          id="employee"
-          name="employee"
-          value={employeeValue}
-          onChange={onChangeEmployeeSelect}
-          placeholder="Choose the employee"
-          required
-        />
-        <Input
-          label="Week Sprint"
-          id="weeksprint"
-          name="weeksprint"
-          type="text"
-          placeholder="Write the week sprint"
-          value={weekSprintValue}
-          onChange={onChangeWeekSprint}
-          required
-        />
-        <Input
-          label="Date"
-          id="date"
-          name="date"
-          type="text"
-          placeholder="Write the date"
-          value={dateValue}
-          onChange={onChangeDate}
-          required
-        />
-        <Input
-          label="Hours worked"
-          type="number"
-          id="hoursWorked"
-          name="hoursWorked"
-          value={hoursWorkedValue}
-          placeholder="Write the hours worked"
-          onChange={onChangeHoursWork}
-          required
-        />
-        <Input
-          label="Project Hours"
-          id="projectHours"
-          name="projectHours"
-          type="number"
-          placeholder="Write the project hours"
-          value={projectHoursValue}
-          onChange={onChangeProjectHours}
-          required
-        />
-        <Input
-          label="Work description"
-          id="workDescription"
-          name="workDescription"
-          type="text"
-          placeholder="Write the work description"
-          value={workDescriptionValue}
-          onChange={onChangeWorkDescription}
-          required
-        />
+        <fieldset className={styles.timesheetForm}>
+          <Select
+            label="Project"
+            arrayToMap={arrayToMapProjects}
+            id="project"
+            name="project"
+            value={projectValue}
+            onChange={onChangeProjectSelect}
+            placeholder="Choose the project"
+            required
+          />
+          <Select
+            label="Employees"
+            arrayToMap={arrayToMapEmployees}
+            id="employee"
+            name="employee"
+            value={employeeValue}
+            onChange={onChangeEmployeeSelect}
+            placeholder="Choose the employee"
+            required
+          />
+          <Input
+            label="Week Sprint"
+            id="weeksprint"
+            name="weeksprint"
+            type="text"
+            placeholder="Write the week sprint"
+            value={weekSprintValue}
+            onChange={onChangeWeekSprint}
+            required
+          />
+          <Input
+            label="Date"
+            id="date"
+            name="date"
+            type="date"
+            placeholder="Write the date"
+            value={dateFormat}
+            onChange={onChangeDate}
+            required
+          />
+          <Input
+            label="Hours worked"
+            type="number"
+            id="hoursWorked"
+            name="hoursWorked"
+            value={hoursWorkedValue}
+            placeholder="Write the hours worked"
+            onChange={onChangeHoursWork}
+            required
+          />
+          <Input
+            label="Project Hours"
+            id="projectHours"
+            name="projectHours"
+            type="number"
+            placeholder="Write the project hours"
+            value={projectHoursValue}
+            onChange={onChangeProjectHours}
+            required
+          />
+          <Input
+            label="Work description"
+            id="workDescription"
+            name="workDescription"
+            type="text"
+            placeholder="Write the work description"
+            value={workDescriptionValue}
+            onChange={onChangeWorkDescription}
+            required
+          />
+        </fieldset>
         <div className={styles.buttoncontainer}>
           <Button type="submit" label="Submit" theme="secondary" />
         </div>
@@ -236,6 +248,7 @@ const Form = () => {
         isOpen={showFeedbackMessage}
         handleClose={() => {
           setShowFeedbackMessage(false);
+          routeValidation();
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />

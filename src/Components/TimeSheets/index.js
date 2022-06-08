@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from './time-sheets.module.css';
 import Table from '../Shared/Table';
 import Modal from '../Shared/Modal';
@@ -14,9 +15,14 @@ const TimeSheets = () => {
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showLoader, setShowLoader] = useState(false);
+  const history = useHistory();
 
   const editData = (id) => {
-    window.location = `/time-sheets/form/${id}`;
+    history.push(`/time-sheets/form/${id}`);
+  };
+
+  const createTimesheet = () => {
+    history.push('/time-sheets/form');
   };
 
   useEffect(() => {
@@ -57,13 +63,9 @@ const TimeSheets = () => {
     setShowLoader(false);
   };
 
-  const createTimesheet = () => {
-    window.location.href = '/time-sheets/form';
-  };
-
   const timesheetData = timeSheets.map((timeSheet) => {
     return {
-      name: JSON.stringify(timeSheet.project.name),
+      name: timeSheet.project.name,
       date: timeSheet.date,
       hoursWorked: timeSheet.hoursWorked,
       weekSprint: timeSheet.weekSprint,
@@ -76,14 +78,16 @@ const TimeSheets = () => {
       <div className={styles.buttoncontainer}>
         <Button onClick={createTimesheet} label="Add new Timesheet" theme="secondary" />
       </div>
-      <Table
-        data={timesheetData}
-        headersName={['Project Name', 'Date', 'Hours Worked', 'WeekSprint']}
-        headers={['name', 'date', 'hoursWorked', 'weekSprint']}
-        setShowModal={setShowDeleteMessage}
-        setInfoForDelete={setInfoForDelete}
-        editData={editData}
-      />
+      <div>
+        <Table
+          data={timesheetData}
+          headersName={['Project Name', 'Date', 'Hours Worked', 'WeekSprint']}
+          headers={['name', 'date', 'hoursWorked', 'weekSprint']}
+          setShowModal={setShowDeleteMessage}
+          setInfoForDelete={setInfoForDelete}
+          editData={editData}
+        />
+      </div>
       <Modal
         isOpen={showDeleteMessage}
         handleClose={() => {

@@ -4,16 +4,19 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  margin-bottom: 20%;
 }
 
 .label {
   justify-content: center;
   margin-top: 10%;
+
 }
 
 .buttoncontainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 5%;
 
 }
