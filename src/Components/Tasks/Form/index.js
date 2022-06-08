@@ -15,6 +15,7 @@ const Form = () => {
   const [weekValue, setWeekValue] = useState('');
   const [dayValue, setDayValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
+  const [hoursValue, setHoursValue] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [showPreloader, setShowPreloader] = useState(false);
@@ -31,7 +32,6 @@ const Form = () => {
   const onChangeDescription = (event) => {
     setDescriptionValue(event.target.value);
   };
-  const [hoursValue, setHoursValue] = useState('');
   const onChangeHours = (event) => {
     setHoursValue(event.target.value);
   };
