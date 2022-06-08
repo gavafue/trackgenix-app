@@ -5,26 +5,31 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
+import Loader from '../Shared/Preloader';
+import { useHistory } from 'react-router-dom';
 
-const editData = (id) => {
-  window.location = `/projects/form/${id}`;
-};
-
-const Projects = (props) => {
+const Projects = () => {
+  const history = useHistory();
   const [projects, setProjects] = useState([]);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
   const URL = `${process.env.REACT_APP_API_URL}`;
 
+  const editData = (id) => {
+    setShowLoader(true);
+    history.push(`/projects/form/${id}`);
+    setShowLoader(false);
+  };
   useEffect(() => {
-    props.setShowLoader(true);
+    setShowLoader(true);
     fetch(`${URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
-        props.setShowLoader(false);
+        setShowLoader(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -34,6 +39,7 @@ const Projects = (props) => {
       method: 'DELETE',
       url: `${URL}/projects/${string}`
     };
+    setShowLoader(true);
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -50,6 +56,7 @@ const Projects = (props) => {
           });
           setProjects(projects.filter((project) => string !== project._id));
           setShowFeedbackMessage(true);
+          setShowLoader(false);
         }
       })
       .catch((error) => console.log(error));
@@ -91,6 +98,7 @@ const Projects = (props) => {
         >
           <FeedbackMessage infoForFeedback={infoForFeedback} />
         </Modal>
+        {showLoader && <Loader />}
       </div>
     </section>
   );

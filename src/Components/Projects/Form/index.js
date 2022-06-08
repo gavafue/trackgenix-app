@@ -6,11 +6,13 @@ import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Button from '../../Shared/Button';
+import Loader from '../../Shared/Preloader';
 
 const Form = () => {
   const [employees, setEmployees] = useState([]);
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     fetch(`${URL}/employees`)
@@ -106,6 +108,7 @@ const Form = () => {
   }, []);
 
   const onSubmit = async (event) => {
+    setShowLoader(true);
     try {
       event.preventDefault();
       const res = await fetch(options.url, options);
@@ -117,6 +120,7 @@ const Form = () => {
         setInfoForFeedback({ title: 'Something went wrong!', description: data.message });
         setShowFeedbackMessage(true);
       }
+      setShowLoader(false);
     } catch (err) {
       console.log(err);
     }
@@ -127,6 +131,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
+      {showLoader && <Loader />}
       <h2>{title}</h2>
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>

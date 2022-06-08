@@ -1,13 +1,15 @@
 .body {
-    position: fixed;
-    width: 100%;
-    background: #000000de;
-    height: 100%;
-    display: flex;
-    z-index: 10000;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  width: 100%;
+  background: #000000de;
+  height: 100%;
+  display: flex;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
 }
 .loader,
 .loader:before,

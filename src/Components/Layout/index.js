@@ -16,13 +16,10 @@ import TimeSheetsForm from '../TimeSheets/Form';
 import Tasks from '../Tasks/index';
 import TasksForm from '../Tasks/Form';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Loader from '../Shared/Preloader';
-import { useState } from 'react';
+
 function Layout() {
-  const [showLoader, setShowLoader] = useState(false);
   return (
     <div className={styles.container}>
-      {showLoader && <Loader />}
       <Navbar />
       <div className={styles.mainContent}>
         <Header />
@@ -40,7 +37,7 @@ function Layout() {
           <Route exact path="/employees" component={Employees} />
           <Route path="/employees/form/:id" component={EmployeesForm} />
           <Route path="/employees/form" component={EmployeesForm} />
-          <Route exact path="/projects" component={Projects} setShowLoader={setShowLoader} />
+          <Route exact path="/projects" component={Projects} />
           <Route path="/projects/form/:id" component={ProjectsForm} />
           <Route path="/projects/form" component={ProjectsForm} />
           <Route exact path="/time-sheets" component={TimeSheets} />
