@@ -1,18 +1,13 @@
 import { useEffect, useState } from 'react';
-//import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
 import Table from '../Shared/Table';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
-// import { useParams } from 'react-router-dom';
 
 const URL = process.env.REACT_APP_API_URL;
-// const paramEmployeeId = useParams();
-const editData = (id) => {
-  window.location = `/employees/form/${id}`;
-};
 
 function Employees() {
   const [employees, saveEmployees] = useState([]);
@@ -20,6 +15,14 @@ function Employees() {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+
+  const history = useHistory();
+  const editData = (id) => {
+    history.push(`/employees/form/${id}`);
+  };
+  const createEmployee = () => {
+    history.push('/employees/form');
+  };
   useEffect(() => {
     fetch(`${URL}/employees`)
       .then((res) => res.json())
@@ -58,12 +61,7 @@ function Employees() {
     <section className={styles.container}>
       <h2 className={styles.title}>Employees</h2>
       <div className={styles.button}>
-        <Button
-          type="button"
-          label="Add new employee"
-          theme="secondary"
-          onClick={() => (window.location = `/employees/form`)}
-        />
+        <Button label="Add new employee" theme="secondary" onClick={createEmployee} />
       </div>
       <div>
         <Table
