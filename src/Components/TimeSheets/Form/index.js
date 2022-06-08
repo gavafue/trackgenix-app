@@ -6,6 +6,7 @@ import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Button from '../../Shared/Button';
+import Preloader from '../../Shared/Preloader';
 
 const URL = process.env.REACT_APP_API_URL;
 
@@ -21,21 +22,26 @@ const Form = () => {
   const [workDescriptionValue, setWorkDescriptionValue] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(false);
 
   useEffect(() => {
+    setShowPreloader(true);
     fetch(`${URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
+        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
+    setShowPreloader(true);
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
         setEmployees(data.data);
+        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -105,6 +111,7 @@ const Form = () => {
 
   useEffect(() => {
     if (timesheetId.id) {
+      setShowPreloader(true);
       fetch(`${URL}/timesheets/${timesheetId.id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -115,13 +122,16 @@ const Form = () => {
           setHoursWorkedValue(data.data.hoursWorked);
           setProjectHoursValue(data.data.hoursProject);
           setWorkDescriptionValue(data.data.workDescription);
+          setShowPreloader(false);
         })
         .catch((err) => console.log(err));
     }
+    setShowPreloader(false);
   }, []);
   const onSubmit = async (event) => {
     try {
       event.preventDefault();
+      setShowPreloader(true);
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
@@ -130,12 +140,14 @@ const Form = () => {
           description: data.message
         });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       } else {
         setInfoForFeedback({
           title: 'Something went wrong',
           description: data.message
         });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       }
     } catch (err) {
       console.log(err);
@@ -227,6 +239,7 @@ const Form = () => {
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
+        {showPreloader && <Preloader />}
       </Modal>
     </div>
   );

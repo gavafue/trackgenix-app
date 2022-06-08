@@ -5,6 +5,7 @@ import Modal from '../Shared/Modal';
 import DeleteMessage from '../Shared/DeleteMessage';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
+import Loader from '../Shared/Preloader';
 
 const TimeSheets = () => {
   const [timeSheets, setTimeSheets] = useState([]);
@@ -12,16 +13,19 @@ const TimeSheets = () => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
 
   const editData = (id) => {
     window.location = `/time-sheets/form/${id}`;
   };
 
   useEffect(() => {
+    setShowLoader(true);
     fetch(`${process.env.REACT_APP_API_URL}/timesheets`)
       .then((res) => res.json())
       .then((data) => {
         setTimeSheets(data.data);
+        setShowLoader(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -31,6 +35,7 @@ const TimeSheets = () => {
       method: 'DELETE',
       url: `${`${process.env.REACT_APP_API_URL}`}/timesheets/${string}`
     };
+    setShowLoader(true);
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -49,6 +54,7 @@ const TimeSheets = () => {
         }
       })
       .catch((err) => console.log(err));
+    setShowLoader(false);
   };
 
   const createTimesheet = () => {
@@ -101,6 +107,7 @@ const TimeSheets = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
+      {showLoader && <Loader />}
     </section>
   );
 };
