@@ -6,6 +6,7 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
+import Preloader from '../Shared/Preloader';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -13,6 +14,7 @@ const Tasks = () => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showPreloader, setShowPreloader] = useState(false);
   const history = useHistory();
   const editData = (id) => {
     history.push(`/tasks/form/${id}`);
@@ -23,10 +25,12 @@ const Tasks = () => {
 
   const url = `${process.env.REACT_APP_API_URL}`;
   useEffect(() => {
+    setShowPreloader(true);
     fetch(`${url}/tasks`)
       .then((res) => res.json())
       .then((data) => {
         setTasks(data.data);
+        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -35,6 +39,7 @@ const Tasks = () => {
       method: 'DELETE',
       url: `${url}/tasks/${string}`
     };
+    setShowPreloader(true);
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -50,13 +55,14 @@ const Tasks = () => {
           });
           setTasks(tasks.filter((task) => string !== task._id));
           setShowFeedbackMessage(true);
+          setShowPreloader(false);
         }
       })
       .catch((err) => console.log(err));
   };
   const taskData = tasks.map((task) => ({
     ...task,
-    nameProject: task.nameProject.name
+    nameProject: task.nameProject?.name || 'Project Not Found'
   }));
   return (
     <section className={styles.container}>
@@ -96,6 +102,7 @@ const Tasks = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
+      {showPreloader && <Preloader />}
     </section>
   );
 };

@@ -6,6 +6,7 @@ import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Modal from '../../Shared/Modal';
+import Preloader from '../../Shared/Preloader';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -16,6 +17,8 @@ const Form = () => {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(false);
+
   const onChangeProject = (event) => {
     setProjectValue(event.target.value);
   };
@@ -33,10 +36,12 @@ const Form = () => {
     setHoursValue(event.target.value);
   };
   useEffect(() => {
+    setShowPreloader(true);
     fetch(`${URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
+        setShowPreloader(false);
       });
   }, []);
   const arrayToMapProjects = projects.map((project) => {
@@ -63,6 +68,7 @@ const Form = () => {
   };
   useEffect(() => {
     if (taskId) {
+      setShowPreloader(true);
       fetch(`${URL}/tasks/${taskId.id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -71,6 +77,7 @@ const Form = () => {
           setDayValue(data.data.day);
           setDescriptionValue(data.data.description);
           setHoursValue(data.data.hours);
+          setShowPreloader(false);
         })
         .catch((err) => console.log(err));
     }
@@ -78,14 +85,17 @@ const Form = () => {
   const onSubmit = async (event) => {
     try {
       event.preventDefault();
+      setShowPreloader(true);
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
         setInfoForFeedback({ title: 'Request done!', description: data.message });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       } else {
         setInfoForFeedback({ title: 'Something went wrong', description: data.message });
         setShowFeedbackMessage(true);
+        setShowPreloader(false);
       }
     } catch (err) {
       console.log(err);
@@ -146,7 +156,7 @@ const Form = () => {
           placeholder="Hours"
         />
         <div className={styles.buttonContainer}>
-          <Button type="submit" className={styles.submitButton} label="Submit" />
+          <Button theme="secondary" type="submit" className={styles.submitButton} label="Submit" />
         </div>
       </form>
       <Modal
@@ -157,6 +167,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
+      {showPreloader && <Preloader />}
     </div>
   );
 };
