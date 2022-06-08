@@ -19,6 +19,8 @@ const Form = () => {
   const [dateValue, setDateValue] = useState('');
   const [projectHoursValue, setProjectHoursValue] = useState('');
   const [workDescriptionValue, setWorkDescriptionValue] = useState('');
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
 
   useEffect(() => {
     fetch(`${URL}/projects`)
@@ -66,17 +68,13 @@ const Form = () => {
     setWorkDescriptionValue(event.target.value);
   };
 
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-
   const timesheetId = useParams();
 
   const title = timesheetId.id ? 'Update Timesheet' : 'Add Timesheet';
 
   const options = {
     method: timesheetId.id ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/timesheets/${timesheetId ? timesheetId.id : ''} `,
+    url: timesheetId.id ? `${URL}/timesheets/${timesheetId.id}` : `${URL}/timesheets`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -106,7 +104,7 @@ const Form = () => {
   });
 
   useEffect(() => {
-    if (timesheetId) {
+    if (timesheetId.id) {
       fetch(`${URL}/timesheets/${timesheetId.id}`)
         .then((res) => res.json())
         .then((data) => {
