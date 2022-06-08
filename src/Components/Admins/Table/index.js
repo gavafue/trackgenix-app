@@ -27,6 +27,7 @@ const AdminsTable = () => {
         setShowPreloader(false);
       })
       .catch((error) => console.log(error));
+    setShowPreloader(false);
   }, []);
   const deleteAdmin = (string) => {
     const options = {
