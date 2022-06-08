@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from '../admins.module.css';
 import Table from '../../Shared/Table';
 import Modal from '../../Shared/Modal';
@@ -15,8 +16,11 @@ const AdminsTable = () => {
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showPreloader, setShowPreloader] = useState(false);
+  const history = useHistory();
   const editData = (id) => {
-    window.location = `/admins/form/${id}`;
+    setShowPreloader(true);
+    history.push(`/admins/form/${id}`);
+    setShowPreloader(false);
   };
   useEffect(() => {
     setShowPreloader(true);
