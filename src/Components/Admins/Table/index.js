@@ -5,7 +5,7 @@ import Modal from '../../Shared/Modal';
 import DeleteMessage from '../../Shared/DeleteMessage';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Button from '../../Shared/Button';
-import Preloader from '../../Shared/Preloader';
+// import Preloader from '../../Shared/Preloader';
 
 const AdminsTable = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -14,27 +14,27 @@ const AdminsTable = () => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showPreloader, setShowPreloader] = useState(false);
+  // const [showPreloader, setShowPreloader] = useState(false);
   const editData = (id) => {
     window.location = `/admins/form/${id}`;
   };
   useEffect(() => {
-    setShowPreloader(true);
+    // setShowPreloader(true);
     fetch(`${URL}/admins`)
       .then((res) => res.json())
       .then((data) => {
         setAdmins(data.data);
-        setShowPreloader(false);
+        // setShowPreloader(false);
       })
       .catch((error) => console.log(error));
-    setShowPreloader(false);
+    // setShowPreloader(false);
   }, []);
   const deleteAdmin = (string) => {
     const options = {
       method: 'DELETE',
       url: `${URL}/admins/${string}`
     };
-    setShowPreloader(true);
+    // setShowPreloader(true);
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -44,7 +44,7 @@ const AdminsTable = () => {
             description: response.message
           });
           setShowFeedbackMessage(true);
-          setShowPreloader(false);
+          // setShowPreloader(false);
         } else {
           setInfoForFeedback({
             title: 'Request done!',
@@ -52,11 +52,11 @@ const AdminsTable = () => {
           });
           setAdmins(admins.filter((admin) => string !== admin._id));
           setShowFeedbackMessage(true);
-          setShowPreloader(false);
+          // setShowPreloader(false);
         }
       })
       .catch((error) => console.log(error));
-    setShowPreloader(false);
+    // setShowPreloader(false);
   };
   const adminData = admins.map((admin) => {
     return {
@@ -103,7 +103,7 @@ const AdminsTable = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {/* {showPreloader && <Preloader />} */}
     </section>
   );
 };
