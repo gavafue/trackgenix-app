@@ -18,7 +18,7 @@ const Admins = () => {
         setShowPreloader(false);
       })
       .catch((err) => console.log(err));
-      setShowPreloader(false);
+    setShowPreloader(false);
   }, []);
 
   return (
