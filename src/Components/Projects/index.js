@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-
 import Table from '../Shared/Table/index';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
-
+import styles from './projects.module.css';
 const editData = (id) => {
   window.location = `/projects/form/${id}`;
 };
@@ -54,9 +53,16 @@ const Projects = () => {
   };
 
   return (
-    <section /*className={styles.container}*/>
-      <div>
-        <Button label="Add a Project" onClick={() => (window.location = '/projects/form')} />
+    <section className={styles.container}>
+      <div className={styles.indexTableContainer}>
+        <h2>Projects</h2>
+        <div className={styles.buttonContainer}>
+          <Button
+            label="Add a Project"
+            theme="secondary"
+            onClick={() => (window.location = '/projects/form')}
+          />
+        </div>
         <Table
           data={projects}
           headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date', 'Members']}

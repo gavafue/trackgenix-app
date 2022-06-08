@@ -215,7 +215,7 @@ const Form = () => {
           value={membersRateValue}
         />
 
-        <Button type="submit" label="Submit"></Button>
+        <Button type="submit" label="Submit" theme="secondary"></Button>
       </form>
       <Modal
         isOpen={showFeedbackMessage}
