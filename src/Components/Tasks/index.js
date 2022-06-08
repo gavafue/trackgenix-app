@@ -1,6 +1,7 @@
 import styles from './tasks.module.css';
 import Table from '../Shared/Table';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
@@ -12,12 +13,14 @@ const Tasks = () => {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const history = useHistory();
   const editData = (id) => {
-    window.location = `/tasks/form/${id}`;
+    history.push(`/tasks/form/${id}`);
   };
   const createTask = () => {
-    window.location.href = '/tasks/form/';
+    history.push('/tasks/form/');
   };
+
   const url = `${process.env.REACT_APP_API_URL}`;
   useEffect(() => {
     fetch(`${url}/tasks`)
@@ -30,7 +33,7 @@ const Tasks = () => {
   const deleteTask = (string) => {
     const options = {
       method: 'DELETE',
-      url: `${process.env.REACT_APP_API_URL}/tasks/${string}`
+      url: `${url}/tasks/${string}`
     };
     fetch(options.url, options)
       .then((response) => response.json())
@@ -45,21 +48,16 @@ const Tasks = () => {
             title: 'Request done!',
             description: response.message
           });
-          setTasks(tasks.filter((task) => task._id !== string));
+          setTasks(tasks.filter((task) => string !== task._id));
           setShowFeedbackMessage(true);
         }
       })
       .catch((err) => console.log(err));
   };
-  const taskData = tasks.map((task) => {
-    return {
-      nameProject: JSON.stringify(task.nameProject.name),
-      week: task.week,
-      day: task.day,
-      description: task.description,
-      hours: task.hours
-    };
-  });
+  const taskData = tasks.map((task) => ({
+    ...task,
+    nameProject: task.nameProject.name
+  }));
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
@@ -73,6 +71,7 @@ const Tasks = () => {
         setShowModal={setShowDeleteMessage}
         setInfoForDelete={setInfoForDelete}
         editData={editData}
+        deleteTask={deleteTask}
       />
       <Modal
         isOpen={showDeleteMessage}

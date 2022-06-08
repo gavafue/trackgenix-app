@@ -2,6 +2,9 @@ import styles from './form.module.css';
 import { useEffect, useState } from 'react';
 import FeedbackModal from '../FeedbackModal';
 import { useParams } from 'react-router-dom';
+import Button from '../../Shared/Button';
+import Input from '../../Shared/Input/InputText';
+import Select from '../../Shared/Input/InputSelect';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -40,7 +43,10 @@ const Form = () => {
   };
   const [contentFeedbackModal, setContentFeedbackModal] = useState({});
   const [showFeedBackModal, setShowFeedbackModal] = useState(false);
+
   const taskId = useParams();
+  console.log(taskId);
+
   const title = taskId.id ? 'Update Task' : 'Add Task';
   const options = {
     method: taskId.id ? 'PUT' : 'POST',
@@ -61,7 +67,7 @@ const Form = () => {
       fetch(`${URL}/tasks/${taskId.id}`)
         .then((res) => res.json())
         .then((data) => {
-          setProjectValue(data.data.nameProject);
+          setProjectValue(data.data.nameProject.name);
           setWeekValue(data.data.week);
           setDayValue(data.data.day);
           setDescriptionValue(data.data.description);
@@ -86,74 +92,69 @@ const Form = () => {
       console.log(err);
     }
   };
+  const arrayToMapProjects = projects.map((project) => {
+    return {
+      id: project._id,
+      optionContent: project.name
+    };
+  });
   return (
-    <div>
-      <form className={styles.container} onSubmit={onSubmit}>
+    <div className={styles.container}>
+      <form onSubmit={onSubmit}>
         <h2>{title}</h2>
-        <label>Project</label>
-        <select
-          className={styles.input}
+        <Select
+          label="Project"
           id="project"
           name="project"
           value={projectValue._id}
           onChange={onChangeProject}
           required
-        >
-          {projects.map((project) => {
-            return (
-              <option
-                id="projectOption"
-                selected={Boolean(project._id === projectValue)}
-                value={project._id}
-                key={project._id}
-              >{`${project.name}`}</option>
-            );
-          })}
-          ;
-          <option value="" disabled selected hidden>
-            Choose Project
-          </option>
-        </select>
-        <label>Week</label>
-        <input
+          placeholder="Select Project"
+          arrayToMap={arrayToMapProjects}
+        />
+        <Input
+          label="Week"
           type="number"
           id="week"
           name="week"
           value={weekValue}
           onChange={onChangeWeek}
           required
-        ></input>
-        <label>Day</label>
-        <input
+          placeholder="Week"
+        />
+        <Input
+          label="Day"
           type="number"
           id="day"
           name="day"
           value={dayValue}
           onChange={onChangeDay}
           required
-        ></input>
-        <label>Description</label>
-        <input
-          className={styles.workInput}
+          placeholder="Day"
+        />
+        <Input
+          label="Description"
           type="text"
           id="Description"
           name="Description"
           value={descriptionValue}
           onChange={onChangeDescription}
           required
-        ></input>
-        <label>Hours</label>
-        <input
+          placeholder="Description"
+        />
+        <Input
+          label="Hours"
           type="number"
           id="hours"
           name="hours"
           value={hoursValue}
           onChange={onChangeHours}
           required
-        ></input>
-        <button type="submit" className={styles.submitButton}>
-          Submit
-        </button>
+          placeholder="Hours"
+        />
+        <div className={styles.buttonContainer}>
+          <Button type="submit" className={styles.submitButton} label="Submit" />
+        </div>
       </form>
       {showFeedBackModal && (
         <FeedbackModal
