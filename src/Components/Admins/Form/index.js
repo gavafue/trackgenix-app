@@ -132,7 +132,6 @@ function Form() {
       }
     } catch (err) {
       console.log(err);
-      setShowPreloader(false);
     }
   };
   const dayInput = birthDateValue.substring(5, 7);
