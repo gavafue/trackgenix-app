@@ -253,8 +253,8 @@ function Form() {
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
-        {showPreloader && <Preloader />}
       </Modal>
+      {showPreloader && <Preloader />}
     </div>
   );
 }
