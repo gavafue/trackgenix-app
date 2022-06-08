@@ -19,9 +19,7 @@ const Projects = () => {
   const URL = `${process.env.REACT_APP_API_URL}`;
 
   const editData = (id) => {
-    setShowLoader(true);
     history.push(`/projects/form/${id}`);
-    setShowLoader(false);
   };
   useEffect(() => {
     setShowLoader(true);

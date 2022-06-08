@@ -15,10 +15,12 @@ const Form = () => {
   const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
+    setShowLoader(true);
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
         setEmployees(data.data);
+        setShowLoader(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -89,6 +91,7 @@ const Form = () => {
 
   useEffect(() => {
     if (projectId) {
+      setShowLoader(true);
       fetch(`${URL}/projects/${projectId}`)
         .then((res) => res.json())
         .then((data) => {
@@ -101,7 +104,7 @@ const Form = () => {
           setActiveValue(data.data.active);
           setMembersRateValue(data.data.members[0].rate);
           setMembersRoleValue(data.data.members[0].role);
-          console.log(data);
+          setShowLoader(false);
         })
         .catch((err) => console.log(err));
     }
