@@ -8,7 +8,7 @@ import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
 
-function Form() {
+const Form = () => {
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -254,6 +254,6 @@ function Form() {
       {showPreloader && <Preloader />}
     </div>
   );
-}
+};
 
 export default Form;
