@@ -6,20 +6,14 @@ import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Button from '../../Shared/Button';
+import Loader from '../../Shared/Preloader';
 
 const Form = () => {
   const [employees, setEmployees] = useState([]);
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
-  useEffect(() => {
-    fetch(`${URL}/employees`)
-      .then((res) => res.json())
-      .then((data) => {
-        setEmployees(data.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   const [nameValue, setNameValue] = useState('');
   const onChangeNameInput = (event) => {
@@ -86,6 +80,14 @@ const Form = () => {
   };
 
   useEffect(() => {
+    setShowLoader(true);
+    fetch(`${URL}/employees`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEmployees(data.data);
+      })
+      .catch((err) => console.log(err));
+
     if (projectId) {
       fetch(`${URL}/projects/${projectId}`)
         .then((res) => res.json())
@@ -99,13 +101,14 @@ const Form = () => {
           setActiveValue(data.data.active);
           setMembersRateValue(data.data.members[0].rate);
           setMembersRoleValue(data.data.members[0].role);
-          console.log(data);
         })
         .catch((err) => console.log(err));
     }
+    setShowLoader(false);
   }, []);
 
   const onSubmit = async (event) => {
+    setShowLoader(true);
     try {
       event.preventDefault();
       const res = await fetch(options.url, options);
@@ -120,13 +123,16 @@ const Form = () => {
     } catch (err) {
       console.log(err);
     }
+    setShowLoader(false);
   };
+
   const arrayToMapEmployees = employees.map((employee) => {
     return { id: employee._id, optionContent: employee.firstName + employee.lastName };
   });
 
   return (
     <div className={styles.container}>
+      {showLoader && <Loader />}
       <h2>{title}</h2>
       <form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
