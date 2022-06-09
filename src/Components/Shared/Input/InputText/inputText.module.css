@@ -11,12 +11,12 @@
   width: 100%;
   justify-content: center;
   margin: auto;
-  padding: 3%;
+  padding: 2% 0 1% 0;
   text-align: center;
   font-size: 1vw;
 }
 .input {
-  margin: auto;
-  box-sizing: border-box;
   width: 100%;
+  margin: 1%;
+  box-sizing: border-box;
 }
