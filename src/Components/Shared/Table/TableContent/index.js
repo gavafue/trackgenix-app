@@ -3,7 +3,6 @@ import styles from './tableContent.module.css';
 import Button from '../../Button';
 
 const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete }) => {
-  console.log(data);
   return (
     <tbody>
       {data.map((row) => {

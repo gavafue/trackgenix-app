@@ -34,10 +34,10 @@ const Tasks = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  const deleteTask = (string) => {
+  const deleteTask = (taskId) => {
     const options = {
       method: 'DELETE',
-      url: `${url}/tasks/${string}`
+      url: `${url}/tasks/${taskId}`
     };
     setShowPreloader(true);
     fetch(options.url, options)
@@ -53,7 +53,7 @@ const Tasks = () => {
             title: 'Request done!',
             description: response.message
           });
-          setTasks(tasks.filter((task) => string !== task._id));
+          setTasks(tasks.filter((task) => taskId !== task._id));
           setShowFeedbackMessage(true);
           setShowPreloader(false);
         }
