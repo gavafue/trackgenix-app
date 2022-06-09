@@ -35,10 +35,10 @@ const SuperAdmins = () => {
     history.push('/super-admins/form');
   };
 
-  const deleteSuperAdmin = (string) => {
+  const deleteSuperAdmin = (superAdminId) => {
     const options = {
       method: 'DELETE',
-      url: `${`${process.env.REACT_APP_API_URL}`}/super-admin/${string}`
+      url: `${`${process.env.REACT_APP_API_URL}`}/super-admin/${superAdminId}`
     };
     setShowPreloader(true);
     fetch(options.url, options)
@@ -55,7 +55,7 @@ const SuperAdmins = () => {
             title: 'Request done!',
             description: response.message
           });
-          setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== string));
+          setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== superAdminId));
           setShowFeedbackMessage(true);
           setShowPreloader(false);
         }
