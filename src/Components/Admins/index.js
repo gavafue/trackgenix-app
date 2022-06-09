@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from './admins.module.css';
 import AdminsTable from './Table';
 import Preloader from '../Shared/Preloader';
@@ -9,6 +10,7 @@ const Admins = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPreloader, setShowPreloader] = useState(false);
   const url = `${process.env.REACT_APP_API_URL}`;
+  const history = useHistory();
   useEffect(() => {
     setShowPreloader(true);
     fetch(`${url}/admins`)
@@ -23,7 +25,7 @@ const Admins = () => {
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
-      <Button label="Add new admin +" onClick={() => (window.location = `/admins/form/`)} />
+      <Button label="Add new admin +" onClick={() => history.push(`/admins/form/`)} />
       <AdminsTable admins={admins} showModal={showModal} setShowModal={setShowModal} />
       {showPreloader && <Preloader />}
     </section>
