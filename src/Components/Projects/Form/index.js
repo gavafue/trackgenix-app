@@ -127,80 +127,81 @@ const Form = () => {
   };
 
   const arrayToMapEmployees = employees.map((employee) => {
-    return { id: employee._id, optionContent: employee.firstName + employee.lastName };
+    return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };
   });
 
   return (
     <div className={styles.container}>
       {showLoader && <Loader />}
       <h2>{title}</h2>
-      <form onSubmit={onSubmit}>
-        <label htmlFor="name">Name</label>
+      <form onSubmit={onSubmit} className={styles.form}>
         <InputText
           name="Name"
           type="text"
+          label="Name"
           onChange={onChangeNameInput}
           placeholder="Write the project's name"
           value={nameValue}
           required
         />
-        <label htmlFor="startDate">Start Date:</label>
         <InputText
           name="startDate"
           type="text"
+          label="Start date"
           onChange={onChangeStartDateInput}
           placeholder="Write the start date"
           value={startDateValue}
           required
         />
-        <label htmlFor="endDate">End Date:</label>
         <InputText
           name="endDate"
           type="text"
+          label="End date"
           onChange={onChangeEndDateInput}
           placeholder="Write the end date"
           value={endDateValue}
         />
-        <label htmlFor="description">Description:</label>
         <InputText
           name="description"
           type="text"
+          label="Description"
           onChange={onChangeDescriptionInput}
           placeholder="Write the description"
           value={descriptionValue}
           required
         />
-        <label htmlFor="client">Client:</label>
         <InputText
           name="client"
+          label="Client"
           type="text"
           onChange={onChangeClientInput}
           placeholder="Write the Client's name"
           value={clientValue}
           required
         />
-        <label htmlFor="active">Active:</label>
         <InputSelect
+          className={styles.select}
           arrayToMap={[
             { id: true, optionContent: 'True' },
             { id: false, optionContent: 'False' }
           ]}
           id="active"
           name="active"
+          label="Active"
           value={activeValue}
           onChange={onChangeActiveInput}
         />
-
-        <label>Members</label>
         <InputSelect
+          className={styles.select}
           arrayToMap={arrayToMapEmployees}
           id="members"
           name="members"
+          label="Members"
           value={membersValue}
           onChange={onChangeMembersInput}
         />
-        <label>Role</label>
         <InputSelect
+          className={styles.select}
           arrayToMap={[
             { id: 'TL', optionContent: 'TL' },
             { id: 'QA', optionContent: 'QA' },
@@ -209,18 +210,18 @@ const Form = () => {
           ]}
           id="role"
           name="role"
+          label="Role"
           value={membersRoleValue}
           onChange={onChangeMembersRoleInput}
         />
-        <label>Rate</label>
         <InputText
           name="rate"
           type="text"
+          label="Rate"
           onChange={onChangeMembersRateInput}
           placeholder="Write the rate"
           value={membersRateValue}
         />
-
         <Button type="submit" label="Submit" theme="secondary"></Button>
       </form>
       <Modal

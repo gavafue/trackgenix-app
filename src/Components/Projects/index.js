@@ -6,7 +6,7 @@ import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import Loader from '../Shared/Preloader';
 import { useHistory } from 'react-router-dom';
-import styles from './project.module.css';
+import styles from './projects.module.css';
 
 const Projects = () => {
   const history = useHistory();
@@ -16,7 +16,7 @@ const Projects = () => {
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showLoader, setShowLoader] = useState(false);
-  const URL = `${process.env.REACT_APP_API_URL}`;
+  const URL = process.env.REACT_APP_API_URL;
 
   const editData = (id) => {
     history.push(`/projects/form/${id}`);
@@ -32,10 +32,10 @@ const Projects = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const deleteProject = (string) => {
+  const deleteProject = (projectId) => {
     const options = {
       method: 'DELETE',
-      url: `${URL}/projects/${string}`
+      url: `${URL}/projects/${projectId}`
     };
     setShowLoader(true);
     fetch(options.url, options)
@@ -52,7 +52,7 @@ const Projects = () => {
             title: 'Request done!',
             description: response.message
           });
-          setProjects(projects.filter((project) => string !== project._id));
+          setProjects(projects.filter((project) => projectId !== project._id));
           setShowFeedbackMessage(true);
         }
       })
@@ -68,12 +68,12 @@ const Projects = () => {
           <Button
             label="Add a Project"
             theme="secondary"
-            onClick={() => (window.location = '/projects/form')}
+            onClick={() => history.push(`/projects/form`)}
           />
         </div>
         <Table
           data={projects}
-          headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date', 'Members']}
+          headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date']}
           headers={['name', 'description', 'client', 'startDate', 'endDate']}
           deleteProject={deleteProject}
           editData={editData}

@@ -6,18 +6,20 @@
   justify-content: space-around;
 }
 
-form {
+.form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   width: 40%;
 }
-label {
+
+.label {
   font-size: 15px;
   margin-left: 2%;
 }
-select {
+
+.select {
   width: 100% !important;
 }
 
