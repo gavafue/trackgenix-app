@@ -142,7 +142,7 @@ const Form = () => {
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
-      <SharedForm onSubmit={onSubmit} legend={title}>
+      <SharedForm onSubmit={onSubmit}>
         <Input
           label="Name"
           id="name"
