@@ -65,11 +65,8 @@ const TimeSheets = () => {
 
   const timesheetData = timeSheets.map((timeSheet) => {
     return {
-      name: timeSheet.project.name,
-      date: timeSheet.date,
-      hoursWorked: timeSheet.hoursWorked,
-      weekSprint: timeSheet.weekSprint,
-      ...timeSheet
+      ...timeSheet,
+      name: timeSheet.project.name
     };
   });
   return (

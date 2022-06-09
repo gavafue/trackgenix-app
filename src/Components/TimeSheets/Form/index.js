@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styles from './form.module.css';
 import Select from '../../Shared/Input/InputSelect';
 import Input from '../../Shared/Input/InputText';
