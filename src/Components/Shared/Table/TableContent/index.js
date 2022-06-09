@@ -15,10 +15,10 @@ const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete 
                 </td>
               );
             })}
-            <td>
+            <td className={styles.rows}>
               <Button onClick={() => editData(row._id)} label="Edit" />
             </td>
-            <td>
+            <td className={styles.rows}>
               <Button
                 label="Delete"
                 theme="secondary"
