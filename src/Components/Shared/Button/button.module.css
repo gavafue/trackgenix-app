@@ -20,7 +20,8 @@
   margin: auto;
   padding: 5px 5px;
   background-color: #373867;
-  border: none;
+  border-style: solid;
+  border-color: #373867;
   opacity: 0.8;
   color: white;
   cursor: pointer;
