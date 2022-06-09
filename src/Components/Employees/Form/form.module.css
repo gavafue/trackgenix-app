@@ -6,7 +6,8 @@
   align-items: center;
 }
 .container form {
-width: 100%;
+  width: 40%;
+  align-items: center;
 }
 .title {
   display: flex;

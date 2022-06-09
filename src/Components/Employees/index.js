@@ -6,6 +6,7 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
+import Loader from '../Shared/Preloader';
 
 const URL = process.env.REACT_APP_API_URL;
 
@@ -15,6 +16,7 @@ function Employees() {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
 
   const history = useHistory();
   const editData = (id) => {
@@ -24,10 +26,12 @@ function Employees() {
     history.push('/employees/form');
   };
   useEffect(() => {
+    setShowLoader(true);
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
         saveEmployees(data.data);
+        setShowLoader(false);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -37,6 +41,7 @@ function Employees() {
       method: 'DELETE',
       url: `${URL}/employees/${_id}`
     };
+    setShowLoader(true);
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -45,7 +50,6 @@ function Employees() {
             title: 'Something went wrong',
             description: response.message
           });
-          setShowFeedbackMessage(true);
         } else {
           setInfoForFeedback({
             title: 'Request done!',
@@ -53,6 +57,7 @@ function Employees() {
           });
           saveEmployees(employees.filter((employee) => _id !== employee._id));
           setShowFeedbackMessage(true);
+          setShowLoader(false);
         }
       })
       .catch((error) => console.log(error));
@@ -96,6 +101,7 @@ function Employees() {
         >
           <FeedbackMessage infoForFeedback={infoForFeedback} />
         </Modal>
+        {showLoader && <Loader />}
       </div>
     </section>
   );

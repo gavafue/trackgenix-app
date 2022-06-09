@@ -5,6 +5,7 @@ import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
 import styles from './form.module.css';
+import Loader from '../../Shared/Preloader';
 
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
@@ -19,6 +20,7 @@ const Form = () => {
   const [birthdayValue, setBirthdayValue] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
 
   const paramEmployeeId = useParams();
@@ -44,8 +46,10 @@ const Form = () => {
       active: false
     })
   };
+
   useEffect(() => {
     if (paramEmployeeId.id) {
+      setShowLoader(true);
       fetch(`${URL}/employees/${paramEmployeeId.id}`)
         .then((response) => response.json())
         .then((data) => {
@@ -59,6 +63,7 @@ const Form = () => {
           setTelephoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setCountryValue(data.data.country);
+          setShowLoader(false);
         })
         .catch((error) => console.log(error));
     }
@@ -66,10 +71,12 @@ const Form = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    setShowLoader(true);
     let correctStatus;
     fetch(options.url, options)
       .then((response) => {
         correctStatus = response.status === 201 || response.status === 200;
+        setShowLoader(false);
         return response.json();
       })
       .then((response) => {
@@ -79,12 +86,14 @@ const Form = () => {
             description: response.message
           });
           setShowFeedbackMessage(true);
+          setShowLoader(false);
         } else {
           setInfoForFeedback({
             title: 'Something went wrong',
             description: response.message
           });
           setShowFeedbackMessage(true);
+          setShowLoader(false);
         }
       })
       .catch((error) => console.log(error));
@@ -122,7 +131,7 @@ const Form = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1 className={styles.title}>{title}</h1>
       <form onSubmit={onSubmit}>
         <Input
@@ -150,7 +159,7 @@ const Form = () => {
           label="E-mail"
           name="email"
           id="email"
-          type="text"
+          type="email"
           placeholder="Write your email."
           value={emailValue}
           onChange={onChangeEmailValue}
@@ -160,7 +169,7 @@ const Form = () => {
           label="Password"
           name="password"
           id="password"
-          type="text"
+          type="password"
           placeholder="Write your password."
           value={passwordValue}
           onChange={onChangePasswordValue}
@@ -180,7 +189,7 @@ const Form = () => {
           label="Phone"
           name="phone"
           id="phone"
-          type="text"
+          type="telephone"
           placeholder="Write your telephone."
           value={telephoneValue}
           onChange={onChangeTelephoneValue}
@@ -242,6 +251,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
+      {showLoader && <Loader />}
     </div>
   );
 };
