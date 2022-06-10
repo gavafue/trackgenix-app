@@ -1,8 +1,14 @@
 import styles from './form.module.css';
 import { useState, useEffect } from 'react';
-import FeedbackModal from '../FeedbackModal';
+import { useParams } from 'react-router-dom';
+import Button from '../../Shared/Button';
+import Input from '../../Shared/Input/InputText';
+import Select from '../../Shared/Input/InputSelect';
+import Modal from '../../Shared/Modal';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Preloader from '../../Shared/Preloader';
 
-function Form() {
+const Form = () => {
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -13,6 +19,9 @@ function Form() {
   const [cityValue, setCityValue] = useState('');
   const [zipValue, setZipValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(false);
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -45,16 +54,21 @@ function Form() {
     setActiveValue(event.target.value);
   };
 
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const arrayToMapGender = [
+    { id: 'male', optionContent: 'Male' },
+    { id: 'female', optionContent: 'Female' },
+    { id: 'other', optionContent: 'Other' }
+  ];
+  const arrayToMapActive = [
+    { id: 'true', optionContent: 'Active' },
+    { id: 'false', optionContent: 'Inactive' }
+  ];
 
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const adminId = params.get('adminId');
-  const title = adminId ? `${nameValue} ${lastNameValue}` : 'Add admin';
+  const adminId = useParams();
+  const title = adminId.id ? `${nameValue} ${lastNameValue}` : 'Add admin';
   const options = {
-    method: adminId ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/admins/${adminId ? adminId : ''}`,
+    method: adminId.id ? 'PUT' : 'POST',
+    url: `${process.env.REACT_APP_API_URL}/admins/${adminId.id ? adminId.id : ''}`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -73,8 +87,9 @@ function Form() {
   };
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    if (adminId) {
-      fetch(`${URL}/admins/${adminId}`)
+    if (adminId.id) {
+      setShowPreloader(true);
+      fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
         .then((data) => {
           setNameValue(data.data.name);
@@ -82,101 +97,166 @@ function Form() {
           setEmailValue(data.data.email);
           setPasswordValue(data.data.password);
           setCityValue(data.data.city);
-          setBirthDateValue(data.data.birthDate);
+          setBirthDateValue(data.data.dateBirth);
           setGenderValue(data.data.gender);
           setPhoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setActiveValue(data.data.active);
+          setShowPreloader(false);
         })
         .catch((error) => console.log(error));
     }
+    setShowPreloader(false);
   }, []);
 
   const onSubmit = async (event) => {
     try {
       event.preventDefault();
+      setShowPreloader(true);
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
-        setContentFeedbackModal({ title: 'Request done!', description: data.message });
-        setShowFeedbackModal(true);
+        setInfoForFeedback({
+          title: 'Request done!',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
+        setShowPreloader(false);
       } else {
-        setContentFeedbackModal({ title: 'Something went wrong', description: data.message });
-        setShowFeedbackModal(true);
+        setInfoForFeedback({
+          title: 'Something went wrong',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
+        setShowPreloader(false);
       }
     } catch (err) {
       console.log(err);
     }
   };
+  const dayInput = birthDateValue.substring(5, 7);
+  const monthInput = birthDateValue.substring(8, 10);
+  const yearInput = birthDateValue.substring(0, 4);
+  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
 
   return (
-    <div>
+    <div className={styles.adminForm}>
+      <h2>{title}</h2>
       <form onSubmit={onSubmit} className={styles.container}>
-        <h2>{title}</h2>
-        <label htmlFor="name">Name</label>
-        <input type="text" id="name" value={nameValue} onChange={onChangeNameInput} required />
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          type="text"
-          id="lastName"
-          value={lastNameValue}
-          onChange={onChangeLastNameInput}
-          required
-        />
-        <label htmlFor="email">E-mail</label>
-        <input type="text" id="email" value={emailValue} onChange={onChangeEmailInput} required />
-        <label htmlFor="password">Password</label>
-        <input
-          type="text"
-          id="password"
-          value={passwordValue}
-          onChange={onChangePasswordInput}
-          required
-        />
-        <label htmlFor="gender">Gender</label>
-        <select id="gender" value={genderValue} onChange={onChangeGenderInput} required>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-          <option value="Male">Male</option>
-          <option value="" disabled selected hidden>
-            Choose gender
-          </option>
-        </select>
-        <label htmlFor="phone">Phone</label>
-        <input type="text" id="phone" value={phoneValue} onChange={onChangePhoneInput} required />
-        <label htmlFor="dateBirth">Date of Birth</label>
-        <input
-          type="date"
-          id="dateBirth"
-          value={birthDateValue}
-          onChange={onChangeBirthDateInput}
-          required
-        />
-        <label htmlFor="city">City</label>
-        <input type="text" id="city" value={cityValue} onChange={onChangeCityInput} required />
-        <label htmlFor="zip">Postal Code</label>
-        <input type="text" id="zip" value={zipValue} onChange={onChangeZipInput} required />
-        <label htmlFor="active">Status</label>
-        <select id="active" value={activeValue} onChange={onChangeActiveInput} required>
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
-          <option value="" disabled selected hidden>
-            Is active?
-          </option>
-        </select>
-        <button type="submit" value="Submit">
-          Submit
-        </button>
+        <fieldset className={styles.adminFieldset}>
+          <Input
+            label="Name"
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Enter admin's name"
+            value={nameValue}
+            onChange={onChangeNameInput}
+            required
+          />
+          <Input
+            label="Last&nbsp;name"
+            id="lastName"
+            name="lastName"
+            type="text"
+            placeholder="Enter admin's last name"
+            value={lastNameValue}
+            onChange={onChangeLastNameInput}
+            required
+          />
+          <Input
+            label="E-mail"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Enter a valid email"
+            value={emailValue}
+            onChange={onChangeEmailInput}
+            required
+          />
+          <Input
+            label="Password"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            value={passwordValue}
+            onChange={onChangePasswordInput}
+            required
+          />
+          <Select
+            label="Gender"
+            arrayToMap={arrayToMapGender}
+            id="gender"
+            name="gender"
+            value={genderValue}
+            onChange={onChangeGenderInput}
+            placeholder={[genderValue ? genderValue : 'Enter your gender']}
+            required
+          />
+          <Input
+            label="Phone"
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="Enter admin's phone number"
+            value={phoneValue}
+            onChange={onChangePhoneInput}
+            required
+          />
+          <Input
+            label="Date&nbsp;of&nbsp;birth"
+            id="dateBirth"
+            name="dateBirth"
+            type="date"
+            value={dateFormat}
+            onChange={onChangeBirthDateInput}
+            required
+          />
+          <Input
+            label="City"
+            id="city"
+            name="city"
+            type="text"
+            placeholder="Enter admin's city"
+            value={cityValue}
+            onChange={onChangeCityInput}
+            required
+          />
+          <Input
+            label="Postal&nbsp;code"
+            id="zip"
+            name="zip"
+            type="text"
+            placeholder="Enter admin's postal code"
+            value={zipValue}
+            onChange={onChangeZipInput}
+            required
+          />
+          <Select
+            label="Status"
+            arrayToMap={arrayToMapActive}
+            id="active"
+            name="active"
+            value={activeValue}
+            onChange={onChangeActiveInput}
+            placeholder={activeValue ? activeValue : 'Enter Active status'}
+            required
+          />
+        </fieldset>
+        <Button type="submit" label="Submit" />
       </form>
-      {showFeedbackModal && (
-        <FeedbackModal
-          feedbackTitle={contentFeedbackModal.title}
-          messageContent={contentFeedbackModal.description}
-          setShowFeedbackModal={setShowFeedbackModal}
-        />
-      )}
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
+      {showPreloader && <Preloader />}
     </div>
   );
-}
+};
 
 export default Form;

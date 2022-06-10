@@ -1,74 +1,87 @@
-import styles from './form.module.css';
 import { useEffect, useState } from 'react';
-import FeedbackModal from '../FeedbackModal';
+import { useHistory, useParams } from 'react-router-dom';
+import styles from './form.module.css';
 import Select from '../../Shared/Input/InputSelect';
 import Input from '../../Shared/Input/InputText';
+import Modal from '../../Shared/Modal';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Button from '../../Shared/Button';
+import Preloader from '../../Shared/Preloader';
 
 const URL = process.env.REACT_APP_API_URL;
 
 const Form = () => {
   const [projects, setProjects] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [projectValue, setProjectValue] = useState('');
+  const [employeeValue, setEmployeeValue] = useState('');
+  const [weekSprintValue, setWeekSprintValue] = useState('');
+  const [hoursWorkedValue, setHoursWorkedValue] = useState('');
+  const [dateValue, setDateValue] = useState('');
+  const [projectHoursValue, setProjectHoursValue] = useState('');
+  const [workDescriptionValue, setWorkDescriptionValue] = useState('');
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(false);
+  const history = useHistory();
+
   useEffect(() => {
+    setShowPreloader(true);
     fetch(`${URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
+        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
   }, []);
-  const [employees, setEmployees] = useState([]);
+
   useEffect(() => {
+    setShowPreloader(true);
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
         setEmployees(data.data);
+        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
   }, []);
-  const [projectValue, setProjectValue] = useState('');
+
   const onChangeProjectSelect = (event) => {
     setProjectValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [employeeValue, setEmployeeValue] = useState('');
+
   const onChangeEmployeeSelect = (event) => {
     setEmployeeValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [weekSprintValue, setWeekSprintValue] = useState('');
+
   const onChangeWeekSprint = (event) => {
     setWeekSprintValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [dateValue, setDateValue] = useState('');
+
   const onChangeDate = (event) => {
     setDateValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [hoursWorkedValue, setHoursWorkedValue] = useState('');
+
   const onChangeHoursWork = (event) => {
     setHoursWorkedValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [projectHoursValue, setProjectHoursValue] = useState('');
+
   const onChangeProjectHours = (event) => {
     setProjectHoursValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [workDescriptionValue, setWorkDescriptionValue] = useState('');
+
   const onChangeWorkDescription = (event) => {
     setWorkDescriptionValue(event.target.value);
-    console.log(event.target.value);
   };
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({});
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const timesheetId = params.get('timesheetId');
-  const title = timesheetId ? 'Update Timesheet' : 'Add Timesheet';
+
+  const timesheetId = useParams();
+
+  const title = timesheetId.id ? 'Update Timesheet' : 'Add Timesheet';
+
   const options = {
-    method: timesheetId ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/timesheets/${timesheetId ? timesheetId : ''} `,
+    method: timesheetId.id ? 'PUT' : 'POST',
+    url: timesheetId.id ? `${URL}/timesheets/${timesheetId.id}` : `${URL}/timesheets`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -98,8 +111,9 @@ const Form = () => {
   });
 
   useEffect(() => {
-    if (timesheetId) {
-      fetch(`${URL}/timesheets/${timesheetId}`)
+    if (timesheetId.id) {
+      setShowPreloader(true);
+      fetch(`${URL}/timesheets/${timesheetId.id}`)
         .then((res) => res.json())
         .then((data) => {
           setProjectValue(data.data.project._id);
@@ -109,115 +123,137 @@ const Form = () => {
           setHoursWorkedValue(data.data.hoursWorked);
           setProjectHoursValue(data.data.hoursProject);
           setWorkDescriptionValue(data.data.workDescription);
+          setShowPreloader(false);
         })
         .catch((err) => console.log(err));
     }
+    setShowPreloader(false);
   }, []);
+
   const onSubmit = async (event) => {
     try {
       event.preventDefault();
+      setShowPreloader(true);
       const res = await fetch(options.url, options);
       const data = await res.json();
       if (res.status == 201 || res.status == 200) {
-        setContentFeedbackModal({ title: 'Request Done!', description: data.message });
-        setShowFeedbackModal(true);
+        setInfoForFeedback({
+          title: 'Request done!',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
+        setShowPreloader(false);
       } else {
-        setContentFeedbackModal({ title: 'Something Went wrong', description: data.message });
-        setShowFeedbackModal(true);
+        setInfoForFeedback({
+          title: 'Something went wrong',
+          description: data.message
+        });
+        setShowFeedbackMessage(true);
+        setShowPreloader(false);
       }
     } catch (err) {
       console.log(err);
     }
+  };
+  const dayInput = dateValue.substring(5, 7);
+  const monthInput = dateValue.substring(8, 10);
+  const yearInput = dateValue.substring(0, 4);
+  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
+  const routeValidation = () => {
+    history.push('/time-sheets');
   };
 
   return (
     <div>
       <form className={styles.container} onSubmit={onSubmit}>
         <h2>{title}</h2>
-        <Select
-          label="Project"
-          arrayToMap={arrayToMapProjects}
-          id="project"
-          name="project"
-          value={projectValue}
-          onChange={onChangeProjectSelect}
-          placeholder="Choose the project"
-          required
-        />
-        <Select
-          label="Employees"
-          arrayToMap={arrayToMapEmployees}
-          id="employee"
-          name="employee"
-          value={employeeValue}
-          onChange={onChangeEmployeeSelect}
-          placeholder="Choose the employee"
-          required
-        />
-        <Input
-          label="Week Sprint"
-          id="weeksprint"
-          name="weeksprint"
-          type="text"
-          placeholder="Write the week sprint"
-          value={weekSprintValue}
-          onChange={onChangeWeekSprint}
-          required
-        />
-        <Input
-          label="Date"
-          id="date"
-          name="date"
-          type="text"
-          placeholder="Write the date"
-          value={dateValue}
-          onChange={onChangeDate}
-          required
-        />
-        <Input
-          label="Hours worked"
-          type="number"
-          id="hoursWorked"
-          name="hoursWorked"
-          value={hoursWorkedValue}
-          placeholder="Write the hours worked"
-          onChange={onChangeHoursWork}
-          required
-        />
-        <Input
-          label="Project Hours"
-          id="projectHours"
-          name="projectHours"
-          type="number"
-          placeholder="Write the project hours"
-          value={projectHoursValue}
-          onChange={onChangeProjectHours}
-          required
-        />
-        <Input
-          label="Work description"
-          id="workDescription"
-          name="workDescription"
-          type="text"
-          placeholder="Write the work description"
-          value={workDescriptionValue}
-          onChange={onChangeWorkDescription}
-          required
-        />
-        <button type="submit" className={styles.submitButton}>
-          Submit
-        </button>
+        <fieldset className={styles.timesheetForm}>
+          <Select
+            label="Project"
+            arrayToMap={arrayToMapProjects}
+            id="project"
+            name="project"
+            value={projectValue}
+            onChange={onChangeProjectSelect}
+            placeholder="Choose the project"
+            required
+          />
+          <Select
+            label="Employees"
+            arrayToMap={arrayToMapEmployees}
+            id="employee"
+            name="employee"
+            value={employeeValue}
+            onChange={onChangeEmployeeSelect}
+            placeholder="Choose the employee"
+            required
+          />
+          <Input
+            label="Week Sprint"
+            id="weeksprint"
+            name="weeksprint"
+            type="text"
+            placeholder="Write the week sprint"
+            value={weekSprintValue}
+            onChange={onChangeWeekSprint}
+            required
+          />
+          <Input
+            label="Date"
+            id="date"
+            name="date"
+            type="date"
+            placeholder="Write the date"
+            value={dateFormat}
+            onChange={onChangeDate}
+            required
+          />
+          <Input
+            label="Hours worked"
+            type="number"
+            id="hoursWorked"
+            name="hoursWorked"
+            value={hoursWorkedValue}
+            placeholder="Write the hours worked"
+            onChange={onChangeHoursWork}
+            required
+          />
+          <Input
+            label="Project Hours"
+            id="projectHours"
+            name="projectHours"
+            type="number"
+            placeholder="Write the project hours"
+            value={projectHoursValue}
+            onChange={onChangeProjectHours}
+            required
+          />
+          <Input
+            label="Work description"
+            id="workDescription"
+            name="workDescription"
+            type="text"
+            placeholder="Write the work description"
+            value={workDescriptionValue}
+            onChange={onChangeWorkDescription}
+            required
+          />
+        </fieldset>
+        <div className={styles.buttoncontainer}>
+          <Button type="submit" label="Submit" theme="secondary" />
+        </div>
       </form>
-      {showFeedbackModal && (
-        <FeedbackModal
-          feedbackTitle={contentFeedbackModal.title}
-          messageContent={contentFeedbackModal.description}
-          setShowFeedbackModal={setShowFeedbackModal}
-          showFeedbackModal={showFeedbackModal}
-        />
-      )}
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+          routeValidation();
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        {showPreloader && <Preloader />}
+      </Modal>
     </div>
   );
 };
-
 export default Form;
