@@ -64,11 +64,7 @@ const Projects = () => {
     <section className={styles.container}>
       <h2>Projects</h2>
       <div>
-        <Button
-          label="Add new project"
-          theme="secondary"
-          onClick={() => history.push(`/projects/form`)}
-        />
+        <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
       </div>
       <Table
         data={projects}

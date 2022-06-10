@@ -68,7 +68,7 @@ const Tasks = () => {
     <section className={styles.container}>
       <h2>Tasks</h2>
       <div className={styles.buttonContainer}>
-        <Button onClick={createTask} label="Add new task" theme="secondary" />
+        <Button onClick={createTask} label="Add new task" />
       </div>
       <Table
         data={taskData}
