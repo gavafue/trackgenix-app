@@ -1,7 +1,8 @@
 import styles from './form.module.css';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Button from '../../Shared/Button';
+import { useHistory } from 'react-router-dom';
+import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
@@ -87,7 +88,7 @@ const Form = () => {
   };
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    if (adminId.id) {
+    if (adminId) {
       setShowPreloader(true);
       fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
@@ -106,7 +107,6 @@ const Form = () => {
         })
         .catch((error) => console.log(error));
     }
-    setShowPreloader(false);
   }, []);
 
   const onSubmit = async (event) => {
@@ -138,118 +138,120 @@ const Form = () => {
   const monthInput = birthDateValue.substring(8, 10);
   const yearInput = birthDateValue.substring(0, 4);
   const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
+  const history = useHistory();
+  const goBack = () => {
+    history.push('/admins');
+  };
 
   return (
-    <div className={styles.adminForm}>
+    <div className={styles.container}>
       <h2>{title}</h2>
-      <form onSubmit={onSubmit} className={styles.container}>
-        <fieldset className={styles.adminFieldset}>
-          <Input
-            label="Name"
-            id="name"
-            name="name"
-            type="text"
-            placeholder="Enter admin's name"
-            value={nameValue}
-            onChange={onChangeNameInput}
-            required
-          />
-          <Input
-            label="Last&nbsp;name"
-            id="lastName"
-            name="lastName"
-            type="text"
-            placeholder="Enter admin's last name"
-            value={lastNameValue}
-            onChange={onChangeLastNameInput}
-            required
-          />
-          <Input
-            label="E-mail"
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Enter a valid email"
-            value={emailValue}
-            onChange={onChangeEmailInput}
-            required
-          />
-          <Input
-            label="Password"
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-            value={passwordValue}
-            onChange={onChangePasswordInput}
-            required
-          />
-          <Select
-            label="Gender"
-            arrayToMap={arrayToMapGender}
-            id="gender"
-            name="gender"
-            value={genderValue}
-            onChange={onChangeGenderInput}
-            placeholder={[genderValue ? genderValue : 'Enter your gender']}
-            required
-          />
-          <Input
-            label="Phone"
-            id="phone"
-            name="phone"
-            type="tel"
-            placeholder="Enter admin's phone number"
-            value={phoneValue}
-            onChange={onChangePhoneInput}
-            required
-          />
-          <Input
-            label="Date&nbsp;of&nbsp;birth"
-            id="dateBirth"
-            name="dateBirth"
-            type="date"
-            value={dateFormat}
-            onChange={onChangeBirthDateInput}
-            required
-          />
-          <Input
-            label="City"
-            id="city"
-            name="city"
-            type="text"
-            placeholder="Enter admin's city"
-            value={cityValue}
-            onChange={onChangeCityInput}
-            required
-          />
-          <Input
-            label="Postal&nbsp;code"
-            id="zip"
-            name="zip"
-            type="text"
-            placeholder="Enter admin's postal code"
-            value={zipValue}
-            onChange={onChangeZipInput}
-            required
-          />
-          <Select
-            label="Status"
-            arrayToMap={arrayToMapActive}
-            id="active"
-            name="active"
-            value={activeValue}
-            onChange={onChangeActiveInput}
-            placeholder={activeValue ? activeValue : 'Enter Active status'}
-            required
-          />
-        </fieldset>
-        <Button type="submit" label="Submit" />
-      </form>
+      <SharedForm onSubmit={onSubmit}>
+        <Input
+          label="Name"
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Enter admin's name"
+          value={nameValue}
+          onChange={onChangeNameInput}
+          required
+        />
+        <Input
+          label="Last&nbsp;name"
+          id="lastName"
+          name="lastName"
+          type="text"
+          placeholder="Enter admin's last name"
+          value={lastNameValue}
+          onChange={onChangeLastNameInput}
+          required
+        />
+        <Input
+          label="E-mail"
+          id="email"
+          name="email"
+          type="email"
+          placeholder="Enter a valid email"
+          value={emailValue}
+          onChange={onChangeEmailInput}
+          required
+        />
+        <Input
+          label="Password"
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Enter your password"
+          value={passwordValue}
+          onChange={onChangePasswordInput}
+          required
+        />
+        <Select
+          label="Gender"
+          arrayToMap={arrayToMapGender}
+          id="gender"
+          name="gender"
+          value={genderValue}
+          onChange={onChangeGenderInput}
+          placeholder={[genderValue ? genderValue : 'Enter your gender']}
+          required
+        />
+        <Input
+          label="Phone"
+          id="phone"
+          name="phone"
+          type="tel"
+          placeholder="Enter admin's phone number"
+          value={phoneValue}
+          onChange={onChangePhoneInput}
+          required
+        />
+        <Input
+          label="Date&nbsp;of&nbsp;birth"
+          id="dateBirth"
+          name="dateBirth"
+          type="date"
+          value={dateFormat}
+          onChange={onChangeBirthDateInput}
+          required
+        />
+        <Input
+          label="City"
+          id="city"
+          name="city"
+          type="text"
+          placeholder="Enter admin's city"
+          value={cityValue}
+          onChange={onChangeCityInput}
+          required
+        />
+        <Input
+          label="Postal&nbsp;code"
+          id="zip"
+          name="zip"
+          type="text"
+          placeholder="Enter admin's postal code"
+          value={zipValue}
+          onChange={onChangeZipInput}
+          required
+        />
+        <Select
+          label="Status"
+          arrayToMap={arrayToMapActive}
+          id="active"
+          name="active"
+          value={activeValue}
+          onChange={onChangeActiveInput}
+          placeholder={activeValue ? activeValue : 'Enter Active status'}
+          required
+        />
+      </SharedForm>
       <Modal
         isOpen={showFeedbackMessage}
         handleClose={() => {
           setShowFeedbackMessage(false);
+          goBack();
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />

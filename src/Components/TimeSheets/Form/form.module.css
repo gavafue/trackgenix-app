@@ -5,13 +5,3 @@
   justify-content: center;
   width: 100%;
 }
-
-.timesheetForm {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  margin: 1%;
-  border:1px solid #999;
-	border-radius:25px;
-	box-shadow:0 0 10px #999;
-}

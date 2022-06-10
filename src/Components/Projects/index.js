@@ -62,49 +62,43 @@ const Projects = () => {
 
   return (
     <section className={styles.container}>
-      <div className={styles.indexTableContainer}>
-        <h2>Projects</h2>
-        <div className={styles.buttonContainer}>
-          <Button
-            label="Add a Project"
-            theme="secondary"
-            onClick={() => history.push(`/projects/form`)}
-          />
-        </div>
-        <Table
-          data={projects}
-          headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date']}
-          headers={['name', 'description', 'client', 'startDate', 'endDate']}
-          deleteProject={deleteProject}
-          editData={editData}
-          setShowModal={setShowDeleteMessage}
-          setInfoForDelete={setInfoForDelete}
-        />
-        <Modal
-          isOpen={showDeleteMessage}
+      <h2>Projects</h2>
+      <div>
+        <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
+      </div>
+      <Table
+        data={projects}
+        headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date']}
+        headers={['name', 'description', 'client', 'startDate', 'endDate']}
+        deleteProject={deleteProject}
+        editData={editData}
+        setShowModal={setShowDeleteMessage}
+        setInfoForDelete={setInfoForDelete}
+      />
+      <Modal
+        isOpen={showDeleteMessage}
+        handleClose={() => {
+          setShowDeleteMessage(false);
+        }}
+      >
+        <DeleteMessage
           handleClose={() => {
             setShowDeleteMessage(false);
           }}
-        >
-          <DeleteMessage
-            handleClose={() => {
-              setShowDeleteMessage(false);
-            }}
-            infoForDelete={infoForDelete}
-            deleteItem={deleteProject}
-            setShowModal={setShowDeleteMessage}
-          />
-        </Modal>
-        <Modal
-          isOpen={showFeedbackMessage}
-          handleClose={() => {
-            setShowFeedbackMessage(false);
-          }}
-        >
-          <FeedbackMessage infoForFeedback={infoForFeedback} />
-        </Modal>
-        {showLoader && <Loader />}
-      </div>
+          infoForDelete={infoForDelete}
+          deleteItem={deleteProject}
+          setShowModal={setShowDeleteMessage}
+        />
+      </Modal>
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
+      {showLoader && <Loader />}
     </section>
   );
 };

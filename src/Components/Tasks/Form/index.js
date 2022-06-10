@@ -1,7 +1,7 @@
 import styles from './form.module.css';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Button from '../../Shared/Button';
+import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
@@ -103,8 +103,8 @@ const Form = () => {
   };
   return (
     <div className={styles.container}>
-      <form onSubmit={onSubmit}>
-        <h2>{title}</h2>
+      <h2>{title}</h2>
+      <SharedForm onSubmit={onSubmit}>
         <Select
           label="Project"
           id="project"
@@ -155,10 +155,7 @@ const Form = () => {
           required
           placeholder="Hours"
         />
-        <div className={styles.buttonContainer}>
-          <Button theme="secondary" type="submit" className={styles.submitButton} label="Submit" />
-        </div>
-      </form>
+      </SharedForm>
       <Modal
         isOpen={showFeedbackMessage}
         handleClose={() => {

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import styles from './table.module.css';
 import DeleteModal from '../DeleteModal';
 
 const SuperAdminsTable = ({
@@ -18,7 +17,7 @@ const SuperAdminsTable = ({
     id: ''
   });
   return (
-    <table className={styles.table}>
+    <table>
       <thead>
         <tr>
           <th>Name</th>

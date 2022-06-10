@@ -25,7 +25,7 @@ const Admins = () => {
   return (
     <section className={styles.container}>
       <h2>Admins</h2>
-      <Button label="Add new admin +" onClick={() => history.push(`/admins/form/`)} />
+      <Button label="Add new admin" onClick={() => history.push(`/admins/form/`)} />
       <AdminsTable admins={admins} showModal={showModal} setShowModal={setShowModal} />
       {showPreloader && <Preloader />}
     </section>
