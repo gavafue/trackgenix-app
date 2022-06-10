@@ -71,8 +71,8 @@ const TimeSheets = () => {
   });
   return (
     <section className={styles.container}>
-      <h1 className={styles.label}>Timesheets</h1>
-      <div className={styles.buttoncontainer}>
+      <h1>Timesheets</h1>
+      <div>
         <Button onClick={createTimesheet} label="Add new Timesheet" theme="secondary" />
       </div>
       <div>
