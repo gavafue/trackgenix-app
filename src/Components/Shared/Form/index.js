@@ -2,10 +2,10 @@ import React from 'react';
 import styles from './form.module.css';
 import Button from '../Button';
 
-const Form = ({ children }) => {
+const Form = ({ children, onSubmit }) => {
   return (
     <div className={styles.container}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <fieldset className={styles.fieldset}>
           {children}
           <Button type="submit" label="Submit" />

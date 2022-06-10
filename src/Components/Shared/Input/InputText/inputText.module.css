@@ -19,4 +19,6 @@
   width: 100%;
   margin: 1%;
   box-sizing: border-box;
+  border-style: solid;
+  border-radius: 5px;
 }
