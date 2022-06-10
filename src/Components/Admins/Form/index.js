@@ -88,7 +88,7 @@ const Form = () => {
   };
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    if (adminId.id) {
+    if (adminId) {
       setShowPreloader(true);
       fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
@@ -107,7 +107,6 @@ const Form = () => {
         })
         .catch((error) => console.log(error));
     }
-    setShowPreloader(false);
   }, []);
 
   const onSubmit = async (event) => {

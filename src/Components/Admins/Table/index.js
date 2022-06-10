@@ -18,9 +18,7 @@ const AdminsTable = () => {
   const [showPreloader, setShowPreloader] = useState(false);
   const history = useHistory();
   const editData = (id) => {
-    setShowPreloader(true);
     history.push(`/admins/form/${id}`);
-    setShowPreloader(false);
   };
   useEffect(() => {
     setShowPreloader(true);
