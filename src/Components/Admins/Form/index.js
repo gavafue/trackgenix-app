@@ -1,6 +1,7 @@
 import styles from './form.module.css';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
@@ -138,6 +139,10 @@ const Form = () => {
   const monthInput = birthDateValue.substring(8, 10);
   const yearInput = birthDateValue.substring(0, 4);
   const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
+  const history = useHistory();
+  const goBack = () => {
+    history.push('/admins');
+  };
 
   return (
     <div className={styles.container}>
@@ -247,6 +252,7 @@ const Form = () => {
         isOpen={showFeedbackMessage}
         handleClose={() => {
           setShowFeedbackMessage(false);
+          goBack();
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
