@@ -72,7 +72,7 @@ const SuperAdmins = () => {
     <section className={styles.container}>
       <h1>Super Admins</h1>
       <div className={styles.buttonContainer}>
-        <Button onClick={createSuperAdmin} label="Add Super Admin" theme="secondary" />
+        <Button onClick={createSuperAdmin} label="Add new super admin" theme="secondary" />
       </div>
       <Table
         data={superAdminData}

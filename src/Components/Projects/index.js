@@ -65,7 +65,7 @@ const Projects = () => {
       <h2>Projects</h2>
       <div>
         <Button
-          label="Add a Project"
+          label="Add new project"
           theme="secondary"
           onClick={() => history.push(`/projects/form`)}
         />

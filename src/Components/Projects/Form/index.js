@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import SharedForm from '../../Shared/Form';
 import InputText from '../../Shared/Input/InputText';
 import InputSelect from '../../Shared/Input/InputSelect';
 import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Button from '../../Shared/Button';
 import Loader from '../../Shared/Preloader';
 
 const Form = () => {
@@ -134,7 +134,7 @@ const Form = () => {
     <div className={styles.container}>
       {showLoader && <Loader />}
       <h2>{title}</h2>
-      <form onSubmit={onSubmit} className={styles.form}>
+      <SharedForm onSubmit={onSubmit}>
         <InputText
           name="Name"
           type="text"
@@ -222,8 +222,7 @@ const Form = () => {
           placeholder="Write the rate"
           value={membersRateValue}
         />
-        <Button type="submit" label="Submit" theme="secondary"></Button>
-      </form>
+      </SharedForm>
       <Modal
         isOpen={showFeedbackMessage}
         handleClose={() => {

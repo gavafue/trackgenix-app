@@ -1,15 +1,7 @@
 .container {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-}
-.container form {
-  width: 30%;
-}
-
-.buttonContainer {
-  margin: 5%;
-  width: 40%;
+  justify-content: center;
+  width: 100%;
 }
