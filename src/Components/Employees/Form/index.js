@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Modal from '../../Shared/Modal';
-import Button from '../../Shared/Button';
 import styles from './form.module.css';
 import Loader from '../../Shared/Preloader';
 
@@ -133,7 +133,7 @@ const Form = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{title}</h1>
-      <form onSubmit={onSubmit}>
+      <SharedForm onSubmit={onSubmit}>
         <Input
           className={styles.input}
           id={employee.id}
@@ -235,14 +235,7 @@ const Form = () => {
           onChange={onChangePhotoValue}
           required
         />
-        <div className={styles.button}>
-          <Button
-            label={employee.id ? 'Update Employee' : 'Add Employee'}
-            theme="secondary"
-            type="submit"
-          />
-        </div>
-      </form>
+      </SharedForm>
       <Modal
         isOpen={showFeedbackMessage}
         handleClose={() => {

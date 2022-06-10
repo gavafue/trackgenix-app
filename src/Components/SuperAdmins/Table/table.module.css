@@ -1,34 +1,7 @@
-table {
-    border: 2px solid #EA3354;
-    background-color: #EEE7DB;
-    width: 80%;
-    text-align: center;
-    border-collapse: collapse;
-  }
-  table td, table th {
-    border: 1px solid #AAAAAA;
-    padding: 3px 2px;
-  }
-  table tbody td {
-    font-size: 13px;
-  }
-  table tr:nth-child(even) {
-    background: #F5C8BF;
-  }
-  thead {
-    background: #EA3354;
-  }
-  table thead th {
-    font-size: 19px;
-    font-weight: bold;
-    color: #FFFFFF;
-    text-align: center;
-    border-left: 2px solid #EA3354;
-  }
-  table thead th:first-child {
-    border-left: none;
-  }
-  
-  .row {
-  background: #EA3354;
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import SharedForm from '../../Shared/Form';
 import styles from './form.module.css';
 import Select from '../../Shared/Input/InputSelect';
 import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Button from '../../Shared/Button';
 import Preloader from '../../Shared/Preloader';
 
 const URL = process.env.REACT_APP_API_URL;
@@ -164,85 +164,80 @@ const Form = () => {
   };
 
   return (
-    <div>
-      <form className={styles.container} onSubmit={onSubmit}>
-        <h2>{title}</h2>
-        <fieldset className={styles.timesheetForm}>
-          <Select
-            label="Project"
-            arrayToMap={arrayToMapProjects}
-            id="project"
-            name="project"
-            value={projectValue}
-            onChange={onChangeProjectSelect}
-            placeholder="Choose the project"
-            required
-          />
-          <Select
-            label="Employees"
-            arrayToMap={arrayToMapEmployees}
-            id="employee"
-            name="employee"
-            value={employeeValue}
-            onChange={onChangeEmployeeSelect}
-            placeholder="Choose the employee"
-            required
-          />
-          <Input
-            label="Week Sprint"
-            id="weeksprint"
-            name="weeksprint"
-            type="text"
-            placeholder="Write the week sprint"
-            value={weekSprintValue}
-            onChange={onChangeWeekSprint}
-            required
-          />
-          <Input
-            label="Date"
-            id="date"
-            name="date"
-            type="date"
-            placeholder="Write the date"
-            value={dateFormat}
-            onChange={onChangeDate}
-            required
-          />
-          <Input
-            label="Hours worked"
-            type="number"
-            id="hoursWorked"
-            name="hoursWorked"
-            value={hoursWorkedValue}
-            placeholder="Write the hours worked"
-            onChange={onChangeHoursWork}
-            required
-          />
-          <Input
-            label="Project Hours"
-            id="projectHours"
-            name="projectHours"
-            type="number"
-            placeholder="Write the project hours"
-            value={projectHoursValue}
-            onChange={onChangeProjectHours}
-            required
-          />
-          <Input
-            label="Work description"
-            id="workDescription"
-            name="workDescription"
-            type="text"
-            placeholder="Write the work description"
-            value={workDescriptionValue}
-            onChange={onChangeWorkDescription}
-            required
-          />
-        </fieldset>
-        <div className={styles.buttoncontainer}>
-          <Button type="submit" label="Submit" theme="secondary" />
-        </div>
-      </form>
+    <div className={styles.container}>
+      <h2>{title}</h2>
+      <SharedForm onSubmit={onSubmit}>
+        <Select
+          label="Project"
+          arrayToMap={arrayToMapProjects}
+          id="project"
+          name="project"
+          value={projectValue}
+          onChange={onChangeProjectSelect}
+          placeholder="Choose the project"
+          required
+        />
+        <Select
+          label="Employees"
+          arrayToMap={arrayToMapEmployees}
+          id="employee"
+          name="employee"
+          value={employeeValue}
+          onChange={onChangeEmployeeSelect}
+          placeholder="Choose the employee"
+          required
+        />
+        <Input
+          label="Week Sprint"
+          id="weeksprint"
+          name="weeksprint"
+          type="text"
+          placeholder="Write the week sprint"
+          value={weekSprintValue}
+          onChange={onChangeWeekSprint}
+          required
+        />
+        <Input
+          label="Date"
+          id="date"
+          name="date"
+          type="date"
+          placeholder="Write the date"
+          value={dateFormat}
+          onChange={onChangeDate}
+          required
+        />
+        <Input
+          label="Hours worked"
+          type="number"
+          id="hoursWorked"
+          name="hoursWorked"
+          value={hoursWorkedValue}
+          placeholder="Write the hours worked"
+          onChange={onChangeHoursWork}
+          required
+        />
+        <Input
+          label="Project Hours"
+          id="projectHours"
+          name="projectHours"
+          type="number"
+          placeholder="Write the project hours"
+          value={projectHoursValue}
+          onChange={onChangeProjectHours}
+          required
+        />
+        <Input
+          label="Work description"
+          id="workDescription"
+          name="workDescription"
+          type="text"
+          placeholder="Write the work description"
+          value={workDescriptionValue}
+          onChange={onChangeWorkDescription}
+          required
+        />
+      </SharedForm>
       <Modal
         isOpen={showFeedbackMessage}
         handleClose={() => {

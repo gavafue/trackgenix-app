@@ -66,7 +66,7 @@ function Employees() {
     <section className={styles.container}>
       <h2 className={styles.title}>Employees</h2>
       <div className={styles.button}>
-        <Button label="Add new employee" theme="secondary" onClick={createEmployee} />
+        <Button label="Add new employee" onClick={createEmployee} />
       </div>
       <div>
         <Table
