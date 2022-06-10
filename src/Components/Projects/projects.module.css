@@ -1,64 +1,22 @@
+h2{
+  text-align: center;
+}
 .container {
   flex: 8;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
 }
 
-table {
-  border: 2px solid #EA3354;
-  background-color: #EEE7DB;
+.indexTableContainer {
   width: 80%;
-  text-align: center;
-  border-collapse: collapse;
-  font-weight: bold;
-}
-table td, table th {
-  border: 1px solid #AAAAAA;
-  padding: 3px 2px;
-}
-table tbody td {
-  font-size: 13px;
-}
-table tr:nth-child(even) {
-  background: #F5C8BF;
-}
-table thead {
-  background: #EA3354;
-}
-table thead th {
-  font-size: 19px;
-  font-weight: bold;
-  color: #FFFFFF;
-  text-align: center;
-  border-left: 2px solid #EA3354;
-}
-table thead th:first-child {
-  border-left: none;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
 }
 
-.smallBtn {
-  margin:1%;
-  background-color: #EA3354;
-  color:antiquewhite;
-  border-radius: 10px;
-  border: 1px solid #000;
-}
-
-.addBtn{
-  align-self: flex-end;
-  margin-top: 1%;
-  margin-right: 10%;
-  width: 10%;
-  padding: 0.5%;
-  background-color: #EA3354;
-  border-radius: 10px;
-  border: 1px solid #000;
-  color: #fff;
-}
-
-.addBtn a{
-  text-decoration: none;
-  color:#fff;
+.buttonContainer {
+  width: 150px;
+  margin: 10px
+  ;
 }

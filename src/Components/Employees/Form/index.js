@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Input from '../../Shared/Input/InputText';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Modal from '../../Shared/Modal';
+import Button from '../../Shared/Button';
 import styles from './form.module.css';
-import Input from './Input/Text';
-import FeedbackModal from '../FeedbackModal';
+import Loader from '../../Shared/Preloader';
+
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
@@ -13,22 +18,17 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
-  const [contentFeedbackModal, setContentFeedbackModal] = useState({
-    title: '',
-    description: ''
-  });
-  const [title, setTitle] = useState('Add an employee');
-  const [idInput, setIdInput] = useState('');
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
 
-  const querystring = window.location.search;
-  const params = new URLSearchParams(querystring);
-  const paramEmployeeId = params.get('employeeId');
-  console.log(paramEmployeeId);
+  const employee = useParams();
+
+  const title = employee.id ? `${nameValue} ${lastNameValue}` : 'Add Employee';
   const options = {
-    method: paramEmployeeId ? 'PUT' : 'POST',
-    url: paramEmployeeId ? `${URL}/employees/${paramEmployeeId}` : `${URL}/employees`,
+    method: employee.id ? 'PUT' : 'POST',
+    url: employee.id ? `${URL}/employees/${employee.id}` : `${URL}/employees`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -46,9 +46,11 @@ const Form = () => {
       active: false
     })
   };
+
   useEffect(() => {
-    if (paramEmployeeId) {
-      fetch(`${URL}/employees/${paramEmployeeId}`)
+    if (employee.id) {
+      setShowLoader(true);
+      fetch(`${URL}/employees/${employee.id}`)
         .then((response) => response.json())
         .then((data) => {
           setNameValue(data.data.firstName);
@@ -61,8 +63,7 @@ const Form = () => {
           setTelephoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setCountryValue(data.data.country);
-          setTitle(`Editing ${nameValue} ${lastNameValue} information.`);
-          setIdInput(<Input name="employee-id" type="text" disabled value={paramEmployeeId} />);
+          setShowLoader(false);
         })
         .catch((error) => console.log(error));
     }
@@ -70,25 +71,29 @@ const Form = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    setShowLoader(true);
     let correctStatus;
     fetch(options.url, options)
       .then((response) => {
         correctStatus = response.status === 201 || response.status === 200;
+        setShowLoader(false);
         return response.json();
       })
       .then((response) => {
         if (correctStatus) {
-          setContentFeedbackModal({
+          setInfoForFeedback({
             title: 'Request done!',
             description: response.message
           });
-          setShowFeedbackModal(true);
+          setShowFeedbackMessage(true);
+          setShowLoader(false);
         } else {
-          setContentFeedbackModal({
+          setInfoForFeedback({
             title: 'Something went wrong',
             description: response.message
           });
-          setShowFeedbackModal(true);
+          setShowFeedbackMessage(true);
+          setShowLoader(false);
         }
       })
       .catch((error) => console.log(error));
@@ -127,10 +132,12 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      <h1>{title}</h1>
+      <h1 className={styles.title}>{title}</h1>
       <form onSubmit={onSubmit}>
-        {idInput}
         <Input
+          className={styles.input}
+          id={employee.id}
+          label="First Name"
           name="first-name"
           type="text"
           placeholder="Write your name."
@@ -139,7 +146,9 @@ const Form = () => {
           required
         />
         <Input
+          label="Last Name"
           name="last-name"
+          id="last-name"
           type="text"
           placeholder="Write your last name."
           value={lastNameValue}
@@ -147,23 +156,29 @@ const Form = () => {
           required
         />
         <Input
+          label="E-mail"
           name="email"
-          type="text"
+          id="email"
+          type="email"
           placeholder="Write your email."
           value={emailValue}
           onChange={onChangeEmailValue}
           required
         />
         <Input
+          label="Password"
           name="password"
-          type="text"
+          id="password"
+          type="password"
           placeholder="Write your password."
           value={passwordValue}
           onChange={onChangePasswordValue}
           required
         />
         <Input
+          label="Date of birth"
           name="birthday"
+          id="birthday"
           type="text"
           placeholder="Write your birthday on format dd/mm/yyyy"
           value={birthdayValue}
@@ -171,15 +186,19 @@ const Form = () => {
           required
         />
         <Input
+          label="Phone"
           name="phone"
-          type="text"
+          id="phone"
+          type="telephone"
           placeholder="Write your telephone."
           value={telephoneValue}
           onChange={onChangeTelephoneValue}
           required
         />
         <Input
+          label="Country"
           name="country"
+          id="country"
           type="text"
           placeholder="Write your country."
           value={countryValue}
@@ -187,7 +206,9 @@ const Form = () => {
           required
         />
         <Input
+          label="City"
           name="city"
+          id="city"
           type="text"
           placeholder="Write your city."
           value={cityValue}
@@ -195,32 +216,42 @@ const Form = () => {
           required
         />
         <Input
+          label="Postal Code"
           name="ZIP"
+          id="ZIP"
           type="text"
-          placeholder="Write your city."
+          placeholder="Write your postal code."
           value={zipValue}
           onChange={onChangeZipValue}
           required
         />
         <Input
+          label="Profile picture"
           name="profile-picture"
+          id="profile-picture"
           type="text"
           placeholder="Write your profile picture url."
           value={photoValue}
           onChange={onChangePhotoValue}
           required
         />
-        <button type="submit" className={styles.button}>
-          Submit
-        </button>
+        <div className={styles.button}>
+          <Button
+            label={employee.id ? 'Update Employee' : 'Add Employee'}
+            theme="secondary"
+            type="submit"
+          />
+        </div>
       </form>
-      {showFeedbackModal && (
-        <FeedbackModal
-          feedbackTitle={contentFeedbackModal.title}
-          messageContent={contentFeedbackModal.description}
-          setShowFeedbackModal={setShowFeedbackModal}
-        />
-      )}
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
+      {showLoader && <Loader />}
     </div>
   );
 };

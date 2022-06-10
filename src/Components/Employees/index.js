@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
 import Table from '../Shared/Table';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
-const URL = process.env.REACT_APP_API_URL;
+import Button from '../Shared/Button';
+import Loader from '../Shared/Preloader';
 
-const editData = (string) => {
-  window.location = `/employees/form?employeeId=${string}`;
-};
+const URL = process.env.REACT_APP_API_URL;
 
 function Employees() {
   const [employees, saveEmployees] = useState([]);
@@ -16,22 +16,32 @@ function Employees() {
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
-  // console.log(infoForFeedback);
-  // console.log(infoForDelete);
+  const [showLoader, setShowLoader] = useState(false);
+
+  const history = useHistory();
+  const editData = (id) => {
+    history.push(`/employees/form/${id}`);
+  };
+  const createEmployee = () => {
+    history.push('/employees/form');
+  };
   useEffect(() => {
+    setShowLoader(true);
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
         saveEmployees(data.data);
+        setShowLoader(false);
       })
       .catch((error) => console.log(error));
   }, []);
 
-  const deleteEmployee = (string) => {
+  const deleteEmployee = (employeeId) => {
     const options = {
       method: 'DELETE',
-      url: `${URL}/employees/${string}`
+      url: `${URL}/employees/${employeeId}`
     };
+    setShowLoader(true);
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -40,21 +50,24 @@ function Employees() {
             title: 'Something went wrong',
             description: response.message
           });
-          setShowFeedbackMessage(true);
         } else {
           setInfoForFeedback({
             title: 'Request done!',
             description: response.message
           });
-          saveEmployees(employees.filter((employee) => string !== employee._id));
+          saveEmployees(employees.filter((employee) => employeeId !== employee.employeeId));
           setShowFeedbackMessage(true);
+          setShowLoader(false);
         }
       })
       .catch((error) => console.log(error));
   };
   return (
-    <section>
-      <h2>Employees</h2>
+    <section className={styles.container}>
+      <h2 className={styles.title}>Employees</h2>
+      <div className={styles.button}>
+        <Button label="Add new employee" theme="secondary" onClick={createEmployee} />
+      </div>
       <div>
         <Table
           data={employees}
@@ -88,10 +101,8 @@ function Employees() {
         >
           <FeedbackMessage infoForFeedback={infoForFeedback} />
         </Modal>
+        {showLoader && <Loader />}
       </div>
-      <a href="/employees/form" className={styles.button}>
-        Add new employee
-      </a>
     </section>
   );
 }
