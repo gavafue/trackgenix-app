@@ -36,10 +36,10 @@ function Employees() {
       .catch((error) => console.log(error));
   }, []);
 
-  const deleteEmployee = (_id) => {
+  const deleteEmployee = (employeeId) => {
     const options = {
       method: 'DELETE',
-      url: `${URL}/employees/${_id}`
+      url: `${URL}/employees/${employeeId}`
     };
     setShowLoader(true);
     fetch(options.url, options)
@@ -55,7 +55,7 @@ function Employees() {
             title: 'Request done!',
             description: response.message
           });
-          saveEmployees(employees.filter((employee) => _id !== employee._id));
+          saveEmployees(employees.filter((employee) => employeeId !== employee.employeeId));
           setShowFeedbackMessage(true);
           setShowLoader(false);
         }

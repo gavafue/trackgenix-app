@@ -23,12 +23,12 @@ const Form = () => {
   const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
 
-  const paramEmployeeId = useParams();
+  const employee = useParams();
 
-  const title = paramEmployeeId.id ? `${nameValue} ${lastNameValue}` : 'Add Employee';
+  const title = employee.id ? `${nameValue} ${lastNameValue}` : 'Add Employee';
   const options = {
-    method: paramEmployeeId.id ? 'PUT' : 'POST',
-    url: paramEmployeeId.id ? `${URL}/employees/${paramEmployeeId.id}` : `${URL}/employees`,
+    method: employee.id ? 'PUT' : 'POST',
+    url: employee.id ? `${URL}/employees/${employee.id}` : `${URL}/employees`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -48,9 +48,9 @@ const Form = () => {
   };
 
   useEffect(() => {
-    if (paramEmployeeId.id) {
+    if (employee.id) {
       setShowLoader(true);
-      fetch(`${URL}/employees/${paramEmployeeId.id}`)
+      fetch(`${URL}/employees/${employee.id}`)
         .then((response) => response.json())
         .then((data) => {
           setNameValue(data.data.firstName);
@@ -136,7 +136,7 @@ const Form = () => {
       <form onSubmit={onSubmit}>
         <Input
           className={styles.input}
-          id={paramEmployeeId.id}
+          id={employee.id}
           label="First Name"
           name="first-name"
           type="text"
@@ -237,7 +237,7 @@ const Form = () => {
         />
         <div className={styles.button}>
           <Button
-            label={paramEmployeeId.id ? 'Update Employee' : 'Add Employee'}
+            label={employee.id ? 'Update Employee' : 'Add Employee'}
             theme="secondary"
             type="submit"
           />
