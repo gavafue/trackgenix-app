@@ -1,65 +1,112 @@
-import React, { useState } from 'react';
-// import styles from '../admins.module.css';
-import Button from '../../Shared/Button';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import styles from '../admins.module.css';
+import Table from '../../Shared/Table';
 import Modal from '../../Shared/Modal';
+import DeleteMessage from '../../Shared/DeleteMessage';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Button from '../../Shared/Button';
+import Preloader from '../../Shared/Preloader';
 
-const AdminsTable = ({ admins }) => {
-  const OnClickEdit = (string) => {
-    window.location = `/admins/form?adminId=${string}`;
+const AdminsTable = () => {
+  const URL = process.env.REACT_APP_API_URL;
+  const [admins, setAdmins] = useState([]);
+  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [infoForDelete, setInfoForDelete] = useState('');
+  const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showPreloader, setShowPreloader] = useState(false);
+  const history = useHistory();
+  const editData = (id) => {
+    setShowPreloader(true);
+    history.push(`/admins/form/${id}`);
+    setShowPreloader(false);
   };
-  const [isDeleting, setIsDeleting] = useState(false);
+  useEffect(() => {
+    setShowPreloader(true);
+    fetch(`${URL}/admins`)
+      .then((res) => res.json())
+      .then((data) => {
+        setAdmins(data.data);
+        setShowPreloader(false);
+      })
+      .catch((error) => console.log(error));
+    setShowPreloader(false);
+  }, []);
+  const deleteAdmin = (string) => {
+    const options = {
+      method: 'DELETE',
+      url: `${URL}/admins/${string}`
+    };
+    setShowPreloader(true);
+    fetch(options.url, options)
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.error === true) {
+          setInfoForFeedback({
+            title: 'Something went wrong',
+            description: response.message
+          });
+          setShowFeedbackMessage(true);
+          setShowPreloader(false);
+        } else {
+          setInfoForFeedback({
+            title: 'Request done!',
+            description: response.message
+          });
+          setAdmins(admins.filter((admin) => string !== admin._id));
+          setShowFeedbackMessage(true);
+          setShowPreloader(false);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+  const adminData = admins.map((admin) => {
+    return {
+      name: admin.name,
+      lastName: admin.lastName,
+      phone: admin.phone,
+      email: admin.email,
+      moreInfo: <Button label="..." disabled={true} theme="disabled" />,
+      ...admin,
+      active: admin.active ? 'Active' : 'Inactive'
+    };
+  });
   return (
-    <section /*className={styles.container}*/>
-      <h2>Admins</h2>
-      <table>
-        <thead>
-          <tr>
-            <th id="name">Name</th>
-            <th id="lastName">Last Name</th>
-            <th id="phone">Phone</th>
-            <th id="e-mail">E-mail</th>
-            <th id="status">Active</th>
-            <th id="moreInfo">Show more</th>
-            <th id="edit">Edit</th>
-            <th id="delete">Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {admins.map((admin) => {
-            return (
-              <tr key={admin._id}>
-                <td>{admin.name}</td>
-                <td>{admin.lastName}</td>
-                <td>{admin.phone}</td>
-                <td>{admin.email}</td>
-                <td>{JSON.stringify(admin.active)}</td>
-                <td>
-                  <input type="button" value="..." />
-                </td>
-                <td>
-                  <Button label="Edit" onClick={() => OnClickEdit(admin._id)} />
-                </td>
-                <td>
-                  <Button
-                    label="Delete"
-                    onClick={() => {
-                      setIsDeleting(true);
-                    }}
-                  />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <section className={styles.container}>
+      <Table
+        data={adminData}
+        headersName={['Name', 'Last Name', 'Phone', 'E-mail', 'Status', 'More information']}
+        headers={['name', 'lastName', 'phone', 'email', 'active', 'moreInfo']}
+        deleteAdmin={deleteAdmin}
+        editData={editData}
+        setShowModal={setShowDeleteMessage}
+        setInfoForDelete={setInfoForDelete}
+      />
       <Modal
-        isOpen={isDeleting}
+        isOpen={showDeleteMessage}
         handleClose={() => {
-          setIsDeleting(false);
+          setShowDeleteMessage(false);
         }}
       >
-        <p>A proper pseudo title for this modal</p>
+        <DeleteMessage
+          handleClose={() => {
+            setShowDeleteMessage(false);
+          }}
+          infoForDelete={infoForDelete}
+          deleteItem={deleteAdmin}
+          setShowModal={setShowDeleteMessage}
+        />
       </Modal>
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
+      {showPreloader && <Preloader />}
     </section>
   );
 };
