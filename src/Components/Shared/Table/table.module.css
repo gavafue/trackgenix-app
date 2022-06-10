@@ -1,8 +1,9 @@
 .container{
-  margin:auto;
+  margin: 1%;
   background-color:#fff;
   border:#37386720 2px solid;
   border-radius: 5px;
+  text-align: center;
 }
 .container td{
   margin:none;

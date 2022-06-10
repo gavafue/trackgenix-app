@@ -6,14 +6,3 @@
   align-items: center;
   width: 100%;
 }
-
-.container table{
-  width: 80%;
-  height: 90%;
-  text-align: center;
-  border-collapse: collapse;
-}
-
-.button:hover {
-  background-color: grey;
-}
