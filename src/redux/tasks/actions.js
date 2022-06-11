@@ -4,7 +4,11 @@ import {
   GET_TASKS_PENDING,
   DELETE_TASK_ERROR,
   DELETE_TASK_PENDING,
-  DELETE_TASK_SUCCESS
+  DELETE_TASK_SUCCESS,
+  SET_INFO_FOR_FEEDBACK,
+  SET_INFO_FOR_DELETE,
+  SHOW_DELETE_MESSAGE,
+  SHOW_FEEDBACK_MESSAGE
 } from './constants';
 
 export const getTasksSuccess = (tasks) => ({
@@ -21,9 +25,9 @@ export const getTasksError = (error) => ({
   payload: error
 });
 
-export const deleteTaskSuccess = (taskId) => ({
+export const deleteTaskSuccess = (deleteInfo) => ({
   type: DELETE_TASK_SUCCESS,
-  payload: taskId
+  payload: deleteInfo
 });
 
 export const deleteTaskPending = () => ({
@@ -33,4 +37,24 @@ export const deleteTaskPending = () => ({
 export const deleteTaskError = (error) => ({
   type: DELETE_TASK_ERROR,
   payload: error
+});
+
+export const setInfoForFeedback = (message) => ({
+  type: SET_INFO_FOR_FEEDBACK,
+  payload: message
+});
+
+export const setInfoForDelete = (id) => ({
+  type: SET_INFO_FOR_DELETE,
+  payload: id
+});
+
+export const showDeleteMessage = (boolean) => ({
+  type: SHOW_DELETE_MESSAGE,
+  payload: boolean
+});
+
+export const showFeedbackMessage = (boolean) => ({
+  type: SHOW_FEEDBACK_MESSAGE,
+  payload: boolean
 });
