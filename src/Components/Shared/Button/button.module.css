@@ -14,6 +14,11 @@
   min-width: 80px;
 }
 
+.primary:hover {
+  cursor: pointer;
+  background-color: #AACE9B50;
+}
+
 .secondary {
   width: auto;
   border-radius: 4px;
