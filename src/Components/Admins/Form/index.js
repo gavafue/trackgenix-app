@@ -88,7 +88,7 @@ const Form = () => {
   };
   const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    if (adminId) {
+    if (adminId.id) {
       setShowPreloader(true);
       fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
