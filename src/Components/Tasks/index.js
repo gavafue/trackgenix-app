@@ -1,15 +1,15 @@
 import styles from './tasks.module.css';
 import Table from '../Shared/Table';
-// import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-// import DeleteMessage from '../Shared/DeleteMessage';
-// import Modal from '../Shared/Modal';
-// import FeedbackMessage from '../Shared/FeedbackMessage';
+import DeleteMessage from '../Shared/DeleteMessage';
+import Modal from '../Shared/Modal';
+import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import Preloader from '../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import { getTasks } from '../../redux/tasks/thunks';
+import { deleteTaskError, deleteTaskSuccess } from '../../redux/tasks/actions';
 
 const Tasks = () => {
   const dispatch = useDispatch();
@@ -17,15 +17,15 @@ const Tasks = () => {
   const pending = useSelector((state) => state.tasks.pending);
 
   // const [tasks, setTasks] = useState([]);
-  // const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  // const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  // const [infoForDelete, setInfoForDelete] = useState('');
-  // const [infoForFeedback, setInfoForFeedback] = useState({});
+  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  const [infoForDelete, setInfoForDelete] = useState('');
+  const [infoForFeedback, setInfoForFeedback] = useState({});
   // const [showPreloader, setShowPreloader] = useState(false);
   const history = useHistory();
-  // const editData = (id) => {
-  //   history.push(`/tasks/form/${id}`);
-  // };
+  const editData = (id) => {
+    history.push(`/tasks/form/${id}`);
+  };
   const createTask = () => {
     history.push('/tasks/form/');
   };
@@ -33,7 +33,7 @@ const Tasks = () => {
     dispatch(getTasks());
   }, []);
 
-  // const url = `${process.env.REACT_APP_API_URL}`;
+  const url = `${process.env.REACT_APP_API_URL}`;
   // useEffect(() => {
   //   // setShowPreloader(true);
   //   // fetch(`${url}/tasks`)
@@ -45,33 +45,31 @@ const Tasks = () => {
   //     })
   //     .catch((err) => console.log(err));
   // }, []);
-  // console.log(tasks);
-  //   const deleteTask = (taskId) => {
-  //     const options = {
-  //       method: 'DELETE',
-  //       url: `${url}/tasks/${taskId}`
-  //     };
-  //     setShowPreloader(true);
-  //     fetch(options.url, options)
-  //       .then((response) => response.json())
-  //       .then((response) => {
-  //         if (response.error === true) {
-  //           setInfoForFeedback({
-  //             title: 'Something went wrong',
-  //             description: response.message
-  //           });
-  //         } else {
-  //           setInfoForFeedback({
-  //             title: 'Request done!',
-  //             description: response.message
-  //           });
-  //           setTasks(tasks.filter((task) => taskId !== task._id));
-  //           setShowFeedbackMessage(true);
-  //           setShowPreloader(false);
-  //         }
-  //       })
-  //       .catch((err) => console.log(err));
-  //   };
+  const deleteTask = (taskId) => {
+    const options = {
+      method: 'DELETE',
+      url: `${url}/tasks/${taskId}`
+    };
+    fetch(options.url, options)
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.error === true) {
+          setInfoForFeedback({
+            title: 'Something went wrong',
+            description: response.message
+          });
+          dispatch(deleteTaskError(response.error));
+        } else {
+          setInfoForFeedback({
+            title: 'Request done!',
+            description: response.message
+          });
+          dispatch(deleteTaskSuccess(taskId));
+          setShowFeedbackMessage(true);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   const taskData = tasks.map((task) => ({
     ...task,
     nameProject: task.nameProject?.name || 'Project Not Found'
@@ -87,11 +85,34 @@ const Tasks = () => {
         data={taskData}
         headersName={['Project', 'Week', 'Day', 'Description', 'Hours']}
         headers={['nameProject', 'week', 'day', 'description', 'hours']}
-        // setShowModal={setShowDeleteMessage}
-        // setInfoForDelete={setInfoForDelete}
-        // editData={editData}
-        // deleteTask={deleteTask}
+        setShowModal={setShowDeleteMessage}
+        setInfoForDelete={setInfoForDelete}
+        editData={editData}
+        deleteTask={deleteTask}
       />
+      <Modal
+        isOpen={showDeleteMessage}
+        handleClose={() => {
+          setShowDeleteMessage(false);
+        }}
+      >
+        <DeleteMessage
+          handleClose={() => {
+            setShowDeleteMessage(false);
+          }}
+          infoForDelete={infoForDelete}
+          deleteItem={deleteTask}
+          setShowModal={setShowDeleteMessage}
+        />
+      </Modal>
+      <Modal
+        isOpen={showFeedbackMessage}
+        handleClose={() => {
+          setShowFeedbackMessage(false);
+        }}
+      >
+        <FeedbackMessage infoForFeedback={infoForFeedback} />
+      </Modal>
       {pending && <Preloader />}
     </section>
   );
