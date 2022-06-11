@@ -8,11 +8,8 @@ import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import Preloader from '../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTasks } from '../../redux/tasks/thunks';
+import { getTasks, deleteTask } from '../../redux/tasks/thunks';
 import {
-  deleteTaskError,
-  deleteTaskSuccess,
-  setInfoForFeedback,
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage
@@ -38,32 +35,8 @@ const Tasks = () => {
     dispatch(getTasks());
   }, []);
 
-  const url = `${process.env.REACT_APP_API_URL}`;
-  const deleteTask = (taskId) => {
-    const options = {
-      method: 'DELETE',
-      url: `${url}/tasks/${taskId}`
-    };
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          dispatch(deleteTaskError(response.error));
-          dispatch(
-            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
-          );
-        } else {
-          dispatch(deleteTaskSuccess(taskId));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        }
-      })
-      .catch((err) => console.log(err));
+  const deleteHandler = () => {
+    dispatch(deleteTask(deleteInfo));
   };
   const taskData = tasks.map((task) => ({
     ...task,
@@ -83,7 +56,7 @@ const Tasks = () => {
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         setInfoForDelete={(taskId) => dispatch(setInfoForDelete(taskId))}
         editData={editData}
-        deleteTask={deleteTask}
+        deleteTask={deleteHandler}
       />
       <Modal
         isOpen={showDelete}
@@ -96,7 +69,7 @@ const Tasks = () => {
             dispatch(showDeleteMessage(!showDelete));
           }}
           infoForDelete={deleteInfo}
-          deleteItem={deleteTask}
+          deleteItem={deleteHandler}
           setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         />
       </Modal>
