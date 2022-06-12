@@ -42,7 +42,7 @@ const Tasks = () => {
     ...task,
     nameProject: task.nameProject?.name || 'Project Not Found'
   }));
-  console.log('taskData: ', taskData);
+
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
