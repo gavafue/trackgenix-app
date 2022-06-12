@@ -1,4 +1,3 @@
-//import styles from './table.module.css';
 import DeleteModal from '../DeleteModal';
 import { useState } from 'react';
 
@@ -18,7 +17,7 @@ const TasksTable = ({
   });
   console.log(showFeedBackModal);
   return (
-    <table /*className={styles.table}*/>
+    <table>
       <thead>
         <th>Project</th>
         <th>Week</th>
