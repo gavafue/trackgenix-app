@@ -1,0 +1,60 @@
+import {
+  GET_PROJECTS_SUCCESS,
+  GET_PROJECTS_ERROR,
+  GET_PROJECTS_PENDING,
+  DELETE_PROJECT_ERROR,
+  DELETE_PROJECT_PENDING,
+  DELETE_PROJECT_SUCCESS,
+  SET_INFO_FOR_FEEDBACK,
+  SET_INFO_FOR_DELETE,
+  SHOW_DELETE_MESSAGE,
+  SHOW_FEEDBACK_MESSAGE
+} from './constants';
+
+export const getProjectsSuccess = (tasks) => ({
+  type: GET_PROJECTS_SUCCESS,
+  payload: tasks
+});
+
+export const getProjectsPending = () => ({
+  type: GET_PROJECTS_PENDING
+});
+
+export const getProjectsError = (error) => ({
+  type: GET_PROJECTS_ERROR,
+  payload: error
+});
+
+export const deleteProjectSuccess = (deleteInfo) => ({
+  type: DELETE_PROJECT_SUCCESS,
+  payload: deleteInfo
+});
+
+export const deleteProjectPending = () => ({
+  type: DELETE_PROJECT_PENDING
+});
+
+export const deleteProjectError = (error) => ({
+  type: DELETE_PROJECT_ERROR,
+  payload: error
+});
+
+export const setInfoForFeedback = (message) => ({
+  type: SET_INFO_FOR_FEEDBACK,
+  payload: message
+});
+
+export const setInfoForDelete = (id) => ({
+  type: SET_INFO_FOR_DELETE,
+  payload: id
+});
+
+export const showDeleteMessage = (showDeleteMessage) => ({
+  type: SHOW_DELETE_MESSAGE,
+  payload: showDeleteMessage
+});
+
+export const showFeedbackMessage = (showFeedbackMessage) => ({
+  type: SHOW_FEEDBACK_MESSAGE,
+  payload: showFeedbackMessage
+});
