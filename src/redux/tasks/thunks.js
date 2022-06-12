@@ -1,3 +1,4 @@
+// import { useSelector } from 'react-redux';
 import {
   getTasksSuccess,
   getTasksError,
@@ -8,7 +9,9 @@ import {
   setInfoForFeedback,
   showFeedbackMessage,
   postTaskError,
-  postTaskSuccess
+  postTaskSuccess,
+  editTaskSuccess,
+  editTaskError
 } from './actions';
 
 export const getTasks = () => {
@@ -84,17 +87,26 @@ export const postTask = (options) => {
   };
 };
 
-// export const editTask = (options) => {
-//   return (dispatch) => {
-//     fetch(options.url, options)
-//       .then((response) => response.json())
-//       .then((data) => {
-//         dispatch(setProjectValue(data.data.nameProject._id));
-//         dispatch(setWeekValue(data.data.week));
-//         dispatch(setDayValue(data.data.day));
-//         dispatch(setDescriptionValue(data.data.description));
-//         dispatch(setHoursValue(data.data.hours));
-//       })
-//       .catch((error) => console.log(error));
-//   };
-// };
+export const editTask = (options) => {
+  // const setDayValue = useSelector((state) => state.tasks.list.item.day);
+  // const setProjectValue = options.body.nameProject._id;
+  return (dispatch) => {
+    fetch(options.url, options)
+      .then((response) => response.json())
+      // .then((data) => {
+      //   setProjectValue(data.data.nameProject._id);
+      //   setWeekValue(data.data.week);
+      //   setDayValue(data.data.day);
+      //   setDescriptionValue(data.data.description);
+      //   setHoursValue(data.data.hours);
+      // })
+      .then((response) => {
+        dispatch(editTaskSuccess(response.data));
+        dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+        dispatch(showFeedbackMessage(true));
+      })
+      .catch((error) => {
+        dispatch(editTaskError(error.toString()));
+      });
+  };
+};
