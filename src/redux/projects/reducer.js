@@ -8,7 +8,10 @@ import {
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
-  SHOW_FEEDBACK_MESSAGE
+  SHOW_FEEDBACK_MESSAGE,
+  POST_PROJECT_ERROR,
+  POST_PROJECT_SUCCESS,
+  POST_PROJECT_PENDING
 } from './constants';
 
 const initialState = {
@@ -76,6 +79,23 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         showFeedbackMessage: action.payload
+      };
+    case POST_PROJECT_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+    case POST_PROJECT_SUCCESS:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+    case POST_PROJECT_PENDING:
+      return {
+        ...state,
+        pending: true
       };
     default:
       return state;

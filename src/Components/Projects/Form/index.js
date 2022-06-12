@@ -7,12 +7,19 @@ import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Loader from '../../Shared/Preloader';
+import { useSelector, useDispatch } from 'react-redux';
+import { postProject } from '../../../redux/projects/thunks';
+import { showFeedbackMessage } from '../../../redux/projects/actions';
 
 const Form = () => {
+  const dispatch = useDispatch();
+  const isPending = useSelector((state) => state.projects.pending);
+  const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
+  const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
   const [employees, setEmployees] = useState([]);
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showLoader, setShowLoader] = useState(false);
+  // const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
+  // const [infoForFeedback, setInfoForFeedback] = useState({});
+  // const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
 
   const [nameValue, setNameValue] = useState('');
@@ -56,31 +63,8 @@ const Form = () => {
   const projectId = useParams().id;
   const title = projectId ? `Editing ${nameValue} projects's information.` : 'Add a Project';
 
-  const options = {
-    method: projectId ? 'PUT' : 'POST',
-    url: `${URL}/projects/${projectId ? projectId : ''}`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      name: nameValue,
-      startDate: startDateValue,
-      endDate: endDateValue,
-      description: descriptionValue,
-      client: clientValue,
-      members: [
-        {
-          name: membersValue,
-          role: membersRoleValue,
-          rate: membersRateValue
-        }
-      ],
-      active: activeValue
-    })
-  };
-
   useEffect(() => {
-    setShowLoader(true);
+    // setShowLoader(true);
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
@@ -104,26 +88,34 @@ const Form = () => {
         })
         .catch((err) => console.log(err));
     }
-    setShowLoader(false);
+    // setShowLoader(false);
   }, []);
 
-  const onSubmit = async (event) => {
-    setShowLoader(true);
-    try {
-      event.preventDefault();
-      const res = await fetch(options.url, options);
-      const data = await res.json();
-      if (res.status === 201 || res.status === 200) {
-        setInfoForFeedback({ title: 'Request done!', description: data.message });
-        setShowFeedbackMessage(true);
-      } else {
-        setInfoForFeedback({ title: 'Something went wrong!', description: data.message });
-        setShowFeedbackMessage(true);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    setShowLoader(false);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const options = {
+      method: projectId ? 'PUT' : 'POST',
+      url: `${URL}/projects/${projectId ? projectId : ''}`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: nameValue,
+        startDate: startDateValue,
+        endDate: endDateValue,
+        description: descriptionValue,
+        client: clientValue,
+        members: [
+          {
+            name: membersValue,
+            role: membersRoleValue,
+            rate: membersRateValue
+          }
+        ],
+        active: activeValue
+      })
+    };
+    dispatch(postProject(options));
   };
 
   const arrayToMapEmployees = employees.map((employee) => {
@@ -132,7 +124,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      {showLoader && <Loader />}
+      {isPending && <Loader />}
       <h2>{title}</h2>
       <SharedForm onSubmit={onSubmit}>
         <InputText
@@ -224,12 +216,12 @@ const Form = () => {
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
     </div>
   );

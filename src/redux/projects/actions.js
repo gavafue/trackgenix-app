@@ -8,7 +8,10 @@ import {
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
-  SHOW_FEEDBACK_MESSAGE
+  SHOW_FEEDBACK_MESSAGE,
+  POST_PROJECT_ERROR,
+  POST_PROJECT_SUCCESS,
+  POST_PROJECT_PENDING
 } from './constants';
 
 export const getProjectsSuccess = (tasks) => ({
@@ -57,4 +60,18 @@ export const showDeleteMessage = (showDeleteMessage) => ({
 export const showFeedbackMessage = (showFeedbackMessage) => ({
   type: SHOW_FEEDBACK_MESSAGE,
   payload: showFeedbackMessage
+});
+
+export const postProjectError = (error) => ({
+  type: POST_PROJECT_ERROR,
+  payload: error
+});
+
+export const postProjectSuccess = (task) => ({
+  type: POST_PROJECT_SUCCESS,
+  payload: task
+});
+
+export const postProjectPending = () => ({
+  type: POST_PROJECT_PENDING
 });

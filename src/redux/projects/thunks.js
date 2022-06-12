@@ -6,7 +6,10 @@ import {
   deleteProjectSuccess,
   deleteProjectPending,
   setInfoForFeedback,
-  showFeedbackMessage
+  showFeedbackMessage,
+  postProjectSuccess,
+  postProjectError,
+  postProjectPending
 } from './actions';
 
 export const getProjects = () => {
@@ -51,5 +54,34 @@ export const deleteProject = (projectId) => {
         }
       })
       .catch((err) => console.log(err));
+  };
+};
+
+export const postProject = (options) => {
+  return (dispatch) => {
+    let isValid;
+    dispatch(postProjectPending());
+    fetch(options.url, options)
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (isValid) {
+          dispatch(postProjectSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postProjectError(response.status));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        dispatch(postProjectError(error.toString()));
+      });
   };
 };
