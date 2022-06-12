@@ -7,14 +7,22 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import Loader from '../Shared/Preloader';
+import { useSelector, useDispatch } from 'react-redux';
+import { getTimesheets } from '../../redux/timesheet/thunks';
 
 const TimeSheets = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getTimesheets());
+  }, []);
+  const timesheets = useSelector((state) => state.timesheets.list);
+  const pending = useSelector((state) => state.timesheets.pending);
   const [timeSheets, setTimeSheets] = useState([]);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
   const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showLoader, setShowLoader] = useState(false);
+
   const history = useHistory();
 
   const editData = (id) => {
@@ -25,23 +33,12 @@ const TimeSheets = () => {
     history.push('/time-sheets/form');
   };
 
-  useEffect(() => {
-    setShowLoader(true);
-    fetch(`${process.env.REACT_APP_API_URL}/timesheets`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTimeSheets(data.data);
-        setShowLoader(false);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   const deleteTimesheet = (string) => {
     const options = {
       method: 'DELETE',
       url: `${`${process.env.REACT_APP_API_URL}`}/timesheets/${string}`
     };
-    setShowLoader(true);
+
     fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
@@ -60,15 +57,15 @@ const TimeSheets = () => {
         }
       })
       .catch((err) => console.log(err));
-    setShowLoader(false);
   };
 
-  const timesheetData = timeSheets.map((timeSheet) => {
+  const timesheetData = timesheets.map((timeSheet) => {
     return {
       ...timeSheet,
-      name: timeSheet.project.name
+      name: timeSheet.project?.name
     };
   });
+  console.log(timesheetData);
   return (
     <section className={styles.container}>
       <h1>Timesheets</h1>
@@ -108,7 +105,7 @@ const TimeSheets = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {showLoader && <Loader />}
+      {pending && <Loader />}
     </section>
   );
 };
