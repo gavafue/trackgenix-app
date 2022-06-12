@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
@@ -24,6 +24,10 @@ const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
 
   const employee = useParams();
+  const history = useHistory();
+  const goBack = () => {
+    history.push('/admins');
+  };
 
   const title = employee.id ? `${nameValue} ${lastNameValue}` : 'Add Employee';
   const options = {
@@ -245,6 +249,7 @@ const Form = () => {
         isOpen={showFeedbackMessage}
         handleClose={() => {
           setShowFeedbackMessage(false);
+          goBack();
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />

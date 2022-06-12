@@ -21,7 +21,7 @@ const initialState = {
   showFeedbackMessage: false
 };
 
-export const employeeReducer = (state = initialState, action) => {
+export const employeesReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_EMPLOYEE_PENDING:
       return {
