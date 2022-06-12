@@ -8,7 +8,10 @@ import {
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
-  SHOW_FEEDBACK_MESSAGE
+  SHOW_FEEDBACK_MESSAGE,
+  // SHOW_PRELOADER,
+  POST_TASK_ERROR,
+  POST_TASK_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -76,6 +79,24 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         showFeedbackMessage: action.payload
+      };
+    // case SHOW_PRELOADER:
+    //   return {
+    //     ...state,
+    //     showPreloader: action.payload
+    //   };
+    case POST_TASK_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+
+    case POST_TASK_SUCCESS:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
       };
     default:
       return state;

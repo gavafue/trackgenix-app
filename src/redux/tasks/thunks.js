@@ -6,7 +6,9 @@ import {
   deleteTaskSuccess,
   deleteTaskPending,
   setInfoForFeedback,
-  showFeedbackMessage
+  showFeedbackMessage,
+  postTaskError,
+  postTaskSuccess
 } from './actions';
 
 export const getTasks = () => {
@@ -53,3 +55,46 @@ export const deleteTask = (taskId) => {
       .catch((err) => console.log(err));
   };
 };
+
+export const postTask = (options) => {
+  return (dispatch) => {
+    let isValid;
+    fetch(options.url, options)
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (isValid) {
+          dispatch(postTaskSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postTaskError(response.status));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        dispatch(postTaskError(error.toString()));
+      });
+  };
+};
+
+// export const editTask = (options) => {
+//   return (dispatch) => {
+//     fetch(options.url, options)
+//       .then((response) => response.json())
+//       .then((data) => {
+//         dispatch(setProjectValue(data.data.nameProject._id));
+//         dispatch(setWeekValue(data.data.week));
+//         dispatch(setDayValue(data.data.day));
+//         dispatch(setDescriptionValue(data.data.description));
+//         dispatch(setHoursValue(data.data.hours));
+//       })
+//       .catch((error) => console.log(error));
+//   };
+// };

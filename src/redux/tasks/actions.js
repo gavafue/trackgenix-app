@@ -8,7 +8,15 @@ import {
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
-  SHOW_FEEDBACK_MESSAGE
+  SHOW_FEEDBACK_MESSAGE,
+  // SHOW_PRELOADER,
+  POST_TASK_ERROR,
+  POST_TASK_SUCCESS,
+  SET_PROJECT_VALUE,
+  SET_DAY_VALUE,
+  SET_DESCRIPTION_VALUE,
+  SET_HOURS_VALUE,
+  SET_WEEK_VALUE
 } from './constants';
 
 export const getTasksSuccess = (tasks) => ({
@@ -57,4 +65,44 @@ export const showDeleteMessage = (showDeleteMessage) => ({
 export const showFeedbackMessage = (showFeedbackMessage) => ({
   type: SHOW_FEEDBACK_MESSAGE,
   payload: showFeedbackMessage
+});
+
+// export const showPreloader = (boolean) => ({
+//   type: SHOW_PRELOADER,
+//   payload: boolean
+// });
+
+export const postTaskError = (error) => ({
+  type: POST_TASK_ERROR,
+  payload: error
+});
+
+export const postTaskSuccess = (task) => ({
+  type: POST_TASK_SUCCESS,
+  payload: task
+});
+
+export const setProjectValue = (data) => ({
+  type: SET_PROJECT_VALUE,
+  payload: data
+});
+
+export const setWeekValue = (data) => ({
+  type: SET_WEEK_VALUE,
+  payload: data
+});
+
+export const setDayValue = (data) => ({
+  type: SET_DAY_VALUE,
+  payload: data
+});
+
+export const setDescriptionValue = (data) => ({
+  type: SET_DESCRIPTION_VALUE,
+  payload: data
+});
+
+export const setHoursValue = (data) => ({
+  type: SET_HOURS_VALUE,
+  payload: data
 });

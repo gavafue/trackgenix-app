@@ -42,7 +42,6 @@ const Tasks = () => {
     ...task,
     nameProject: task.nameProject?.name || 'Project Not Found'
   }));
-
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
