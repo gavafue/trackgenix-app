@@ -49,12 +49,12 @@ export const setInfoForDelete = (id) => ({
   payload: id
 });
 
-export const showDeleteMessage = (boolean) => ({
+export const showDeleteMessage = (showDeleteMessage) => ({
   type: SHOW_DELETE_MESSAGE,
-  payload: boolean
+  payload: showDeleteMessage
 });
 
-export const showFeedbackMessage = (boolean) => ({
+export const showFeedbackMessage = (showFeedbackMessage) => ({
   type: SHOW_FEEDBACK_MESSAGE,
-  payload: boolean
+  payload: showFeedbackMessage
 });

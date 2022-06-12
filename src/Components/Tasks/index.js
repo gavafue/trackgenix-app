@@ -18,7 +18,7 @@ import {
 const Tasks = () => {
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.tasks.list);
-  const pending = useSelector((state) => state.tasks.pending);
+  const isPending = useSelector((state) => state.tasks.pending);
   const feedbackInfo = useSelector((state) => state.tasks.infoForFeedback);
   const deleteInfo = useSelector((state) => state.tasks.infoForDelete);
   const showDelete = useSelector((state) => state.tasks.showDeleteMessage);
@@ -81,7 +81,7 @@ const Tasks = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {pending && <Preloader />}
+      {isPending && <Preloader />}
     </section>
   );
 };

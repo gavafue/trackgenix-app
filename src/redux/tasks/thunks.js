@@ -4,9 +4,10 @@ import {
   getTasksPending,
   deleteTaskError,
   deleteTaskSuccess,
-  deleteTaskPending
+  deleteTaskPending,
+  setInfoForFeedback,
+  showFeedbackMessage
 } from './actions';
-import { setInfoForFeedback, showFeedbackMessage } from './actions';
 
 export const getTasks = () => {
   return (dispatch) => {
@@ -33,7 +34,7 @@ export const deleteTask = (taskId) => {
     return fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
-        if (response.error === true) {
+        if (response.error) {
           dispatch(deleteTaskError(response.error));
           dispatch(
             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
