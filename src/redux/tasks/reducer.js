@@ -4,13 +4,21 @@ import {
   GET_TASKS_ERROR,
   DELETE_TASK_ERROR,
   DELETE_TASK_PENDING,
-  DELETE_TASK_SUCCESS
+  DELETE_TASK_SUCCESS,
+  SET_INFO_FOR_FEEDBACK,
+  SET_INFO_FOR_DELETE,
+  SHOW_DELETE_MESSAGE,
+  SHOW_FEEDBACK_MESSAGE
 } from './constants';
 
 const initialState = {
   list: [],
   pending: false,
-  error: ''
+  error: '',
+  infoForFeedback: { title: '', description: '' },
+  showDeleteMessage: false,
+  infoForDelete: '',
+  showFeedbackMessage: false
 };
 
 export const tasksReducer = (state = initialState, action) => {
@@ -48,6 +56,26 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
         pending: false
+      };
+    case SET_INFO_FOR_FEEDBACK:
+      return {
+        ...state,
+        infoForFeedback: action.payload
+      };
+    case SET_INFO_FOR_DELETE:
+      return {
+        ...state,
+        infoForDelete: action.payload
+      };
+    case SHOW_DELETE_MESSAGE:
+      return {
+        ...state,
+        showDeleteMessage: action.payload
+      };
+    case SHOW_FEEDBACK_MESSAGE:
+      return {
+        ...state,
+        showFeedbackMessage: action.payload
       };
     default:
       return state;
