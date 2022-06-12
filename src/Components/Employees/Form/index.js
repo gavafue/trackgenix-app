@@ -130,6 +130,11 @@ const Form = () => {
     setBirthdayValue(e.target.value);
   };
 
+  const dayInput = birthdayValue.substring(5, 7);
+  const monthInput = birthdayValue.substring(8, 10);
+  const yearInput = birthdayValue.substring(0, 4);
+  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{title}</h1>
@@ -179,9 +184,9 @@ const Form = () => {
           label="Date of birth"
           name="birthday"
           id="birthday"
-          type="text"
+          type="date"
           placeholder="Write your birthday on format dd/mm/yyyy"
-          value={birthdayValue}
+          value={dateFormat}
           onChange={onChangeBirthdayValue}
           required
         />
@@ -189,7 +194,7 @@ const Form = () => {
           label="Phone"
           name="phone"
           id="phone"
-          type="telephone"
+          type="tel"
           placeholder="Write your telephone."
           value={telephoneValue}
           onChange={onChangeTelephoneValue}
