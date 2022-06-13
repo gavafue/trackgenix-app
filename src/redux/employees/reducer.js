@@ -8,7 +8,10 @@ import {
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
-  SHOW_FEEDBACK_MESSAGE
+  SHOW_FEEDBACK_MESSAGE,
+  POST_EMPLOYEE_ERROR,
+  POST_EMPLOYEE_SUCCESS,
+  POST_EMPLOYEE_PENDING
 } from './constants';
 
 const initialState = {
@@ -76,6 +79,23 @@ export const employeesReducer = (state = initialState, action) => {
       return {
         ...state,
         showFeedbackMessage: action.payload
+      };
+    case POST_EMPLOYEE_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+    case POST_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+    case POST_EMPLOYEE_PENDING:
+      return {
+        ...state,
+        pending: true
       };
     default:
       return state;

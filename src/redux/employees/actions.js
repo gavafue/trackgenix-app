@@ -8,7 +8,10 @@ import {
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
-  SHOW_FEEDBACK_MESSAGE
+  SHOW_FEEDBACK_MESSAGE,
+  POST_EMPLOYEE_PENDING,
+  POST_EMPLOYEE_SUCCESS,
+  POST_EMPLOYEE_ERROR
 } from './constants';
 
 export const getEmployeeSuccess = (employees) => ({
@@ -57,4 +60,18 @@ export const showDeleteMessage = (showDeleteMessage) => ({
 export const showFeedbackMessage = (showFeedbackMessage) => ({
   type: SHOW_FEEDBACK_MESSAGE,
   payload: showFeedbackMessage
+});
+
+export const postEmployeeError = (error) => ({
+  type: POST_EMPLOYEE_ERROR,
+  payload: error
+});
+
+export const postEmployeeSuccess = (task) => ({
+  type: POST_EMPLOYEE_SUCCESS,
+  payload: task
+});
+
+export const postEmployeePending = () => ({
+  type: POST_EMPLOYEE_PENDING
 });

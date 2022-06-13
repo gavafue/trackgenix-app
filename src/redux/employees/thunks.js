@@ -6,7 +6,10 @@ import {
   deleteEmployeeSuccess,
   deleteEmployeePending,
   setInfoForFeedback,
-  showFeedbackMessage
+  showFeedbackMessage,
+  postEmployeePending,
+  postEmployeeSuccess,
+  postEmployeeError
 } from './actions';
 
 export const getEmployee = () => {
@@ -51,5 +54,34 @@ export const deleteEmployee = (employeeId) => {
         }
       })
       .catch((err) => console.log(err));
+  };
+};
+
+export const postEmployee = (options) => {
+  return (dispatch) => {
+    let isValid;
+    dispatch(postEmployeePending());
+    fetch(options.url, options)
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (isValid) {
+          dispatch(postEmployeeSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postEmployeeError(response.status));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        dispatch(postEmployeeError(error.toString()));
+      });
   };
 };

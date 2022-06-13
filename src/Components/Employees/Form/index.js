@@ -6,6 +6,9 @@ import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Modal from '../../Shared/Modal';
 import styles from './form.module.css';
 import Loader from '../../Shared/Preloader';
+import { useSelector, useDispatch } from 'react-redux';
+import { showFeedbackMessage } from '../../../redux/employees/actions';
+import { postEmployee } from '../../../redux/employees/thunks';
 
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
@@ -18,9 +21,10 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [showLoader, setShowLoader] = useState(false);
+  const dispatch = useDispatch();
+  const isPending = useSelector((state) => state.employees.pending);
+  const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
+  const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const URL = process.env.REACT_APP_API_URL;
 
   const employee = useParams();
@@ -30,30 +34,10 @@ const Form = () => {
   };
 
   const title = employee.id ? `${nameValue} ${lastNameValue}` : 'Add Employee';
-  const options = {
-    method: employee.id ? 'PUT' : 'POST',
-    url: employee.id ? `${URL}/employees/${employee.id}` : `${URL}/employees`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      firstName: nameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      country: countryValue,
-      city: cityValue,
-      zip: zipValue,
-      phone: telephoneValue,
-      birthDate: birthdayValue,
-      photo: photoValue,
-      password: passwordValue,
-      active: false
-    })
-  };
 
   useEffect(() => {
     if (employee.id) {
-      setShowLoader(true);
+      // setShowLoader(true);
       fetch(`${URL}/employees/${employee.id}`)
         .then((response) => response.json())
         .then((data) => {
@@ -67,7 +51,7 @@ const Form = () => {
           setTelephoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setCountryValue(data.data.country);
-          setShowLoader(false);
+          // setShowLoader(false);
         })
         .catch((error) => console.log(error));
     }
@@ -75,32 +59,28 @@ const Form = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setShowLoader(true);
-    let correctStatus;
-    fetch(options.url, options)
-      .then((response) => {
-        correctStatus = response.status === 201 || response.status === 200;
-        setShowLoader(false);
-        return response.json();
+    // setShowLoader(true);
+    const options = {
+      method: employee.id ? 'PUT' : 'POST',
+      url: employee.id ? `${URL}/employees/${employee.id}` : `${URL}/employees`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName: nameValue,
+        lastName: lastNameValue,
+        email: emailValue,
+        country: countryValue,
+        city: cityValue,
+        zip: zipValue,
+        phone: telephoneValue,
+        birthDate: birthdayValue,
+        photo: photoValue,
+        password: passwordValue,
+        active: false
       })
-      .then((response) => {
-        if (correctStatus) {
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          });
-          setShowFeedbackMessage(true);
-          setShowLoader(false);
-        } else {
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: response.message
-          });
-          setShowFeedbackMessage(true);
-          setShowLoader(false);
-        }
-      })
-      .catch((error) => console.log(error));
+    };
+    dispatch(postEmployee(options));
   };
 
   const onChangeNameValue = (e) => {
@@ -246,15 +226,15 @@ const Form = () => {
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
           goBack();
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {showLoader && <Loader />}
+      {isPending && <Loader />}
     </div>
   );
 };
