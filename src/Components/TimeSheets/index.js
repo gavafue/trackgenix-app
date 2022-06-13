@@ -68,10 +68,11 @@ const TimeSheets = () => {
   const timesheetData = timesheets.map((timeSheet) => {
     return {
       ...timeSheet,
-      name: timeSheet.project?.name
+      name: timeSheet?.project?.name || 'Project not found',
+      employeeName: timeSheet?.employee?.firstName || 'Employee not found'
     };
   });
-
+  console.log(timesheetData);
   return (
     <section className={styles.container}>
       <h1>Timesheets</h1>
@@ -81,8 +82,15 @@ const TimeSheets = () => {
       <div>
         <Table
           data={timesheetData}
-          headersName={['Project Name', 'Date', 'Hours Worked', 'WeekSprint']}
-          headers={['name', 'date', 'hoursWorked', 'weekSprint']}
+          headersName={[
+            'Project Name',
+            'Date',
+            'Description',
+            'Hours Worked',
+            'WeekSprint',
+            'Employee'
+          ]}
+          headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
           setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
           setInfoForDelete={(timesheetId) => dispatch(setInfoForDelete(timesheetId))}
           editData={editData}

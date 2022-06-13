@@ -8,7 +8,16 @@ import {
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
   SET_INFO_FOR_DELETE,
-  SET_INFO_FOR_FEEDBACK
+  SET_INFO_FOR_FEEDBACK,
+  ADD_TIMESHEET_ERROR,
+  ADD_TIMESHEET_PENDING,
+  ADD_TIMESHEET_SUCCESS,
+  EDIT_TIMESHEET_ERROR,
+  EDIT_TIMESHEET_PENDING,
+  EDIT_TIMESHEET_SUCCESS,
+  GET_A_TIMESHEET_ERROR,
+  GET_A_TIMESHEET_PENDING,
+  GET_A_TIMESHEET_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -18,7 +27,8 @@ const initialState = {
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
   infoForDelete: '',
-  showFeedbackMessage: false
+  showFeedbackMessage: false,
+  timesheetSelected: {}
 };
 
 export const timesheetsReducer = (state = initialState, action) => {
@@ -76,6 +86,57 @@ export const timesheetsReducer = (state = initialState, action) => {
       return {
         ...state,
         showFeedbackMessage: action.payload
+      };
+    case ADD_TIMESHEET_ERROR:
+      return {
+        ...state,
+        error: true,
+        pending: false
+      };
+    case ADD_TIMESHEET_SUCCESS:
+      return {
+        ...state,
+        list: action.payload,
+        pending: false
+      };
+    case ADD_TIMESHEET_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case EDIT_TIMESHEET_ERROR:
+      return {
+        ...state,
+        error: true,
+        pending: false
+      };
+    case EDIT_TIMESHEET_SUCCESS:
+      return {
+        ...state,
+        timesheetSelected: action.payload,
+        pending: false
+      };
+    case EDIT_TIMESHEET_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case GET_A_TIMESHEET_SUCCESS:
+      return {
+        ...state,
+        timesheetSelected: action.payload,
+        pending: false
+      };
+    case GET_A_TIMESHEET_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case GET_A_TIMESHEET_ERROR:
+      return {
+        ...state,
+        error: true,
+        pending: false
       };
     default:
       return state;

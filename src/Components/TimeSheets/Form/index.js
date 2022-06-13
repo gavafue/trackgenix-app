@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import styles from './form.module.css';
 import Select from '../../Shared/Input/InputSelect';
@@ -7,6 +7,9 @@ import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
+import { addTimesheet, getTimesheet } from '../../../redux/timesheet/thunks';
+import { useDispatch, useSelector } from 'react-redux';
+import { showFeedbackMessage } from '../../../redux/timesheet/actions';
 
 const URL = process.env.REACT_APP_API_URL;
 
@@ -20,29 +23,24 @@ const Form = () => {
   const [dateValue, setDateValue] = useState('');
   const [projectHoursValue, setProjectHoursValue] = useState('');
   const [workDescriptionValue, setWorkDescriptionValue] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [showPreloader, setShowPreloader] = useState(false);
-  const history = useHistory();
-
+  const dispatch = useDispatch();
+  const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
+  const pending = useSelector((state) => state.timesheets.pending);
+  const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
+  const selectedTimesheet = useSelector((store) => store.timesheets.timesheetSelected);
   useEffect(() => {
-    setShowPreloader(true);
+    //Get data for projects
     fetch(`${URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
-        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
-    setShowPreloader(true);
+    //Get data for employees
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
         setEmployees(data.data);
-        setShowPreloader(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -76,7 +74,6 @@ const Form = () => {
   };
 
   const timesheetId = useParams();
-
   const title = timesheetId.id ? 'Update Timesheet' : 'Add Timesheet';
 
   const options = {
@@ -95,11 +92,15 @@ const Form = () => {
       workDescription: workDescriptionValue
     })
   };
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(addTimesheet(options));
+  };
 
   const arrayToMapEmployees = employees.map((item) => {
     return {
       id: item._id,
-      optionContent: `${item.firstName + ' ' + item.lastName}`
+      optionContent: `${item.firstName} ${item.lastName}`
     };
   });
 
@@ -112,56 +113,21 @@ const Form = () => {
 
   useEffect(() => {
     if (timesheetId.id) {
-      setShowPreloader(true);
-      fetch(`${URL}/timesheets/${timesheetId.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProjectValue(data.data.project._id);
-          setEmployeeValue(data.data.employee._id);
-          setWeekSprintValue(data.data.weekSprint);
-          setDateValue(data.data.date);
-          setHoursWorkedValue(data.data.hoursWorked);
-          setProjectHoursValue(data.data.hoursProject);
-          setWorkDescriptionValue(data.data.workDescription);
-          setShowPreloader(false);
-        })
-        .catch((err) => console.log(err));
+      dispatch(getTimesheet(timesheetId.id));
+      setProjectValue(selectedTimesheet.project?._id || '');
+      setEmployeeValue(selectedTimesheet.employee?._id || '');
+      setWeekSprintValue(selectedTimesheet.weekSprint);
+      setDateValue(selectedTimesheet.date);
+      setHoursWorkedValue(selectedTimesheet.hoursWorked);
+      setProjectHoursValue(selectedTimesheet.hoursProject);
+      setWorkDescriptionValue(selectedTimesheet.workDescription);
     }
-    setShowPreloader(false);
   }, []);
 
-  const onSubmit = async (event) => {
-    try {
-      event.preventDefault();
-      setShowPreloader(true);
-      const res = await fetch(options.url, options);
-      const data = await res.json();
-      if (res.status == 201 || res.status == 200) {
-        setInfoForFeedback({
-          title: 'Request done!',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      } else {
-        setInfoForFeedback({
-          title: 'Something went wrong',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
   const dayInput = dateValue.substring(5, 7);
   const monthInput = dateValue.substring(8, 10);
   const yearInput = dateValue.substring(0, 4);
   const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
-  const routeValidation = () => {
-    history.push('/time-sheets');
-  };
 
   return (
     <div className={styles.container}>
@@ -239,14 +205,13 @@ const Form = () => {
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
-          routeValidation();
+          dispatch(showFeedbackMessage(false));
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
-        {showPreloader && <Preloader />}
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
+        {pending && <Preloader />}
       </Modal>
     </div>
   );
