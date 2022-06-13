@@ -2,6 +2,9 @@ import {
   GET_TASKS_PENDING,
   GET_TASKS_SUCCESS,
   GET_TASKS_ERROR,
+  GET_TASK_BY_ID_PENDING,
+  GET_TASK_BY_ID_SUCCESS,
+  GET_TASK_BY_ID_ERROR,
   DELETE_TASK_ERROR,
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
@@ -22,7 +25,8 @@ const initialState = {
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
   infoForDelete: '',
-  showFeedbackMessage: false
+  showFeedbackMessage: false,
+  selectedItem: {}
 };
 
 export const tasksReducer = (state = initialState, action) => {
@@ -43,6 +47,23 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
         pending: false
+      };
+    case GET_TASK_BY_ID_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case GET_TASK_BY_ID_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        selectedItem: action.payload
+      };
+    case GET_TASK_BY_ID_ERROR:
+      return {
+        ...state,
+        isFetching: false,
+        error: action.payload
       };
     case DELETE_TASK_PENDING:
       return {
@@ -97,12 +118,14 @@ export const tasksReducer = (state = initialState, action) => {
     case EDIT_TASK_SUCCESS:
       return {
         ...state,
-        list: action.payload
+        selectedItem: action.payload,
+        pending: false
       };
     case EDIT_TASK_ERROR:
       return {
         ...state,
-        list: action.payload
+        error: true,
+        pending: false
       };
     default:
       return state;

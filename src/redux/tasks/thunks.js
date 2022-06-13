@@ -3,6 +3,9 @@ import {
   getTasksSuccess,
   getTasksError,
   getTasksPending,
+  getTaskByIdError,
+  getTaskByIdPending,
+  getTaskByIdSuccess,
   deleteTaskError,
   deleteTaskSuccess,
   deleteTaskPending,
@@ -59,10 +62,13 @@ export const deleteTask = (taskId) => {
   };
 };
 
-export const postTask = (options) => {
+export const postTask = (values) => {
   return (dispatch) => {
+    const options = {
+      body: JSON.stringify(values)
+    };
     let isValid;
-    fetch(options.url, options)
+    fetch(options.url, values)
       .then((response) => {
         isValid = response.status == 201 || response.status == 200;
         return response.json();
@@ -74,7 +80,7 @@ export const postTask = (options) => {
           dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
           dispatch(showFeedbackMessage(true));
         } else {
-          dispatch(postTaskError(response.status));
+          dispatch(postTaskError(response.data.message));
           dispatch(
             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
           );
@@ -88,25 +94,48 @@ export const postTask = (options) => {
 };
 
 export const editTask = (options) => {
-  // const setDayValue = useSelector((state) => state.tasks.list.item.day);
-  // const setProjectValue = options.body.nameProject._id;
   return (dispatch) => {
+    let isValid;
     fetch(options.url, options)
-      .then((response) => response.json())
-      // .then((data) => {
-      //   setProjectValue(data.data.nameProject._id);
-      //   setWeekValue(data.data.week);
-      //   setDayValue(data.data.day);
-      //   setDescriptionValue(data.data.description);
-      //   setHoursValue(data.data.hours);
-      // })
       .then((response) => {
-        dispatch(editTaskSuccess(response.data));
-        dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-        dispatch(showFeedbackMessage(true));
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
+      })
+      .then((response) => {
+        if (isValid) {
+          dispatch(editTaskSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong.', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editTaskError(response.data.message));
+        }
       })
       .catch((error) => {
-        dispatch(editTaskError(error.toString()));
+        dispatch(editTaskError(error));
+      });
+  };
+};
+
+export const getTaskById = (id) => {
+  return (dispatch) => {
+    dispatch(getTaskByIdPending());
+    return fetch(`${process.env.REACT_APP_API}/tasks/${id}`)
+      .then((response) => response.json())
+      .then((response) => {
+        dispatch(getTaskByIdSuccess(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(getTaskByIdError(error.toString()));
       });
   };
 };

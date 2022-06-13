@@ -23,6 +23,7 @@ const Form = () => {
 
   const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
   const infoForFeedback = useSelector((state) => state.tasks.infoForFeedback);
+  const selectedItem = useSelector((state) => state.tasks.selectedItem);
 
   const onChangeProject = (event) => {
     setProjectValue(event.target.value);
@@ -49,6 +50,17 @@ const Form = () => {
         setShowPreloader(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (selectedItem) {
+      setProjectValue(selectedItem.nameProject);
+      setDayValue(selectedItem.day);
+      setWeekValue(selectedItem.week);
+      setHoursValue(selectedItem.hours);
+      setDescriptionValue(selectedItem.description);
+    }
+  }, []);
+
   const arrayToMapProjects = projects.map((project) => {
     return {
       id: project._id,
@@ -58,6 +70,7 @@ const Form = () => {
 
   const taskId = useParams();
   const title = taskId.id ? 'Update Task' : 'Add Task';
+
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {

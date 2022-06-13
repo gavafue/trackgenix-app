@@ -2,6 +2,9 @@ import {
   GET_TASKS_SUCCESS,
   GET_TASKS_ERROR,
   GET_TASKS_PENDING,
+  GET_TASK_BY_ID_ERROR,
+  GET_TASK_BY_ID_PENDING,
+  GET_TASK_BY_ID_SUCCESS,
   DELETE_TASK_ERROR,
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
@@ -28,6 +31,26 @@ export const getTasksError = (error) => ({
   type: GET_TASKS_ERROR,
   payload: error
 });
+
+export const getTaskByIdPending = () => {
+  return {
+    type: GET_TASK_BY_ID_PENDING
+  };
+};
+
+export const getTaskByIdSuccess = (task) => {
+  return {
+    type: GET_TASK_BY_ID_SUCCESS,
+    payload: task
+  };
+};
+
+export const getTaskByIdError = (error) => {
+  return {
+    type: GET_TASK_BY_ID_ERROR,
+    payload: error
+  };
+};
 
 export const deleteTaskSuccess = (deleteInfo) => ({
   type: DELETE_TASK_SUCCESS,
