@@ -7,61 +7,70 @@ import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import { useHistory } from 'react-router-dom';
 import Preloader from '../Shared/Preloader';
+import { useDispatch, useSelector } from 'react-redux';
+// import {
+//   setInfoForDelete,
+//   showDeleteMessage,
+//   showFeedbackMessage
+// } from '../../redux/superadmin/actions';
+import { getSuperadmins } from '../../redux/superadmin/thunks';
 
 const SuperAdmins = () => {
-  const [superAdmins, setSuperAdmins] = useState([]);
+  const dispatch = useDispatch();
+  const superAdmins = useSelector((state) => state.superadmins.list);
+  const isPending = useSelector((state) => state.superadmins.pending);
+  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
+  // const deleteInfo = useSelector((state) => state.superadmins.infoForDelete);
+  // const showDelete = useSelector((state) => state.superadmins.showDeleteMessage);
+  // const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
+
+  // const [superAdmins, setSuperAdmins] = useState([]);
   const [showDeleteMessage, setShowDeleteMessage] = useState(false);
   const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [infoForDelete, setInfoForDelete] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showPreloader, setShowPreloader] = useState(false);
+  // const [infoForFeedback, setInfoForFeedback] = useState({});
+  // const [showPreloader, setShowPreloader] = useState(false);
+
   const history = useHistory();
   const editData = (id) => {
     history.push(`/super-admins/form/${id}`);
   };
 
   useEffect(() => {
-    setShowPreloader(true);
-    fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSuperAdmins(data.data);
-        setShowPreloader(false);
-      })
-      .catch((err) => console.log(err));
+    dispatch(getSuperadmins());
   }, []);
 
   const createSuperAdmin = () => {
     history.push('/super-admins/form');
   };
 
-  const deleteSuperAdmin = (superAdminId) => {
-    const options = {
-      method: 'DELETE',
-      url: `${`${process.env.REACT_APP_API_URL}`}/super-admin/${superAdminId}`
-    };
-    setShowPreloader(true);
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: response.message
-          });
-          setShowPreloader(false);
-        } else {
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          });
-          setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== superAdminId));
-          setShowFeedbackMessage(true);
-          setShowPreloader(false);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+  // const deleteSuperAdmin = (superAdminId) => {
+  //   const options = {
+  //     method: 'DELETE',
+  //     url: `${`${process.env.REACT_APP_API_URL}`}/super-admin/${superAdminId}`
+  //   };
+  //   // setShowPreloader(true);
+  //   fetch(options.url, options)
+  //     .then((response) => response.json())
+  //     .then((response) => {
+  //       if (response.error === true) {
+  //         setInfoForFeedback({
+  //           title: 'Something went wrong',
+  //           description: response.message
+  //         });
+  //         // setShowPreloader(false);
+  //       } else {
+  //         setInfoForFeedback({
+  //           title: 'Request done!',
+  //           description: response.message
+  //         });
+  //         setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== superAdminId));
+  //         setShowFeedbackMessage(true);
+  //         // setShowPreloader(false);
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
   const superAdminData = superAdmins.map((superAdmin) => {
     return {
       ...superAdmin,
@@ -93,7 +102,7 @@ const SuperAdmins = () => {
             setShowDeleteMessage(false);
           }}
           infoForDelete={infoForDelete}
-          deleteItem={deleteSuperAdmin}
+          // deleteItem={deleteSuperAdmin}
           setShowModal={setShowDeleteMessage}
         />
       </Modal>
@@ -105,7 +114,7 @@ const SuperAdmins = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {isPending && <Preloader />}
     </section>
   );
 };

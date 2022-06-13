@@ -7,6 +7,9 @@ import Select from '../../Shared/Input/InputSelect';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Modal from '../../Shared/Modal';
 import Preloader from '../../Shared/Preloader';
+import { useSelector, useDispatch } from 'react-redux';
+import { editTask, postTask } from '../../../redux/tasks/thunks';
+import { showFeedbackMessage } from '../../../redux/tasks/actions';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
@@ -16,9 +19,10 @@ const Form = () => {
   const [dayValue, setDayValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
   const [hoursValue, setHoursValue] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
   const [showPreloader, setShowPreloader] = useState(false);
+  const dispatch = useDispatch();
+  const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
+  const infoForFeedback = useSelector((state) => state.tasks.infoForFeedback);
 
   const onChangeProject = (event) => {
     setProjectValue(event.target.value);
@@ -50,56 +54,26 @@ const Form = () => {
       optionContent: project.name
     };
   });
+
   const taskId = useParams();
   const title = taskId.id ? 'Update Task' : 'Add Task';
-  const options = {
-    method: taskId.id ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/tasks/${taskId.id ?? ''}`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      nameProject: projectValue,
-      week: weekValue,
-      day: dayValue,
-      description: descriptionValue,
-      hours: hoursValue
-    })
-  };
-  useEffect(() => {
-    if (taskId) {
-      setShowPreloader(true);
-      fetch(`${URL}/tasks/${taskId.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProjectValue(data.data.nameProject._id);
-          setWeekValue(data.data.week);
-          setDayValue(data.data.day);
-          setDescriptionValue(data.data.description);
-          setHoursValue(data.data.hours);
-          setShowPreloader(false);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
-  const onSubmit = async (event) => {
-    try {
-      event.preventDefault();
-      setShowPreloader(true);
-      const res = await fetch(options.url, options);
-      const data = await res.json();
-      if (res.status == 201 || res.status == 200) {
-        setInfoForFeedback({ title: 'Request done!', description: data.message });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      } else {
-        setInfoForFeedback({ title: 'Something went wrong', description: data.message });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const options = {
+      method: taskId.id ? 'PUT' : 'POST',
+      url: `${process.env.REACT_APP_API_URL}/tasks/${taskId.id ?? ''}`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        nameProject: projectValue,
+        week: weekValue,
+        day: dayValue,
+        description: descriptionValue,
+        hours: hoursValue
+      })
+    };
+    taskId.id ? dispatch(editTask(options)) : dispatch(postTask(options));
   };
   return (
     <div className={styles.container}>
@@ -159,7 +133,7 @@ const Form = () => {
       <Modal
         isOpen={showFeedbackMessage}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          showFeedbackMessage(!showFeedback);
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
