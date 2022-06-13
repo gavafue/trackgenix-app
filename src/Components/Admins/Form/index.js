@@ -1,15 +1,19 @@
-import styles from './form.module.css';
 import { useState, useEffect } from 'react';
+import styles from './form.module.css';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { showFeedbackMessage } from '../../../redux/admins/actions';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
+import { postAdmin } from '../../../redux/admins/thunks';
 
 const Form = () => {
+  const dispatch = useDispatch();
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -20,9 +24,9 @@ const Form = () => {
   const [cityValue, setCityValue] = useState('');
   const [zipValue, setZipValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [showPreloader, setShowPreloader] = useState(false);
+  const isPending = useSelector((state) => state.admins.pending);
+  const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
+  const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -67,29 +71,36 @@ const Form = () => {
 
   const adminId = useParams();
   const title = adminId.id ? `${nameValue} ${lastNameValue}` : 'Add admin';
-  const options = {
-    method: adminId.id ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/admins/${adminId.id ? adminId.id : ''}`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      name: nameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      password: passwordValue,
-      gender: genderValue,
-      phone: phoneValue,
-      dateBirth: birthDateValue,
-      city: cityValue,
-      zip: zipValue,
-      active: activeValue
-    })
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const options = {
+      method: adminId.id ? 'PUT' : 'POST',
+      url: `${process.env.REACT_APP_API_URL}/admins/${adminId.id ? adminId.id : ''}`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: nameValue,
+        lastName: lastNameValue,
+        email: emailValue,
+        password: passwordValue,
+        gender: genderValue,
+        phone: phoneValue,
+        dateBirth: birthDateValue,
+        city: cityValue,
+        zip: zipValue,
+        active: activeValue
+      })
+    };
+    dispatch(postAdmin(options));
   };
+
   const URL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     if (adminId.id) {
-      setShowPreloader(true);
+      // setShowPreloader(true);
       fetch(`${URL}/admins/${adminId.id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -103,37 +114,12 @@ const Form = () => {
           setPhoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setActiveValue(data.data.active);
-          setShowPreloader(false);
+          // setShowPreloader(false);
         })
         .catch((error) => console.log(error));
     }
   }, []);
 
-  const onSubmit = async (event) => {
-    try {
-      event.preventDefault();
-      setShowPreloader(true);
-      const res = await fetch(options.url, options);
-      const data = await res.json();
-      if (res.status == 201 || res.status == 200) {
-        setInfoForFeedback({
-          title: 'Request done!',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      } else {
-        setInfoForFeedback({
-          title: 'Something went wrong',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
   const dayInput = birthDateValue.substring(5, 7);
   const monthInput = birthDateValue.substring(8, 10);
   const yearInput = birthDateValue.substring(0, 4);
@@ -248,15 +234,15 @@ const Form = () => {
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
           goBack();
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {isPending && <Preloader />}
     </div>
   );
 };
