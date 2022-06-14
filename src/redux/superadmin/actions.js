@@ -31,16 +31,19 @@ export const getSuperAdminsError = (error) => ({
 
 export const deleteSuperAdminSuccess = (deleteInfo) => ({
   type: DELETE_SUPERADMIN_SUCCESS,
-  payload: deleteInfo
+  payload: deleteInfo,
+  pending: false
 });
 
 export const deleteSuperAdminPending = () => ({
-  type: DELETE_SUPERADMIN_PENDING
+  type: DELETE_SUPERADMIN_PENDING,
+  pending: true
 });
 
 export const deleteSuperAdminError = (error) => ({
   type: DELETE_SUPERADMIN_ERROR,
-  payload: error
+  payload: error,
+  pending: false
 });
 
 export const setInfoForFeedback = (message) => ({
@@ -50,7 +53,8 @@ export const setInfoForFeedback = (message) => ({
 
 export const setInfoForDelete = (id) => ({
   type: SET_INFO_FOR_DELETE,
-  payload: id
+  payload: id,
+  pending: false
 });
 
 export const showDeleteMessage = (showDeleteMessage) => ({

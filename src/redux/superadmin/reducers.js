@@ -52,7 +52,7 @@ export const superadminReducer = (state = initialState, action) => {
     case DELETE_SUPERADMIN_SUCCESS:
       return {
         ...state,
-        list: state.list.filter((superadmin) => superadmin._id !== action.payload),
+        list: state.list.filter((superadmin) => superadmin._id !== action.payload._id),
         pending: false
       };
     case DELETE_SUPERADMIN_ERROR:
