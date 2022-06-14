@@ -151,7 +151,7 @@ export const getTimesheet = (id) => {
       })
       .catch((err) => {
         console.log(err);
-        getATimesheetsError(err);
+        dispatch(getATimesheetsError(err));
       });
   };
 };

@@ -10,7 +10,6 @@ import Preloader from '../../Shared/Preloader';
 import { addTimesheet, getTimesheet } from '../../../redux/timesheet/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/timesheet/actions';
-
 const URL = process.env.REACT_APP_API_URL;
 
 const Form = () => {
@@ -110,23 +109,24 @@ const Form = () => {
       optionContent: `${item.name}`
     };
   });
-
+  console.log('fuera', selectedTimesheet);
   useEffect(() => {
     if (timesheetId.id) {
+      console.log('dentro', selectedTimesheet);
       dispatch(getTimesheet(timesheetId.id));
       setProjectValue(selectedTimesheet.project?._id || '');
       setEmployeeValue(selectedTimesheet.employee?._id || '');
       setWeekSprintValue(selectedTimesheet.weekSprint);
-      setDateValue(selectedTimesheet.date);
+      setDateValue(selectedTimesheet.date ?? '');
       setHoursWorkedValue(selectedTimesheet.hoursWorked);
       setProjectHoursValue(selectedTimesheet.hoursProject);
       setWorkDescriptionValue(selectedTimesheet.workDescription);
     }
   }, []);
-
-  const dayInput = dateValue.substring(5, 7);
-  const monthInput = dateValue.substring(8, 10);
-  const yearInput = dateValue.substring(0, 4);
+  console.log();
+  const dayInput = dateValue?.substring(5, 7);
+  const monthInput = dateValue?.substring(8, 10);
+  const yearInput = dateValue?.substring(0, 4);
   const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
 
   return (
