@@ -94,7 +94,7 @@ export const editProjectPending = () => ({
   type: EDIT_PROJECT_PENDING
 });
 
-export const getSelectedProject = (timesheet) => ({
+export const getSelectedProject = (project) => ({
   type: GET_SELECTED_PROJECT,
-  payload: timesheet
+  payload: project
 });
