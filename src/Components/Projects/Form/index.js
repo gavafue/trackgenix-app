@@ -70,7 +70,7 @@ const Form = () => {
   }, []);
 
   useEffect(() => {
-    if (projectSelected.legth != 0) {
+    if (projectSelected.length != 0) {
       setNameValue(projectSelected.name);
       setStartDateValue(projectSelected.startDate);
       setEndDateValue(projectSelected.endDate);
@@ -110,7 +110,6 @@ const Form = () => {
     };
     projectSelected.length != 0 ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
-  console.log('membersValue', membersValue);
   const arrayToMapEmployees = employees.map((employee) => {
     return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };
   });
