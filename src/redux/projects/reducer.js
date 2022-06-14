@@ -15,7 +15,8 @@ import {
   EDIT_PROJECT_ERROR,
   EDIT_PROJECT_PENDING,
   EDIT_PROJECT_SUCCESS,
-  GET_SELECTED_PROJECT
+  GET_SELECTED_PROJECT,
+  CLEAN_SELECTED_PROJECT
 } from './constants';
 
 const initialState = {
@@ -26,7 +27,7 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  projectSelected: []
+  projectSelected: {}
 };
 
 export const projectsReducer = (state = initialState, action) => {
@@ -94,7 +95,7 @@ export const projectsReducer = (state = initialState, action) => {
     case POST_PROJECT_SUCCESS:
       return {
         ...state,
-        list: action.payload,
+        list: [...state.list, action.payload],
         pending: false
       };
     case POST_PROJECT_PENDING:
@@ -110,7 +111,12 @@ export const projectsReducer = (state = initialState, action) => {
     case EDIT_PROJECT_SUCCESS:
       return {
         ...state,
-        projectSelected: action.payload,
+        list: state.list.map((item) => {
+          if (item._id === action.payload._id) {
+            return action.payload;
+          }
+          return item;
+        }),
         pending: false
       };
     case EDIT_PROJECT_ERROR:
@@ -123,6 +129,12 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         projectSelected: action.payload
+      };
+    case CLEAN_SELECTED_PROJECT:
+      return {
+        ...state,
+        projectSelected: {},
+        pending: false
       };
     default:
       return state;

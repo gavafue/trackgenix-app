@@ -16,49 +16,50 @@ const Form = () => {
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
   const projectSelected = useSelector((state) => state.projects.projectSelected);
+  const isProjectSelected = Object.keys(projectSelected).length;
   const [employees, setEmployees] = useState([]);
+  const [nameValue, setNameValue] = useState('');
+  const [startDateValue, setStartDateValue] = useState('');
+  const [endDateValue, setEndDateValue] = useState('');
+  const [descriptionValue, setDescriptionValue] = useState('');
+  const [clientValue, setClientValue] = useState('');
+  const [activeValue, setActiveValue] = useState('');
+  const [membersValue, setMembersValue] = useState('');
+  const [membersRoleValue, setMembersRoleValue] = useState('');
+  const [membersRateValue, setMembersRateValue] = useState('');
   const URL = process.env.REACT_APP_API_URL;
 
-  const [nameValue, setNameValue] = useState('');
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
   };
-  const [startDateValue, setStartDateValue] = useState('');
   const onChangeStartDateInput = (event) => {
     setStartDateValue(event.target.value);
   };
-  const [endDateValue, setEndDateValue] = useState('');
   const onChangeEndDateInput = (event) => {
     setEndDateValue(event.target.value);
   };
-  const [descriptionValue, setDescriptionValue] = useState('');
   const onChangeDescriptionInput = (event) => {
     setDescriptionValue(event.target.value);
   };
-  const [clientValue, setClientValue] = useState('');
   const onChangeClientInput = (event) => {
     setClientValue(event.target.value);
   };
-  const [activeValue, setActiveValue] = useState('');
   const onChangeActiveInput = (event) => {
     setActiveValue(event.target.value);
   };
-  const [membersValue, setMembersValue] = useState('');
   const onChangeMembersInput = (event) => {
     setMembersValue(event.target.value);
   };
-  const [membersRoleValue, setMembersRoleValue] = useState('');
   const onChangeMembersRoleInput = (event) => {
     setMembersRoleValue(event.target.value);
   };
-
-  const [membersRateValue, setMembersRateValue] = useState('');
   const onChangeMembersRateInput = (event) => {
     setMembersRateValue(event.target.value);
   };
 
-  const title =
-    projectSelected.length != 0 ? `Editing ${nameValue} projects's information.` : 'Add a Project';
+  const title = isProjectSelected
+    ? `Editing ${nameValue} projects's information.`
+    : 'Add a Project';
 
   useEffect(() => {
     fetch(`${URL}/employees`)
@@ -70,7 +71,7 @@ const Form = () => {
   }, []);
 
   useEffect(() => {
-    if (projectSelected.length != 0) {
+    if (isProjectSelected) {
       setNameValue(projectSelected.name);
       setStartDateValue(projectSelected.startDate);
       setEndDateValue(projectSelected.endDate);
@@ -86,9 +87,8 @@ const Form = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {
-      method: projectSelected.length != 0 ? 'PUT' : 'POST',
-      url:
-        projectSelected.length != 0 ? `${URL}/projects/${projectSelected._id}` : `${URL}/projects`,
+      method: isProjectSelected ? 'PUT' : 'POST',
+      url: isProjectSelected ? `${URL}/projects/${projectSelected._id}` : `${URL}/projects`,
       headers: {
         'Content-type': 'application/json'
       },
@@ -108,7 +108,7 @@ const Form = () => {
         active: activeValue
       })
     };
-    projectSelected.length != 0 ? dispatch(editProject(options)) : dispatch(postProject(options));
+    isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
   const arrayToMapEmployees = employees.map((employee) => {
     return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };

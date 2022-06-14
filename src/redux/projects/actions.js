@@ -15,7 +15,8 @@ import {
   EDIT_PROJECT_ERROR,
   EDIT_PROJECT_PENDING,
   EDIT_PROJECT_SUCCESS,
-  GET_SELECTED_PROJECT
+  GET_SELECTED_PROJECT,
+  CLEAN_SELECTED_PROJECT
 } from './constants';
 
 export const getProjectsSuccess = (tasks) => ({
@@ -97,4 +98,8 @@ export const editProjectPending = () => ({
 export const getSelectedProject = (project) => ({
   type: GET_SELECTED_PROJECT,
   payload: project
+});
+
+export const cleanSelectedProject = () => ({
+  type: CLEAN_SELECTED_PROJECT
 });

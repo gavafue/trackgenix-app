@@ -13,7 +13,8 @@ import {
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
-  getSelectedProject
+  getSelectedProject,
+  cleanSelectedProject
 } from '../../redux/projects/actions';
 
 const Projects = () => {
@@ -37,6 +38,10 @@ const Projects = () => {
   const deleteHandler = () => {
     dispatch(deleteProject(deleteInfo));
   };
+
+  useEffect(() => {
+    dispatch(cleanSelectedProject());
+  }, []);
 
   return (
     <section className={styles.container}>
