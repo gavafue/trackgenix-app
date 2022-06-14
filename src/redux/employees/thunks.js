@@ -7,9 +7,9 @@ import {
   deleteEmployeePending,
   setInfoForFeedback,
   showFeedbackMessage,
-  postEmployeePending,
-  postEmployeeSuccess,
-  postEmployeeError
+  addOrEditEmployeeError,
+  addOrEditEmployeePending,
+  addOrEditEmployeeSuccess
 } from './actions';
 
 export const getEmployee = () => {
@@ -57,31 +57,39 @@ export const deleteEmployee = (employeeId) => {
   };
 };
 
-export const postEmployee = (options) => {
+export const addOrEditEmployee = (options) => {
   return (dispatch) => {
+    dispatch(addOrEditEmployeePending());
     let isValid;
-    dispatch(postEmployeePending());
     fetch(options.url, options)
-      .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
-        return response.json();
+      .then((res) => {
+        isValid = res.status == 201 || res.status == 200;
+        return res.json();
       })
-      .then((response) => {
-        console.log(response);
+      .then((res) => {
         if (isValid) {
-          dispatch(postEmployeeSuccess(response.data));
-          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(postEmployeeError(response.status));
+          dispatch(addOrEditEmployeeSuccess(res.message));
           dispatch(
-            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: res.message
+            })
           );
           dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: res.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(addOrEditEmployeeError(res.message));
         }
       })
       .catch((error) => {
-        dispatch(postEmployeeError(error.toString()));
+        console.log(error);
+        dispatch(addOrEditEmployeeError(error));
       });
   };
 };

@@ -9,9 +9,10 @@ import {
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  POST_EMPLOYEE_ERROR,
-  POST_EMPLOYEE_SUCCESS,
-  POST_EMPLOYEE_PENDING
+  ADD_OR_EDIT_EMPLOYEE_ERROR,
+  ADD_OR_EDIT_EMPLOYEE_PENDING,
+  ADD_OR_EDIT_EMPLOYEE_SUCCESS,
+  SELECTED_EMPLOYEE
 } from './constants';
 
 const initialState = {
@@ -21,7 +22,8 @@ const initialState = {
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
   infoForDelete: '',
-  showFeedbackMessage: false
+  showFeedbackMessage: false,
+  employeeSelected: {}
 };
 
 export const employeesReducer = (state = initialState, action) => {
@@ -80,22 +82,32 @@ export const employeesReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-    case POST_EMPLOYEE_ERROR:
+    case ADD_OR_EDIT_EMPLOYEE_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: true,
         pending: false
       };
-    case POST_EMPLOYEE_SUCCESS:
+    case ADD_OR_EDIT_EMPLOYEE_SUCCESS:
       return {
         ...state,
-        error: action.payload,
+        list: state.list.map((item) => {
+          if (item._id === action.payload._id) {
+            return action.payload;
+          }
+          return item;
+        }),
         pending: false
       };
-    case POST_EMPLOYEE_PENDING:
+    case ADD_OR_EDIT_EMPLOYEE_PENDING:
       return {
         ...state,
         pending: true
+      };
+    case SELECTED_EMPLOYEE:
+      return {
+        ...state,
+        employeeSelected: action.payload
       };
     default:
       return state;

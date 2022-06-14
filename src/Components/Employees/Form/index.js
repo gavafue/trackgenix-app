@@ -8,7 +8,7 @@ import styles from './form.module.css';
 import Loader from '../../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/employees/actions';
-import { postEmployee } from '../../../redux/employees/thunks';
+import { addOrEditEmployee } from '../../../redux/employees/thunks';
 
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
@@ -25,19 +25,17 @@ const Form = () => {
   const isPending = useSelector((state) => state.employees.pending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
+  const selectedEmployee = useSelector((store) => store.employees.employeeSelected);
   const URL = process.env.REACT_APP_API_URL;
 
   const employee = useParams();
   const history = useHistory();
-  const goBack = () => {
-    history.push('/admins');
-  };
 
-  const title = employee.id ? `${nameValue} ${lastNameValue}` : 'Add Employee';
+  const title =
+    selectedEmployee.length != 0 ? `Update ${nameValue} ${lastNameValue}'s data` : 'Add Employee';
 
   useEffect(() => {
     if (employee.id) {
-      // setShowLoader(true);
       fetch(`${URL}/employees/${employee.id}`)
         .then((response) => response.json())
         .then((data) => {
@@ -51,36 +49,34 @@ const Form = () => {
           setTelephoneValue(data.data.phone);
           setZipValue(data.data.zip);
           setCountryValue(data.data.country);
-          // setShowLoader(false);
         })
         .catch((error) => console.log(error));
     }
   }, []);
 
+  const options = {
+    method: employee.id ? 'PUT' : 'POST',
+    url: employee.id ? `${URL}/employees/${employee.id}` : `${URL}/employees`,
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      firstName: nameValue,
+      lastName: lastNameValue,
+      email: emailValue,
+      country: countryValue,
+      city: cityValue,
+      zip: zipValue,
+      phone: telephoneValue,
+      birthDate: birthdayValue,
+      photo: photoValue,
+      password: passwordValue,
+      active: false
+    })
+  };
   const onSubmit = (event) => {
     event.preventDefault();
-    // setShowLoader(true);
-    const options = {
-      method: employee.id ? 'PUT' : 'POST',
-      url: employee.id ? `${URL}/employees/${employee.id}` : `${URL}/employees`,
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        firstName: nameValue,
-        lastName: lastNameValue,
-        email: emailValue,
-        country: countryValue,
-        city: cityValue,
-        zip: zipValue,
-        phone: telephoneValue,
-        birthDate: birthdayValue,
-        photo: photoValue,
-        password: passwordValue,
-        active: false
-      })
-    };
-    dispatch(postEmployee(options));
+    dispatch(addOrEditEmployee(options));
   };
 
   const onChangeNameValue = (e) => {
@@ -121,7 +117,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>{title}</h1>
+      <h1>{title}</h1>
       <SharedForm onSubmit={onSubmit}>
         <Input
           className={styles.input}
@@ -229,7 +225,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          goBack();
+          history.goBack();
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
