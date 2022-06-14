@@ -88,7 +88,6 @@ export const postSuperAdmin = (options) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch(postSuperAdminError(error));
       });
   };
@@ -124,7 +123,6 @@ export const editSuperAdmin = (options) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch(editSuperAdminError(error));
       });
   };

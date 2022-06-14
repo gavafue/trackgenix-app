@@ -16,7 +16,7 @@ const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete 
               );
             })}
             <td className={styles.rows}>
-              <Button onClick={() => editData(row._id)} label="Edit" />
+              <Button onClick={() => editData(row)} label="Edit" />
             </td>
             <td className={styles.rows}>
               <Button

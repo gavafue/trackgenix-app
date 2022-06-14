@@ -6,14 +6,14 @@ const SuperAdminsTable = ({
   showFeedbackModal,
   superAdmins,
   deleteSuperAdmin,
-  showModal,
-  setShowModal
+  showDeleteModal,
+  setShowDeleteModal
 }) => {
   const editSuperAdmin = (string) => {
     window.location = `/super-admins/form?superadminId=${string}`;
   };
 
-  const [InfoForDelete, setInfoForDelete] = useState({
+  const [infoForDelete, setInfoForDelete] = useState({
     id: ''
   });
   return (
@@ -44,10 +44,10 @@ const SuperAdminsTable = ({
               <td>
                 <button
                   onClick={() => {
-                    setShowModal(!showModal);
                     setInfoForDelete({
                       id: superAdmin._id
                     });
+                    setShowDeleteModal(!showDeleteModal);
                   }}
                 >
                   Delete
@@ -57,15 +57,15 @@ const SuperAdminsTable = ({
           );
         })}
       </tbody>
-      {showModal && (
+      {showDeleteModal && (
         <DeleteModal
-          setShowModal={setShowModal}
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
           showFeedbackModal={showFeedbackModal}
           setShowFeedbackModal={setShowFeedbackModal}
-          modalId={InfoForDelete.id}
+          modalId={infoForDelete.id}
           deleteSuperAdmin={deleteSuperAdmin}
           setInfoFoDelete={setInfoForDelete}
-          showModal={showModal}
         />
       )}
     </table>

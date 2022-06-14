@@ -11,7 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setInfoForDelete,
   showDeleteMessage,
-  showFeedbackMessage
+  showFeedbackMessage,
+  getSelectedItem,
+  cleanSelectedItem
 } from '../../redux/superadmin/actions';
 import { deleteSuperAdmin, getSuperadmins } from '../../redux/superadmin/thunks';
 
@@ -25,8 +27,9 @@ const SuperAdmins = () => {
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
 
   const history = useHistory();
-  const editData = (id) => {
-    history.push(`/super-admins/form/${id}`);
+  const editData = (row) => {
+    dispatch(getSelectedItem(row));
+    history.push(`/super-admins/form/`);
   };
 
   const createSuperAdmin = () => {
@@ -47,6 +50,10 @@ const SuperAdmins = () => {
       active: superAdmin.active ? 'Yes' : 'No'
     };
   });
+  useEffect(() => {
+    dispatch(cleanSelectedItem());
+  }, []);
+
   return (
     <section className={styles.container}>
       <h1>Super Admins</h1>

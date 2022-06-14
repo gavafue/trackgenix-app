@@ -12,7 +12,9 @@ import {
   POST_SUPERADMIN_ERROR,
   POST_SUPERADMIN_SUCCESS,
   EDIT_SUPERADMIN_ERROR,
-  EDIT_SUPERADMIN_SUCCESS
+  EDIT_SUPERADMIN_SUCCESS,
+  GET_SELECTED_ITEM,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getSuperAdminsSuccess = (superAdmins) => ({
@@ -36,14 +38,12 @@ export const deleteSuperAdminSuccess = (deleteInfo) => ({
 });
 
 export const deleteSuperAdminPending = () => ({
-  type: DELETE_SUPERADMIN_PENDING,
-  pending: true
+  type: DELETE_SUPERADMIN_PENDING
 });
 
 export const deleteSuperAdminError = (error) => ({
   type: DELETE_SUPERADMIN_ERROR,
-  payload: error,
-  pending: false
+  payload: error
 });
 
 export const setInfoForFeedback = (message) => ({
@@ -53,8 +53,7 @@ export const setInfoForFeedback = (message) => ({
 
 export const setInfoForDelete = (id) => ({
   type: SET_INFO_FOR_DELETE,
-  payload: id,
-  pending: false
+  payload: id
 });
 
 export const showDeleteMessage = (showDeleteMessage) => ({
@@ -85,4 +84,15 @@ export const editSuperAdminSuccess = (superadminEdited) => ({
 export const editSuperAdminError = (error) => ({
   type: EDIT_SUPERADMIN_ERROR,
   payload: error
+});
+
+export const getSelectedItem = (superadmin) => {
+  return {
+    type: GET_SELECTED_ITEM,
+    payload: superadmin
+  };
+};
+
+export const cleanSelectedItem = () => ({
+  type: CLEAN_SELECTED_ITEM
 });

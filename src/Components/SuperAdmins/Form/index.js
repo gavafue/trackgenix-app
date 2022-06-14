@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import styles from './form.module.css';
 import Input from '../../Shared/Input/InputText';
@@ -14,8 +13,11 @@ import { showFeedbackMessage } from '../../../redux/superadmin/actions';
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
-  const infoForFeedback = useSelector((state) => state.tasks.infoForFeedback);
-  const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
+  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
+  const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
+  const isPending = useSelector((state) => state.superadmins.pending);
+  const isItemSelected = Object.keys(selectedItem).length;
+  const selectedItem = useSelector((state) => state.superadmins.selectedItem);
 
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
@@ -23,7 +25,6 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
   const [roleValue, setRoleValue] = useState('');
-  const [showPreloader, setShowPreloader] = useState(false);
 
   const onChangeNameInput = (e) => {
     setNameValue(e.target.value);
@@ -56,28 +57,22 @@ const Form = () => {
   ];
 
   useEffect(() => {
-    if (superAdminId) {
-      fetch(`${URL}/super-admin/${superAdminId.id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setNameValue(data.data.firstName);
-          setLastNameValue(data.data.lastName);
-          setEmailValue(data.data.email);
-          setPasswordValue(data.data.password);
-          setActiveValue(data.data.active);
-          setRoleValue(data.data.role);
-          setShowPreloader(false);
-        })
-        .catch((error) => console.log(error));
+    if (isItemSelected) {
+      setNameValue(selectedItem.firstName);
+      setLastNameValue(selectedItem.lastName);
+      setEmailValue(selectedItem.email);
+      setPasswordValue(selectedItem.password);
+      setActiveValue(selectedItem.active);
+      setRoleValue(selectedItem.role);
     }
   }, []);
-  const superAdminId = useParams();
-  const title = superAdminId.id ? 'Update Super Admin' : 'Add Super Admin';
+
+  const title = isItemSelected ? 'Update Super Admin' : 'Add Super Admin';
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {
-      method: superAdminId.id ? 'PUT' : 'POST',
-      url: `${URL}/super-admin/${superAdminId.id ?? ''}`,
+      method: isItemSelected ? 'PUT' : 'POST',
+      url: `${URL}/super-admin/${isItemSelected ?? ''}`,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         firstName: nameValue,
@@ -88,7 +83,7 @@ const Form = () => {
         active: activeValue
       })
     };
-    superAdminId ? dispatch(editSuperAdmin(options)) : dispatch(postSuperAdmin(options));
+    isItemSelected ? dispatch(editSuperAdmin(options)) : dispatch(postSuperAdmin(options));
   };
   return (
     <div className={styles.container}>
@@ -156,14 +151,14 @@ const Form = () => {
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          showFeedbackMessage(!showFeedback);
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {isPending && <Preloader />}
     </div>
   );
 };
