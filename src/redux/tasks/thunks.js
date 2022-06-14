@@ -54,12 +54,13 @@ export const deleteTask = (taskId) => {
           dispatch(showFeedbackMessage(true));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        dispatch(deleteTaskError(error));
+      });
   };
 };
 
 export const postTask = (options) => {
-  console.log(options, 'inside thunk');
   return (dispatch) => {
     let isValid;
     fetch(options.url, options)

@@ -25,7 +25,6 @@ const Tasks = () => {
   const deleteInfo = useSelector((state) => state.tasks.infoForDelete);
   const showDelete = useSelector((state) => state.tasks.showDeleteMessage);
   const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
-  // let taskData = [];
 
   const history = useHistory();
   const editData = (row) => {

@@ -89,7 +89,6 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-
     case POST_TASK_ERROR:
       return {
         ...state,
