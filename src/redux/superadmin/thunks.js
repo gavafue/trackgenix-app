@@ -28,12 +28,12 @@ export const getSuperadmins = () => {
   };
 };
 
-export const deleteSuperAdmin = (id) => {
+export const deleteSuperAdmin = (superAdminId) => {
   return (dispatch) => {
     dispatch(deleteSuperAdminPending());
     const options = {
       method: 'DELETE',
-      url: `${process.env.REACT_APP_API_URL}/super-admins/${id}`
+      url: `${process.env.REACT_APP_API_URL}/super-admin/${superAdminId}`
     };
     return fetch(options.url, options)
       .then((response) => response.json())
@@ -43,8 +43,9 @@ export const deleteSuperAdmin = (id) => {
           dispatch(
             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
           );
+          console.log('log de if', response);
         } else {
-          dispatch(deleteSuperAdminSuccess(id));
+          dispatch(deleteSuperAdminSuccess(superAdminId));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
@@ -52,6 +53,7 @@ export const deleteSuperAdmin = (id) => {
             })
           );
           dispatch(showFeedbackMessage(true));
+          console.log('log de else', response);
         }
       })
       .catch((error) => console.log(error));
@@ -118,8 +120,8 @@ export const editSuperAdmin = (options) => {
               description: res.message
             })
           );
-          dispatch(showFeedbackMessage(true));
           dispatch(editSuperAdminError(res.data.message));
+          dispatch(showFeedbackMessage(true));
         }
       })
       .catch((error) => {

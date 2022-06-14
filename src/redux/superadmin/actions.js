@@ -33,8 +33,7 @@ export const getSuperAdminsError = (error) => ({
 
 export const deleteSuperAdminSuccess = (deleteInfo) => ({
   type: DELETE_SUPERADMIN_SUCCESS,
-  payload: deleteInfo,
-  pending: false
+  payload: deleteInfo
 });
 
 export const deleteSuperAdminPending = () => ({
@@ -93,6 +92,7 @@ export const getSelectedItem = (superadmin) => {
   };
 };
 
-export const cleanSelectedItem = () => ({
-  type: CLEAN_SELECTED_ITEM
+export const cleanSelectedItem = (superAdmin) => ({
+  type: CLEAN_SELECTED_ITEM,
+  payload: superAdmin
 });

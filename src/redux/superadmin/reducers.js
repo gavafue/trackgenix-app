@@ -13,7 +13,8 @@ import {
   POST_SUPERADMIN_SUCCESS,
   EDIT_SUPERADMIN_SUCCESS,
   EDIT_SUPERADMIN_ERROR,
-  CLEAN_SELECTED_ITEM
+  CLEAN_SELECTED_ITEM,
+  GET_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
@@ -116,6 +117,11 @@ export const superadminReducer = (state = initialState, action) => {
         ...state,
         selectedItem: {},
         pending: false
+      };
+    case GET_SELECTED_ITEM:
+      return {
+        ...state,
+        selectedItem: action.payload
       };
     default:
       return state;

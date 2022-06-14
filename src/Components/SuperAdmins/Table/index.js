@@ -19,11 +19,11 @@ const SuperAdminsTable = ({
   return (
     <table>
       <thead>
-        <tr>
-          <th>Name</th>
-          <th>Lastname</th>
-          <th>Status</th>
-        </tr>
+        <th>Name</th>
+        <th>Lastname</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
       </thead>
       <tbody>
         {superAdmins.map((superAdmin) => {
@@ -33,13 +33,7 @@ const SuperAdminsTable = ({
               <td>{superAdmin.lastName}</td>
               <td>{superAdmin.active ? 'Active' : 'Inactive'}</td>
               <td>
-                <button
-                  onClick={() => {
-                    editSuperAdmin(superAdmin._id);
-                  }}
-                >
-                  Edit
-                </button>
+                <button onClick={() => editSuperAdmin(superAdmin._id)}>Edit</button>
               </td>
               <td>
                 <button

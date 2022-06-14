@@ -13,11 +13,6 @@ import { showFeedbackMessage } from '../../../redux/superadmin/actions';
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
-  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
-  const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
-  const isPending = useSelector((state) => state.superadmins.pending);
-  const isItemSelected = Object.keys(selectedItem).length;
-  const selectedItem = useSelector((state) => state.superadmins.selectedItem);
 
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
@@ -25,6 +20,13 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
   const [roleValue, setRoleValue] = useState('');
+
+  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
+  const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
+  const isPending = useSelector((state) => state.superadmins.pending);
+
+  const selectedItem = useSelector((state) => state.superadmins.selectedItem);
+  const isItemSelected = Object.keys(selectedItem).length;
 
   const onChangeNameInput = (e) => {
     setNameValue(e.target.value);
@@ -50,12 +52,6 @@ const Form = () => {
     setRoleValue(e.target.value);
   };
 
-  const arrayToMapRole = [{ id: 'SA', optionContent: 'SuperAdmin' }];
-  const arrayToMapStatus = [
-    { id: 'true', optionContent: 'Active' },
-    { id: 'false', optionContent: 'Inactive' }
-  ];
-
   useEffect(() => {
     if (isItemSelected) {
       setNameValue(selectedItem.firstName);
@@ -67,12 +63,18 @@ const Form = () => {
     }
   }, []);
 
+  const arrayToMapRole = [{ id: 'SA', optionContent: 'SuperAdmin' }];
+  const arrayToMapStatus = [
+    { id: true, optionContent: 'True' },
+    { id: false, optionContent: 'False' }
+  ];
+
   const title = isItemSelected ? 'Update Super Admin' : 'Add Super Admin';
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {
       method: isItemSelected ? 'PUT' : 'POST',
-      url: `${URL}/super-admin/${isItemSelected ?? ''}`,
+      url: isItemSelected ? `${URL}/super-admin/${selectedItem._id}` : `${URL}/super-admin`,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         firstName: nameValue,
@@ -140,10 +142,10 @@ const Form = () => {
           required
         />
         <Select
-          label="Status"
+          label="Active"
           arrayToMap={arrayToMapStatus}
-          id="status"
-          name="status"
+          id="active"
+          name="active"
           value={activeValue}
           onChange={onChangeActiveInput}
           placeholder="Choose Status"

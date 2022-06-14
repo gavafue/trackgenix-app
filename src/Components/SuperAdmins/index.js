@@ -19,7 +19,7 @@ import { deleteSuperAdmin, getSuperadmins } from '../../redux/superadmin/thunks'
 
 const SuperAdmins = () => {
   const dispatch = useDispatch();
-  const superAdmins = useSelector((state) => state.superadmins.list);
+  const superadmins = useSelector((state) => state.superadmins.list);
   const isPending = useSelector((state) => state.superadmins.pending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
   const deleteInfo = useSelector((state) => state.superadmins.infoForDelete);
@@ -44,12 +44,14 @@ const SuperAdmins = () => {
     dispatch(deleteSuperAdmin(deleteInfo));
   };
 
-  const superAdminData = superAdmins.map((superAdmin) => {
+  const superAdminData = superadmins.map((superAdmin) => {
     return {
       ...superAdmin,
-      active: superAdmin.active ? 'Yes' : 'No'
+      active: superAdmin.active,
+      isActive: superAdmin.active ? 'Yes' : 'No'
     };
   });
+
   useEffect(() => {
     dispatch(cleanSelectedItem());
   }, []);
@@ -63,7 +65,7 @@ const SuperAdmins = () => {
       <Table
         data={superAdminData}
         headersName={['Name', 'Last Name', 'Email', 'Role', 'Active']}
-        headers={['firstName', 'lastName', 'email', 'role', 'active']}
+        headers={['firstName', 'lastName', 'email', 'role', 'isActive']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         setInfoForDelete={(superAdminId) => dispatch(setInfoForDelete(superAdminId))}
         editData={editData}
