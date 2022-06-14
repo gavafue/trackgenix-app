@@ -11,8 +11,7 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   ADD_OR_EDIT_EMPLOYEE_ERROR,
   ADD_OR_EDIT_EMPLOYEE_PENDING,
-  ADD_OR_EDIT_EMPLOYEE_SUCCESS,
-  SELECTED_EMPLOYEE
+  ADD_OR_EDIT_EMPLOYEE_SUCCESS
 } from './constants';
 
 export const getEmployeeSuccess = (employees) => ({
@@ -75,8 +74,4 @@ export const addOrEditEmployeePending = () => ({
 export const addOrEditEmployeeError = (error) => ({
   type: ADD_OR_EDIT_EMPLOYEE_ERROR,
   payload: error
-});
-export const selectOneEmployee = (employee) => ({
-  type: SELECTED_EMPLOYEE,
-  payload: employee
 });

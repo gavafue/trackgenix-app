@@ -11,8 +11,7 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   ADD_OR_EDIT_EMPLOYEE_ERROR,
   ADD_OR_EDIT_EMPLOYEE_PENDING,
-  ADD_OR_EDIT_EMPLOYEE_SUCCESS,
-  SELECTED_EMPLOYEE
+  ADD_OR_EDIT_EMPLOYEE_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -22,8 +21,7 @@ const initialState = {
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
   infoForDelete: '',
-  showFeedbackMessage: false,
-  employeeSelected: {}
+  showFeedbackMessage: false
 };
 
 export const employeesReducer = (state = initialState, action) => {
@@ -103,11 +101,6 @@ export const employeesReducer = (state = initialState, action) => {
       return {
         ...state,
         pending: true
-      };
-    case SELECTED_EMPLOYEE:
-      return {
-        ...state,
-        employeeSelected: action.payload
       };
     default:
       return state;

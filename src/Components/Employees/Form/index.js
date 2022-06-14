@@ -25,14 +25,12 @@ const Form = () => {
   const isPending = useSelector((state) => state.employees.pending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const selectedEmployee = useSelector((store) => store.employees.employeeSelected);
   const URL = process.env.REACT_APP_API_URL;
-
   const employee = useParams();
   const history = useHistory();
 
-  const title =
-    selectedEmployee.length != 0 ? `Update ${nameValue} ${lastNameValue}'s data` : 'Add Employee';
+  const title = employee.id ? `Update ${nameValue} ${lastNameValue}'s data` : 'Add Employee';
+  console.log(employee);
 
   useEffect(() => {
     if (employee.id) {
