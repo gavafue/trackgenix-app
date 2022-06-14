@@ -12,10 +12,7 @@ import {
   addTimesheetsPending,
   editTimesheetsError,
   editTimesheetsPending,
-  editTimesheetsSuccess,
-  getATimesheetsPending,
-  getATimesheetsSuccess,
-  getATimesheetsError
+  editTimesheetsSuccess
 } from './actions';
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -137,21 +134,6 @@ export const editTimesheet = (options) => {
       .catch((error) => {
         console.log(error);
         dispatch(editTimesheetsError(error));
-      });
-  };
-};
-export const getTimesheet = (id) => {
-  return (dispatch) => {
-    dispatch(getATimesheetsPending());
-    fetch(`${API_URL}/timesheets/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        dispatch(getATimesheetsSuccess(res.data));
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(getATimesheetsError(err));
       });
   };
 };

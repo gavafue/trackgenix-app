@@ -15,9 +15,7 @@ import {
   EDIT_TIMESHEET_ERROR,
   EDIT_TIMESHEET_PENDING,
   EDIT_TIMESHEET_SUCCESS,
-  GET_A_TIMESHEET_ERROR,
-  GET_A_TIMESHEET_PENDING,
-  GET_A_TIMESHEET_SUCCESS
+  SELECTED_TIMESHEET
 } from './constants';
 
 const initialState = {
@@ -28,7 +26,7 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  timesheetSelected: {}
+  timesheetSelected: []
 };
 
 export const timesheetsReducer = (state = initialState, action) => {
@@ -121,22 +119,10 @@ export const timesheetsReducer = (state = initialState, action) => {
         ...state,
         pending: true
       };
-    case GET_A_TIMESHEET_SUCCESS:
+    case SELECTED_TIMESHEET:
       return {
         ...state,
-        timesheetSelected: action.payload,
-        pending: false
-      };
-    case GET_A_TIMESHEET_PENDING:
-      return {
-        ...state,
-        pending: true
-      };
-    case GET_A_TIMESHEET_ERROR:
-      return {
-        ...state,
-        error: true,
-        pending: false
+        timesheetSelected: action.payload
       };
     default:
       return state;

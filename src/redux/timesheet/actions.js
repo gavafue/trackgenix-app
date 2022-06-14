@@ -14,7 +14,8 @@ import {
   ADD_TIMESHEET_PENDING,
   EDIT_TIMESHEET_ERROR,
   EDIT_TIMESHEET_PENDING,
-  EDIT_TIMESHEET_SUCCESS
+  EDIT_TIMESHEET_SUCCESS,
+  SELECTED_TIMESHEET
 } from './constants';
 //ACTIONS FOR GET
 export const getTimesheetsSuccess = (tasks) => ({
@@ -93,16 +94,7 @@ export const editTimesheetsError = (error) => ({
   payload: error
 });
 //ACTIONS FOR GET A TIMESHEET
-export const getATimesheetsSuccess = (timesheet) => ({
-  type: EDIT_TIMESHEET_SUCCESS,
+export const selectOneTimesheet = (timesheet) => ({
+  type: SELECTED_TIMESHEET,
   payload: timesheet
-});
-
-export const getATimesheetsPending = () => ({
-  type: EDIT_TIMESHEET_PENDING
-});
-
-export const getATimesheetsError = (error) => ({
-  type: EDIT_TIMESHEET_ERROR,
-  payload: error
 });

@@ -7,7 +7,7 @@ import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
-import { addTimesheet, getTimesheet } from '../../../redux/timesheet/thunks';
+import { addTimesheet } from '../../../redux/timesheet/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/timesheet/actions';
 const URL = process.env.REACT_APP_API_URL;
@@ -73,11 +73,12 @@ const Form = () => {
   };
 
   const timesheetId = useParams();
-  const title = timesheetId.id ? 'Update Timesheet' : 'Add Timesheet';
+  const title = selectedTimesheet.length != 0 ? 'Update Timesheet' : 'Add Timesheet';
 
   const options = {
-    method: timesheetId.id ? 'PUT' : 'POST',
-    url: timesheetId.id ? `${URL}/timesheets/${timesheetId.id}` : `${URL}/timesheets`,
+    method: selectedTimesheet.length != 0 ? 'PUT' : 'POST',
+    url:
+      selectedTimesheet.length != 0 ? `${URL}/timesheets/${timesheetId.id}` : `${URL}/timesheets`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -109,11 +110,9 @@ const Form = () => {
       optionContent: `${item.name}`
     };
   });
-  console.log('fuera', selectedTimesheet);
+
   useEffect(() => {
-    if (timesheetId.id) {
-      console.log('dentro', selectedTimesheet);
-      dispatch(getTimesheet(timesheetId.id));
+    if (selectedTimesheet.length != 0) {
       setProjectValue(selectedTimesheet.project?._id || '');
       setEmployeeValue(selectedTimesheet.employee?._id || '');
       setWeekSprintValue(selectedTimesheet.weekSprint);

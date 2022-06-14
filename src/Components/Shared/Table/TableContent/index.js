@@ -11,12 +11,12 @@ const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete 
             {headers.map((header, index) => {
               return (
                 <td key={index} className={styles.rows}>
-                  {row[header]}
+                  {row[header] ?? ''}
                 </td>
               );
             })}
             <td className={styles.rows}>
-              <Button onClick={() => editData(row._id)} label="Edit" />
+              <Button onClick={() => editData(row)} label="Edit" />
             </td>
             <td className={styles.rows}>
               <Button

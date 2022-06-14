@@ -12,7 +12,8 @@ import { getTimesheets, deleteTimesheet } from '../../redux/timesheet/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
-  showFeedbackMessage
+  showFeedbackMessage,
+  selectOneTimesheet
 } from '../../redux/timesheet/actions';
 
 const TimeSheets = () => {
@@ -29,8 +30,9 @@ const TimeSheets = () => {
 
   const history = useHistory();
 
-  const editData = (id) => {
-    history.push(`/time-sheets/form/${id}`);
+  const editData = (row) => {
+    dispatch(selectOneTimesheet(row));
+    history.push(`/time-sheets/form/`);
   };
   const deleteHandler = () => {
     dispatch(deleteTimesheet(deleteInfo));
@@ -64,7 +66,6 @@ const TimeSheets = () => {
   //     })
   //     .catch((err) => console.log(err));
   // };
-  console.log(timesheets);
   const timesheetData = timesheets.map((timeSheet) => {
     return {
       ...timeSheet,
@@ -72,7 +73,6 @@ const TimeSheets = () => {
       employeeName: timeSheet?.employee?.firstName || 'Employee not found'
     };
   });
-  console.log(timesheetData);
   return (
     <section className={styles.container}>
       <h1>Timesheets</h1>
