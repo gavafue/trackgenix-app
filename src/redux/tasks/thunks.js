@@ -1,11 +1,7 @@
-// import { useSelector } from 'react-redux';
 import {
   getTasksSuccess,
   getTasksError,
   getTasksPending,
-  getTaskByIdError,
-  getTaskByIdPending,
-  getTaskByIdSuccess,
   deleteTaskError,
   deleteTaskSuccess,
   deleteTaskPending,
@@ -62,19 +58,16 @@ export const deleteTask = (taskId) => {
   };
 };
 
-export const postTask = (values) => {
+export const postTask = (options) => {
+  console.log(options, 'inside thunk');
   return (dispatch) => {
-    const options = {
-      body: JSON.stringify(values)
-    };
     let isValid;
-    fetch(options.url, values)
+    fetch(options.url, options)
       .then((response) => {
         isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        console.log(response);
         if (isValid) {
           dispatch(postTaskSuccess(response.data));
           dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
@@ -121,21 +114,6 @@ export const editTask = (options) => {
       })
       .catch((error) => {
         dispatch(editTaskError(error));
-      });
-  };
-};
-
-export const getTaskById = (id) => {
-  return (dispatch) => {
-    dispatch(getTaskByIdPending());
-    return fetch(`${process.env.REACT_APP_API}/tasks/${id}`)
-      .then((response) => response.json())
-      .then((response) => {
-        dispatch(getTaskByIdSuccess(response.data));
-        return response.data;
-      })
-      .catch((error) => {
-        dispatch(getTaskByIdError(error.toString()));
       });
   };
 };

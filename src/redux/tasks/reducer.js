@@ -2,9 +2,7 @@ import {
   GET_TASKS_PENDING,
   GET_TASKS_SUCCESS,
   GET_TASKS_ERROR,
-  GET_TASK_BY_ID_PENDING,
-  GET_TASK_BY_ID_SUCCESS,
-  GET_TASK_BY_ID_ERROR,
+  GET_SELECTED_ITEM,
   DELETE_TASK_ERROR,
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
@@ -15,7 +13,8 @@ import {
   POST_TASK_ERROR,
   POST_TASK_SUCCESS,
   EDIT_TASK_SUCCESS,
-  EDIT_TASK_ERROR
+  EDIT_TASK_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
@@ -48,22 +47,10 @@ export const tasksReducer = (state = initialState, action) => {
         error: action.payload,
         pending: false
       };
-    case GET_TASK_BY_ID_PENDING:
+    case GET_SELECTED_ITEM:
       return {
         ...state,
-        pending: true
-      };
-    case GET_TASK_BY_ID_SUCCESS:
-      return {
-        ...state,
-        isFetching: false,
         selectedItem: action.payload
-      };
-    case GET_TASK_BY_ID_ERROR:
-      return {
-        ...state,
-        isFetching: false,
-        error: action.payload
       };
     case DELETE_TASK_PENDING:
       return {
@@ -112,19 +99,30 @@ export const tasksReducer = (state = initialState, action) => {
     case POST_TASK_SUCCESS:
       return {
         ...state,
-        list: action.payload,
+        list: [...state.list, action.payload],
         pending: false
       };
     case EDIT_TASK_SUCCESS:
       return {
         ...state,
-        selectedItem: action.payload,
+        list: state.list.map((item) => {
+          if (item._id === action.payload._id) {
+            return action.payload;
+          }
+          return item;
+        }),
         pending: false
       };
     case EDIT_TASK_ERROR:
       return {
         ...state,
         error: true,
+        pending: false
+      };
+    case CLEAN_SELECTED_ITEM:
+      return {
+        ...state,
+        selectedItem: {},
         pending: false
       };
     default:

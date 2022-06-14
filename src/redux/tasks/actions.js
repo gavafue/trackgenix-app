@@ -2,9 +2,7 @@ import {
   GET_TASKS_SUCCESS,
   GET_TASKS_ERROR,
   GET_TASKS_PENDING,
-  GET_TASK_BY_ID_ERROR,
-  GET_TASK_BY_ID_PENDING,
-  GET_TASK_BY_ID_SUCCESS,
+  GET_SELECTED_ITEM,
   DELETE_TASK_ERROR,
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
@@ -15,7 +13,8 @@ import {
   POST_TASK_ERROR,
   POST_TASK_SUCCESS,
   EDIT_TASK_ERROR,
-  EDIT_TASK_SUCCESS
+  EDIT_TASK_SUCCESS,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getTasksSuccess = (tasks) => ({
@@ -32,23 +31,10 @@ export const getTasksError = (error) => ({
   payload: error
 });
 
-export const getTaskByIdPending = () => {
+export const getSelectedItem = (task) => {
   return {
-    type: GET_TASK_BY_ID_PENDING
-  };
-};
-
-export const getTaskByIdSuccess = (task) => {
-  return {
-    type: GET_TASK_BY_ID_SUCCESS,
+    type: GET_SELECTED_ITEM,
     payload: task
-  };
-};
-
-export const getTaskByIdError = (error) => {
-  return {
-    type: GET_TASK_BY_ID_ERROR,
-    payload: error
   };
 };
 
@@ -104,4 +90,8 @@ export const editTaskSuccess = (taskEdited) => ({
 export const editTaskError = (error) => ({
   type: EDIT_TASK_ERROR,
   payload: error
+});
+
+export const cleanSelectedItem = () => ({
+  type: CLEAN_SELECTED_ITEM
 });
