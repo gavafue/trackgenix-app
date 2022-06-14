@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-// import { useParams } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import InputText from '../../Shared/Input/InputText';
 import InputSelect from '../../Shared/Input/InputSelect';
@@ -58,17 +57,8 @@ const Form = () => {
     setMembersRateValue(event.target.value);
   };
 
-  // const projectId = useParams().id;
   const title =
     projectSelected.length != 0 ? `Editing ${nameValue} projects's information.` : 'Add a Project';
-
-  // const memberData = projectSelected.members.map((member) => {
-  //   return {
-  //     name: member.name,
-  //     role: member.role,
-  //     rate: member.rate
-  //   };
-  // });
 
   useEffect(() => {
     fetch(`${URL}/employees`)
@@ -93,8 +83,6 @@ const Form = () => {
     }
   }, []);
 
-  // console.log('data', projectSelected.members[0]);
-  console.log('projectselected.members[0]?.name: ', projectSelected.members[0]?.name._id);
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {
