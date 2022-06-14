@@ -9,7 +9,10 @@ import {
   showFeedbackMessage,
   postProjectSuccess,
   postProjectError,
-  postProjectPending
+  postProjectPending,
+  editProjectPending,
+  editProjectError,
+  editProjectSuccess
 } from './actions';
 
 export const getProjects = () => {
@@ -67,7 +70,6 @@ export const postProject = (options) => {
         return response.json();
       })
       .then((response) => {
-        console.log(response);
         if (isValid) {
           dispatch(postProjectSuccess(response.data));
           dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
@@ -82,6 +84,43 @@ export const postProject = (options) => {
       })
       .catch((error) => {
         dispatch(postProjectError(error.toString()));
+      });
+  };
+};
+
+export const editProject = (options) => {
+  return (dispatch) => {
+    dispatch(editProjectPending());
+    let isValid;
+    fetch(options.url, options)
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
+      })
+      .then((response) => {
+        if (isValid) {
+          dispatch(editProjectSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editProjectError(response.data.message));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(editProjectError(error));
       });
   };
 };

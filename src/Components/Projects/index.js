@@ -12,7 +12,8 @@ import { getProjects, deleteProject } from '../../redux/projects/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
-  showFeedbackMessage
+  showFeedbackMessage,
+  getSelectedProject
 } from '../../redux/projects/actions';
 
 const Projects = () => {
@@ -25,8 +26,9 @@ const Projects = () => {
   const showDelete = useSelector((state) => state.projects.showDeleteMessage);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
 
-  const editData = (id) => {
-    history.push(`/projects/form/${id}`);
+  const editData = (row) => {
+    dispatch(getSelectedProject(row));
+    history.push(`/projects/form/`);
   };
   useEffect(() => {
     dispatch(getProjects());

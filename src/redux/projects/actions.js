@@ -11,7 +11,11 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   POST_PROJECT_ERROR,
   POST_PROJECT_SUCCESS,
-  POST_PROJECT_PENDING
+  POST_PROJECT_PENDING,
+  EDIT_PROJECT_ERROR,
+  EDIT_PROJECT_PENDING,
+  EDIT_PROJECT_SUCCESS,
+  GET_SELECTED_PROJECT
 } from './constants';
 
 export const getProjectsSuccess = (tasks) => ({
@@ -74,4 +78,23 @@ export const postProjectSuccess = (task) => ({
 
 export const postProjectPending = () => ({
   type: POST_PROJECT_PENDING
+});
+
+export const editProjectSuccess = (projectEdited) => ({
+  type: EDIT_PROJECT_SUCCESS,
+  payload: projectEdited
+});
+
+export const editProjectError = (error) => ({
+  type: EDIT_PROJECT_ERROR,
+  payload: error
+});
+
+export const editProjectPending = () => ({
+  type: EDIT_PROJECT_PENDING
+});
+
+export const getSelectedProject = (timesheet) => ({
+  type: GET_SELECTED_PROJECT,
+  payload: timesheet
 });

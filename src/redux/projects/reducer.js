@@ -11,7 +11,11 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   POST_PROJECT_ERROR,
   POST_PROJECT_SUCCESS,
-  POST_PROJECT_PENDING
+  POST_PROJECT_PENDING,
+  EDIT_PROJECT_ERROR,
+  EDIT_PROJECT_PENDING,
+  EDIT_PROJECT_SUCCESS,
+  GET_SELECTED_PROJECT
 } from './constants';
 
 const initialState = {
@@ -21,7 +25,8 @@ const initialState = {
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
   infoForDelete: '',
-  showFeedbackMessage: false
+  showFeedbackMessage: false,
+  projectSelected: []
 };
 
 export const projectsReducer = (state = initialState, action) => {
@@ -89,13 +94,35 @@ export const projectsReducer = (state = initialState, action) => {
     case POST_PROJECT_SUCCESS:
       return {
         ...state,
-        error: action.payload,
+        list: action.payload,
         pending: false
       };
     case POST_PROJECT_PENDING:
       return {
         ...state,
         pending: true
+      };
+    case EDIT_PROJECT_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case EDIT_PROJECT_SUCCESS:
+      return {
+        ...state,
+        projectSelected: action.payload,
+        pending: false
+      };
+    case EDIT_PROJECT_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+    case GET_SELECTED_PROJECT:
+      return {
+        ...state,
+        projectSelected: action.payload
       };
     default:
       return state;

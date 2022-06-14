@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import InputText from '../../Shared/Input/InputText';
 import InputSelect from '../../Shared/Input/InputSelect';
@@ -8,7 +8,7 @@ import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Loader from '../../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
-import { postProject } from '../../../redux/projects/thunks';
+import { editProject, postProject } from '../../../redux/projects/thunks';
 import { showFeedbackMessage } from '../../../redux/projects/actions';
 
 const Form = () => {
@@ -16,10 +16,8 @@ const Form = () => {
   const isPending = useSelector((state) => state.projects.pending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
+  const projectSelected = useSelector((state) => state.projects.projectSelected);
   const [employees, setEmployees] = useState([]);
-  // const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  // const [infoForFeedback, setInfoForFeedback] = useState({});
-  // const [showLoader, setShowLoader] = useState(false);
   const URL = process.env.REACT_APP_API_URL;
 
   const [nameValue, setNameValue] = useState('');
@@ -60,42 +58,49 @@ const Form = () => {
     setMembersRateValue(event.target.value);
   };
 
-  const projectId = useParams().id;
-  const title = projectId ? `Editing ${nameValue} projects's information.` : 'Add a Project';
+  // const projectId = useParams().id;
+  const title =
+    projectSelected.length != 0 ? `Editing ${nameValue} projects's information.` : 'Add a Project';
+
+  // const memberData = projectSelected.members.map((member) => {
+  //   return {
+  //     name: member.name,
+  //     role: member.role,
+  //     rate: member.rate
+  //   };
+  // });
 
   useEffect(() => {
-    // setShowLoader(true);
     fetch(`${URL}/employees`)
       .then((res) => res.json())
       .then((data) => {
         setEmployees(data.data);
       })
       .catch((err) => console.log(err));
-
-    if (projectId) {
-      fetch(`${URL}/projects/${projectId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setNameValue(data.data.name);
-          setStartDateValue(data.data.startDate);
-          setEndDateValue(data.data.endDate);
-          setDescriptionValue(data.data.description);
-          setClientValue(data.data.client);
-          setMembersValue(data.data.members[0]._id);
-          setActiveValue(data.data.active);
-          setMembersRateValue(data.data.members[0].rate);
-          setMembersRoleValue(data.data.members[0].role);
-        })
-        .catch((err) => console.log(err));
-    }
-    // setShowLoader(false);
   }, []);
 
+  useEffect(() => {
+    if (projectSelected.legth != 0) {
+      setNameValue(projectSelected.name);
+      setStartDateValue(projectSelected.startDate);
+      setEndDateValue(projectSelected.endDate);
+      setDescriptionValue(projectSelected.description);
+      setClientValue(projectSelected.client);
+      setMembersValue(projectSelected.members[0]?.name?._id || '');
+      setActiveValue(projectSelected.active);
+      setMembersRateValue(projectSelected.members[0]?.rate || '');
+      setMembersRoleValue(projectSelected.members[0]?.role || '');
+    }
+  }, []);
+
+  // console.log('data', projectSelected.members[0]);
+  console.log('projectselected.members[0]?.name: ', projectSelected.members[0]?.name._id);
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {
-      method: projectId ? 'PUT' : 'POST',
-      url: `${URL}/projects/${projectId ? projectId : ''}`,
+      method: projectSelected.length != 0 ? 'PUT' : 'POST',
+      url:
+        projectSelected.length != 0 ? `${URL}/projects/${projectSelected._id}` : `${URL}/projects`,
       headers: {
         'Content-type': 'application/json'
       },
@@ -115,9 +120,9 @@ const Form = () => {
         active: activeValue
       })
     };
-    dispatch(postProject(options));
+    projectSelected.length != 0 ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
-
+  console.log('membersValue', membersValue);
   const arrayToMapEmployees = employees.map((employee) => {
     return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };
   });
