@@ -9,12 +9,9 @@ import {
   SET_INFO_FOR_FEEDBACK,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  ADD_TIMESHEET_SUCCESS,
-  ADD_TIMESHEET_ERROR,
-  ADD_TIMESHEET_PENDING,
-  EDIT_TIMESHEET_ERROR,
-  EDIT_TIMESHEET_PENDING,
-  EDIT_TIMESHEET_SUCCESS,
+  ADD_OR_EDIT_TIMESHEET_ERROR,
+  ADD_OR_EDIT_TIMESHEET_PENDING,
+  ADD_OR_EDIT_TIMESHEET_SUCCESS,
   SELECTED_TIMESHEET
 } from './constants';
 //ACTIONS FOR GET
@@ -66,31 +63,17 @@ export const showFeedbackMessage = (boolean) => ({
   payload: boolean
 });
 //ACTIONS FOR POST
-export const addTimesheetsSuccess = (timesheet) => ({
-  type: ADD_TIMESHEET_SUCCESS,
+export const addOrEditTimesheetsSuccess = (timesheet) => ({
+  type: ADD_OR_EDIT_TIMESHEET_SUCCESS,
   payload: timesheet
 });
 
-export const addTimesheetsPending = () => ({
-  type: ADD_TIMESHEET_PENDING
+export const addOrEditTimesheetsPending = () => ({
+  type: ADD_OR_EDIT_TIMESHEET_PENDING
 });
 
-export const addTimesheetsError = (error) => ({
-  type: ADD_TIMESHEET_ERROR,
-  payload: error
-});
-//ACTIONS FOR PUT
-export const editTimesheetsSuccess = (timesheet) => ({
-  type: EDIT_TIMESHEET_SUCCESS,
-  payload: timesheet
-});
-
-export const editTimesheetsPending = () => ({
-  type: EDIT_TIMESHEET_PENDING
-});
-
-export const editTimesheetsError = (error) => ({
-  type: EDIT_TIMESHEET_ERROR,
+export const addOrEditTimesheetsError = (error) => ({
+  type: ADD_OR_EDIT_TIMESHEET_ERROR,
   payload: error
 });
 //ACTIONS FOR GET A TIMESHEET

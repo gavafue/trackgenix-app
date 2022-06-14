@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import styles from './form.module.css';
 import Select from '../../Shared/Input/InputSelect';
@@ -7,7 +6,7 @@ import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
-import { addTimesheet } from '../../../redux/timesheet/thunks';
+import { addOrEditTimesheet } from '../../../redux/timesheet/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/timesheet/actions';
 const URL = process.env.REACT_APP_API_URL;
@@ -72,13 +71,14 @@ const Form = () => {
     setWorkDescriptionValue(event.target.value);
   };
 
-  const timesheetId = useParams();
   const title = selectedTimesheet.length != 0 ? 'Update Timesheet' : 'Add Timesheet';
 
   const options = {
     method: selectedTimesheet.length != 0 ? 'PUT' : 'POST',
     url:
-      selectedTimesheet.length != 0 ? `${URL}/timesheets/${timesheetId.id}` : `${URL}/timesheets`,
+      selectedTimesheet.length != 0
+        ? `${URL}/timesheets/${selectedTimesheet._id}`
+        : `${URL}/timesheets`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -94,7 +94,7 @@ const Form = () => {
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(addTimesheet(options));
+    dispatch(addOrEditTimesheet(options));
   };
 
   const arrayToMapEmployees = employees.map((item) => {
@@ -122,7 +122,7 @@ const Form = () => {
       setWorkDescriptionValue(selectedTimesheet.workDescription);
     }
   }, []);
-  console.log();
+
   const dayInput = dateValue?.substring(5, 7);
   const monthInput = dateValue?.substring(8, 10);
   const yearInput = dateValue?.substring(0, 4);

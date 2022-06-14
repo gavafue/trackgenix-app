@@ -7,12 +7,9 @@ import {
   deleteTimesheetPending,
   setInfoForFeedback,
   showFeedbackMessage,
-  addTimesheetsError,
-  addTimesheetsSuccess,
-  addTimesheetsPending,
-  editTimesheetsError,
-  editTimesheetsPending,
-  editTimesheetsSuccess
+  addOrEditTimesheetsError,
+  addOrEditTimesheetsPending,
+  addOrEditTimesheetsSuccess
 } from './actions';
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -64,9 +61,9 @@ export const deleteTimesheet = (timesheetId) => {
   };
 };
 
-export const addTimesheet = (options) => {
+export const addOrEditTimesheet = (options) => {
   return (dispatch) => {
-    dispatch(addTimesheetsPending());
+    dispatch(addOrEditTimesheetsPending());
     let isValid;
     fetch(options.url, options)
       .then((res) => {
@@ -75,7 +72,7 @@ export const addTimesheet = (options) => {
       })
       .then((res) => {
         if (isValid) {
-          dispatch(addTimesheetsSuccess(res.data));
+          dispatch(addOrEditTimesheetsSuccess(res.data));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
@@ -91,49 +88,12 @@ export const addTimesheet = (options) => {
             })
           );
           dispatch(showFeedbackMessage(true));
-          dispatch(addTimesheetsError(res.data.message));
+          dispatch(addOrEditTimesheetsError(res.data.message));
         }
       })
       .catch((error) => {
         console.log(error);
-        dispatch(addTimesheetsError(error));
-      });
-  };
-};
-
-export const editTimesheet = (options) => {
-  return (dispatch) => {
-    dispatch(editTimesheetsPending());
-    let isValid;
-    fetch(options.url, options)
-      .then((res) => {
-        isValid = res.status == 201 || res.status == 200;
-        return res.json();
-      })
-      .then((res) => {
-        if (isValid) {
-          dispatch(editTimesheetsSuccess(res.data));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: res.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(
-            setInfoForFeedback({
-              title: 'Something went wrong',
-              description: res.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-          dispatch(editTimesheetsError(res.data.message));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        dispatch(editTimesheetsError(error));
+        dispatch(addOrEditTimesheetsError(error));
       });
   };
 };
