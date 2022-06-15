@@ -173,7 +173,7 @@ const Form = () => {
           name="gender"
           value={genderValue}
           onChange={onChangeGenderInput}
-          placeholder="Enter gender"
+          placeholder={[genderValue ? genderValue : 'Enter the admin gender']}
           required
         />
         <Input
@@ -222,7 +222,7 @@ const Form = () => {
           name="status"
           value={activeValue}
           onChange={onChangeActiveInput}
-          placeholder={[activeValue ? activeValue : 'Enter your gender']}
+          placeholder={[activeValue ? activeValue : 'Enter the admin status']}
           required
         />
       </SharedForm>
