@@ -1,4 +1,5 @@
 import styles from '../admins.module.css';
+import { useEffect } from 'react';
 import Table from '../../Shared/Table';
 import Modal from '../../Shared/Modal';
 import DeleteMessage from '../../Shared/DeleteMessage';
@@ -9,9 +10,11 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteAdmin } from '../../../redux/admins/thunks';
 import {
+  getSelectedAdmin,
   setInfoForDelete,
   showDeleteMessage,
-  showFeedbackMessage
+  showFeedbackMessage,
+  cleanSelectedAdmin
 } from '../../../redux/admins/actions';
 
 const AdminsTable = () => {
@@ -23,13 +26,20 @@ const AdminsTable = () => {
   const showDelete = useSelector((state) => state.admins.showDeleteMessage);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const history = useHistory();
-  const editData = (id) => {
-    history.push(`/admins/form/${id}`);
+
+  const editData = (row) => {
+    dispatch(getSelectedAdmin(row));
+    history.push(`/admins/form/`);
   };
 
   const deleteHandler = () => {
     dispatch(deleteAdmin(deleteInfo));
   };
+
+  useEffect(() => {
+    dispatch(cleanSelectedAdmin());
+  }, []);
+
   const adminData = admins.map((admin) => {
     return {
       name: admin.name,

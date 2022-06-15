@@ -11,7 +11,12 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   POST_ADMIN_PENDING,
   POST_ADMIN_SUCCESS,
-  POST_ADMIN_ERROR
+  POST_ADMIN_ERROR,
+  GET_SELECTED_ADMIN,
+  EDIT_ADMIN_PENDING,
+  EDIT_ADMIN_SUCCESS,
+  EDIT_ADMIN_ERROR,
+  CLEAN_SELECTED_ADMIN
 } from './constants';
 
 export const getAdminsSuccess = (admins) => ({
@@ -74,4 +79,28 @@ export const postAdminSuccess = (admin) => ({
 
 export const postAdminPending = () => ({
   type: POST_ADMIN_PENDING
+});
+
+export const getSelectedAdmin = (admin) => ({
+  type: GET_SELECTED_ADMIN,
+  payload: admin
+});
+
+export const editAdminPending = () => ({
+  type: EDIT_ADMIN_PENDING
+});
+
+export const editAdminSuccess = (adminEdited) => ({
+  type: EDIT_ADMIN_SUCCESS,
+  payload: adminEdited
+});
+
+export const editAdminError = (error) => ({
+  type: EDIT_ADMIN_ERROR,
+  payload: error
+});
+
+export const cleanSelectedAdmin = (admin) => ({
+  type: CLEAN_SELECTED_ADMIN,
+  payload: admin
 });

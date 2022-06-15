@@ -11,7 +11,12 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   POST_ADMIN_ERROR,
   POST_ADMIN_SUCCESS,
-  POST_ADMIN_PENDING
+  POST_ADMIN_PENDING,
+  GET_SELECTED_ADMIN,
+  EDIT_ADMIN_PENDING,
+  EDIT_ADMIN_ERROR,
+  EDIT_ADMIN_SUCCESS,
+  CLEAN_SELECTED_ADMIN
 } from './constants';
 
 const initialState = {
@@ -21,7 +26,8 @@ const initialState = {
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
   infoForDelete: '',
-  showFeedbackMessage: false
+  showFeedbackMessage: false,
+  adminSelected: {}
 };
 
 export const adminsReducer = (state = initialState, action) => {
@@ -96,6 +102,35 @@ export const adminsReducer = (state = initialState, action) => {
       return {
         ...state,
         pending: true
+      };
+    case EDIT_ADMIN_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case EDIT_ADMIN_SUCCESS:
+      return {
+        ...state,
+        adminSelected: action.payload,
+        pending: false
+      };
+    case EDIT_ADMIN_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        pending: false
+      };
+    case GET_SELECTED_ADMIN:
+      return {
+        ...state,
+        pending: true,
+        adminSelected: action.payload
+      };
+    case CLEAN_SELECTED_ADMIN:
+      return {
+        ...state,
+        selectedAdmin: {},
+        pending: false
       };
     default:
       return state;

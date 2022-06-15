@@ -9,7 +9,10 @@ import {
   showFeedbackMessage,
   postAdminPending,
   postAdminSuccess,
-  postAdminError
+  postAdminError,
+  editAdminPending,
+  editAdminError,
+  editAdminSuccess
 } from './actions';
 
 export const getAdmins = () => {
@@ -82,6 +85,43 @@ export const postAdmin = (options) => {
       })
       .catch((error) => {
         dispatch(postAdminError(error.toString()));
+      });
+  };
+};
+
+export const editAdmin = (options) => {
+  return (dispatch) => {
+    dispatch(editAdminPending());
+    let isValid;
+    fetch(options.url, options)
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
+      })
+      .then((response) => {
+        if (isValid) {
+          dispatch(editAdminSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editAdminError(response.data.message));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(editAdminError(error));
       });
   };
 };

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import styles from './form.module.css';
-import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/admins/actions';
@@ -9,8 +8,7 @@ import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Preloader from '../../Shared/Preloader';
-import { postAdmin } from '../../../redux/admins/thunks';
+import { editAdmin, postAdmin } from '../../../redux/admins/thunks';
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -27,6 +25,8 @@ const Form = () => {
   const isPending = useSelector((state) => state.admins.pending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
+  const adminSelected = useSelector((state) => state.admins.adminSelected);
+  const isAdminSelected = Object.keys(adminSelected).length;
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -64,19 +64,34 @@ const Form = () => {
     { id: 'female', optionContent: 'Female' },
     { id: 'other', optionContent: 'Other' }
   ];
+
   const arrayToMapActive = [
-    { id: 'true', optionContent: 'Active' },
-    { id: 'false', optionContent: 'Inactive' }
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
   ];
 
-  const adminId = useParams();
-  const title = adminId.id ? `${nameValue} ${lastNameValue}` : 'Add admin';
+  useEffect(() => {
+    if (isAdminSelected) {
+      setNameValue(adminSelected.name);
+      setLastNameValue(adminSelected.lastName);
+      setEmailValue(adminSelected.email);
+      setPasswordValue(adminSelected.password);
+      setCityValue(adminSelected.city);
+      setBirthDateValue(adminSelected.dateBirth);
+      setGenderValue(adminSelected.gender);
+      setPhoneValue(adminSelected.phone);
+      setZipValue(adminSelected.zip);
+      setActiveValue(adminSelected.active);
+    }
+  }, []);
 
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {
-      method: adminId.id ? 'PUT' : 'POST',
-      url: `${process.env.REACT_APP_API_URL}/admins/${adminId.id ? adminId.id : ''}`,
+      method: isAdminSelected ? 'PUT' : 'POST',
+      url: isAdminSelected
+        ? `${process.env.REACT_APP_API_URL}/admins/${adminSelected._id}`
+        : `${process.env.REACT_APP_API_URL}/admins`,
       headers: {
         'Content-type': 'application/json'
       },
@@ -93,32 +108,10 @@ const Form = () => {
         active: activeValue
       })
     };
-    dispatch(postAdmin(options));
+    isAdminSelected ? dispatch(editAdmin(options)) : dispatch(postAdmin(options));
   };
 
-  const URL = process.env.REACT_APP_API_URL;
-
-  useEffect(() => {
-    if (adminId.id) {
-      // setShowPreloader(true);
-      fetch(`${URL}/admins/${adminId.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setNameValue(data.data.name);
-          setLastNameValue(data.data.lastName);
-          setEmailValue(data.data.email);
-          setPasswordValue(data.data.password);
-          setCityValue(data.data.city);
-          setBirthDateValue(data.data.dateBirth);
-          setGenderValue(data.data.gender);
-          setPhoneValue(data.data.phone);
-          setZipValue(data.data.zip);
-          setActiveValue(data.data.active);
-          // setShowPreloader(false);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, []);
+  const title = isAdminSelected ? `Editing ${nameValue} admin information.` : 'Add an Admin';
 
   const dayInput = birthDateValue.substring(5, 7);
   const monthInput = birthDateValue.substring(8, 10);
@@ -180,7 +173,7 @@ const Form = () => {
           name="gender"
           value={genderValue}
           onChange={onChangeGenderInput}
-          placeholder={[genderValue ? genderValue : 'Enter your gender']}
+          placeholder="Enter gender"
           required
         />
         <Input
@@ -225,11 +218,11 @@ const Form = () => {
         <Select
           label="Status"
           arrayToMap={arrayToMapActive}
-          id="active"
-          name="active"
+          id="status"
+          name="status"
           value={activeValue}
           onChange={onChangeActiveInput}
-          placeholder={activeValue ? activeValue : 'Enter Active status'}
+          placeholder={[activeValue ? activeValue : 'Enter your gender']}
           required
         />
       </SharedForm>
@@ -242,7 +235,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Preloader />}
+      {isPending}
     </div>
   );
 };
