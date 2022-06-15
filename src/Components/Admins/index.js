@@ -5,17 +5,16 @@ import { getAdmins } from '../../redux/admins/thunks';
 import styles from './admins.module.css';
 import AdminsTable from './Table';
 import Button from '../Shared/Button';
-import { cleanSelectedAdmin } from '../../redux/admins/actions';
+
 const Admins = () => {
   const dispatch = useDispatch();
   const admins = useSelector((state) => state.admins.list);
   const history = useHistory();
+
   useEffect(() => {
     dispatch(getAdmins());
   }, []);
-  useEffect(() => {
-    dispatch(cleanSelectedAdmin());
-  }, []);
+
   return (
     <section className={styles.container}>
       <h2>Admins</h2>

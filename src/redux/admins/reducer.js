@@ -129,7 +129,7 @@ export const adminsReducer = (state = initialState, action) => {
     case CLEAN_SELECTED_ADMIN:
       return {
         ...state,
-        selectedAdmin: {},
+        adminSelected: {},
         pending: false
       };
     default:

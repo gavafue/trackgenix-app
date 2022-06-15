@@ -100,7 +100,6 @@ export const editAdminError = (error) => ({
   payload: error
 });
 
-export const cleanSelectedAdmin = (admin) => ({
-  type: CLEAN_SELECTED_ADMIN,
-  payload: admin
+export const cleanSelectedAdmin = () => ({
+  type: CLEAN_SELECTED_ADMIN
 });
