@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import styles from './form.module.css';
-import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/admins/actions';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
+import Preloader from '../../Shared/Preloader';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import { editAdmin, postAdmin } from '../../../redux/admins/thunks';
 
@@ -117,10 +117,6 @@ const Form = () => {
   const monthInput = birthDateValue.substring(8, 10);
   const yearInput = birthDateValue.substring(0, 4);
   const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
-  const history = useHistory();
-  const goBack = () => {
-    history.push('/admins');
-  };
 
   return (
     <div className={styles.container}>
@@ -173,7 +169,7 @@ const Form = () => {
           name="gender"
           value={genderValue}
           onChange={onChangeGenderInput}
-          placeholder={[genderValue ? genderValue : 'Enter the admin gender']}
+          placeholder="Enter the admin gender"
           required
         />
         <Input
@@ -216,13 +212,13 @@ const Form = () => {
           required
         />
         <Select
-          label="Status"
+          label="Active"
           arrayToMap={arrayToMapActive}
-          id="status"
-          name="status"
+          id="active"
+          name="active"
           value={activeValue}
           onChange={onChangeActiveInput}
-          placeholder={[activeValue ? activeValue : 'Enter the admin status']}
+          placeholder="Enter the admin status"
           required
         />
       </SharedForm>
@@ -230,12 +226,11 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          goBack();
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending}
+      {isPending && <Preloader />}
     </div>
   );
 };

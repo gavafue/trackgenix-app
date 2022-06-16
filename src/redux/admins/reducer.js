@@ -86,6 +86,11 @@ export const adminsReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
+    case POST_ADMIN_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
     case POST_ADMIN_ERROR:
       return {
         ...state,
@@ -95,13 +100,8 @@ export const adminsReducer = (state = initialState, action) => {
     case POST_ADMIN_SUCCESS:
       return {
         ...state,
-        error: action.payload,
+        list: [...state.list, action.payload],
         pending: false
-      };
-    case POST_ADMIN_PENDING:
-      return {
-        ...state,
-        pending: true
       };
     case EDIT_ADMIN_PENDING:
       return {
@@ -111,7 +111,12 @@ export const adminsReducer = (state = initialState, action) => {
     case EDIT_ADMIN_SUCCESS:
       return {
         ...state,
-        adminSelected: action.payload,
+        list: state.list.map((admin) => {
+          if (admin._id === action.payload._id) {
+            return action.payload;
+          }
+          return admin;
+        }),
         pending: false
       };
     case EDIT_ADMIN_ERROR:
@@ -123,8 +128,8 @@ export const adminsReducer = (state = initialState, action) => {
     case GET_SELECTED_ADMIN:
       return {
         ...state,
-        pending: true,
-        adminSelected: action.payload
+        adminSelected: action.payload,
+        pending: false
       };
     case CLEAN_SELECTED_ADMIN:
       return {

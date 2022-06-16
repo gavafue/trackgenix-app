@@ -42,13 +42,10 @@ const AdminsTable = () => {
 
   const adminData = admins.map((admin) => {
     return {
-      name: admin.name,
-      lastName: admin.lastName,
-      phone: admin.phone,
-      email: admin.email,
-      moreInfo: <Button label="..." disabled={true} theme="disabled" />,
       ...admin,
-      active: admin.active ? 'Active' : 'Inactive'
+      moreInfo: <Button label="..." disabled={true} theme="disabled" />,
+      active: admin.active,
+      isActive: admin.active ? 'Active' : 'Inactive'
     };
   });
   return (
@@ -56,7 +53,7 @@ const AdminsTable = () => {
       <Table
         data={adminData}
         headersName={['Name', 'Last Name', 'Phone', 'E-mail', 'Status', 'More information']}
-        headers={['name', 'lastName', 'phone', 'email', 'active', 'moreInfo']}
+        headers={['name', 'lastName', 'phone', 'email', 'isActive', 'moreInfo']}
         deleteAdmin={deleteHandler}
         editData={editData}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
