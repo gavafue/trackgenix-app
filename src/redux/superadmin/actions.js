@@ -11,7 +11,9 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   POST_SUPERADMIN_ERROR,
   POST_SUPERADMIN_SUCCESS,
+  POST_SUPERADMIN_PENDING,
   EDIT_SUPERADMIN_ERROR,
+  EDIT_SUPERADMIN_PENDING,
   EDIT_SUPERADMIN_SUCCESS,
   GET_SELECTED_ITEM,
   CLEAN_SELECTED_ITEM
@@ -70,6 +72,10 @@ export const postSuperAdminError = (error) => ({
   payload: error
 });
 
+export const postSuperAdminsPending = () => ({
+  type: POST_SUPERADMIN_PENDING
+});
+
 export const postSuperAdminSuccess = (superadmin) => ({
   type: POST_SUPERADMIN_SUCCESS,
   payload: superadmin
@@ -78,6 +84,10 @@ export const postSuperAdminSuccess = (superadmin) => ({
 export const editSuperAdminSuccess = (superadminEdited) => ({
   type: EDIT_SUPERADMIN_SUCCESS,
   payload: superadminEdited
+});
+
+export const editSuperAdminsPending = () => ({
+  type: EDIT_SUPERADMIN_PENDING
 });
 
 export const editSuperAdminError = (error) => ({

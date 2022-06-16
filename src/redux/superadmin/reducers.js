@@ -10,8 +10,10 @@ import {
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
   POST_SUPERADMIN_ERROR,
+  POST_SUPERADMIN_PENDING,
   POST_SUPERADMIN_SUCCESS,
   EDIT_SUPERADMIN_SUCCESS,
+  EDIT_SUPERADMIN_PENDING,
   EDIT_SUPERADMIN_ERROR,
   CLEAN_SELECTED_ITEM,
   GET_SELECTED_ITEM
@@ -90,6 +92,11 @@ export const superadminReducer = (state = initialState, action) => {
         error: action.payload,
         pending: false
       };
+    case POST_SUPERADMIN_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
     case POST_SUPERADMIN_SUCCESS:
       return {
         ...state,
@@ -105,6 +112,11 @@ export const superadminReducer = (state = initialState, action) => {
           }
           return item;
         })
+      };
+    case EDIT_SUPERADMIN_PENDING:
+      return {
+        ...state,
+        pending: true
       };
     case EDIT_SUPERADMIN_ERROR:
       return {

@@ -13,6 +13,11 @@ import { showFeedbackMessage } from '../../../redux/superadmin/actions';
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
+  const selectedItem = useSelector((state) => state.superadmins.selectedItem);
+  const isItemSelected = Object.keys(selectedItem).length;
+  const isPending = useSelector((state) => state.superadmins.pending);
+  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
+  const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
 
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
@@ -20,13 +25,6 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
   const [roleValue, setRoleValue] = useState('');
-
-  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
-  const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
-  const isPending = useSelector((state) => state.superadmins.pending);
-
-  const selectedItem = useSelector((state) => state.superadmins.selectedItem);
-  const isItemSelected = Object.keys(selectedItem).length;
 
   const onChangeNameInput = (e) => {
     setNameValue(e.target.value);
@@ -89,6 +87,7 @@ const Form = () => {
   };
   return (
     <div className={styles.container}>
+      {isPending && <Preloader />}
       <h2>{title}</h2>
       <SharedForm onSubmit={onSubmit}>
         <Input
@@ -124,7 +123,7 @@ const Form = () => {
         <Input
           name="password"
           id="password"
-          type="text"
+          type="password"
           value={passwordValue}
           placeholder="Write your password"
           onChange={onChangePasswordInput}
@@ -160,7 +159,6 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {isPending && <Preloader />}
     </div>
   );
 };

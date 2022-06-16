@@ -26,6 +26,10 @@ const SuperAdmins = () => {
   const showDelete = useSelector((state) => state.superadmins.showDeleteMessage);
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
 
+  useEffect(() => {
+    dispatch(cleanSelectedItem());
+  }, []);
+
   const history = useHistory();
   const editData = (row) => {
     dispatch(getSelectedItem(row));
@@ -51,10 +55,6 @@ const SuperAdmins = () => {
       isActive: superAdmin.active ? 'Yes' : 'No'
     };
   });
-
-  useEffect(() => {
-    dispatch(cleanSelectedItem());
-  }, []);
 
   return (
     <section className={styles.container}>

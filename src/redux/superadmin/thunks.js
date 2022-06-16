@@ -8,8 +8,10 @@ import {
   setInfoForFeedback,
   showFeedbackMessage,
   postSuperAdminError,
+  postSuperAdminsPending,
   postSuperAdminSuccess,
   editSuperAdminError,
+  editSuperAdminsPending,
   editSuperAdminSuccess
 } from './actions';
 
@@ -17,10 +19,10 @@ export const getSuperadmins = () => {
   return (dispatch) => {
     dispatch(getSuperAdminsPending());
     return fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
-      .then((response) => response.json())
-      .then((response) => {
-        dispatch(getSuperAdminsSuccess(response.data));
-        return response.data;
+      .then((responseponse) => responseponse.json())
+      .then((responseponse) => {
+        dispatch(getSuperAdminsSuccess(responseponse.data));
+        return responseponse.data;
       })
       .catch((error) => {
         dispatch(getSuperAdminsError(error.toString()));
@@ -36,24 +38,25 @@ export const deleteSuperAdmin = (superAdminId) => {
       url: `${process.env.REACT_APP_API_URL}/super-admin/${superAdminId}`
     };
     return fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error) {
-          dispatch(deleteSuperAdminError(response.error));
+      .then((responseponse) => responseponse.json())
+      .then((responseponse) => {
+        if (responseponse.error) {
+          dispatch(deleteSuperAdminError(responseponse.error));
           dispatch(
-            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: responseponse.message
+            })
           );
-          console.log('log de if', response);
         } else {
           dispatch(deleteSuperAdminSuccess(superAdminId));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
-              description: response.message
+              description: responseponse.message
             })
           );
           dispatch(showFeedbackMessage(true));
-          console.log('log de else', response);
         }
       })
       .catch((error) => console.log(error));
@@ -62,19 +65,20 @@ export const deleteSuperAdmin = (superAdminId) => {
 
 export const postSuperAdmin = (options) => {
   return (dispatch) => {
+    dispatch(postSuperAdminsPending());
     let isValid;
     fetch(options.url, options)
-      .then((res) => {
-        isValid = res.status == 201 || res.status == 200;
-        return res.json();
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
       })
-      .then((res) => {
+      .then((response) => {
         if (isValid) {
-          dispatch(postSuperAdminSuccess(res.data));
+          dispatch(postSuperAdminSuccess(response.data));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
-              description: res.message
+              description: response.message
             })
           );
           dispatch(showFeedbackMessage(true));
@@ -82,11 +86,11 @@ export const postSuperAdmin = (options) => {
           dispatch(
             setInfoForFeedback({
               title: 'Something went wrong',
-              description: res.message
+              description: response.message
             })
           );
           dispatch(showFeedbackMessage(true));
-          dispatch(postSuperAdminError(res.data.message));
+          dispatch(postSuperAdminError(response.data.message));
         }
       })
       .catch((error) => {
@@ -97,30 +101,31 @@ export const postSuperAdmin = (options) => {
 
 export const editSuperAdmin = (options) => {
   return (dispatch) => {
+    dispatch(editSuperAdminsPending());
     let isValid;
     fetch(options.url, options)
-      .then((res) => {
-        isValid = res.status == 201 || res.status == 200;
-        return res.json();
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
       })
-      .then((res) => {
-        if (isValid) {
-          dispatch(editSuperAdminSuccess(res.data));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: res.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        } else {
+      .then((response) => {
+        if (!isValid) {
           dispatch(
             setInfoForFeedback({
               title: 'Something went wrong',
-              description: res.message
+              description: response.message
             })
           );
-          dispatch(editSuperAdminError(res.data.message));
+          dispatch(showFeedbackMessage(true));
+          dispatch(editSuperAdminError(response.data.message));
+        } else {
+          dispatch(editSuperAdminSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
           dispatch(showFeedbackMessage(true));
         }
       })
