@@ -9,9 +9,14 @@ import {
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  ADD_OR_EDIT_EMPLOYEE_ERROR,
-  ADD_OR_EDIT_EMPLOYEE_PENDING,
-  ADD_OR_EDIT_EMPLOYEE_SUCCESS
+  POST_EMPLOYEE_ERROR,
+  POST_EMPLOYEE_SUCCESS,
+  POST_EMPLOYEE_PENDING,
+  EDIT_EMPLOYEE_ERROR,
+  EDIT_EMPLOYEE_PENDING,
+  EDIT_EMPLOYEE_SUCCESS,
+  GET_SELECTED_EMPLOYEE,
+  CLEAN_SELECTED_EMPLOYEE
 } from './constants';
 
 export const getEmployeeSuccess = (employees) => ({
@@ -62,16 +67,39 @@ export const showFeedbackMessage = (showFeedbackMessage) => ({
   payload: showFeedbackMessage
 });
 
-export const addOrEditEmployeeSuccess = (employee) => ({
-  type: ADD_OR_EDIT_EMPLOYEE_SUCCESS,
+export const postEmployeeError = (error) => ({
+  type: POST_EMPLOYEE_ERROR,
+  payload: error
+});
+
+export const postEmployeeSuccess = (employee) => ({
+  type: POST_EMPLOYEE_SUCCESS,
   payload: employee
 });
 
-export const addOrEditEmployeePending = () => ({
-  type: ADD_OR_EDIT_EMPLOYEE_PENDING
+export const postEmployeePending = () => ({
+  type: POST_EMPLOYEE_PENDING
 });
 
-export const addOrEditEmployeeError = (error) => ({
-  type: ADD_OR_EDIT_EMPLOYEE_ERROR,
+export const editEmployeeSuccess = (employeeEdited) => ({
+  type: EDIT_EMPLOYEE_SUCCESS,
+  payload: employeeEdited
+});
+
+export const editEmployeeError = (error) => ({
+  type: EDIT_EMPLOYEE_ERROR,
   payload: error
+});
+
+export const editEmployeePending = () => ({
+  type: EDIT_EMPLOYEE_PENDING
+});
+
+export const getSelectedEmployee = (employee) => ({
+  type: GET_SELECTED_EMPLOYEE,
+  payload: employee
+});
+
+export const cleanSelectedEmployee = () => ({
+  type: CLEAN_SELECTED_EMPLOYEE
 });

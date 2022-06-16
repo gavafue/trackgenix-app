@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { /*useParams,*/ useHistory } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
@@ -8,7 +8,7 @@ import styles from './form.module.css';
 import Loader from '../../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/employees/actions';
-import { addOrEditEmployee } from '../../../redux/employees/thunks';
+import { editEmployee, postEmployee } from '../../../redux/employees/thunks';
 
 const Form = () => {
   const [nameValue, setNameValue] = useState('');
@@ -21,62 +21,6 @@ const Form = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [photoValue, setPhotoValue] = useState('');
   const [birthdayValue, setBirthdayValue] = useState('');
-  const dispatch = useDispatch();
-  const isPending = useSelector((state) => state.employees.pending);
-  const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const URL = process.env.REACT_APP_API_URL;
-  const employee = useParams();
-  const history = useHistory();
-
-  const title = employee.id ? `Update ${nameValue} ${lastNameValue}'s data` : 'Add Employee';
-  console.log(employee);
-
-  useEffect(() => {
-    if (employee.id) {
-      fetch(`${URL}/employees/${employee.id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setNameValue(data.data.firstName);
-          setLastNameValue(data.data.lastName);
-          setEmailValue(data.data.email);
-          setPasswordValue(data.data.password);
-          setCityValue(data.data.city);
-          setBirthdayValue(data.data.birthDate);
-          setPhotoValue(data.data.photo);
-          setTelephoneValue(data.data.phone);
-          setZipValue(data.data.zip);
-          setCountryValue(data.data.country);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, []);
-
-  const options = {
-    method: employee.id ? 'PUT' : 'POST',
-    url: employee.id ? `${URL}/employees/${employee.id}` : `${URL}/employees`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      firstName: nameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      country: countryValue,
-      city: cityValue,
-      zip: zipValue,
-      phone: telephoneValue,
-      birthDate: birthdayValue,
-      photo: photoValue,
-      password: passwordValue,
-      active: false
-    })
-  };
-  const onSubmit = (event) => {
-    event.preventDefault();
-    dispatch(addOrEditEmployee(options));
-  };
-
   const onChangeNameValue = (e) => {
     setNameValue(e.target.value);
   };
@@ -107,6 +51,57 @@ const Form = () => {
   const onChangeBirthdayValue = (e) => {
     setBirthdayValue(e.target.value);
   };
+  const dispatch = useDispatch();
+  const isPending = useSelector((state) => state.employees.pending);
+  const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
+  const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
+  const employeeSelected = useSelector((state) => state.employees.employeeSelected);
+  const isEmployeeSelected = Object.keys(employeeSelected).length;
+  const URL = process.env.REACT_APP_API_URL;
+  // const employee = useParams();
+  const history = useHistory();
+
+  const title = isEmployeeSelected ? `Update ${nameValue} ${lastNameValue}'s data` : 'Add Employee';
+
+  useEffect(() => {
+    if (isEmployeeSelected) {
+      setNameValue(employeeSelected.firstName);
+      setLastNameValue(employeeSelected.lastName);
+      setEmailValue(employeeSelected.email);
+      setPasswordValue(employeeSelected.password);
+      setCityValue(employeeSelected.city);
+      setBirthdayValue(employeeSelected.birthDate);
+      setPhotoValue(employeeSelected.photo);
+      setTelephoneValue(employeeSelected.phone);
+      setZipValue(employeeSelected.zip);
+      setCountryValue(employeeSelected.country);
+    }
+  }, []);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const options = {
+      method: isEmployeeSelected ? 'PUT' : 'POST',
+      url: isEmployeeSelected ? `${URL}/employees/${employeeSelected._id}` : `${URL}/employees`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName: nameValue,
+        lastName: lastNameValue,
+        email: emailValue,
+        country: countryValue,
+        city: cityValue,
+        zip: zipValue,
+        phone: telephoneValue,
+        birthDate: birthdayValue,
+        photo: photoValue,
+        password: passwordValue,
+        active: false
+      })
+    };
+    isEmployeeSelected ? dispatch(editEmployee(options)) : dispatch(postEmployee(options));
+  };
 
   const dayInput = birthdayValue.substring(5, 7);
   const monthInput = birthdayValue.substring(8, 10);
@@ -119,7 +114,7 @@ const Form = () => {
       <SharedForm onSubmit={onSubmit}>
         <Input
           className={styles.input}
-          id={employee.id}
+          id="first-name"
           label="First Name"
           name="first-name"
           type="text"

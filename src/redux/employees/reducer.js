@@ -9,9 +9,14 @@ import {
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  ADD_OR_EDIT_EMPLOYEE_ERROR,
-  ADD_OR_EDIT_EMPLOYEE_PENDING,
-  ADD_OR_EDIT_EMPLOYEE_SUCCESS
+  POST_EMPLOYEE_ERROR,
+  POST_EMPLOYEE_SUCCESS,
+  POST_EMPLOYEE_PENDING,
+  EDIT_EMPLOYEE_ERROR,
+  EDIT_EMPLOYEE_PENDING,
+  EDIT_EMPLOYEE_SUCCESS,
+  GET_SELECTED_EMPLOYEE,
+  CLEAN_SELECTED_EMPLOYEE
 } from './constants';
 
 const initialState = {
@@ -80,13 +85,29 @@ export const employeesReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-    case ADD_OR_EDIT_EMPLOYEE_ERROR:
+    case POST_EMPLOYEE_ERROR:
       return {
         ...state,
-        error: true,
+        error: action.payload,
         pending: false
       };
-    case ADD_OR_EDIT_EMPLOYEE_SUCCESS:
+    case POST_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        list: [...state.list, action.payload],
+        pending: false
+      };
+    case POST_EMPLOYEE_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case EDIT_EMPLOYEE_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case EDIT_EMPLOYEE_SUCCESS:
       return {
         ...state,
         list: state.list.map((item) => {
@@ -97,10 +118,22 @@ export const employeesReducer = (state = initialState, action) => {
         }),
         pending: false
       };
-    case ADD_OR_EDIT_EMPLOYEE_PENDING:
+    case EDIT_EMPLOYEE_ERROR:
       return {
         ...state,
-        pending: true
+        error: action.payload,
+        pending: false
+      };
+    case GET_SELECTED_EMPLOYEE:
+      return {
+        ...state,
+        employeeSelected: action.payload
+      };
+    case CLEAN_SELECTED_EMPLOYEE:
+      return {
+        ...state,
+        employeeSelected: {},
+        pending: false
       };
     default:
       return state;

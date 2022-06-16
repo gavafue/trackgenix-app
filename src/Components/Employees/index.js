@@ -12,7 +12,9 @@ import { getEmployee, deleteEmployee } from '../../redux/employees/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
-  showFeedbackMessage
+  showFeedbackMessage,
+  getSelectedEmployee,
+  cleanSelectedEmployee
 } from '../../redux/employees/actions';
 
 function Employees() {
@@ -24,32 +26,29 @@ function Employees() {
   const showDelete = useSelector((state) => state.employees.showDeleteMessage);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const history = useHistory();
-  const editData = (id) => {
-    history.push(`/employees/form/${id}`);
+  const editData = (row) => {
+    dispatch(getSelectedEmployee(row));
+    history.push(`/employees/form/`);
   };
   const createEmployee = () => {
     history.push('/employees/form');
   };
   useEffect(() => {
+    dispatch(cleanSelectedEmployee());
     dispatch(getEmployee());
   }, []);
 
   const deleteHandler = () => {
     dispatch(deleteEmployee(deleteInfo));
   };
-  const employeeData = employees.map((employee) => ({
-    ...employee
-  }));
 
   return (
     <section className={styles.container}>
-      <h2 className={styles.title}>Employees</h2>
-      <div className={styles.button}>
-        <Button label="Add new employee" onClick={createEmployee} />
-      </div>
+      <h2>Employees</h2>
       <div>
+        <Button label="Add new employee" onClick={createEmployee} />
         <Table
-          data={employeeData}
+          data={employees}
           headersName={['Name', 'Last Name', 'Email', 'Phone']}
           headers={['firstName', 'lastName', 'email', 'phone']}
           setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}

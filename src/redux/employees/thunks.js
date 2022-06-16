@@ -7,9 +7,12 @@ import {
   deleteEmployeePending,
   setInfoForFeedback,
   showFeedbackMessage,
-  addOrEditEmployeeError,
-  addOrEditEmployeePending,
-  addOrEditEmployeeSuccess
+  postEmployeeSuccess,
+  postEmployeeError,
+  postEmployeePending,
+  editEmployeePending,
+  editEmployeeError,
+  editEmployeeSuccess
 } from './actions';
 
 export const getEmployee = () => {
@@ -57,22 +60,50 @@ export const deleteEmployee = (employeeId) => {
   };
 };
 
-export const addOrEditEmployee = (options) => {
+export const postEmployee = (options) => {
   return (dispatch) => {
-    dispatch(addOrEditEmployeePending());
+    let isValid;
+    dispatch(postEmployeePending());
+    fetch(options.url, options)
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
+      })
+      .then((response) => {
+        if (isValid) {
+          dispatch(postEmployeeSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postEmployeeError(response.status));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        dispatch(postEmployeeError(error.toString()));
+      });
+  };
+};
+
+export const editEmployee = (options) => {
+  return (dispatch) => {
+    dispatch(editEmployeePending());
     let isValid;
     fetch(options.url, options)
-      .then((res) => {
-        isValid = res.status == 201 || res.status == 200;
-        return res.json();
+      .then((response) => {
+        isValid = response.status == 201 || response.status == 200;
+        return response.json();
       })
-      .then((res) => {
+      .then((response) => {
         if (isValid) {
-          dispatch(addOrEditEmployeeSuccess(res.message));
+          dispatch(editEmployeeSuccess(response.data));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
-              description: res.message
+              description: response.message
             })
           );
           dispatch(showFeedbackMessage(true));
@@ -80,16 +111,16 @@ export const addOrEditEmployee = (options) => {
           dispatch(
             setInfoForFeedback({
               title: 'Something went wrong',
-              description: res.message
+              description: response.message
             })
           );
           dispatch(showFeedbackMessage(true));
-          dispatch(addOrEditEmployeeError(res.message));
+          dispatch(editEmployeeError(response.data.message));
         }
       })
       .catch((error) => {
         console.log(error);
-        dispatch(addOrEditEmployeeError(error));
+        dispatch(editEmployeeError(error));
       });
   };
 };
