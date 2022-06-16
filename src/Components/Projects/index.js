@@ -32,16 +32,13 @@ const Projects = () => {
     history.push(`/projects/form/`);
   };
   useEffect(() => {
+    dispatch(cleanSelectedProject());
     dispatch(getProjects());
   }, []);
 
   const deleteHandler = () => {
     dispatch(deleteProject(deleteInfo));
   };
-
-  useEffect(() => {
-    dispatch(cleanSelectedProject());
-  }, []);
 
   return (
     <section className={styles.container}>

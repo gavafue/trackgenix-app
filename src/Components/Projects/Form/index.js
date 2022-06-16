@@ -77,7 +77,7 @@ const Form = () => {
       setEndDateValue(projectSelected.endDate);
       setDescriptionValue(projectSelected.description);
       setClientValue(projectSelected.client);
-      setMembersValue(projectSelected.members[0]?.name?._id || '');
+      setMembersValue(projectSelected.members[0].name?._id || '');
       setActiveValue(projectSelected.active);
       setMembersRateValue(projectSelected.members[0]?.rate || '');
       setMembersRoleValue(projectSelected.members[0]?.role || '');
