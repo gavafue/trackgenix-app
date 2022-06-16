@@ -6,7 +6,7 @@ import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
-import { addOrEditTimesheet } from '../../../redux/timesheet/thunks';
+import { editTimesheet, addTimesheet } from '../../../redux/timesheet/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { showFeedbackMessage } from '../../../redux/timesheet/actions';
 const URL = process.env.REACT_APP_API_URL;
@@ -26,6 +26,7 @@ const Form = () => {
   const pending = useSelector((state) => state.timesheets.pending);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const selectedTimesheet = useSelector((store) => store.timesheets.timesheetSelected);
+  const isTimesheetSelected = Object.keys(selectedTimesheet).length;
   useEffect(() => {
     //Get data for projects
     fetch(`${URL}/projects`)
@@ -71,14 +72,11 @@ const Form = () => {
     setWorkDescriptionValue(event.target.value);
   };
 
-  const title = selectedTimesheet.length != 0 ? 'Update Timesheet' : 'Add Timesheet';
+  const title = isTimesheetSelected ? 'Update Timesheet' : 'Add Timesheet';
 
   const options = {
-    method: selectedTimesheet.length != 0 ? 'PUT' : 'POST',
-    url:
-      selectedTimesheet.length != 0
-        ? `${URL}/timesheets/${selectedTimesheet._id}`
-        : `${URL}/timesheets`,
+    method: isTimesheetSelected ? 'PUT' : 'POST',
+    url: isTimesheetSelected ? `${URL}/timesheets/${selectedTimesheet._id}` : `${URL}/timesheets`,
     headers: {
       'Content-type': 'application/json'
     },
@@ -94,7 +92,7 @@ const Form = () => {
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(addOrEditTimesheet(options));
+    isTimesheetSelected ? dispatch(editTimesheet(options)) : dispatch(addTimesheet(options));
   };
 
   const arrayToMapEmployees = employees.map((item) => {
@@ -112,7 +110,7 @@ const Form = () => {
   });
 
   useEffect(() => {
-    if (selectedTimesheet.length != 0) {
+    if (isTimesheetSelected) {
       setProjectValue(selectedTimesheet.project?._id || '');
       setEmployeeValue(selectedTimesheet.employee?._id || '');
       setWeekSprintValue(selectedTimesheet.weekSprint);

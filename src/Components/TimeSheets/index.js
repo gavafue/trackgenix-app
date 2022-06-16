@@ -13,14 +13,17 @@ import {
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
-  selectOneTimesheet
+  selectOneTimesheet,
+  cleanSelectedTimesheet
 } from '../../redux/timesheet/actions';
 
 const TimeSheets = () => {
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(cleanSelectedTimesheet());
     dispatch(getTimesheets());
   }, []);
+
   const timesheets = useSelector((state) => state.timesheets.list);
   const pending = useSelector((state) => state.timesheets.pending);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
@@ -41,31 +44,6 @@ const TimeSheets = () => {
     history.push('/time-sheets/form');
   };
 
-  // const deleteTimesheet = (string) => {
-  //   const options = {
-  //     method: 'DELETE',
-  //     url: `${`${process.env.REACT_APP_API_URL}`}/timesheets/${string}`
-  //   };
-
-  //   fetch(options.url, options)
-  //     .then((response) => response.json())
-  //     .then((response) => {
-  //       if (response.error === true) {
-  //         setInfoForFeedback({
-  //           title: 'Something went wrong',
-  //           description: response.message
-  //         });
-  //       } else {
-  //         setInfoForFeedback({
-  //           title: 'Request done!',
-  //           description: response.message
-  //         });
-  //         setTimeSheets(timeSheets.filter((timeSheet) => timeSheet._id !== string));
-  //         setShowFeedbackMessage(true);
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
   const timesheetData = timesheets.map((timeSheet) => {
     return {
       ...timeSheet,

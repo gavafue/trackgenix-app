@@ -9,9 +9,13 @@ import {
   SHOW_FEEDBACK_MESSAGE,
   SET_INFO_FOR_DELETE,
   SET_INFO_FOR_FEEDBACK,
-  ADD_OR_EDIT_TIMESHEET_ERROR,
-  ADD_OR_EDIT_TIMESHEET_PENDING,
-  ADD_OR_EDIT_TIMESHEET_SUCCESS,
+  ADD_TIMESHEET_ERROR,
+  ADD_TIMESHEET_PENDING,
+  ADD_TIMESHEET_SUCCESS,
+  EDIT_TIMESHEET_ERROR,
+  EDIT_TIMESHEET_PENDING,
+  EDIT_TIMESHEET_SUCCESS,
+  CLEAN_SELECTED_TIMESHEET,
   SELECTED_TIMESHEET
 } from './constants';
 
@@ -23,7 +27,7 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  timesheetSelected: []
+  timesheetSelected: {}
 };
 
 export const timesheetsReducer = (state = initialState, action) => {
@@ -82,19 +86,41 @@ export const timesheetsReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-    case ADD_OR_EDIT_TIMESHEET_ERROR:
+    case ADD_TIMESHEET_ERROR:
       return {
         ...state,
         error: true,
         pending: false
       };
-    case ADD_OR_EDIT_TIMESHEET_SUCCESS:
+    case ADD_TIMESHEET_SUCCESS:
       return {
         ...state,
-        list: action.payload,
+        list: [...state.list, action.payload],
         pending: false
       };
-    case ADD_OR_EDIT_TIMESHEET_PENDING:
+    case ADD_TIMESHEET_PENDING:
+      return {
+        ...state,
+        pending: true
+      };
+    case EDIT_TIMESHEET_ERROR:
+      return {
+        ...state,
+        error: true,
+        pending: false
+      };
+    case EDIT_TIMESHEET_SUCCESS:
+      return {
+        ...state,
+        list: state.list.map((item) => {
+          if (item._id === action.payload._id) {
+            return action.payload;
+          }
+          return item;
+        }),
+        pending: false
+      };
+    case EDIT_TIMESHEET_PENDING:
       return {
         ...state,
         pending: true
@@ -103,6 +129,12 @@ export const timesheetsReducer = (state = initialState, action) => {
       return {
         ...state,
         timesheetSelected: action.payload
+      };
+    case CLEAN_SELECTED_TIMESHEET:
+      return {
+        ...state,
+        timesheetSelected: {},
+        pending: false
       };
     default:
       return state;
