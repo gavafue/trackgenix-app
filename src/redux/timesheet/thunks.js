@@ -67,14 +67,10 @@ export const deleteTimesheet = (timesheetId) => {
 export const addTimesheet = (options) => {
   return (dispatch) => {
     dispatch(addTimesheetsPending());
-    let isValid;
     fetch(options.url, options)
+      .then((res) => res.json())
       .then((res) => {
-        isValid = res.status == 201 || res.status == 200;
-        return res.json();
-      })
-      .then((res) => {
-        if (isValid) {
+        if (!res.error) {
           dispatch(addTimesheetsSuccess(res.data));
           dispatch(
             setInfoForFeedback({
@@ -103,14 +99,11 @@ export const addTimesheet = (options) => {
 export const editTimesheet = (options) => {
   return (dispatch) => {
     dispatch(editTimesheetsPending());
-    let isValid;
     fetch(options.url, options)
+      .then((res) => res.json())
       .then((res) => {
-        isValid = res.status == 201 || res.status == 200;
-        return res.json();
-      })
-      .then((res) => {
-        if (isValid) {
+        console.log(res);
+        if (!res.error) {
           dispatch(editTimesheetsSuccess(res.data));
           dispatch(
             setInfoForFeedback({

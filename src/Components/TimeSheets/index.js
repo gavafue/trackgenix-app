@@ -25,7 +25,7 @@ const TimeSheets = () => {
   }, []);
 
   const timesheets = useSelector((state) => state.timesheets.list);
-  const pending = useSelector((state) => state.timesheets.pending);
+  const isPending = useSelector((state) => state.timesheets.isPending);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const deleteInfo = useSelector((state) => state.timesheets.infoForDelete);
   const showDelete = useSelector((state) => state.timesheets.showDeleteMessage);
@@ -69,7 +69,7 @@ const TimeSheets = () => {
             'Employee'
           ]}
           headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
-          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+          setShowModal={(isModalShowed) => dispatch(showDeleteMessage(isModalShowed))}
           setInfoForDelete={(timesheetId) => dispatch(setInfoForDelete(timesheetId))}
           editData={editData}
           deleteTimesheet={deleteHandler}
@@ -98,7 +98,7 @@ const TimeSheets = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {pending && <Loader />}
+      {isPending && <Loader />}
     </section>
   );
 };

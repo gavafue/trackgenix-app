@@ -11,7 +11,7 @@ const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete 
             {headers.map((header, index) => {
               return (
                 <td key={index} className={styles.rows}>
-                  {row[header] ?? ''}
+                  {row[header]}
                 </td>
               );
             })}

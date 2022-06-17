@@ -21,7 +21,7 @@ import {
 
 const initialState = {
   list: [],
-  pending: false,
+  isPending: false,
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
@@ -35,36 +35,36 @@ export const timesheetsReducer = (state = initialState, action) => {
     case GET_TIMESHEETS_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case GET_TIMESHEETS_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_TIMESHEETS_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case DELETE_TIMESHEET_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case DELETE_TIMESHEET_SUCCESS:
       return {
         ...state,
         list: state.list.filter((timesheet) => timesheet._id !== action.payload),
-        pending: false
+        isPending: false
       };
     case DELETE_TIMESHEET_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -90,24 +90,24 @@ export const timesheetsReducer = (state = initialState, action) => {
       return {
         ...state,
         error: true,
-        pending: false
+        isPending: false
       };
     case ADD_TIMESHEET_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
     case ADD_TIMESHEET_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case EDIT_TIMESHEET_ERROR:
       return {
         ...state,
         error: true,
-        pending: false
+        isPending: false
       };
     case EDIT_TIMESHEET_SUCCESS:
       return {
@@ -118,12 +118,12 @@ export const timesheetsReducer = (state = initialState, action) => {
           }
           return item;
         }),
-        pending: false
+        isPending: false
       };
     case EDIT_TIMESHEET_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case SELECTED_TIMESHEET:
       return {
@@ -134,7 +134,7 @@ export const timesheetsReducer = (state = initialState, action) => {
       return {
         ...state,
         timesheetSelected: {},
-        pending: false
+        isPending: false
       };
     default:
       return state;
