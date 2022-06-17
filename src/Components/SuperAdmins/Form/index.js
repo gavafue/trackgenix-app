@@ -13,8 +13,8 @@ import { showFeedbackMessage } from '../../../redux/superadmin/actions';
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
-  const selectedItem = useSelector((state) => state.superadmins.selectedItem);
-  const isItemSelected = Object.keys(selectedItem).length;
+  const selectedSuperadmin = useSelector((state) => state.superadmins.selectedSuperadmin);
+  const isSuperadminSelected = Object.keys(selectedSuperadmin).length;
   const isPending = useSelector((state) => state.superadmins.pending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
@@ -51,13 +51,13 @@ const Form = () => {
   };
 
   useEffect(() => {
-    if (isItemSelected) {
-      setNameValue(selectedItem.firstName);
-      setLastNameValue(selectedItem.lastName);
-      setEmailValue(selectedItem.email);
-      setPasswordValue(selectedItem.password);
-      setActiveValue(selectedItem.active);
-      setRoleValue(selectedItem.role);
+    if (isSuperadminSelected) {
+      setNameValue(selectedSuperadmin.firstName);
+      setLastNameValue(selectedSuperadmin.lastName);
+      setEmailValue(selectedSuperadmin.email);
+      setPasswordValue(selectedSuperadmin.password);
+      setActiveValue(selectedSuperadmin.active);
+      setRoleValue(selectedSuperadmin.role);
     }
   }, []);
 
@@ -67,12 +67,14 @@ const Form = () => {
     { id: false, optionContent: 'False' }
   ];
 
-  const title = isItemSelected ? 'Update Super Admin' : 'Add Super Admin';
+  const title = isSuperadminSelected ? 'Update Super Admin' : 'Add Super Admin';
   const onSubmit = (event) => {
     event.preventDefault();
     const options = {
-      method: isItemSelected ? 'PUT' : 'POST',
-      url: isItemSelected ? `${URL}/super-admin/${selectedItem._id}` : `${URL}/super-admin`,
+      method: isSuperadminSelected ? 'PUT' : 'POST',
+      url: isSuperadminSelected
+        ? `${URL}/super-admin/${selectedSuperadmin._id}`
+        : `${URL}/super-admin`,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         firstName: nameValue,
@@ -83,7 +85,7 @@ const Form = () => {
         active: activeValue
       })
     };
-    isItemSelected ? dispatch(editSuperAdmin(options)) : dispatch(postSuperAdmin(options));
+    isSuperadminSelected ? dispatch(editSuperAdmin(options)) : dispatch(postSuperAdmin(options));
   };
   return (
     <div className={styles.container}>

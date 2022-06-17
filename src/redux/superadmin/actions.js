@@ -15,8 +15,8 @@ import {
   EDIT_SUPERADMIN_ERROR,
   EDIT_SUPERADMIN_PENDING,
   EDIT_SUPERADMIN_SUCCESS,
-  GET_SELECTED_ITEM,
-  CLEAN_SELECTED_ITEM
+  GET_SELECTED_SUPERADMIN,
+  CLEAN_SELECTED_SUPERADMIN
 } from './constants';
 
 export const getSuperAdminsSuccess = (superAdmins) => ({
@@ -95,14 +95,14 @@ export const editSuperAdminError = (error) => ({
   payload: error
 });
 
-export const getSelectedItem = (superadmin) => {
+export const getSelectedSuperadmin = (superadmin) => {
   return {
-    type: GET_SELECTED_ITEM,
+    type: GET_SELECTED_SUPERADMIN,
     payload: superadmin
   };
 };
 
-export const cleanSelectedItem = (superAdmin) => ({
-  type: CLEAN_SELECTED_ITEM,
+export const cleanSelectedSuperadmin = (superAdmin) => ({
+  type: CLEAN_SELECTED_SUPERADMIN,
   payload: superAdmin
 });

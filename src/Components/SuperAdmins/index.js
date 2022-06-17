@@ -12,8 +12,8 @@ import {
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
-  getSelectedItem,
-  cleanSelectedItem
+  getSelectedSuperadmin,
+  cleanSelectedSuperadmin
 } from '../../redux/superadmin/actions';
 import { deleteSuperAdmin, getSuperadmins } from '../../redux/superadmin/thunks';
 
@@ -27,12 +27,12 @@ const SuperAdmins = () => {
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
 
   useEffect(() => {
-    dispatch(cleanSelectedItem());
+    dispatch(cleanSelectedSuperadmin());
   }, []);
 
   const history = useHistory();
   const editData = (row) => {
-    dispatch(getSelectedItem(row));
+    dispatch(getSelectedSuperadmin(row));
     history.push(`/super-admins/form/`);
   };
 
@@ -66,7 +66,7 @@ const SuperAdmins = () => {
         data={superAdminData}
         headersName={['Name', 'Last Name', 'Email', 'Role', 'Active']}
         headers={['firstName', 'lastName', 'email', 'role', 'isActive']}
-        setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+        setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
         setInfoForDelete={(superAdminId) => dispatch(setInfoForDelete(superAdminId))}
         editData={editData}
         deleteSuperAdmin={deleteHandler}
@@ -83,7 +83,7 @@ const SuperAdmins = () => {
           }}
           infoForDelete={deleteInfo}
           deleteItem={deleteHandler}
-          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+          setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
         />
       </Modal>
       <Modal
