@@ -19,7 +19,7 @@ const Form = () => {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [hoursValue, setHoursValue] = useState('');
 
-  const isPending = useSelector((state) => state.tasks.pending);
+  const isPending = useSelector((state) => state.tasks.isPending);
   const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
   const infoForFeedback = useSelector((state) => state.tasks.infoForFeedback);
   const selectedItem = useSelector((state) => state.tasks.selectedItem);

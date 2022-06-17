@@ -19,7 +19,7 @@ import {
 
 const initialState = {
   list: [],
-  pending: false,
+  isPending: false,
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,

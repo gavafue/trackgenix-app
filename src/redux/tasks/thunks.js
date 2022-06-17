@@ -62,59 +62,45 @@ export const deleteTask = (taskId) => {
 
 export const postTask = (options) => {
   return (dispatch) => {
-    let isValid;
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        if (isValid) {
-          dispatch(postTaskSuccess(response.data));
-          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(postTaskError(response.data.message));
-          dispatch(
-            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
-          );
-          dispatch(showFeedbackMessage(true));
-        }
+        dispatch(postTaskSuccess(response.data));
+        dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+        dispatch(showFeedbackMessage(true));
       })
       .catch((error) => {
-        dispatch(postTaskError(error.toString()));
+        dispatch(postTaskError(error));
+        dispatch(setInfoForFeedback({ title: 'Something went wrong', description: error.message }));
+        dispatch(showFeedbackMessage(true));
       });
   };
 };
 
 export const editTask = (options) => {
   return (dispatch) => {
-    let isValid;
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        if (isValid) {
-          dispatch(editTaskSuccess(response.data));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(
-            setInfoForFeedback({ title: 'Something went wrong.', description: response.message })
-          );
-          dispatch(showFeedbackMessage(true));
-          dispatch(editTaskError(response.data.message));
-        }
+        dispatch(editTaskSuccess(response.data));
+        dispatch(
+          setInfoForFeedback({
+            title: 'Request done!',
+            description: response.message
+          })
+        );
+        dispatch(showFeedbackMessage(true));
       })
       .catch((error) => {
         dispatch(editTaskError(error));
+        dispatch(
+          setInfoForFeedback({ title: 'Something went wrong.', description: error.message })
+        );
+        dispatch(showFeedbackMessage(true));
       });
   };
 };
