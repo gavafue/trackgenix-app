@@ -21,12 +21,18 @@ export const getEmployee = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/employees`)
       .then((response) => response.json())
       .then((response) => {
-        dispatch(getEmployeeSuccess(response.data));
-        return response.data;
+        if (response.error) {
+          dispatch(getEmployeeError(response.error));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+        } else {
+          dispatch(getEmployeeSuccess(response.data));
+          return response.data;
+        }
+        dispatch(showFeedbackMessage(true));
       })
-      .catch((error) => {
-        dispatch(getEmployeeError(error.toString()));
-      });
+      .catch((err) => console.log(err));
   };
 };
 
@@ -64,19 +70,22 @@ export const postEmployee = (options) => {
   return (dispatch) => {
     dispatch(postEmployeePending());
     fetch(options.url, options)
+      .then((response) => response.json())
       .then((response) => {
-        return response.json();
+        if (response.error) {
+          dispatch(postEmployeeError(response.error));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postEmployeeSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+          return response.data;
+        }
       })
-      .then((response) => {
-        dispatch(postEmployeeSuccess(response.data));
-        dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-        dispatch(showFeedbackMessage(true));
-      })
-      .catch((error) => {
-        dispatch(postEmployeeError(error.toString()));
-        dispatch(setInfoForFeedback({ title: 'Something went wrong', description: error.message }));
-        dispatch(showFeedbackMessage(true));
-      });
+      .catch((err) => console.log(err));
   };
 };
 
@@ -84,28 +93,21 @@ export const editEmployee = (options) => {
   return (dispatch) => {
     dispatch(editEmployeePending());
     fetch(options.url, options)
+      .then((response) => response.json())
       .then((response) => {
-        return response.json();
+        if (response.error) {
+          dispatch(editEmployeeError(response.error));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(editEmployeeSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+          return response.data;
+        }
       })
-      .then((response) => {
-        dispatch(editEmployeeSuccess(response.data));
-        dispatch(
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          })
-        );
-        dispatch(showFeedbackMessage(true));
-      })
-      .catch((error) => {
-        dispatch(
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: error.message
-          })
-        );
-        dispatch(showFeedbackMessage(true));
-        dispatch(editEmployeeError(error.toString()));
-      });
+      .catch((err) => console.log(err));
   };
 };
