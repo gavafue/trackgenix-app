@@ -60,7 +60,10 @@ export const deleteTimesheet = (timesheetId) => {
           dispatch(showFeedbackMessage(true));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        dispatch(deleteTimesheetError(err));
+        dispatch(setInfoForFeedback({ title: 'Something went wrong.', description: err.message }));
+      });
   };
 };
 
@@ -91,8 +94,10 @@ export const addTimesheet = (options) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch(addTimesheetsError(error));
+        dispatch(
+          setInfoForFeedback({ title: 'Something went wrong.', description: error.message })
+        );
       });
   };
 };
@@ -124,8 +129,10 @@ export const editTimesheet = (options) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch(editTimesheetsError(error));
+        dispatch(
+          setInfoForFeedback({ title: 'Something went wrong.', description: error.message })
+        );
       });
   };
 };
