@@ -111,7 +111,9 @@ const Form = () => {
     isAdminSelected ? dispatch(editAdmin(options)) : dispatch(postAdmin(options));
   };
 
-  const title = isAdminSelected ? `Editing ${nameValue} admin information.` : 'Add an Admin';
+  const title = isAdminSelected
+    ? `Editing ${adminSelected.name} ${adminSelected.lastName}'s information`
+    : 'Add an Admin';
 
   const dayInput = birthDateValue.substring(5, 7);
   const monthInput = birthDateValue.substring(8, 10);
