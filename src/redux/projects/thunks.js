@@ -68,14 +68,20 @@ export const postProject = (options) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(postProjectSuccess(response.data));
-        dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-        dispatch(showFeedbackMessage(true));
+        if (!response.error) {
+          dispatch(postProjectSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postProjectError(response.data.message));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
       })
       .catch((error) => {
-        dispatch(postProjectError(error.toString()));
-        dispatch(setInfoForFeedback({ title: 'Something went wrong', description: error.message }));
-        dispatch(showFeedbackMessage(true));
+        dispatch(postProjectError(error));
       });
   };
 };
@@ -88,24 +94,28 @@ export const editProject = (options) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(editProjectSuccess(response.data));
-        dispatch(
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          })
-        );
-        dispatch(showFeedbackMessage(true));
+        if (!response.error) {
+          dispatch(editProjectSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editProjectError(response.data.message));
+        }
       })
       .catch((error) => {
-        dispatch(
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: error.message
-          })
-        );
-        dispatch(showFeedbackMessage(true));
-        dispatch(editProjectError(error.toString()));
+        dispatch(editProjectError(error));
       });
   };
 };
