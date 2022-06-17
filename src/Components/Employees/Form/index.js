@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { /*useParams,*/ useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
@@ -55,13 +55,13 @@ const Form = () => {
   const isPending = useSelector((state) => state.employees.pending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const employeeSelected = useSelector((state) => state.employees.employeeSelected);
+  const employeeSelected = useSelector((state) => state.employees.employeeSelected) || NaN;
   const isEmployeeSelected = Object.keys(employeeSelected).length;
   const URL = process.env.REACT_APP_API_URL;
-  // const employee = useParams();
   const history = useHistory();
-
-  const title = isEmployeeSelected ? `Update ${nameValue} ${lastNameValue}'s data` : 'Add Employee';
+  const title = isEmployeeSelected
+    ? `Update ${employeeSelected.firstName} ${employeeSelected.lastName}'s data`
+    : 'Add Employee';
 
   useEffect(() => {
     if (isEmployeeSelected) {
