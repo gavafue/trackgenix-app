@@ -21,7 +21,7 @@ import {
 
 const initialState = {
   list: [],
-  pending: false,
+  isPending: false,
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
@@ -35,36 +35,36 @@ export const projectsReducer = (state = initialState, action) => {
     case GET_PROJECTS_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case GET_PROJECTS_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_PROJECTS_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case DELETE_PROJECT_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case DELETE_PROJECT_SUCCESS:
       return {
         ...state,
         list: state.list.filter((project) => project._id !== action.payload),
-        pending: false
+        isPending: false
       };
     case DELETE_PROJECT_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -90,23 +90,23 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case POST_PROJECT_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
     case POST_PROJECT_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case EDIT_PROJECT_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case EDIT_PROJECT_SUCCESS:
       return {
@@ -117,13 +117,13 @@ export const projectsReducer = (state = initialState, action) => {
           }
           return item;
         }),
-        pending: false
+        isPending: false
       };
     case EDIT_PROJECT_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_SELECTED_PROJECT:
       return {
@@ -134,7 +134,7 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         projectSelected: {},
-        pending: false
+        isPending: false
       };
     default:
       return state;

@@ -52,7 +52,7 @@ const Projects = () => {
         headers={['name', 'description', 'client', 'startDate', 'endDate']}
         deleteProject={deleteHandler}
         editData={editData}
-        setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+        setShowModal={(show) => dispatch(showDeleteMessage(show))}
         setInfoForDelete={(projectId) => dispatch(setInfoForDelete(projectId))}
       />
       <Modal
@@ -67,7 +67,7 @@ const Projects = () => {
           }}
           infoForDelete={deleteInfo}
           deleteItem={deleteHandler}
-          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+          setShowModal={(show) => dispatch(showDeleteMessage(show))}
         />
       </Modal>
       <Modal

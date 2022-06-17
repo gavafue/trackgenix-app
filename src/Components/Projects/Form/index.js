@@ -12,7 +12,7 @@ import { showFeedbackMessage } from '../../../redux/projects/actions';
 
 const Form = () => {
   const dispatch = useDispatch();
-  const isPending = useSelector((state) => state.projects.pending);
+  const isPending = useSelector((state) => state.projects.isPending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
   const projectSelected = useSelector((state) => state.projects.projectSelected);
