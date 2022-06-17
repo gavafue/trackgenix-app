@@ -21,12 +21,13 @@ import {
 
 const initialState = {
   list: [],
-  pending: false,
+  isPending: false,
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
   infoForDelete: '',
-  showFeedbackMessage: false
+  showFeedbackMessage: false,
+  projectSelected: {}
 };
 
 export const employeesReducer = (state = initialState, action) => {
@@ -34,36 +35,36 @@ export const employeesReducer = (state = initialState, action) => {
     case GET_EMPLOYEE_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case GET_EMPLOYEE_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_EMPLOYEE_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case DELETE_EMPLOYEE_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case DELETE_EMPLOYEE_SUCCESS:
       return {
         ...state,
         list: state.list.filter((employee) => employee._id !== action.payload),
-        pending: false
+        isPending: false
       };
     case DELETE_EMPLOYEE_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -89,23 +90,23 @@ export const employeesReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case POST_EMPLOYEE_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
     case POST_EMPLOYEE_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case EDIT_EMPLOYEE_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case EDIT_EMPLOYEE_SUCCESS:
       return {
@@ -116,13 +117,13 @@ export const employeesReducer = (state = initialState, action) => {
           }
           return item;
         }),
-        pending: false
+        isPending: false
       };
     case EDIT_EMPLOYEE_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_SELECTED_EMPLOYEE:
       return {
@@ -133,7 +134,7 @@ export const employeesReducer = (state = initialState, action) => {
       return {
         ...state,
         employeeSelected: {},
-        pending: false
+        isPending: false
       };
     default:
       return state;

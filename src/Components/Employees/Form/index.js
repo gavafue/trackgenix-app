@@ -52,7 +52,7 @@ const Form = () => {
     setBirthdayValue(e.target.value);
   };
   const dispatch = useDispatch();
-  const isPending = useSelector((state) => state.employees.pending);
+  const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const employeeSelected = useSelector((state) => state.employees.employeeSelected) || NaN;

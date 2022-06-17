@@ -20,7 +20,7 @@ import {
 function Employees() {
   const dispatch = useDispatch();
   const employees = useSelector((state) => state.employees.list);
-  const isPending = useSelector((state) => state.employees.pending);
+  const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const deleteInfo = useSelector((state) => state.employees.infoForDelete);
   const showDelete = useSelector((state) => state.employees.showDeleteMessage);

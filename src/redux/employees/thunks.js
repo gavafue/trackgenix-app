@@ -62,28 +62,20 @@ export const deleteEmployee = (employeeId) => {
 
 export const postEmployee = (options) => {
   return (dispatch) => {
-    let isValid;
     dispatch(postEmployeePending());
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        if (isValid) {
-          dispatch(postEmployeeSuccess(response.data));
-          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(postEmployeeError(response.status));
-          dispatch(
-            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
-          );
-          dispatch(showFeedbackMessage(true));
-        }
+        dispatch(postEmployeeSuccess(response.data));
+        dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+        dispatch(showFeedbackMessage(true));
       })
       .catch((error) => {
         dispatch(postEmployeeError(error.toString()));
+        dispatch(setInfoForFeedback({ title: 'Something went wrong', description: error.message }));
+        dispatch(showFeedbackMessage(true));
       });
   };
 };
@@ -91,36 +83,29 @@ export const postEmployee = (options) => {
 export const editEmployee = (options) => {
   return (dispatch) => {
     dispatch(editEmployeePending());
-    let isValid;
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        if (isValid) {
-          dispatch(editEmployeeSuccess(response.data));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(
-            setInfoForFeedback({
-              title: 'Something went wrong',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-          dispatch(editEmployeeError(response.data.message));
-        }
+        dispatch(editEmployeeSuccess(response.data));
+        dispatch(
+          setInfoForFeedback({
+            title: 'Request done!',
+            description: response.message
+          })
+        );
+        dispatch(showFeedbackMessage(true));
       })
       .catch((error) => {
-        console.log(error);
-        dispatch(editEmployeeError(error));
+        dispatch(
+          setInfoForFeedback({
+            title: 'Something went wrong',
+            description: error.message
+          })
+        );
+        dispatch(showFeedbackMessage(true));
+        dispatch(editEmployeeError(error.toString()));
       });
   };
 };
