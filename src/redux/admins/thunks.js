@@ -62,28 +62,26 @@ export const deleteAdmin = (adminId) => {
 
 export const postAdmin = (options) => {
   return (dispatch) => {
-    let isValid;
     dispatch(postAdminPending());
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        console.log(response);
-        if (isValid) {
-          dispatch(postAdminSuccess(response.data));
-          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(postAdminError(response.status));
+        if (response.error) {
+          dispatch(postAdminError(response.error));
           dispatch(
             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
           );
           dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postAdminSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
         }
       })
       .catch((error) => {
+        console.log(error);
         dispatch(postAdminError(error.toString()));
       });
   };
@@ -92,23 +90,12 @@ export const postAdmin = (options) => {
 export const editAdmin = (options) => {
   return (dispatch) => {
     dispatch(editAdminPending());
-    let isValid;
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        if (isValid) {
-          dispatch(editAdminSuccess(response.data));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        } else {
+        if (response.error) {
           dispatch(
             setInfoForFeedback({
               title: 'Something went wrong',
@@ -117,11 +104,20 @@ export const editAdmin = (options) => {
           );
           dispatch(showFeedbackMessage(true));
           dispatch(editAdminError(response.data.message));
+        } else {
+          dispatch(editAdminSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
         }
       })
       .catch((error) => {
         console.log(error);
-        dispatch(editAdminError(error));
+        dispatch(editAdminError(error.toString()));
       });
   };
 };

@@ -21,7 +21,7 @@ import {
 
 const initialState = {
   list: [],
-  pending: false,
+  isPending: false,
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
@@ -35,36 +35,36 @@ export const adminsReducer = (state = initialState, action) => {
     case GET_ADMINS_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case GET_ADMINS_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_ADMINS_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case DELETE_ADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case DELETE_ADMIN_SUCCESS:
       return {
         ...state,
         list: state.list.filter((admin) => admin._id !== action.payload),
-        pending: false
+        isPending: false
       };
     case DELETE_ADMIN_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -89,24 +89,24 @@ export const adminsReducer = (state = initialState, action) => {
     case POST_ADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case POST_ADMIN_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case POST_ADMIN_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
     case EDIT_ADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case EDIT_ADMIN_SUCCESS:
       return {
@@ -117,25 +117,25 @@ export const adminsReducer = (state = initialState, action) => {
           }
           return admin;
         }),
-        pending: false
+        isPending: false
       };
     case EDIT_ADMIN_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_SELECTED_ADMIN:
       return {
         ...state,
         adminSelected: action.payload,
-        pending: false
+        isPending: false
       };
     case CLEAN_SELECTED_ADMIN:
       return {
         ...state,
         adminSelected: {},
-        pending: false
+        isPending: false
       };
     default:
       return state;
