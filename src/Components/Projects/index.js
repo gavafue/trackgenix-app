@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import Table from '../Shared/Table/index';
+import { useEffect } from 'react';
+import Table from '../Shared/Table';
 import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
@@ -7,57 +7,37 @@ import Button from '../Shared/Button';
 import Loader from '../Shared/Preloader';
 import { useHistory } from 'react-router-dom';
 import styles from './projects.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { getProjects, deleteProject } from '../../redux/projects/thunks';
+import {
+  setInfoForDelete,
+  showDeleteMessage,
+  showFeedbackMessage,
+  getSelectedProject,
+  cleanSelectedProject
+} from '../../redux/projects/actions';
 
 const Projects = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
-  const [projects, setProjects] = useState([]);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [infoForDelete, setInfoForDelete] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showLoader, setShowLoader] = useState(false);
-  const URL = process.env.REACT_APP_API_URL;
+  const projects = useSelector((state) => state.projects.list);
+  const isPending = useSelector((state) => state.projects.pending);
+  const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
+  const deleteInfo = useSelector((state) => state.projects.infoForDelete);
+  const showDelete = useSelector((state) => state.projects.showDeleteMessage);
+  const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
 
-  const editData = (id) => {
-    history.push(`/projects/form/${id}`);
+  const editData = (row) => {
+    dispatch(getSelectedProject(row));
+    history.push(`/projects/form/`);
   };
   useEffect(() => {
-    setShowLoader(true);
-    fetch(`${URL}/projects`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProjects(data.data);
-        setShowLoader(false);
-      })
-      .catch((err) => console.log(err));
+    dispatch(cleanSelectedProject());
+    dispatch(getProjects());
   }, []);
 
-  const deleteProject = (projectId) => {
-    const options = {
-      method: 'DELETE',
-      url: `${URL}/projects/${projectId}`
-    };
-    setShowLoader(true);
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: response.message
-          });
-          setShowFeedbackMessage(true);
-        } else {
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          });
-          setProjects(projects.filter((project) => projectId !== project._id));
-          setShowFeedbackMessage(true);
-        }
-      })
-      .catch((error) => console.log(error));
-    setShowLoader(false);
+  const deleteHandler = () => {
+    dispatch(deleteProject(deleteInfo));
   };
 
   return (
@@ -70,35 +50,35 @@ const Projects = () => {
         data={projects}
         headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date']}
         headers={['name', 'description', 'client', 'startDate', 'endDate']}
-        deleteProject={deleteProject}
+        deleteProject={deleteHandler}
         editData={editData}
-        setShowModal={setShowDeleteMessage}
-        setInfoForDelete={setInfoForDelete}
+        setShowModal={(show) => dispatch(showDeleteMessage(show))}
+        setInfoForDelete={(projectId) => dispatch(setInfoForDelete(projectId))}
       />
       <Modal
-        isOpen={showDeleteMessage}
+        isOpen={showDelete}
         handleClose={() => {
-          setShowDeleteMessage(false);
+          dispatch(showDeleteMessage(!showDelete));
         }}
       >
         <DeleteMessage
           handleClose={() => {
-            setShowDeleteMessage(false);
+            dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={infoForDelete}
-          deleteItem={deleteProject}
-          setShowModal={setShowDeleteMessage}
+          infoForDelete={deleteInfo}
+          deleteItem={deleteHandler}
+          setShowModal={(show) => dispatch(showDeleteMessage(show))}
         />
       </Modal>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {showLoader && <Loader />}
+      {isPending && <Loader />}
     </section>
   );
 };
