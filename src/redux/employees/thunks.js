@@ -12,7 +12,10 @@ import {
   postEmployeePending,
   editEmployeePending,
   editEmployeeError,
-  editEmployeeSuccess
+  editEmployeeSuccess,
+  getEmployeeByIdError,
+  getEmployeeByIdPending,
+  getEmployeeByIdSuccess
 } from './actions';
 
 export const getEmployee = () => {
@@ -109,5 +112,20 @@ export const editEmployee = (options) => {
         }
       })
       .catch((err) => console.log(err));
+  };
+};
+
+export const getEmployeeById = (id) => {
+  return (dispatch) => {
+    dispatch(getEmployeeByIdPending());
+    return fetch(`${process.env.REACT_APP_API_URL}/employees/${id}`)
+      .then((response) => response.json())
+      .then((response) => {
+        dispatch(getEmployeeByIdSuccess(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(getEmployeeByIdError(error.toString()));
+      });
   };
 };

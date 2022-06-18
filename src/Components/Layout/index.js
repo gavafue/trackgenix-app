@@ -16,6 +16,10 @@ import TimeSheetsForm from '../TimeSheets/Form';
 import Tasks from '../Tasks/index';
 import TasksForm from '../Tasks/Form';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import Loader from 'Components/Shared/Preloader';
+
+const Employee = lazy(() => import('routes/employee'));
 
 function Layout() {
   return (
@@ -46,6 +50,9 @@ function Layout() {
           <Route exact path="/tasks" component={Tasks} />
           <Route path="/tasks/form/:id" component={TasksForm} />
           <Route path="/tasks/form" component={TasksForm} />
+          <Suspense fallback={Loader}>
+            <Route path="/employee" component={Employee} />
+          </Suspense>
         </Switch>
         <Footer />
       </div>
