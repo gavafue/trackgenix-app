@@ -1,20 +1,22 @@
 import {
-  GET_TASKS_PENDING,
-  GET_TASKS_SUCCESS,
-  GET_TASKS_ERROR,
-  GET_SELECTED_ITEM,
-  DELETE_TASK_ERROR,
-  DELETE_TASK_PENDING,
-  DELETE_TASK_SUCCESS,
+  GET_EMPLOYEE_PENDING,
+  GET_EMPLOYEE_SUCCESS,
+  GET_EMPLOYEE_ERROR,
+  DELETE_EMPLOYEE_ERROR,
+  DELETE_EMPLOYEE_PENDING,
+  DELETE_EMPLOYEE_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  POST_TASK_ERROR,
-  POST_TASK_SUCCESS,
-  EDIT_TASK_SUCCESS,
-  EDIT_TASK_ERROR,
-  CLEAN_SELECTED_ITEM
+  POST_EMPLOYEE_ERROR,
+  POST_EMPLOYEE_SUCCESS,
+  POST_EMPLOYEE_PENDING,
+  EDIT_EMPLOYEE_ERROR,
+  EDIT_EMPLOYEE_PENDING,
+  EDIT_EMPLOYEE_SUCCESS,
+  GET_SELECTED_EMPLOYEE,
+  CLEAN_SELECTED_EMPLOYEE
 } from './constants';
 
 const initialState = {
@@ -25,49 +27,44 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  selectedItem: {}
+  projectSelected: {}
 };
 
-export const tasksReducer = (state = initialState, action) => {
+export const employeesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_TASKS_PENDING:
+    case GET_EMPLOYEE_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
-    case GET_TASKS_SUCCESS:
+    case GET_EMPLOYEE_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
-    case GET_TASKS_ERROR:
+    case GET_EMPLOYEE_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
-    case GET_SELECTED_ITEM:
+    case DELETE_EMPLOYEE_PENDING:
       return {
         ...state,
-        selectedItem: action.payload
+        isPending: true
       };
-    case DELETE_TASK_PENDING:
+    case DELETE_EMPLOYEE_SUCCESS:
       return {
         ...state,
-        pending: true
+        list: state.list.filter((employee) => employee._id !== action.payload),
+        isPending: false
       };
-    case DELETE_TASK_SUCCESS:
-      return {
-        ...state,
-        list: state.list.filter((task) => task._id !== action.payload),
-        pending: false
-      };
-    case DELETE_TASK_ERROR:
+    case DELETE_EMPLOYEE_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -89,19 +86,29 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-    case POST_TASK_ERROR:
+    case POST_EMPLOYEE_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
-    case POST_TASK_SUCCESS:
+    case POST_EMPLOYEE_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
-    case EDIT_TASK_SUCCESS:
+    case POST_EMPLOYEE_PENDING:
+      return {
+        ...state,
+        isPending: true
+      };
+    case EDIT_EMPLOYEE_PENDING:
+      return {
+        ...state,
+        isPending: true
+      };
+    case EDIT_EMPLOYEE_SUCCESS:
       return {
         ...state,
         list: state.list.map((item) => {
@@ -110,19 +117,24 @@ export const tasksReducer = (state = initialState, action) => {
           }
           return item;
         }),
-        pending: false
+        isPending: false
       };
-    case EDIT_TASK_ERROR:
+    case EDIT_EMPLOYEE_ERROR:
       return {
         ...state,
-        error: true,
-        pending: false
+        error: action.payload,
+        isPending: false
       };
-    case CLEAN_SELECTED_ITEM:
+    case GET_SELECTED_EMPLOYEE:
       return {
         ...state,
-        selectedItem: {},
-        pending: false
+        employeeSelected: action.payload
+      };
+    case CLEAN_SELECTED_EMPLOYEE:
+      return {
+        ...state,
+        employeeSelected: {},
+        isPending: false
       };
     default:
       return state;

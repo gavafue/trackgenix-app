@@ -1,20 +1,22 @@
 import {
-  GET_TASKS_PENDING,
-  GET_TASKS_SUCCESS,
-  GET_TASKS_ERROR,
-  GET_SELECTED_ITEM,
-  DELETE_TASK_ERROR,
-  DELETE_TASK_PENDING,
-  DELETE_TASK_SUCCESS,
+  GET_PROJECTS_PENDING,
+  GET_PROJECTS_SUCCESS,
+  GET_PROJECTS_ERROR,
+  DELETE_PROJECT_ERROR,
+  DELETE_PROJECT_PENDING,
+  DELETE_PROJECT_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  POST_TASK_ERROR,
-  POST_TASK_SUCCESS,
-  EDIT_TASK_SUCCESS,
-  EDIT_TASK_ERROR,
-  CLEAN_SELECTED_ITEM
+  POST_PROJECT_ERROR,
+  POST_PROJECT_SUCCESS,
+  POST_PROJECT_PENDING,
+  EDIT_PROJECT_ERROR,
+  EDIT_PROJECT_PENDING,
+  EDIT_PROJECT_SUCCESS,
+  GET_SELECTED_PROJECT,
+  CLEAN_SELECTED_PROJECT
 } from './constants';
 
 const initialState = {
@@ -25,49 +27,44 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  selectedItem: {}
+  projectSelected: {}
 };
 
-export const tasksReducer = (state = initialState, action) => {
+export const projectsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_TASKS_PENDING:
+    case GET_PROJECTS_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
-    case GET_TASKS_SUCCESS:
+    case GET_PROJECTS_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
-    case GET_TASKS_ERROR:
+    case GET_PROJECTS_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
-    case GET_SELECTED_ITEM:
+    case DELETE_PROJECT_PENDING:
       return {
         ...state,
-        selectedItem: action.payload
+        isPending: true
       };
-    case DELETE_TASK_PENDING:
+    case DELETE_PROJECT_SUCCESS:
       return {
         ...state,
-        pending: true
+        list: state.list.filter((project) => project._id !== action.payload),
+        isPending: false
       };
-    case DELETE_TASK_SUCCESS:
-      return {
-        ...state,
-        list: state.list.filter((task) => task._id !== action.payload),
-        pending: false
-      };
-    case DELETE_TASK_ERROR:
+    case DELETE_PROJECT_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -89,19 +86,29 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-    case POST_TASK_ERROR:
+    case POST_PROJECT_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
-    case POST_TASK_SUCCESS:
+    case POST_PROJECT_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
-    case EDIT_TASK_SUCCESS:
+    case POST_PROJECT_PENDING:
+      return {
+        ...state,
+        isPending: true
+      };
+    case EDIT_PROJECT_PENDING:
+      return {
+        ...state,
+        isPending: true
+      };
+    case EDIT_PROJECT_SUCCESS:
       return {
         ...state,
         list: state.list.map((item) => {
@@ -110,19 +117,24 @@ export const tasksReducer = (state = initialState, action) => {
           }
           return item;
         }),
-        pending: false
+        isPending: false
       };
-    case EDIT_TASK_ERROR:
+    case EDIT_PROJECT_ERROR:
       return {
         ...state,
-        error: true,
-        pending: false
+        error: action.payload,
+        isPending: false
       };
-    case CLEAN_SELECTED_ITEM:
+    case GET_SELECTED_PROJECT:
       return {
         ...state,
-        selectedItem: {},
-        pending: false
+        projectSelected: action.payload
+      };
+    case CLEAN_SELECTED_PROJECT:
+      return {
+        ...state,
+        projectSelected: {},
+        isPending: false
       };
     default:
       return state;
