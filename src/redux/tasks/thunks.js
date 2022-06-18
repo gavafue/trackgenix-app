@@ -6,7 +6,11 @@ import {
   deleteTaskSuccess,
   deleteTaskPending,
   setInfoForFeedback,
-  showFeedbackMessage
+  showFeedbackMessage,
+  postTaskError,
+  postTaskSuccess,
+  editTaskSuccess,
+  editTaskError
 } from './actions';
 
 export const getTasks = () => {
@@ -50,6 +54,64 @@ export const deleteTask = (taskId) => {
           dispatch(showFeedbackMessage(true));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        dispatch(deleteTaskError(error));
+      });
+  };
+};
+
+export const postTask = (options) => {
+  return (dispatch) => {
+    fetch(options.url, options)
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (!response.error) {
+          dispatch(postTaskSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postTaskError(response.data.message));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        dispatch(postTaskError(error));
+      });
+  };
+};
+
+export const editTask = (options) => {
+  return (dispatch) => {
+    fetch(options.url, options)
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (!response.error) {
+          dispatch(editTaskSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(editTaskError(response.data.message));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong.', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        dispatch(editTaskError(error));
+      });
   };
 };

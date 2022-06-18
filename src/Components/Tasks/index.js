@@ -12,7 +12,9 @@ import { getTasks, deleteTask } from '../../redux/tasks/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
-  showFeedbackMessage
+  showFeedbackMessage,
+  getSelectedItem,
+  cleanSelectedItem
 } from '../../redux/tasks/actions';
 
 const Tasks = () => {
@@ -25,24 +27,33 @@ const Tasks = () => {
   const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
 
   const history = useHistory();
-  const editData = (id) => {
-    history.push(`/tasks/form/${id}`);
+  const editData = (row) => {
+    dispatch(getSelectedItem(row));
+    history.push(`/tasks/form/`);
   };
   const createTask = () => {
     history.push('/tasks/form/');
   };
-  useEffect(() => {
-    dispatch(getTasks());
-  }, []);
 
   const deleteHandler = () => {
     dispatch(deleteTask(deleteInfo));
   };
-  const taskData = tasks.map((task) => ({
-    ...task,
-    nameProject: task.nameProject?.name || 'Project Not Found'
-  }));
 
+  useEffect(() => {
+    dispatch(getTasks());
+  }, []);
+
+  const taskData =
+    tasks &&
+    tasks.map((task) => ({
+      ...task,
+      nameProject: task.nameProject?.name || 'Project Not Found',
+      nameProjectId: task.nameProject?._id
+    }));
+
+  useEffect(() => {
+    dispatch(cleanSelectedItem());
+  }, []);
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
