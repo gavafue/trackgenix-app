@@ -15,8 +15,8 @@ import {
   EDIT_SUPERADMIN_SUCCESS,
   EDIT_SUPERADMIN_PENDING,
   EDIT_SUPERADMIN_ERROR,
-  CLEAN_SELECTED_ITEM,
-  GET_SELECTED_ITEM
+  CLEAN_SELECTED_SUPERADMIN,
+  GET_SELECTED_SUPERADMIN
 } from './constants';
 
 const initialState = {
@@ -27,7 +27,7 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  selectedItem: {}
+  selectedSuperadmin: {}
 };
 
 export const superadminReducer = (state = initialState, action) => {
@@ -106,12 +106,13 @@ export const superadminReducer = (state = initialState, action) => {
     case EDIT_SUPERADMIN_SUCCESS:
       return {
         ...state,
-        list: state.list.map((item) => {
-          if (item._id === action.payload._id) {
+        list: state.list.map((superadmin) => {
+          if (superadmin._id === action.payload._id) {
             return action.payload;
           }
-          return item;
-        })
+          return superadmin;
+        }),
+        pending: false
       };
     case EDIT_SUPERADMIN_PENDING:
       return {
@@ -124,16 +125,16 @@ export const superadminReducer = (state = initialState, action) => {
         error: true,
         pending: false
       };
-    case CLEAN_SELECTED_ITEM:
+    case CLEAN_SELECTED_SUPERADMIN:
       return {
         ...state,
-        selectedItem: {},
+        selectedSuperadmin: {},
         pending: false
       };
-    case GET_SELECTED_ITEM:
+    case GET_SELECTED_SUPERADMIN:
       return {
         ...state,
-        selectedItem: action.payload
+        selectedSuperadmin: action.payload
       };
     default:
       return state;

@@ -66,35 +66,29 @@ export const deleteSuperAdmin = (superAdminId) => {
 export const postSuperAdmin = (options) => {
   return (dispatch) => {
     dispatch(postSuperAdminsPending());
-    let isValid;
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        if (isValid) {
-          dispatch(postSuperAdminSuccess(response.data));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(
-            setInfoForFeedback({
-              title: 'Something went wrong',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-          dispatch(postSuperAdminError(response.data.message));
-        }
+        dispatch(postSuperAdminSuccess(response.data));
+        dispatch(
+          setInfoForFeedback({
+            title: 'Request done!',
+            description: response.message
+          })
+        );
+        dispatch(showFeedbackMessage(true));
       })
       .catch((error) => {
         dispatch(postSuperAdminError(error));
+        dispatch(
+          setInfoForFeedback({
+            title: 'Something went wrong',
+            description: error.message
+          })
+        );
+        dispatch(showFeedbackMessage(true));
       });
   };
 };
@@ -102,35 +96,29 @@ export const postSuperAdmin = (options) => {
 export const editSuperAdmin = (options) => {
   return (dispatch) => {
     dispatch(editSuperAdminsPending());
-    let isValid;
     fetch(options.url, options)
       .then((response) => {
-        isValid = response.status == 201 || response.status == 200;
         return response.json();
       })
       .then((response) => {
-        if (!isValid) {
-          dispatch(
-            setInfoForFeedback({
-              title: 'Something went wrong',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-          dispatch(editSuperAdminError(response.data.message));
-        } else {
-          dispatch(editSuperAdminSuccess(response.data));
-          dispatch(
-            setInfoForFeedback({
-              title: 'Request done!',
-              description: response.message
-            })
-          );
-          dispatch(showFeedbackMessage(true));
-        }
+        dispatch(editSuperAdminSuccess(response.data));
+        dispatch(
+          setInfoForFeedback({
+            title: 'Request done!',
+            description: response.message
+          })
+        );
+        dispatch(showFeedbackMessage(true));
       })
       .catch((error) => {
         dispatch(editSuperAdminError(error));
+        dispatch(
+          setInfoForFeedback({
+            title: 'Something went wrong',
+            description: error.message
+          })
+        );
+        dispatch(showFeedbackMessage(true));
       });
   };
 };
