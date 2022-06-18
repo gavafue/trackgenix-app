@@ -20,7 +20,7 @@ import { deleteSuperAdmin, getSuperadmins } from '../../redux/superadmin/thunks'
 const SuperAdmins = () => {
   const dispatch = useDispatch();
   const superadmins = useSelector((state) => state.superadmins.list);
-  const isPending = useSelector((state) => state.superadmins.pending);
+  const isPending = useSelector((state) => state.superadmins.isPending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
   const deleteInfo = useSelector((state) => state.superadmins.infoForDelete);
   const showDelete = useSelector((state) => state.superadmins.showDeleteMessage);
