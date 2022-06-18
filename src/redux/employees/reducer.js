@@ -30,7 +30,8 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  projectSelected: {}
+  employeeSelected: {},
+  employeeLogged: {}
 };
 
 export const employeesReducer = (state = initialState, action) => {
@@ -148,7 +149,7 @@ export const employeesReducer = (state = initialState, action) => {
     case GET_EMPLOYEE_BY_ID_SUCCESS: {
       return {
         ...state,
-        list: action.payload,
+        employeeLogged: action.payload,
         isPending: false
       };
     }

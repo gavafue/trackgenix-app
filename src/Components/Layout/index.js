@@ -18,10 +18,17 @@ import TasksForm from '../Tasks/Form';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import React, { Suspense, lazy } from 'react';
 import Loader from 'Components/Shared/Preloader';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getEmployeeById } from 'redux/employees/thunks';
 
 const Employee = lazy(() => import('routes/employee'));
 
 function Layout() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getEmployeeById('62998834f7d152003b124d36'));
+  }, []);
   return (
     <div className={styles.container}>
       <Navbar />
