@@ -5,7 +5,6 @@ import { tasksReducer } from './tasks/reducer';
 import { projectsReducer } from './projects/reducer';
 import { employeesReducer } from './employees/reducer';
 
-
 const rootReducer = combineReducers({
   tasks: tasksReducer,
   projects: projectsReducer,
