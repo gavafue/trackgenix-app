@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
 import Table from '../Shared/Table';
@@ -7,101 +7,79 @@ import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import Loader from '../Shared/Preloader';
-
-const URL = process.env.REACT_APP_API_URL;
+import { useSelector, useDispatch } from 'react-redux';
+import { getEmployee, deleteEmployee } from '../../redux/employees/thunks';
+import {
+  setInfoForDelete,
+  showDeleteMessage,
+  showFeedbackMessage,
+  getSelectedEmployee,
+  cleanSelectedEmployee
+} from '../../redux/employees/actions';
 
 function Employees() {
-  const [employees, saveEmployees] = useState([]);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [infoForDelete, setInfoForDelete] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showLoader, setShowLoader] = useState(false);
-
+  const dispatch = useDispatch();
+  const employees = useSelector((state) => state.employees.list);
+  const isPending = useSelector((state) => state.employees.isPending);
+  const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
+  const deleteInfo = useSelector((state) => state.employees.infoForDelete);
+  const showDelete = useSelector((state) => state.employees.showDeleteMessage);
+  const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const history = useHistory();
-  const editData = (id) => {
-    history.push(`/employees/form/${id}`);
+  const editData = (row) => {
+    dispatch(getSelectedEmployee(row));
+    history.push(`/employees/form/`);
   };
   const createEmployee = () => {
     history.push('/employees/form');
   };
   useEffect(() => {
-    setShowLoader(true);
-    fetch(`${URL}/employees`)
-      .then((res) => res.json())
-      .then((data) => {
-        saveEmployees(data.data);
-        setShowLoader(false);
-      })
-      .catch((error) => console.log(error));
+    dispatch(cleanSelectedEmployee());
+    dispatch(getEmployee());
   }, []);
 
-  const deleteEmployee = (employeeId) => {
-    const options = {
-      method: 'DELETE',
-      url: `${URL}/employees/${employeeId}`
-    };
-    setShowLoader(true);
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: response.message
-          });
-        } else {
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          });
-          saveEmployees(employees.filter((employee) => employeeId !== employee.employeeId));
-          setShowFeedbackMessage(true);
-          setShowLoader(false);
-        }
-      })
-      .catch((error) => console.log(error));
+  const deleteHandler = () => {
+    dispatch(deleteEmployee(deleteInfo));
   };
+
   return (
     <section className={styles.container}>
-      <h2 className={styles.title}>Employees</h2>
-      <div className={styles.button}>
-        <Button label="Add new employee" onClick={createEmployee} />
-      </div>
+      <h2>Employees</h2>
       <div>
+        <Button label="Add new employee" onClick={createEmployee} />
         <Table
           data={employees}
           headersName={['Name', 'Last Name', 'Email', 'Phone']}
           headers={['firstName', 'lastName', 'email', 'phone']}
-          deleteEmployee={deleteEmployee}
+          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+          setInfoForDelete={(employeeId) => dispatch(setInfoForDelete(employeeId))}
           editData={editData}
-          setShowModal={setShowDeleteMessage}
-          setInfoForDelete={setInfoForDelete}
+          deleteEmployee={deleteHandler}
         />
         <Modal
-          isOpen={showDeleteMessage}
+          isOpen={showDelete}
           handleClose={() => {
-            setShowDeleteMessage(false);
+            dispatch(showDeleteMessage(!showDelete));
           }}
         >
           <DeleteMessage
             handleClose={() => {
-              setShowDeleteMessage(false);
+              dispatch(showDeleteMessage(!showDelete));
             }}
-            infoForDelete={infoForDelete}
-            deleteItem={deleteEmployee}
-            setShowModal={setShowDeleteMessage}
+            infoForDelete={deleteInfo}
+            deleteItem={deleteHandler}
+            setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
           />
         </Modal>
         <Modal
-          isOpen={showFeedbackMessage}
+          isOpen={showFeedback}
           handleClose={() => {
-            setShowFeedbackMessage(false);
+            dispatch(showFeedbackMessage(!showFeedback));
           }}
         >
-          <FeedbackMessage infoForFeedback={infoForFeedback} />
+          <FeedbackMessage infoForFeedback={feedbackInfo} />
         </Modal>
-        {showLoader && <Loader />}
+        {isPending && <Loader />}
       </div>
     </section>
   );
