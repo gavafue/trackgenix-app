@@ -16,7 +16,10 @@ import {
   EDIT_EMPLOYEE_PENDING,
   EDIT_EMPLOYEE_SUCCESS,
   GET_SELECTED_EMPLOYEE,
-  CLEAN_SELECTED_EMPLOYEE
+  CLEAN_SELECTED_EMPLOYEE,
+  GET_EMPLOYEE_BY_ID_ERROR,
+  GET_EMPLOYEE_BY_ID_PENDING,
+  GET_EMPLOYEE_BY_ID_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -27,7 +30,8 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  projectSelected: {}
+  employeeSelected: {},
+  employeeLogged: {}
 };
 
 export const employeesReducer = (state = initialState, action) => {
@@ -136,6 +140,26 @@ export const employeesReducer = (state = initialState, action) => {
         employeeSelected: {},
         isPending: false
       };
+    case GET_EMPLOYEE_BY_ID_PENDING: {
+      return {
+        ...state,
+        isPending: true
+      };
+    }
+    case GET_EMPLOYEE_BY_ID_SUCCESS: {
+      return {
+        ...state,
+        employeeLogged: action.payload,
+        isPending: false
+      };
+    }
+    case GET_EMPLOYEE_BY_ID_ERROR: {
+      return {
+        ...state,
+        error: action.payload,
+        isPending: false
+      };
+    }
     default:
       return state;
   }
