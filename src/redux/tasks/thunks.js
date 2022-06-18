@@ -67,14 +67,20 @@ export const postTask = (options) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(postTaskSuccess(response.data));
-        dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
-        dispatch(showFeedbackMessage(true));
+        if (!response.error) {
+          dispatch(postTaskSuccess(response.data));
+          dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postTaskError(response.data.message));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
       })
       .catch((error) => {
         dispatch(postTaskError(error));
-        dispatch(setInfoForFeedback({ title: 'Something went wrong', description: error.message }));
-        dispatch(showFeedbackMessage(true));
       });
   };
 };
@@ -86,21 +92,26 @@ export const editTask = (options) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(editTaskSuccess(response.data));
-        dispatch(
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          })
-        );
-        dispatch(showFeedbackMessage(true));
+        console.log(response);
+        if (!response.error) {
+          dispatch(editTaskSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(editTaskError(response.data.message));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong.', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
       })
       .catch((error) => {
         dispatch(editTaskError(error));
-        dispatch(
-          setInfoForFeedback({ title: 'Something went wrong.', description: error.message })
-        );
-        dispatch(showFeedbackMessage(true));
       });
   };
 };
