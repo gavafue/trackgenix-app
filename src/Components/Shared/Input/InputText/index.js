@@ -1,21 +1,21 @@
 import React from 'react';
 import styles from './inputText.module.css';
 
-const Input = ({ label, name, id, type, placeholder, value, onChange, required }) => {
+const Input = (props) => {
   return (
     <div className={styles.container}>
-      <label className={styles.label} htmlFor={id}>
-        {label}
+      <label className={styles.label} htmlFor={props.id}>
+        {props.label}
       </label>
       <input
         className={styles.input}
-        id={id}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        required={required}
+        id={props.id}
+        name={props.name}
+        type={props.type}
+        defaultValue={props.value}
+        // onChange={props.onChange}
+        required={props.required}
+        placeholder={props.placeholder}
       />
     </div>
   );

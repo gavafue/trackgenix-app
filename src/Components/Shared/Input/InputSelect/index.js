@@ -1,40 +1,34 @@
 import React from 'react';
 import styles from './inputSelect.module.css';
 
-const Select = ({
-  arrayToMap,
-  itemValue,
-  label,
-  id,
-  name,
-  onChange,
-  required,
-  value,
-  placeholder
-}) => {
+const Select = (props) => {
   return (
     <div className={styles.container}>
-      <label className={styles.label} htmlFor={id}>
-        {label}
+      <label className={styles.label} htmlFor={props.id}>
+        {props.label}
       </label>
       <select
         className={styles.select}
-        id={id}
-        name={name}
-        onChange={onChange}
-        value={value}
-        required={required}
+        id={props.id}
+        name={props.name}
+        defaultValue={props.value ?? props.placeholder}
+        required={props.equired}
+        multiple={props.multiple}
       >
-        {arrayToMap.map((item) => {
+        {props.arrayToMap.map((item) => {
           return (
-            <option defaultValue={Boolean(item.id === itemValue)} key={item.id} value={item.id}>
+            <option
+              // defaultValue={Boolean(item.id === props.itemValue)}
+              key={item.id}
+              value={item.id}
+            >
               {`${item.optionContent}`}
             </option>
           );
         })}
         ;
-        <option value="" disabled defaultValue hidden>
-          {placeholder}
+        <option value={props.placeholder} disabled hidden>
+          {props.placeholder}
         </option>
       </select>
     </div>
