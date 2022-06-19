@@ -16,7 +16,10 @@ import {
   EDIT_EMPLOYEE_PENDING,
   EDIT_EMPLOYEE_SUCCESS,
   GET_SELECTED_EMPLOYEE,
-  CLEAN_SELECTED_EMPLOYEE
+  CLEAN_SELECTED_EMPLOYEE,
+  GET_EMPLOYEE_BY_ID_ERROR,
+  GET_EMPLOYEE_BY_ID_PENDING,
+  GET_EMPLOYEE_BY_ID_SUCCESS
 } from './constants';
 
 export const getEmployeeSuccess = (employees) => ({
@@ -103,3 +106,23 @@ export const getSelectedEmployee = (employee) => ({
 export const cleanSelectedEmployee = () => ({
   type: CLEAN_SELECTED_EMPLOYEE
 });
+
+export const getEmployeeByIdPending = () => {
+  return {
+    type: GET_EMPLOYEE_BY_ID_PENDING
+  };
+};
+
+export const getEmployeeByIdSuccess = (employee) => {
+  return {
+    type: GET_EMPLOYEE_BY_ID_SUCCESS,
+    payload: employee
+  };
+};
+
+export const getEmployeeByIdError = (error) => {
+  return {
+    type: GET_EMPLOYEE_BY_ID_ERROR,
+    payload: error
+  };
+};
