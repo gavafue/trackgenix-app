@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './inputText.module.css';
 
-const Input = ({ label, name, id, type, placeholder, value, onChange, required }) => {
+const Input = ({ label, id, type, placeholder }) => {
   return (
     <div className={styles.container}>
       <label className={styles.label} htmlFor={id}>
@@ -10,12 +10,12 @@ const Input = ({ label, name, id, type, placeholder, value, onChange, required }
       <input
         className={styles.input}
         id={id}
-        name={name}
+        // name={name}
         type={type}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        required={required}
+        // value={value}
+        // onChange={onChange}
+        // required={required}
       />
     </div>
   );
