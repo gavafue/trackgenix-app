@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import styles from './form.module.css';
 import Input from '../../Shared/Input/InputText';
@@ -7,18 +6,25 @@ import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
+import { useDispatch, useSelector } from 'react-redux';
+import { editSuperAdmin, postSuperAdmin } from '../../../redux/superadmin/thunks';
+import { showFeedbackMessage } from '../../../redux/superadmin/actions';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
+  const dispatch = useDispatch();
+  const selectedSuperadmin = useSelector((state) => state.superadmins.selectedSuperadmin);
+  const isSuperadminSelected = Object.keys(selectedSuperadmin).length;
+  const isPending = useSelector((state) => state.superadmins.pending);
+  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
+  const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
+
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
   const [roleValue, setRoleValue] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [showPreloader, setShowPreloader] = useState(false);
 
   const onChangeNameInput = (e) => {
     setNameValue(e.target.value);
@@ -44,73 +50,46 @@ const Form = () => {
     setRoleValue(e.target.value);
   };
 
-  const arrayToMapRole = [{ id: 'SA', optionContent: 'SuperAdmin' }];
-  const arrayToMapStatus = [
-    { id: 'true', optionContent: 'Active' },
-    { id: 'false', optionContent: 'Inactive' }
-  ];
-  const superAdminId = useParams();
-  const title = superAdminId.id ? 'Update Super Admin' : 'Add Super Admin';
-
-  const options = {
-    method: superAdminId.id ? 'PUT' : 'POST',
-    url: `${URL}/super-admin/${superAdminId.id ?? ''}`,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      firstName: nameValue,
-      lastName: lastNameValue,
-      password: passwordValue,
-      email: emailValue,
-      role: roleValue,
-      active: activeValue
-    })
-  };
   useEffect(() => {
-    setShowPreloader(true);
-    if (superAdminId) {
-      fetch(`${URL}/super-admin/${superAdminId.id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setNameValue(data.data.firstName);
-          setLastNameValue(data.data.lastName);
-          setEmailValue(data.data.email);
-          setPasswordValue(data.data.password);
-          setActiveValue(data.data.active);
-          setRoleValue(data.data.role);
-          setShowPreloader(false);
-        })
-        .catch((error) => console.log(error));
+    if (isSuperadminSelected) {
+      setNameValue(selectedSuperadmin.firstName);
+      setLastNameValue(selectedSuperadmin.lastName);
+      setEmailValue(selectedSuperadmin.email);
+      setPasswordValue(selectedSuperadmin.password);
+      setActiveValue(selectedSuperadmin.active);
+      setRoleValue(selectedSuperadmin.role);
     }
-    setShowPreloader(false);
   }, []);
 
-  const onSubmit = async (event) => {
-    try {
-      event.preventDefault();
-      setShowPreloader(true);
-      const res = await fetch(options.url, options);
-      const data = await res.json();
-      if (res.status == 201 || res.status == 200) {
-        setInfoForFeedback({
-          title: 'Request done!',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      } else {
-        setInfoForFeedback({
-          title: 'Something went wrong',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  const arrayToMapRole = [{ id: 'SA', optionContent: 'SuperAdmin' }];
+  const arrayToMapStatus = [
+    { id: true, optionContent: 'True' },
+    { id: false, optionContent: 'False' }
+  ];
+
+  const title = isSuperadminSelected ? 'Update Super Admin' : 'Add Super Admin';
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const options = {
+      method: isSuperadminSelected ? 'PUT' : 'POST',
+      url: isSuperadminSelected
+        ? `${URL}/super-admin/${selectedSuperadmin._id}`
+        : `${URL}/super-admin`,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName: nameValue,
+        lastName: lastNameValue,
+        password: passwordValue,
+        email: emailValue,
+        role: roleValue,
+        active: activeValue
+      })
+    };
+    isSuperadminSelected ? dispatch(editSuperAdmin(options)) : dispatch(postSuperAdmin(options));
   };
   return (
     <div className={styles.container}>
+      {isPending && <Preloader />}
       <h2>{title}</h2>
       <SharedForm onSubmit={onSubmit}>
         <Input
@@ -146,7 +125,7 @@ const Form = () => {
         <Input
           name="password"
           id="password"
-          type="text"
+          type="password"
           value={passwordValue}
           placeholder="Write your password"
           onChange={onChangePasswordInput}
@@ -164,10 +143,10 @@ const Form = () => {
           required
         />
         <Select
-          label="Status"
+          label="Active"
           arrayToMap={arrayToMapStatus}
-          id="status"
-          name="status"
+          id="active"
+          name="active"
           value={activeValue}
           onChange={onChangeActiveInput}
           placeholder="Choose Status"
@@ -175,14 +154,13 @@ const Form = () => {
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {showPreloader && <Preloader />}
     </div>
   );
 };
