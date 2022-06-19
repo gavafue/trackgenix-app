@@ -1,25 +1,22 @@
 import {
-  GET_EMPLOYEE_PENDING,
-  GET_EMPLOYEE_SUCCESS,
-  GET_EMPLOYEE_ERROR,
-  DELETE_EMPLOYEE_ERROR,
-  DELETE_EMPLOYEE_PENDING,
-  DELETE_EMPLOYEE_SUCCESS,
-  SET_INFO_FOR_FEEDBACK,
-  SET_INFO_FOR_DELETE,
+  GET_TIMESHEETS_PENDING,
+  GET_TIMESHEETS_SUCCESS,
+  GET_TIMESHEETS_ERROR,
+  DELETE_TIMESHEET_ERROR,
+  DELETE_TIMESHEET_PENDING,
+  DELETE_TIMESHEET_SUCCESS,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  POST_EMPLOYEE_ERROR,
-  POST_EMPLOYEE_SUCCESS,
-  POST_EMPLOYEE_PENDING,
-  EDIT_EMPLOYEE_ERROR,
-  EDIT_EMPLOYEE_PENDING,
-  EDIT_EMPLOYEE_SUCCESS,
-  GET_SELECTED_EMPLOYEE,
-  CLEAN_SELECTED_EMPLOYEE,
-  GET_EMPLOYEE_BY_ID_ERROR,
-  GET_EMPLOYEE_BY_ID_PENDING,
-  GET_EMPLOYEE_BY_ID_SUCCESS
+  SET_INFO_FOR_DELETE,
+  SET_INFO_FOR_FEEDBACK,
+  ADD_TIMESHEET_ERROR,
+  ADD_TIMESHEET_PENDING,
+  ADD_TIMESHEET_SUCCESS,
+  EDIT_TIMESHEET_ERROR,
+  EDIT_TIMESHEET_PENDING,
+  EDIT_TIMESHEET_SUCCESS,
+  CLEAN_SELECTED_TIMESHEET,
+  SELECTED_TIMESHEET
 } from './constants';
 
 const initialState = {
@@ -30,41 +27,40 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  employeeSelected: {},
-  employeeLogged: {}
+  timesheetSelected: {}
 };
 
-export const employeesReducer = (state = initialState, action) => {
+export const timesheetsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_EMPLOYEE_PENDING:
+    case GET_TIMESHEETS_PENDING:
       return {
         ...state,
         isPending: true
       };
-    case GET_EMPLOYEE_SUCCESS:
+    case GET_TIMESHEETS_SUCCESS:
       return {
         ...state,
         list: action.payload,
         isPending: false
       };
-    case GET_EMPLOYEE_ERROR:
+    case GET_TIMESHEETS_ERROR:
       return {
         ...state,
         error: action.payload,
         isPending: false
       };
-    case DELETE_EMPLOYEE_PENDING:
+    case DELETE_TIMESHEET_PENDING:
       return {
         ...state,
         isPending: true
       };
-    case DELETE_EMPLOYEE_SUCCESS:
+    case DELETE_TIMESHEET_SUCCESS:
       return {
         ...state,
-        list: state.list.filter((employee) => employee._id !== action.payload),
+        list: state.list.filter((timesheet) => timesheet._id !== action.payload),
         isPending: false
       };
-    case DELETE_EMPLOYEE_ERROR:
+    case DELETE_TIMESHEET_ERROR:
       return {
         ...state,
         error: action.payload,
@@ -90,29 +86,30 @@ export const employeesReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-    case POST_EMPLOYEE_ERROR:
+    case ADD_TIMESHEET_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: true,
         isPending: false
       };
-    case POST_EMPLOYEE_SUCCESS:
+    case ADD_TIMESHEET_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
         isPending: false
       };
-    case POST_EMPLOYEE_PENDING:
+    case ADD_TIMESHEET_PENDING:
       return {
         ...state,
         isPending: true
       };
-    case EDIT_EMPLOYEE_PENDING:
+    case EDIT_TIMESHEET_ERROR:
       return {
         ...state,
-        isPending: true
+        error: true,
+        isPending: false
       };
-    case EDIT_EMPLOYEE_SUCCESS:
+    case EDIT_TIMESHEET_SUCCESS:
       return {
         ...state,
         list: state.list.map((item) => {
@@ -123,43 +120,22 @@ export const employeesReducer = (state = initialState, action) => {
         }),
         isPending: false
       };
-    case EDIT_EMPLOYEE_ERROR:
-      return {
-        ...state,
-        error: action.payload,
-        isPending: false
-      };
-    case GET_SELECTED_EMPLOYEE:
-      return {
-        ...state,
-        employeeSelected: action.payload
-      };
-    case CLEAN_SELECTED_EMPLOYEE:
-      return {
-        ...state,
-        employeeSelected: {},
-        isPending: false
-      };
-    case GET_EMPLOYEE_BY_ID_PENDING: {
+    case EDIT_TIMESHEET_PENDING:
       return {
         ...state,
         isPending: true
       };
-    }
-    case GET_EMPLOYEE_BY_ID_SUCCESS: {
+    case SELECTED_TIMESHEET:
       return {
         ...state,
-        employeeLogged: action.payload,
-        isPending: false
+        timesheetSelected: action.payload
       };
-    }
-    case GET_EMPLOYEE_BY_ID_ERROR: {
+    case CLEAN_SELECTED_TIMESHEET:
       return {
         ...state,
-        error: action.payload,
+        timesheetSelected: {},
         isPending: false
       };
-    }
     default:
       return state;
   }

@@ -103,11 +103,6 @@ const Form = () => {
     isEmployeeSelected ? dispatch(editEmployee(options)) : dispatch(postEmployee(options));
   };
 
-  const dayInput = birthdayValue.substring(5, 7);
-  const monthInput = birthdayValue.substring(8, 10);
-  const yearInput = birthdayValue.substring(0, 4);
-  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
-
   return (
     <div className={styles.container}>
       <h1>{title}</h1>
@@ -159,7 +154,7 @@ const Form = () => {
           id="birthday"
           type="date"
           placeholder="Write your birthday on format dd/mm/yyyy"
-          value={dateFormat}
+          value={birthdayValue.slice(0, 10)}
           onChange={onChangeBirthdayValue}
           required
         />

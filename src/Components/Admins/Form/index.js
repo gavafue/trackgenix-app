@@ -1,15 +1,17 @@
-import styles from './form.module.css';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import styles from './form.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { showFeedbackMessage } from '../../../redux/admins/actions';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Preloader from '../../Shared/Preloader';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
+import { editAdmin, postAdmin } from '../../../redux/admins/thunks';
 
 const Form = () => {
+  const dispatch = useDispatch();
   const [nameValue, setNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -20,9 +22,11 @@ const Form = () => {
   const [cityValue, setCityValue] = useState('');
   const [zipValue, setZipValue] = useState('');
   const [activeValue, setActiveValue] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [showPreloader, setShowPreloader] = useState(false);
+  const isPending = useSelector((state) => state.admins.isPending);
+  const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
+  const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
+  const adminSelected = useSelector((state) => state.admins.adminSelected);
+  const isAdminSelected = Object.keys(adminSelected).length;
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -60,88 +64,56 @@ const Form = () => {
     { id: 'female', optionContent: 'Female' },
     { id: 'other', optionContent: 'Other' }
   ];
+
   const arrayToMapActive = [
-    { id: 'true', optionContent: 'Active' },
-    { id: 'false', optionContent: 'Inactive' }
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
   ];
 
-  const adminId = useParams();
-  const title = adminId.id ? `${nameValue} ${lastNameValue}` : 'Add admin';
-  const options = {
-    method: adminId.id ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/admins/${adminId.id ? adminId.id : ''}`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      name: nameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      password: passwordValue,
-      gender: genderValue,
-      phone: phoneValue,
-      dateBirth: birthDateValue,
-      city: cityValue,
-      zip: zipValue,
-      active: activeValue
-    })
-  };
-  const URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
-    if (adminId.id) {
-      setShowPreloader(true);
-      fetch(`${URL}/admins/${adminId.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setNameValue(data.data.name);
-          setLastNameValue(data.data.lastName);
-          setEmailValue(data.data.email);
-          setPasswordValue(data.data.password);
-          setCityValue(data.data.city);
-          setBirthDateValue(data.data.dateBirth);
-          setGenderValue(data.data.gender);
-          setPhoneValue(data.data.phone);
-          setZipValue(data.data.zip);
-          setActiveValue(data.data.active);
-          setShowPreloader(false);
-        })
-        .catch((error) => console.log(error));
+    if (isAdminSelected) {
+      setNameValue(adminSelected.name);
+      setLastNameValue(adminSelected.lastName);
+      setEmailValue(adminSelected.email);
+      setPasswordValue(adminSelected.password);
+      setCityValue(adminSelected.city);
+      setBirthDateValue(adminSelected.dateBirth);
+      setGenderValue(adminSelected.gender);
+      setPhoneValue(adminSelected.phone);
+      setZipValue(adminSelected.zip);
+      setActiveValue(adminSelected.active);
     }
   }, []);
 
-  const onSubmit = async (event) => {
-    try {
-      event.preventDefault();
-      setShowPreloader(true);
-      const res = await fetch(options.url, options);
-      const data = await res.json();
-      if (res.status == 201 || res.status == 200) {
-        setInfoForFeedback({
-          title: 'Request done!',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      } else {
-        setInfoForFeedback({
-          title: 'Something went wrong',
-          description: data.message
-        });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const options = {
+      method: isAdminSelected ? 'PUT' : 'POST',
+      url: isAdminSelected
+        ? `${process.env.REACT_APP_API_URL}/admins/${adminSelected._id}`
+        : `${process.env.REACT_APP_API_URL}/admins`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: nameValue,
+        lastName: lastNameValue,
+        email: emailValue,
+        password: passwordValue,
+        gender: genderValue,
+        phone: phoneValue,
+        dateBirth: birthDateValue,
+        city: cityValue,
+        zip: zipValue,
+        active: activeValue
+      })
+    };
+    isAdminSelected ? dispatch(editAdmin(options)) : dispatch(postAdmin(options));
   };
-  const dayInput = birthDateValue.substring(5, 7);
-  const monthInput = birthDateValue.substring(8, 10);
-  const yearInput = birthDateValue.substring(0, 4);
-  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
-  const history = useHistory();
-  const goBack = () => {
-    history.push('/admins');
-  };
+
+  const title = isAdminSelected
+    ? `Editing ${adminSelected.name} ${adminSelected.lastName}'s information`
+    : 'Add an Admin';
 
   return (
     <div className={styles.container}>
@@ -194,7 +166,7 @@ const Form = () => {
           name="gender"
           value={genderValue}
           onChange={onChangeGenderInput}
-          placeholder={[genderValue ? genderValue : 'Enter your gender']}
+          placeholder="Enter the admin gender"
           required
         />
         <Input
@@ -212,7 +184,7 @@ const Form = () => {
           id="dateBirth"
           name="dateBirth"
           type="date"
-          value={dateFormat}
+          value={birthDateValue.slice(0, 10)}
           onChange={onChangeBirthDateInput}
           required
         />
@@ -237,26 +209,25 @@ const Form = () => {
           required
         />
         <Select
-          label="Status"
+          label="Active"
           arrayToMap={arrayToMapActive}
           id="active"
           name="active"
           value={activeValue}
           onChange={onChangeActiveInput}
-          placeholder={activeValue ? activeValue : 'Enter Active status'}
+          placeholder="Enter the admin status"
           required
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
-          goBack();
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {isPending && <Preloader />}
     </div>
   );
 };
