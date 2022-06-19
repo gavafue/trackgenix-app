@@ -1,50 +1,52 @@
 import {
-  getTasksSuccess,
-  getTasksError,
-  getTasksPending,
-  deleteTaskError,
-  deleteTaskSuccess,
-  deleteTaskPending,
+  getAdminsSuccess,
+  getAdminsError,
+  getAdminsPending,
+  deleteAdminError,
+  deleteAdminSuccess,
+  deleteAdminPending,
   setInfoForFeedback,
   showFeedbackMessage,
-  postTaskError,
-  postTaskSuccess,
-  editTaskSuccess,
-  editTaskError
+  postAdminPending,
+  postAdminSuccess,
+  postAdminError,
+  editAdminPending,
+  editAdminError,
+  editAdminSuccess
 } from './actions';
 
-export const getTasks = () => {
+export const getAdmins = () => {
   return (dispatch) => {
-    dispatch(getTasksPending());
-    return fetch(`${process.env.REACT_APP_API_URL}/tasks`)
+    dispatch(getAdminsPending());
+    return fetch(`${process.env.REACT_APP_API_URL}/admins`)
       .then((response) => response.json())
       .then((response) => {
-        dispatch(getTasksSuccess(response.data));
+        dispatch(getAdminsSuccess(response.data));
         return response.data;
       })
       .catch((error) => {
-        dispatch(getTasksError(error.toString()));
+        dispatch(getAdminsError(error.toString()));
       });
   };
 };
 
-export const deleteTask = (taskId) => {
+export const deleteAdmin = (adminId) => {
   return (dispatch) => {
-    dispatch(deleteTaskPending());
+    dispatch(deleteAdminPending());
     const options = {
       method: 'DELETE',
-      url: `${process.env.REACT_APP_API_URL}/tasks/${taskId}`
+      url: `${process.env.REACT_APP_API_URL}/admins/${adminId}`
     };
     return fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
         if (response.error) {
-          dispatch(deleteTaskError(response.error));
+          dispatch(deleteAdminError(response.error));
           dispatch(
             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
           );
         } else {
-          dispatch(deleteTaskSuccess(taskId));
+          dispatch(deleteAdminSuccess(adminId));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
@@ -54,47 +56,56 @@ export const deleteTask = (taskId) => {
           dispatch(showFeedbackMessage(true));
         }
       })
-      .catch((error) => {
-        dispatch(deleteTaskError(error));
-      });
+      .catch((err) => console.log(err));
   };
 };
 
-export const postTask = (options) => {
+export const postAdmin = (options) => {
   return (dispatch) => {
+    dispatch(postAdminPending());
     fetch(options.url, options)
       .then((response) => {
         return response.json();
       })
       .then((response) => {
-        if (!response.error) {
-          dispatch(postTaskSuccess(response.data));
+        if (response.error) {
+          dispatch(postAdminError(response.error));
+          dispatch(
+            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+          );
+          dispatch(showFeedbackMessage(true));
+        } else {
+          dispatch(postAdminSuccess(response.data));
           dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
           dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(postTaskError(response.data.message));
-          dispatch(
-            setInfoForFeedback({ title: 'Something went wrong', description: response.message })
-          );
-          dispatch(showFeedbackMessage(true));
         }
       })
       .catch((error) => {
-        dispatch(postTaskError(error));
+        console.log(error);
+        dispatch(postAdminError(error.toString()));
       });
   };
 };
 
-export const editTask = (options) => {
+export const editAdmin = (options) => {
   return (dispatch) => {
+    dispatch(editAdminPending());
     fetch(options.url, options)
       .then((response) => {
         return response.json();
       })
       .then((response) => {
-        console.log(response);
-        if (!response.error) {
-          dispatch(editTaskSuccess(response.data));
+        if (response.error) {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editAdminError(response.data.message));
+        } else {
+          dispatch(editAdminSuccess(response.data));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
@@ -102,16 +113,11 @@ export const editTask = (options) => {
             })
           );
           dispatch(showFeedbackMessage(true));
-        } else {
-          dispatch(editTaskError(response.data.message));
-          dispatch(
-            setInfoForFeedback({ title: 'Something went wrong.', description: response.message })
-          );
-          dispatch(showFeedbackMessage(true));
         }
       })
       .catch((error) => {
-        dispatch(editTaskError(error));
+        console.log(error);
+        dispatch(editAdminError(error.toString()));
       });
   };
 };

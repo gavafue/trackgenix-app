@@ -2,11 +2,17 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { tasksReducer } from './tasks/reducer';
+import { projectsReducer } from './projects/reducer';
+import { employeesReducer } from './employees/reducer';
+import { adminsReducer } from './admins/reducer';
 import { timesheetsReducer } from './timesheet/reducer';
 
 const rootReducer = combineReducers({
-  timesheets: timesheetsReducer,
-  tasks: tasksReducer
+  admins: adminsReducer,
+  tasks: tasksReducer,
+  projects: projectsReducer,
+  employees: employeesReducer,
+  timesheets: timesheetsReducer
 });
 
 const configureStore = () => {

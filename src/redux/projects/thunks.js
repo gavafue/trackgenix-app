@@ -1,50 +1,52 @@
 import {
-  getTasksSuccess,
-  getTasksError,
-  getTasksPending,
-  deleteTaskError,
-  deleteTaskSuccess,
-  deleteTaskPending,
+  getProjectsSuccess,
+  getProjectsError,
+  getProjectsPending,
+  deleteProjectError,
+  deleteProjectSuccess,
+  deleteProjectPending,
   setInfoForFeedback,
   showFeedbackMessage,
-  postTaskError,
-  postTaskSuccess,
-  editTaskSuccess,
-  editTaskError
+  postProjectSuccess,
+  postProjectError,
+  postProjectPending,
+  editProjectPending,
+  editProjectError,
+  editProjectSuccess
 } from './actions';
 
-export const getTasks = () => {
+export const getProjects = () => {
   return (dispatch) => {
-    dispatch(getTasksPending());
-    return fetch(`${process.env.REACT_APP_API_URL}/tasks`)
+    dispatch(getProjectsPending());
+    return fetch(`${process.env.REACT_APP_API_URL}/projects`)
       .then((response) => response.json())
       .then((response) => {
-        dispatch(getTasksSuccess(response.data));
+        dispatch(getProjectsSuccess(response.data));
         return response.data;
       })
       .catch((error) => {
-        dispatch(getTasksError(error.toString()));
+        dispatch(getProjectsError(error.toString()));
       });
   };
 };
 
-export const deleteTask = (taskId) => {
+export const deleteProject = (projectId) => {
   return (dispatch) => {
-    dispatch(deleteTaskPending());
+    dispatch(deleteProjectPending());
     const options = {
       method: 'DELETE',
-      url: `${process.env.REACT_APP_API_URL}/tasks/${taskId}`
+      url: `${process.env.REACT_APP_API_URL}/projects/${projectId}`
     };
     return fetch(options.url, options)
       .then((response) => response.json())
       .then((response) => {
         if (response.error) {
-          dispatch(deleteTaskError(response.error));
+          dispatch(deleteProjectError(response.error));
           dispatch(
             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
           );
         } else {
-          dispatch(deleteTaskSuccess(taskId));
+          dispatch(deleteProjectSuccess(projectId));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
@@ -54,25 +56,24 @@ export const deleteTask = (taskId) => {
           dispatch(showFeedbackMessage(true));
         }
       })
-      .catch((error) => {
-        dispatch(deleteTaskError(error));
-      });
+      .catch((err) => console.log(err));
   };
 };
 
-export const postTask = (options) => {
+export const postProject = (options) => {
   return (dispatch) => {
+    dispatch(postProjectPending());
     fetch(options.url, options)
       .then((response) => {
         return response.json();
       })
       .then((response) => {
         if (!response.error) {
-          dispatch(postTaskSuccess(response.data));
+          dispatch(postProjectSuccess(response.data));
           dispatch(setInfoForFeedback({ title: 'Request done!', description: response.message }));
           dispatch(showFeedbackMessage(true));
         } else {
-          dispatch(postTaskError(response.data.message));
+          dispatch(postProjectError(response.data.message));
           dispatch(
             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
           );
@@ -80,21 +81,21 @@ export const postTask = (options) => {
         }
       })
       .catch((error) => {
-        dispatch(postTaskError(error));
+        dispatch(postProjectError(error));
       });
   };
 };
 
-export const editTask = (options) => {
+export const editProject = (options) => {
   return (dispatch) => {
+    dispatch(editProjectPending());
     fetch(options.url, options)
       .then((response) => {
         return response.json();
       })
       .then((response) => {
-        console.log(response);
         if (!response.error) {
-          dispatch(editTaskSuccess(response.data));
+          dispatch(editProjectSuccess(response.data));
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
@@ -103,15 +104,18 @@ export const editTask = (options) => {
           );
           dispatch(showFeedbackMessage(true));
         } else {
-          dispatch(editTaskError(response.data.message));
           dispatch(
-            setInfoForFeedback({ title: 'Something went wrong.', description: response.message })
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
           );
           dispatch(showFeedbackMessage(true));
+          dispatch(editProjectError(response.data.message));
         }
       })
       .catch((error) => {
-        dispatch(editTaskError(error));
+        dispatch(editProjectError(error));
       });
   };
 };

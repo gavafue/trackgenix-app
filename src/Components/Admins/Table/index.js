@@ -1,73 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import styles from '../admins.module.css';
+import { useEffect } from 'react';
 import Table from '../../Shared/Table';
 import Modal from '../../Shared/Modal';
 import DeleteMessage from '../../Shared/DeleteMessage';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Button from '../../Shared/Button';
 import Preloader from '../../Shared/Preloader';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteAdmin } from '../../../redux/admins/thunks';
+import {
+  getSelectedAdmin,
+  setInfoForDelete,
+  showDeleteMessage,
+  showFeedbackMessage,
+  cleanSelectedAdmin
+} from '../../../redux/admins/actions';
 
 const AdminsTable = () => {
-  const URL = process.env.REACT_APP_API_URL;
-  const [admins, setAdmins] = useState([]);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [infoForDelete, setInfoForDelete] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showPreloader, setShowPreloader] = useState(false);
+  const dispatch = useDispatch();
+  const admins = useSelector((state) => state.admins.list);
+  const isPending = useSelector((state) => state.admins.isPending);
+  const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
+  const deleteInfo = useSelector((state) => state.admins.infoForDelete);
+  const showDelete = useSelector((state) => state.admins.showDeleteMessage);
+  const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const history = useHistory();
-  const editData = (id) => {
-    history.push(`/admins/form/${id}`);
+
+  const editData = (row) => {
+    dispatch(getSelectedAdmin(row));
+    history.push(`/admins/form/`);
   };
+
+  const deleteHandler = () => {
+    dispatch(deleteAdmin(deleteInfo));
+  };
+
   useEffect(() => {
-    setShowPreloader(true);
-    fetch(`${URL}/admins`)
-      .then((res) => res.json())
-      .then((data) => {
-        setAdmins(data.data);
-        setShowPreloader(false);
-      })
-      .catch((error) => console.log(error));
-    setShowPreloader(false);
+    dispatch(cleanSelectedAdmin());
   }, []);
-  const deleteAdmin = (string) => {
-    const options = {
-      method: 'DELETE',
-      url: `${URL}/admins/${string}`
-    };
-    setShowPreloader(true);
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: response.message
-          });
-          setShowFeedbackMessage(true);
-          setShowPreloader(false);
-        } else {
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          });
-          setAdmins(admins.filter((admin) => string !== admin._id));
-          setShowFeedbackMessage(true);
-          setShowPreloader(false);
-        }
-      })
-      .catch((error) => console.log(error));
-  };
+
   const adminData = admins.map((admin) => {
     return {
-      name: admin.name,
-      lastName: admin.lastName,
-      phone: admin.phone,
-      email: admin.email,
-      moreInfo: <Button label="..." disabled={true} theme="disabled" />,
       ...admin,
-      active: admin.active ? 'Active' : 'Inactive'
+      moreInfo: <Button label="..." disabled={true} theme="disabled" />,
+      active: admin.active,
+      isActive: admin.active ? 'Active' : 'Inactive'
     };
   });
   return (
@@ -75,36 +53,36 @@ const AdminsTable = () => {
       <Table
         data={adminData}
         headersName={['Name', 'Last Name', 'Phone', 'E-mail', 'Status', 'More information']}
-        headers={['name', 'lastName', 'phone', 'email', 'active', 'moreInfo']}
-        deleteAdmin={deleteAdmin}
+        headers={['name', 'lastName', 'phone', 'email', 'isActive', 'moreInfo']}
+        deleteAdmin={deleteHandler}
         editData={editData}
-        setShowModal={setShowDeleteMessage}
-        setInfoForDelete={setInfoForDelete}
+        setShowModal={(handler) => dispatch(showDeleteMessage(handler))}
+        setInfoForDelete={(adminId) => dispatch(setInfoForDelete(adminId))}
       />
       <Modal
-        isOpen={showDeleteMessage}
+        isOpen={showDelete}
         handleClose={() => {
-          setShowDeleteMessage(false);
+          dispatch(showDeleteMessage(!showDelete));
         }}
       >
         <DeleteMessage
           handleClose={() => {
-            setShowDeleteMessage(false);
+            dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={infoForDelete}
-          deleteItem={deleteAdmin}
-          setShowModal={setShowDeleteMessage}
+          infoForDelete={deleteInfo}
+          deleteItem={deleteHandler}
+          setShowModal={(handler) => dispatch(showDeleteMessage(handler))}
         />
       </Modal>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {isPending && <Preloader />}
     </section>
   );
 };
