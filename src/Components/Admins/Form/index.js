@@ -1,63 +1,24 @@
-import { useState, useEffect } from 'react';
-import styles from './form.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { showFeedbackMessage } from '../../../redux/admins/actions';
-import SharedForm from '../../Shared/Form';
-import Input from '../../Shared/Input/InputText';
-import Select from '../../Shared/Input/InputSelect';
-import Modal from '../../Shared/Modal';
-import Preloader from '../../Shared/Preloader';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
-import { editAdmin, postAdmin } from '../../../redux/admins/thunks';
+import { showFeedbackMessage } from 'redux/admins/actions';
+import { editAdmin, postAdmin } from 'redux/admins/thunks';
+import { appendErrors, useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import styles from './form.module.css';
+import Preloader from 'Components/Shared/Preloader';
+import SharedForm from 'Components/Shared/Form';
+import Input from 'Components/Shared/Input/InputText';
+import Select from 'Components/Shared/Input/InputSelect';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import validations from 'Components/Shared/validations';
 
 const Form = () => {
   const dispatch = useDispatch();
-  const [nameValue, setNameValue] = useState('');
-  const [lastNameValue, setLastNameValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
-  const [phoneValue, setPhoneValue] = useState('');
-  const [genderValue, setGenderValue] = useState('');
-  const [birthDateValue, setBirthDateValue] = useState('');
-  const [cityValue, setCityValue] = useState('');
-  const [zipValue, setZipValue] = useState('');
-  const [activeValue, setActiveValue] = useState('');
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const adminSelected = useSelector((state) => state.admins.adminSelected);
   const isAdminSelected = Object.keys(adminSelected).length;
-
-  const onChangeNameInput = (event) => {
-    setNameValue(event.target.value);
-  };
-  const onChangeLastNameInput = (event) => {
-    setLastNameValue(event.target.value);
-  };
-  const onChangeEmailInput = (event) => {
-    setEmailValue(event.target.value);
-  };
-  const onChangePasswordInput = (event) => {
-    setPasswordValue(event.target.value);
-  };
-  const onChangePhoneInput = (event) => {
-    setPhoneValue(event.target.value);
-  };
-  const onChangeGenderInput = (event) => {
-    setGenderValue(event.target.value);
-  };
-  const onChangeBirthDateInput = (event) => {
-    setBirthDateValue(event.target.value);
-  };
-  const onChangeCityInput = (event) => {
-    setCityValue(event.target.value);
-  };
-  const onChangeZipInput = (event) => {
-    setZipValue(event.target.value);
-  };
-  const onChangeActiveInput = (event) => {
-    setActiveValue(event.target.value);
-  };
 
   const arrayToMapGender = [
     { id: 'male', optionContent: 'Male' },
@@ -70,43 +31,27 @@ const Form = () => {
     { id: false, optionContent: 'Inactive' }
   ];
 
-  useEffect(() => {
-    if (isAdminSelected) {
-      setNameValue(adminSelected.name);
-      setLastNameValue(adminSelected.lastName);
-      setEmailValue(adminSelected.email);
-      setPasswordValue(adminSelected.password);
-      setCityValue(adminSelected.city);
-      setBirthDateValue(adminSelected.dateBirth);
-      setGenderValue(adminSelected.gender);
-      setPhoneValue(adminSelected.phone);
-      setZipValue(adminSelected.zip);
-      setActiveValue(adminSelected.active);
-    }
-  }, []);
-
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = () => {
     const options = {
       method: isAdminSelected ? 'PUT' : 'POST',
       url: isAdminSelected
         ? `${process.env.REACT_APP_API_URL}/admins/${adminSelected._id}`
-        : `${process.env.REACT_APP_API_URL}/admins`,
+        : `${process.env.REACT_APP_API_URL}/admins` /*,
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        name: nameValue,
-        lastName: lastNameValue,
-        email: emailValue,
-        password: passwordValue,
-        gender: genderValue,
-        phone: phoneValue,
-        dateBirth: birthDateValue,
-        city: cityValue,
-        zip: zipValue,
-        active: activeValue
-      })
+        name: adminSelected.name,
+        lastName: adminSelected.lastName,
+        email: adminSelected.email,
+        password: adminSelected.password,
+        gender: adminSelected.gender,
+        phone: adminSelected.phone,
+        dateBirth: adminSelected.dateBirth,
+        city: adminSelected.city,
+        zip: adminSelected.zip,
+        active: adminSelected.active
+      })*/
     };
     isAdminSelected ? dispatch(editAdmin(options)) : dispatch(postAdmin(options));
   };
@@ -115,107 +60,126 @@ const Form = () => {
     ? `Editing ${adminSelected.name} ${adminSelected.lastName}'s information`
     : 'Add an Admin';
 
+  const {
+    handleSubmit,
+    register
+    // formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(validations)
+  });
+
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
-      <SharedForm onSubmit={onSubmit}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Name"
-          id="name"
           name="name"
+          id="name"
           type="text"
-          placeholder="Enter admin's name"
-          value={nameValue}
-          onChange={onChangeNameInput}
+          placeholder="Enter admin's first name"
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.name}
           required
         />
         <Input
           label="Last&nbsp;name"
-          id="lastName"
           name="lastName"
+          id="lastName"
           type="text"
           placeholder="Enter admin's last name"
-          value={lastNameValue}
-          onChange={onChangeLastNameInput}
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.lastName}
           required
         />
         <Input
           label="E-mail"
-          id="email"
           name="email"
+          id="email"
           type="email"
           placeholder="Enter a valid email"
-          value={emailValue}
-          onChange={onChangeEmailInput}
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.email}
           required
         />
         <Input
           label="Password"
-          id="password"
           name="password"
+          id="password"
           type="password"
           placeholder="Enter your password"
-          value={passwordValue}
-          onChange={onChangePasswordInput}
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.password}
           required
         />
         <Select
           label="Gender"
-          arrayToMap={arrayToMapGender}
-          id="gender"
           name="gender"
-          value={genderValue}
-          onChange={onChangeGenderInput}
-          placeholder="Enter the admin gender"
+          id="gender"
+          arrayToMap={arrayToMapGender}
+          placeholder="Enter admin's gender"
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.gender}
           required
         />
         <Input
           label="Phone"
-          id="phone"
           name="phone"
+          id="phone"
           type="tel"
           placeholder="Enter admin's phone number"
-          value={phoneValue}
-          onChange={onChangePhoneInput}
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.phone}
           required
         />
         <Input
           label="Date&nbsp;of&nbsp;birth"
-          id="dateBirth"
           name="dateBirth"
+          id="dateBirth"
           type="date"
-          value={birthDateValue.slice(0, 10)}
-          onChange={onChangeBirthDateInput}
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.dateBirth?.slice(0, 10)}
           required
         />
         <Input
           label="City"
-          id="city"
           name="city"
+          id="city"
           type="text"
           placeholder="Enter admin's city"
-          value={cityValue}
-          onChange={onChangeCityInput}
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.city}
           required
         />
         <Input
           label="Postal&nbsp;code"
-          id="zip"
           name="zip"
+          id="zip"
           type="text"
           placeholder="Enter admin's postal code"
-          value={zipValue}
-          onChange={onChangeZipInput}
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.zip}
           required
         />
         <Select
           label="Active"
           arrayToMap={arrayToMapActive}
-          id="active"
           name="active"
-          value={activeValue}
-          onChange={onChangeActiveInput}
-          placeholder="Enter the admin status"
+          id="active"
+          placeholder="Enter admin's status"
+          register={register}
+          error={appendErrors.name?.message}
+          value={adminSelected.active}
           required
         />
       </SharedForm>
