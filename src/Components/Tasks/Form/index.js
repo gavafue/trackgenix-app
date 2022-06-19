@@ -1,25 +1,30 @@
 import styles from './form.module.css';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Modal from '../../Shared/Modal';
 import Preloader from '../../Shared/Preloader';
+import { useSelector, useDispatch } from 'react-redux';
+import { editTask, postTask } from '../../../redux/tasks/thunks';
+import { showFeedbackMessage } from '../../../redux/tasks/actions';
 
 const Form = () => {
-  const URL = process.env.REACT_APP_API_URL;
+  const dispatch = useDispatch();
   const [projects, setProjects] = useState([]);
   const [projectValue, setProjectValue] = useState('');
   const [weekValue, setWeekValue] = useState('');
   const [dayValue, setDayValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
   const [hoursValue, setHoursValue] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [showPreloader, setShowPreloader] = useState(false);
 
+  const isPending = useSelector((state) => state.tasks.isPending);
+  const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
+  const infoForFeedback = useSelector((state) => state.tasks.infoForFeedback);
+  const selectedItem = useSelector((state) => state.tasks.selectedItem);
+  const URL = process.env.REACT_APP_API_URL;
+  const isItemSelected = Object.keys(selectedItem).length;
   const onChangeProject = (event) => {
     setProjectValue(event.target.value);
   };
@@ -35,72 +40,52 @@ const Form = () => {
   const onChangeHours = (event) => {
     setHoursValue(event.target.value);
   };
+
   useEffect(() => {
-    setShowPreloader(true);
-    fetch(`${URL}/projects`)
+    fetch(`${process.env.REACT_APP_API_URL}/projects`)
       .then((res) => res.json())
       .then((data) => {
         setProjects(data.data);
-        setShowPreloader(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (isItemSelected) {
+      setProjectValue(selectedItem.nameProjectId || '');
+      setDayValue(selectedItem.day);
+      setWeekValue(selectedItem.week);
+      setHoursValue(selectedItem.hours);
+      setDescriptionValue(selectedItem.description);
+    }
+  }, []);
+
   const arrayToMapProjects = projects.map((project) => {
     return {
       id: project._id,
-      optionContent: project.name
+      optionContent: project.name || 'No project name'
     };
   });
-  const taskId = useParams();
-  const title = taskId.id ? 'Update Task' : 'Add Task';
-  const options = {
-    method: taskId.id ? 'PUT' : 'POST',
-    url: `${process.env.REACT_APP_API_URL}/tasks/${taskId.id ?? ''}`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      nameProject: projectValue,
-      week: weekValue,
-      day: dayValue,
-      description: descriptionValue,
-      hours: hoursValue
-    })
+
+  const title = isItemSelected ? 'Update Task' : 'Add Task';
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const options = {
+      method: isItemSelected ? 'PUT' : 'POST',
+      url: isItemSelected ? `${URL}/tasks/${selectedItem._id}` : `${URL}/tasks`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        nameProject: projectValue,
+        week: weekValue,
+        day: dayValue,
+        description: descriptionValue,
+        hours: hoursValue
+      })
+    };
+    isItemSelected ? dispatch(editTask(options)) : dispatch(postTask(options));
   };
-  useEffect(() => {
-    if (taskId) {
-      setShowPreloader(true);
-      fetch(`${URL}/tasks/${taskId.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProjectValue(data.data.nameProject._id);
-          setWeekValue(data.data.week);
-          setDayValue(data.data.day);
-          setDescriptionValue(data.data.description);
-          setHoursValue(data.data.hours);
-          setShowPreloader(false);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
-  const onSubmit = async (event) => {
-    try {
-      event.preventDefault();
-      setShowPreloader(true);
-      const res = await fetch(options.url, options);
-      const data = await res.json();
-      if (res.status == 201 || res.status == 200) {
-        setInfoForFeedback({ title: 'Request done!', description: data.message });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      } else {
-        setInfoForFeedback({ title: 'Something went wrong', description: data.message });
-        setShowFeedbackMessage(true);
-        setShowPreloader(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
@@ -157,14 +142,14 @@ const Form = () => {
         />
       </SharedForm>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {isPending && <Preloader />}
     </div>
   );
 };

@@ -115,11 +115,6 @@ const Form = () => {
     ? `Editing ${adminSelected.name} ${adminSelected.lastName}'s information`
     : 'Add an Admin';
 
-  const dayInput = birthDateValue.substring(5, 7);
-  const monthInput = birthDateValue.substring(8, 10);
-  const yearInput = birthDateValue.substring(0, 4);
-  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
-
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
@@ -189,7 +184,7 @@ const Form = () => {
           id="dateBirth"
           name="dateBirth"
           type="date"
-          value={dateFormat}
+          value={birthDateValue.slice(0, 10)}
           onChange={onChangeBirthDateInput}
           required
         />

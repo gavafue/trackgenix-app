@@ -15,7 +15,6 @@ const TasksTable = ({
   const [infoForDelete, setInfoForDelete] = useState({
     id: ''
   });
-  console.log(showFeedBackModal);
   return (
     <table>
       <thead>
