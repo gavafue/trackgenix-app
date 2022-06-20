@@ -6,6 +6,7 @@ import styles from './form.module.css';
 import Loader from '../../Shared/Preloader';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
+import Select from 'Components/Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import { showFeedbackMessage } from '../../../redux/employees/actions';
@@ -24,6 +25,11 @@ const Form = () => {
   const title = isEmployeeSelected
     ? `Update ${employeeSelected.firstName} ${employeeSelected.lastName}'s data`
     : 'Add Employee';
+
+  const arrayToMapActive = [
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
+  ];
 
   const onSubmit = (data) => {
     const options = {
@@ -76,8 +82,8 @@ const Form = () => {
         />
         <Input
           label="Last Name"
-          name="last-name"
-          id="last-name"
+          name="lastName"
+          id="lastName"
           type="text"
           placeholder="Write your last name."
           register={register}
@@ -171,6 +177,17 @@ const Form = () => {
           register={register}
           error={errors.photo?.message}
           value={employeeSelected ? employeeSelected.photo : ''}
+          required
+        />
+        <Select
+          label="Active"
+          arrayToMap={arrayToMapActive}
+          name="active"
+          id="active"
+          placeholder="Enter employee's status"
+          register={register}
+          error={errors.active?.message}
+          value={employeeSelected ? employeeSelected.active : ''}
           required
         />
       </SharedForm>
