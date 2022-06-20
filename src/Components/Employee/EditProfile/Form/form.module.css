@@ -1,12 +1,42 @@
 .container{
 display: flex;
+flex-direction: column;
+width: 100%;
 }
 
+.title{
+  margin-left:5%;
+  font-size: 30px;
+}
 .formContainer{
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   text-align: center;
-  margin: 1%;
+  margin: 2% 5%;
+}
+
+.firstColumn, .secondColumn{
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  align-self: baseline;
+}
+
+.profileImg{
+  width: 13%;
+  height: auto;
+  border-radius: 50%;
+  justify-self: flex-start;
+  align-self: flex-start;
+  margin-left: 5%
+}
+
+label{
+  text-align: left;
+  margin: 2% 0%
+}
+
+.submitButton{
+  margin: 4%
 }

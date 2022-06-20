@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useEffect } from 'react';
+import Button from 'Components/Shared/Button';
 
 const Form = () => {
   const schema = Joi.object({
@@ -107,191 +108,100 @@ const Form = () => {
   console.log(errors);
   return (
     <div className={styles.container}>
-      <h1>{employeeLogged.name}</h1>
+      <h1 className={styles.title}> Edit profile</h1>
+      <img className={styles.profileImg} src={employeeLogged.photo}></img>
       <form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="photo">Profile Picture</label>
-        <input {...register('photo')} className={styles.input} id="photo" type="text" />
-        <label htmlFor="firstName"> First Name</label>
-        <input
-          {...register('firstName')}
-          className={styles.input}
-          id="firstName"
-          type="text"
-          placeholder="Write your name."
-        />
-        {errors.firstName && <p>{errors.firstName.message}</p>}
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          {...register('lastName')}
-          className={styles.input}
-          id="lastName"
-          type="text"
-          placeholder="Write your last name."
-        />
-        {errors.lastName && <p>{errors.lastName.message}</p>}
-        <label htmlFor="email">Email</label>
-        <input
-          {...register('email')}
-          className={styles.input}
-          id="email"
-          type="text"
-          placeholder="Write your email"
-        />
-        {errors.email && <p>{errors.email.message}</p>}
-        <label htmlFor="country">Country</label>
-        <input
-          {...register('country')}
-          className={styles.input}
-          id="country"
-          type="text"
-          placeholder="Write your Country"
-        />
-        {errors.country && <p>{errors.country.message}</p>}
-        <label htmlFor="city">City</label>
-        <input
-          {...register('city')}
-          className={styles.input}
-          id="city"
-          type="text"
-          placeholder="Write your City"
-        />
-        {errors.city && <p>{errors.city.message}</p>}
-        <label htmlFor="zip">Postal Code</label>
-        <input
-          {...register('zip')}
-          className={styles.input}
-          id="zip"
-          type="text"
-          placeholder="Write your Postal Code"
-        />
-        {errors.zip && <p>{errors.zip.message}</p>}
-        <label htmlFor="phone">Phone</label>
-        <input
-          {...register('phone')}
-          className={styles.input}
-          id="phone"
-          type="tel"
-          placeholder="Write your Phone"
-        />
-        {errors.phone && <p>{errors.phone.message}</p>}
-        <label htmlFor="birthDate">Birth Date</label>
-        <input
-          {...register('birthDate')}
-          className={styles.input}
-          id="birthDate"
-          type="text"
-          placeholder="Write your birth date"
-        />
-        {errors.birthDate && <p>{errors.birthDate.message}</p>}
-        <label htmlFor="password">Password</label>
-        <input
-          {...register('password')}
-          className={styles.input}
-          id="password"
-          type="password"
-          placeholder="Change your password"
-        />
-        {errors.password && <p>{errors.password.message}</p>}
-        {/* <Input
-          label="Last Name"
-          // name="last-name"
-          id="last-name"
-          type="text"
-          placeholder="Write your last name."
-          // value={lastNameValue}
-          // onChange={onChangeLastNameValue}
-          // {...register('last-name')}
-          // required
-        />
-        <Input
-          label="E-mail"
-          // name="email"
-          id="email"
-          type="email"
-          placeholder="Write your email."
-          // value={emailValue}
-          // onChange={onChangeEmailValue}
-          // {...register('email')}
-          // required
-        />
-        <Input
-          label="Password"
-          // name="password"
-          id="password"
-          type="password"
-          placeholder="Write your password."
-          // value={passwordValue}
-          // onChange={onChangePasswordValue}
-          // required
-          // {...register('password')}
-        />
-        <Input
-          label="Date of birth"
-          // name="birthday"
-          id="birthday"
-          type="date"
-          placeholder="Write your birthday on format dd/mm/yyyy"
-          // value={birthdayValue.slice(0, 10)}
-          // onChange={onChangeBirthdayValue}
-          // {...register('birthday')}
-          // required
-        />
-        <Input
-          label="Phone"
-          // name="phone"
-          id="phone"
-          type="tel"
-          placeholder="Write your telephone."
-          // value={telephoneValue}
-          // onChange={onChangeTelephoneValue}
-          // {...register('phone')}
-          // required
-        />
-        <Input
-          label="Country"
-          // name="country"
-          id="country"
-          type="text"
-          placeholder="Write your country."
-          // value={countryValue}
-          // onChange={onChangeCountryValue}
-          // {...register('country')}
-          // required
-        />
-        <Input
-          label="City"
-          // name="city"
-          id="city"
-          type="text"
-          placeholder="Write your city."
-          // value={cityValue}
-          // onChange={onChangeCityValue}
-          // {...register('city')}
-          // required
-        />
-        <Input
-          label="Postal Code"
-          // name="ZIP"
-          id="zip"
-          type="text"
-          placeholder="Write your postal code."
-          // value={zipValue}
-          // onChange={onChangeZipValue}
-          // {...register('zip')}
-          // required
-        />
-        <Input
-          label="Profile picture"
-          // name="profile-picture"
-          id="profile-picture"
-          type="text"
-          placeholder="Write your profile picture url."
-          // value={photoValue}
-          // onChange={onChangePhotoValue}
-          // {...register('profile-picture')}
-          // required
-        /> */}
-        <button type="submit"> submit </button>
+        <div className={styles.firstColumn}>
+          <label htmlFor="firstName"> First Name</label>
+          <input
+            {...register('firstName')}
+            className={styles.input}
+            id="firstName"
+            type="text"
+            placeholder="Write your name."
+          />
+          {errors.firstName && <p>{errors.firstName.message}</p>}
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            {...register('lastName')}
+            className={styles.input}
+            id="lastName"
+            type="text"
+            placeholder="Write your last name."
+          />
+          {errors.lastName && <p>{errors.lastName.message}</p>}
+          <label htmlFor="email">Email</label>
+          <input
+            {...register('email')}
+            className={styles.input}
+            id="email"
+            type="text"
+            placeholder="Write your email"
+          />
+          {errors.email && <p>{errors.email.message}</p>}
+          <label htmlFor="country">Country</label>
+          <input
+            {...register('country')}
+            className={styles.input}
+            id="country"
+            type="text"
+            placeholder="Write your Country"
+          />
+          {errors.country && <p>{errors.country.message}</p>}
+          <label htmlFor="city">City</label>
+          <input
+            {...register('city')}
+            className={styles.input}
+            id="city"
+            type="text"
+            placeholder="Write your City"
+          />
+          {errors.city && <p>{errors.city.message}</p>}
+        </div>
+        <div className={styles.secondColumn}>
+          <label htmlFor="zip">Postal Code</label>
+          <input
+            {...register('zip')}
+            className={styles.input}
+            id="zip"
+            type="text"
+            placeholder="Write your Postal Code"
+          />
+          {errors.zip && <p>{errors.zip.message}</p>}
+          <label htmlFor="phone">Phone</label>
+          <input
+            {...register('phone')}
+            className={styles.input}
+            id="phone"
+            type="tel"
+            placeholder="Write your Phone"
+          />
+          {errors.phone && <p>{errors.phone.message}</p>}
+          <label htmlFor="birthDate">Birth Date</label>
+          <input
+            {...register('birthDate')}
+            className={styles.input}
+            id="birthDate"
+            type="text"
+            placeholder="Write your birth date"
+          />
+          {errors.birthDate && <p>{errors.birthDate.message}</p>}
+          <label htmlFor="password">Password</label>
+          <input
+            {...register('password')}
+            className={styles.input}
+            id="password"
+            type="password"
+            placeholder="Change your password"
+          />
+          {errors.password && <p>{errors.password.message}</p>}
+          <label htmlFor="photo">Profile Picture</label>
+          <input {...register('photo')} className={styles.input} id="photo" type="text" />
+          {errors.photo && <p>{errors.photo.message}</p>}
+          <div className={styles.submitButton}>
+            <Button type="submit" label="Submit" />
+          </div>
+        </div>
       </form>
       <Modal
         isOpen={showFeedback}
