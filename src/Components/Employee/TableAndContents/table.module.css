@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  margin: 1%;
+  background-color: #fff;
+  border: #37386720 2px solid;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.headers {
+  width: 100%;
+  background-color: #37386720;
+  border: #373867 1px solid;
+  border-collapse: collapse;
+  text-align: center;
+  font-weight: bold;
+}
