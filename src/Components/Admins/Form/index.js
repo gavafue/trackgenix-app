@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from 'redux/admins/actions';
 import { editAdmin, postAdmin } from 'redux/admins/thunks';
-import { appendErrors, useForm } from 'react-hook-form';
-// import { joiResolver } from '@hookform/resolvers/joi';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
 import Preloader from 'Components/Shared/Preloader';
 import SharedForm from 'Components/Shared/Form';
@@ -10,7 +10,7 @@ import Input from 'Components/Shared/Input/InputText';
 import Select from 'Components/Shared/Input/InputSelect';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
-// import validations from 'Components/Shared/validations';
+import validations from 'Components/Shared/validations';
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -32,28 +32,28 @@ const Form = () => {
   ];
 
   const onSubmit = (data) => {
-    // const options = {
-    //   method: isAdminSelected ? 'PUT' : 'POST',
-    //   url: isAdminSelected
-    //     ? `${process.env.REACT_APP_API_URL}/admins/${adminSelected._id}`
-    //     : `${process.env.REACT_APP_API_URL}/admins` ,
-    //   headers: {
-    //     'Content-type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     name: adminSelected.name,
-    //     lastName: adminSelected.lastName,
-    //     email: adminSelected.email,
-    //     password: adminSelected.password,
-    //     gender: adminSelected.gender,
-    //     phone: adminSelected.phone,
-    //     dateBirth: adminSelected.dateBirth,
-    //     city: adminSelected.city,
-    //     zip: adminSelected.zip,
-    //     active: adminSelected.active
-    //   })
-    // };
-    isAdminSelected ? dispatch(editAdmin(data)) : dispatch(postAdmin(data));
+    const options = {
+      method: isAdminSelected ? 'PUT' : 'POST',
+      url: isAdminSelected
+        ? `${process.env.REACT_APP_API_URL}/admins/${adminSelected._id}`
+        : `${process.env.REACT_APP_API_URL}/admins`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: data.name,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        gender: data.gender,
+        phone: data.phone,
+        dateBirth: data.dateBirth,
+        city: data.city,
+        zip: data.zip,
+        active: data.active
+      })
+    };
+    isAdminSelected ? dispatch(editAdmin(options)) : dispatch(postAdmin(options));
   };
 
   const title = isAdminSelected
@@ -62,11 +62,11 @@ const Form = () => {
 
   const {
     handleSubmit,
-    register
-    // formState: { errors }
+    register,
+    formState: { errors }
   } = useForm({
-    mode: 'onChange'
-    // resolver: joiResolver(validations)
+    mode: 'onChange',
+    resolver: joiResolver(validations)
   });
 
   return (
@@ -75,13 +75,13 @@ const Form = () => {
       <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Name"
-          name="firstName"
-          id="firstName"
+          name="name"
+          id="name"
           type="text"
           placeholder="Enter admin's first name"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.name}
+          error={errors.name?.message}
+          value={adminSelected ? adminSelected.name : ''}
           required
         />
         <Input
@@ -91,8 +91,8 @@ const Form = () => {
           type="text"
           placeholder="Enter admin's last name"
           register={register}
-          error={appendErrors.lastName?.message}
-          value={adminSelected.lastName}
+          error={errors.lastName?.message}
+          value={adminSelected ? adminSelected.lastName : ''}
           required
         />
         <Input
@@ -102,8 +102,8 @@ const Form = () => {
           type="email"
           placeholder="Enter a valid email"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.email}
+          error={errors.email?.message}
+          value={adminSelected ? adminSelected.email : ''}
           required
         />
         <Input
@@ -113,8 +113,8 @@ const Form = () => {
           type="password"
           placeholder="Enter your password"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.password}
+          error={errors.password?.message}
+          value={adminSelected ? adminSelected.password : ''}
           required
         />
         <Select
@@ -124,8 +124,8 @@ const Form = () => {
           arrayToMap={arrayToMapGender}
           placeholder="Enter admin's gender"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.gender}
+          error={errors.gender?.message}
+          value={adminSelected ? adminSelected.gender : ''}
           required
         />
         <Input
@@ -135,18 +135,18 @@ const Form = () => {
           type="tel"
           placeholder="Enter admin's phone number"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.phone}
+          error={errors.phone?.message}
+          value={adminSelected ? adminSelected.phone : ''}
           required
         />
         <Input
           label="Date&nbsp;of&nbsp;birth"
-          name="birthDate"
-          id="birthDate"
+          name="dateBirth"
+          id="dateBirth"
           type="date"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.dateBirth?.slice(0, 10)}
+          error={errors.dateBirth?.message}
+          value={adminSelected.dateBirth ? adminSelected.dateBirth.slice(0, 10) : ''}
           required
         />
         <Input
@@ -156,8 +156,8 @@ const Form = () => {
           type="text"
           placeholder="Enter admin's city"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.city}
+          error={errors.city?.message}
+          value={adminSelected ? adminSelected.city : ''}
           required
         />
         <Input
@@ -167,8 +167,8 @@ const Form = () => {
           type="text"
           placeholder="Enter admin's postal code"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.zip}
+          error={errors.zip?.message}
+          value={adminSelected ? adminSelected.zip : ''}
           required
         />
         <Select
@@ -178,8 +178,8 @@ const Form = () => {
           id="active"
           placeholder="Enter admin's status"
           register={register}
-          error={appendErrors.name?.message}
-          value={adminSelected.active}
+          error={errors.active?.message}
+          value={adminSelected ? adminSelected.active : ''}
           required
         />
       </SharedForm>
