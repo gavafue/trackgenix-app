@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from 'redux/admins/actions';
 import { editAdmin, postAdmin } from 'redux/admins/thunks';
 import { appendErrors, useForm } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
+// import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
 import Preloader from 'Components/Shared/Preloader';
 import SharedForm from 'Components/Shared/Form';
@@ -10,7 +10,7 @@ import Input from 'Components/Shared/Input/InputText';
 import Select from 'Components/Shared/Input/InputSelect';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
-import validations from 'Components/Shared/validations';
+// import validations from 'Components/Shared/validations';
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -31,29 +31,29 @@ const Form = () => {
     { id: false, optionContent: 'Inactive' }
   ];
 
-  const onSubmit = () => {
-    const options = {
-      method: isAdminSelected ? 'PUT' : 'POST',
-      url: isAdminSelected
-        ? `${process.env.REACT_APP_API_URL}/admins/${adminSelected._id}`
-        : `${process.env.REACT_APP_API_URL}/admins` /*,
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: adminSelected.name,
-        lastName: adminSelected.lastName,
-        email: adminSelected.email,
-        password: adminSelected.password,
-        gender: adminSelected.gender,
-        phone: adminSelected.phone,
-        dateBirth: adminSelected.dateBirth,
-        city: adminSelected.city,
-        zip: adminSelected.zip,
-        active: adminSelected.active
-      })*/
-    };
-    isAdminSelected ? dispatch(editAdmin(options)) : dispatch(postAdmin(options));
+  const onSubmit = (data) => {
+    // const options = {
+    //   method: isAdminSelected ? 'PUT' : 'POST',
+    //   url: isAdminSelected
+    //     ? `${process.env.REACT_APP_API_URL}/admins/${adminSelected._id}`
+    //     : `${process.env.REACT_APP_API_URL}/admins` ,
+    //   headers: {
+    //     'Content-type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     name: adminSelected.name,
+    //     lastName: adminSelected.lastName,
+    //     email: adminSelected.email,
+    //     password: adminSelected.password,
+    //     gender: adminSelected.gender,
+    //     phone: adminSelected.phone,
+    //     dateBirth: adminSelected.dateBirth,
+    //     city: adminSelected.city,
+    //     zip: adminSelected.zip,
+    //     active: adminSelected.active
+    //   })
+    // };
+    isAdminSelected ? dispatch(editAdmin(data)) : dispatch(postAdmin(data));
   };
 
   const title = isAdminSelected
@@ -65,8 +65,8 @@ const Form = () => {
     register
     // formState: { errors }
   } = useForm({
-    mode: 'onChange',
-    resolver: joiResolver(validations)
+    mode: 'onChange'
+    // resolver: joiResolver(validations)
   });
 
   return (
@@ -75,8 +75,8 @@ const Form = () => {
       <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Name"
-          name="name"
-          id="name"
+          name="firstName"
+          id="firstName"
           type="text"
           placeholder="Enter admin's first name"
           register={register}
@@ -91,7 +91,7 @@ const Form = () => {
           type="text"
           placeholder="Enter admin's last name"
           register={register}
-          error={appendErrors.name?.message}
+          error={appendErrors.lastName?.message}
           value={adminSelected.lastName}
           required
         />
@@ -141,8 +141,8 @@ const Form = () => {
         />
         <Input
           label="Date&nbsp;of&nbsp;birth"
-          name="dateBirth"
-          id="dateBirth"
+          name="birthDate"
+          id="birthDate"
           type="date"
           register={register}
           error={appendErrors.name?.message}

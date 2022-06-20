@@ -14,6 +14,7 @@ const Select = (props) => {
         defaultValue={props.value ?? props.placeholder}
         required={props.equired}
         multiple={props.multiple}
+        {...props.register(props.name)}
       >
         {props.arrayToMap.map((item) => {
           return (
@@ -31,6 +32,7 @@ const Select = (props) => {
           {props.placeholder}
         </option>
       </select>
+      {props.error && <sub className={styles.error}>{props.error}</sub>}
     </div>
   );
 };

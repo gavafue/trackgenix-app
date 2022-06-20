@@ -13,10 +13,11 @@ const Input = (props) => {
         name={props.name}
         type={props.type}
         defaultValue={props.value}
-        // onChange={props.onChange}
         required={props.required}
         placeholder={props.placeholder}
+        {...props.register(props.name)}
       />
+      {props.error && <sub className={styles.error}>{props.error}</sub>}
     </div>
   );
 };

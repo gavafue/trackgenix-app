@@ -46,7 +46,7 @@ const validations = Joi.object({
   zip: Joi.string()
     .regex(/^[0-9]{4,5}$/)
     .message('Postal code should be a 4 or 5 digits value'),
-  photo: Joi.string().min(0).message('Invalid photo'),
+  photo: Joi.string().empty('').min(0).message('Invalid photo'),
   description: Joi.string().min(6).message('Description should contain at least 6 charcters'),
   client: Joi.string()
     .min(3)
