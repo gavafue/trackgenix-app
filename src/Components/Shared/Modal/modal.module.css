@@ -31,3 +31,7 @@
     cursor: pointer;
     color: #000;
 }
+
+.closeButton:hover {
+    color: #FF0000;
+}

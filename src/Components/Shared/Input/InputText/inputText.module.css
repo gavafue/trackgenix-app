@@ -19,6 +19,11 @@
   width: 100%;
   margin: 1%;
   box-sizing: border-box;
+  background-color: #FFF;
   border-style: solid;
   border-radius: 5px;
+}
+
+.error {
+  color: #ff0000;
 }
