@@ -10,6 +10,7 @@ import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useEffect } from 'react';
 import Button from 'Components/Shared/Button';
+import Input from 'Components/Shared/Input/InputText';
 
 const Form = () => {
   const schema = Joi.object({
@@ -67,7 +68,6 @@ const Form = () => {
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
-  console.log('employeeLogged: ', employeeLogged);
   useEffect(() => {
     reset({
       firstName: employeeLogged.firstName,
@@ -107,98 +107,123 @@ const Form = () => {
     };
     dispatch(editEmployee(options));
   };
-  console.log(errors);
   return (
     <div className={styles.container}>
       <img className={styles.profileImg} src={employeeLogged.photo}></img>
       <form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.firstColumn}>
-          <label htmlFor="firstName"> First Name</label>
-          <input
-            {...register('firstName')}
-            className={styles.input}
+          <Input
+            label="First Name"
+            register={register}
             id="firstName"
             type="text"
             placeholder="Write your name."
+            error={errors.firstName?.message}
+            name="firstName"
+            value={employeeLogged ? employeeLogged.firstName : ''}
+            required
           />
-          {errors.firstName && <p>{errors.firstName.message}</p>}
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            {...register('lastName')}
-            className={styles.input}
+          <Input
+            label="Last Name"
+            register={register}
             id="lastName"
             type="text"
             placeholder="Write your last name."
+            error={errors.lastName?.message}
+            name="lastName"
+            value={employeeLogged ? employeeLogged.lastName : ''}
+            required
           />
-          {errors.lastName && <p>{errors.lastName.message}</p>}
-          <label htmlFor="email">Email</label>
-          <input
-            {...register('email')}
-            className={styles.input}
+          <Input
+            label="Email"
+            register={register}
             id="email"
             type="text"
             placeholder="Write your email"
+            error={errors.email?.message}
+            name="email"
+            value={employeeLogged ? employeeLogged.email : ''}
+            required
           />
-          {errors.email && <p>{errors.email.message}</p>}
-          <label htmlFor="country">Country</label>
-          <input
-            {...register('country')}
-            className={styles.input}
+          <Input
+            label="Country"
+            register={register}
             id="country"
             type="text"
             placeholder="Write your Country"
+            error={errors.country?.message}
+            name="country"
+            value={employeeLogged ? employeeLogged.country : ''}
+            required
           />
-          {errors.country && <p>{errors.country.message}</p>}
-          <label htmlFor="city">City</label>
-          <input
-            {...register('city')}
-            className={styles.input}
+          <Input
+            label="City"
+            register={register}
             id="city"
             type="text"
             placeholder="Write your City"
+            error={errors.city?.message}
+            name="city"
+            value={employeeLogged ? employeeLogged.city : ''}
+            required
           />
-          {errors.city && <p>{errors.city.message}</p>}
         </div>
         <div className={styles.secondColumn}>
-          <label htmlFor="zip">Postal Code</label>
-          <input
-            {...register('zip')}
-            className={styles.input}
+          <Input
+            label="Postal Code"
+            register={register}
             id="zip"
             type="text"
             placeholder="Write your Postal Code"
+            error={errors.zip?.message}
+            name="zip"
+            value={employeeLogged ? employeeLogged.zip : ''}
+            required
           />
-          {errors.zip && <p>{errors.zip.message}</p>}
-          <label htmlFor="phone">Phone</label>
-          <input
-            {...register('phone')}
-            className={styles.input}
+          <Input
+            label="Phone"
+            register={register}
             id="phone"
             type="tel"
             placeholder="Write your Phone"
+            error={errors.phone?.message}
+            name="phone"
+            value={employeeLogged ? employeeLogged.phone : ''}
+            required
           />
-          {errors.phone && <p>{errors.phone.message}</p>}
-          <label htmlFor="birthDate">Birth Date</label>
-          <input
-            {...register('birthDate')}
-            className={styles.input}
+          <Input
+            label="Birth Date"
+            register={register}
             id="birthDate"
             type="text"
             placeholder="Write your birth date"
+            error={errors.birthDate?.message}
+            name="birthDate"
+            value={employeeLogged ? employeeLogged.birthDate : ''}
+            required
           />
-          {errors.birthDate && <p>{errors.birthDate.message}</p>}
-          <label htmlFor="password">Password</label>
-          <input
-            {...register('password')}
-            className={styles.input}
+          <Input
+            label="Password"
+            register={register}
             id="password"
             type="password"
             placeholder="Change your password"
+            error={errors.password?.message}
+            name="password"
+            value={employeeLogged ? employeeLogged.password : ''}
+            required
           />
-          {errors.password && <p>{errors.password.message}</p>}
-          <label htmlFor="photo">Profile Picture</label>
-          <input {...register('photo')} className={styles.input} id="photo" type="text" />
-          {errors.photo && <p>{errors.photo.message}</p>}
+          <Input
+            label="Photo"
+            register={register}
+            id="photo"
+            type="text"
+            placeholder="Change your profile picture"
+            error={errors.photo?.message}
+            name="photo"
+            value={employeeLogged ? employeeLogged.photo : ''}
+            required
+          />
           <div className={styles.submitButton}>
             <Button type="submit" label="Submit" />
           </div>
