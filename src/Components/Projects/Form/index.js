@@ -9,56 +9,47 @@ import Loader from '../../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { editProject, postProject } from '../../../redux/projects/thunks';
 import { showFeedbackMessage } from '../../../redux/projects/actions';
+import { useForm } from 'react-hook-form';
+import projectsValidation from 'validations/projects';
+import { joiResolver } from '@hookform/resolvers/joi';
 
 const Form = () => {
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(projectsValidation)
+  });
+
   const dispatch = useDispatch();
+  const [employees, setEmployees] = useState([]);
   const isPending = useSelector((state) => state.projects.isPending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
   const projectSelected = useSelector((state) => state.projects.projectSelected);
-  const isProjectSelected = Object.keys(projectSelected).length;
-  const [employees, setEmployees] = useState([]);
-  const [nameValue, setNameValue] = useState('');
-  const [startDateValue, setStartDateValue] = useState('');
-  const [endDateValue, setEndDateValue] = useState('');
-  const [descriptionValue, setDescriptionValue] = useState('');
-  const [clientValue, setClientValue] = useState('');
-  const [activeValue, setActiveValue] = useState('');
-  const [membersValue, setMembersValue] = useState('');
-  const [membersRoleValue, setMembersRoleValue] = useState('');
-  const [membersRateValue, setMembersRateValue] = useState('');
+  const isProjectSelected = Boolean(Object.keys(projectSelected).length);
   const URL = process.env.REACT_APP_API_URL;
 
-  const onChangeNameInput = (event) => {
-    setNameValue(event.target.value);
-  };
-  const onChangeStartDateInput = (event) => {
-    setStartDateValue(event.target.value);
-  };
-  const onChangeEndDateInput = (event) => {
-    setEndDateValue(event.target.value);
-  };
-  const onChangeDescriptionInput = (event) => {
-    setDescriptionValue(event.target.value);
-  };
-  const onChangeClientInput = (event) => {
-    setClientValue(event.target.value);
-  };
-  const onChangeActiveInput = (event) => {
-    setActiveValue(event.target.value);
-  };
-  const onChangeMembersInput = (event) => {
-    setMembersValue(event.target.value);
-  };
-  const onChangeMembersRoleInput = (event) => {
-    setMembersRoleValue(event.target.value);
-  };
-  const onChangeMembersRateInput = (event) => {
-    setMembersRateValue(event.target.value);
-  };
+  useEffect(() => {
+    if (isProjectSelected)
+      reset({
+        name: projectSelected.name,
+        startDate: projectSelected.startDate?.slice(0, 10),
+        endDate: projectSelected.endDate?.slice(0, 10),
+        description: projectSelected.description,
+        client: projectSelected.client,
+        members: projectSelected.members[0].name?._id || '',
+        role: projectSelected.members?.role || '',
+        rate: projectSelected.members[0]?.rate || '',
+        active: projectSelected.active
+      });
+  }, [isProjectSelected]);
 
   const title = isProjectSelected
-    ? `Editing ${nameValue} projects's information.`
+    ? `Editing ${projectSelected.name} projects's information.`
     : 'Add a Project';
 
   useEffect(() => {
@@ -70,22 +61,7 @@ const Form = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  useEffect(() => {
-    if (isProjectSelected) {
-      setNameValue(projectSelected.name);
-      setStartDateValue(projectSelected.startDate);
-      setEndDateValue(projectSelected.endDate);
-      setDescriptionValue(projectSelected.description);
-      setClientValue(projectSelected.client);
-      setMembersValue(projectSelected.members[0].name?._id || '');
-      setActiveValue(projectSelected.active);
-      setMembersRateValue(projectSelected.members[0]?.rate || '');
-      setMembersRoleValue(projectSelected.members[0]?.role || '');
-    }
-  }, []);
-
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = (data) => {
     const options = {
       method: isProjectSelected ? 'PUT' : 'POST',
       url: isProjectSelected ? `${URL}/projects/${projectSelected._id}` : `${URL}/projects`,
@@ -93,19 +69,19 @@ const Form = () => {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        name: nameValue,
-        startDate: startDateValue,
-        endDate: endDateValue,
-        description: descriptionValue,
-        client: clientValue,
+        name: data.name,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        description: data.description,
+        client: data.client,
         members: [
           {
-            name: membersValue,
-            role: membersRoleValue,
-            rate: membersRateValue
+            name: data.name,
+            role: data.role,
+            rate: data.rate
           }
         ],
-        active: activeValue
+        active: data.active
       })
     };
     isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
@@ -118,49 +94,49 @@ const Form = () => {
     <div className={styles.container}>
       {isPending && <Loader />}
       <h2>{title}</h2>
-      <SharedForm onSubmit={onSubmit}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <InputText
           name="Name"
           type="text"
           label="Name"
-          onChange={onChangeNameInput}
           placeholder="Write the project's name"
-          value={nameValue}
+          error={errors.name?.message}
           required
         />
         <InputText
           name="startDate"
-          type="text"
+          type="date"
           label="Start date"
-          onChange={onChangeStartDateInput}
           placeholder="Write the start date"
-          value={startDateValue}
+          register={register}
+          error={errors.startDate?.message}
           required
         />
         <InputText
           name="endDate"
-          type="text"
+          type="date"
           label="End date"
-          onChange={onChangeEndDateInput}
           placeholder="Write the end date"
-          value={endDateValue}
+          register={register}
+          error={errors.endDate?.message}
+          required
         />
         <InputText
           name="description"
           type="text"
           label="Description"
-          onChange={onChangeDescriptionInput}
           placeholder="Write the description"
-          value={descriptionValue}
+          register={register}
+          error={errors.description?.message}
           required
         />
         <InputText
           name="client"
           label="Client"
           type="text"
-          onChange={onChangeClientInput}
           placeholder="Write the Client's name"
-          value={clientValue}
+          register={register}
+          error={errors.client?.message}
           required
         />
         <InputSelect
@@ -172,8 +148,9 @@ const Form = () => {
           id="active"
           name="active"
           label="Active"
-          value={activeValue}
-          onChange={onChangeActiveInput}
+          register={register}
+          error={errors.active?.message}
+          required
         />
         <InputSelect
           className={styles.select}
@@ -181,8 +158,9 @@ const Form = () => {
           id="members"
           name="members"
           label="Members"
-          value={membersValue}
-          onChange={onChangeMembersInput}
+          register={register}
+          error={errors.members?._id?.message}
+          required
         />
         <InputSelect
           className={styles.select}
@@ -195,16 +173,19 @@ const Form = () => {
           id="role"
           name="role"
           label="Role"
-          value={membersRoleValue}
-          onChange={onChangeMembersRoleInput}
+          placeholer="enter member role"
+          register={register}
+          error={errors.members?.role?.message}
+          required
         />
         <InputText
           name="rate"
           type="text"
           label="Rate"
-          onChange={onChangeMembersRateInput}
           placeholder="Write the rate"
-          value={membersRateValue}
+          register={register}
+          error={errors.members?.rate?.message}
+          required
         />
       </SharedForm>
       <Modal
