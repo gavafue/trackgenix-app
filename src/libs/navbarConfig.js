@@ -1,9 +1,22 @@
 export const employeeNavbar = [
-  { path: '/employee/home', name: 'Home' },
-  { path: '/employee/projects', name: 'Projects' },
-  { path: '/employee/timesheet', name: 'Timesheet' },
-  { path: '/employee/profile', name: 'Edit Profile' }
+  {
+    path: '/employee/home',
+    name: 'Home'
+  },
+  {
+    path: '/employee/projects',
+    name: 'Projects'
+  },
+  {
+    path: '/employee/timesheet',
+    name: 'Timesheet'
+  },
+  {
+    path: '/employee/profile',
+    name: 'Edit Profile'
+  }
 ];
+
 export const defaultNavbaritems = [
   { path: '/admins', name: 'Admins' },
   { path: '/super-admins', name: 'Super Admins' },
