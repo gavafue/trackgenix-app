@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -49,7 +50,7 @@ const Form = () => {
         birthDate: data.birthDate,
         photo: data.photo,
         password: data.password,
-        active: false
+        active: data.active
       })
     };
     isEmployeeSelected ? dispatch(editEmployee(options)) : dispatch(postEmployee(options));
@@ -58,11 +59,29 @@ const Form = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     mode: 'onChange',
     resolver: joiResolver(employeesValidation)
   });
+
+  useEffect(() => {
+    if (isEmployeeSelected)
+      reset({
+        firstName: employeeSelected.firstName,
+        lastName: employeeSelected.lastName,
+        email: employeeSelected.email,
+        country: employeeSelected.country,
+        city: employeeSelected.city,
+        zip: employeeSelected.zip,
+        phone: employeeSelected.phone,
+        birthDate: employeeSelected.birthDate?.slice(0, 10),
+        password: employeeSelected.password,
+        photo: employeeSelected.photo,
+        active: employeeSelected.active
+      });
+  }, [employeeSelected]);
 
   return (
     <div className={styles.container}>
@@ -77,7 +96,6 @@ const Form = () => {
           placeholder="Write your name."
           register={register}
           error={errors.firstName?.message}
-          value={employeeSelected ? employeeSelected.firstName : ''}
           required
         />
         <Input
@@ -88,7 +106,6 @@ const Form = () => {
           placeholder="Write your last name."
           register={register}
           error={errors.lastName?.message}
-          value={employeeSelected ? employeeSelected.lastName : ''}
           required
         />
         <Input
@@ -99,7 +116,6 @@ const Form = () => {
           placeholder="Write your email."
           register={register}
           error={errors.email?.message}
-          value={employeeSelected ? employeeSelected.email : ''}
           required
         />
         <Input
@@ -110,7 +126,6 @@ const Form = () => {
           placeholder="Write your password."
           register={register}
           error={errors.password?.message}
-          value={employeeSelected ? employeeSelected.password : ''}
           required
         />
         <Input
@@ -121,7 +136,6 @@ const Form = () => {
           placeholder="Write your birthday on format dd/mm/yyyy"
           register={register}
           error={errors.birthDate?.message}
-          value={employeeSelected ? employeeSelected.birthDate?.slice(0, 10) : ''}
           required
         />
         <Input
@@ -132,7 +146,6 @@ const Form = () => {
           placeholder="Write your telephone."
           register={register}
           error={errors.phone?.message}
-          value={employeeSelected ? employeeSelected.phone : ''}
           required
         />
         <Input
@@ -143,7 +156,6 @@ const Form = () => {
           placeholder="Write your country."
           register={register}
           error={errors.country?.message}
-          value={employeeSelected ? employeeSelected.country : ''}
           required
         />
         <Input
@@ -154,7 +166,6 @@ const Form = () => {
           placeholder="Write your city."
           register={register}
           error={errors.city?.message}
-          value={employeeSelected ? employeeSelected.city : ''}
           required
         />
         <Input
@@ -165,7 +176,6 @@ const Form = () => {
           placeholder="Write your postal code."
           register={register}
           error={errors.zip?.message}
-          value={employeeSelected ? employeeSelected.zip : ''}
           required
         />
         <Input
@@ -176,7 +186,6 @@ const Form = () => {
           placeholder="Write your profile picture url."
           register={register}
           error={errors.photo?.message}
-          value={employeeSelected ? employeeSelected.photo : ''}
           required
         />
         <Select
@@ -187,7 +196,6 @@ const Form = () => {
           placeholder="Enter employee's status"
           register={register}
           error={errors.active?.message}
-          value={employeeSelected ? employeeSelected.active : ''}
           required
         />
       </SharedForm>
