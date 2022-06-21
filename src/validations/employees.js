@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-
 const employeesValidation = Joi.object({
   firstName: Joi.string()
     .min(3)
