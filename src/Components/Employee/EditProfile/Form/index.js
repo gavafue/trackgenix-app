@@ -6,54 +6,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from 'redux/employees/actions';
 import { editEmployee } from 'redux/employees/thunks';
 import { useForm } from 'react-hook-form';
-import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useEffect } from 'react';
 import Button from 'Components/Shared/Button';
 import Input from 'Components/Shared/Input/InputText';
+import employeesValidation from 'validations/employees';
 
 const Form = () => {
-  const schema = Joi.object({
-    firstName: Joi.string().min(3).max(40).messages({
-      'string.min': 'Invalid name, it must not contain less than 3 letters',
-      'string.max': 'Invalid name, it must not contain more than 40 letters'
-    }),
-    lastName: Joi.string().min(3).max(40).messages({
-      'string.min': 'Invalid last name, it must not contain less than 3 letters',
-      'string.max': 'Invalid last name, it must not contain more than 40 letters'
-    }),
-    birthDate: Joi.date().greater('1-1-1900').less(new Date()).messages({
-      'date.greater': 'You can not get than older',
-      'date.less': 'Your birth date can not be tomorrow, you already born'
-    }),
-    country: Joi.string().min(3).max(60).messages({
-      'string.min': 'Invalid country, it must not contain less than 3 letters',
-      'string.max': 'Invalid country, it must not contain more than 60 letters'
-    }),
-    city: Joi.string().min(3).max(60).messages({
-      'string.min': 'Invalid city, it must not contain less than 3 letters',
-      'string.max': 'Invalid city, it must not contain more than 60 letters'
-    }),
-    zip: Joi.number().integer().min(1000).max(99999).messages({
-      'string.min': 'Invalid zip, it must not contain less than 4 numbers',
-      'string.max': 'Invalid zip, it must not contain more than 5 numbers'
-    }),
-    phone: Joi.string()
-      .pattern(/^[0-9]{10}$/)
-      .messages({
-        'string.pattern': 'Phonenomber must contain 10 numbers, only integers'
-      }),
-    email: Joi.string().lowercase().messages({
-      'string.email': 'Invalid email format. Try again.'
-    }),
-    password: Joi.string()
-      .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
-      .messages({
-        'string.pattern':
-          'Password must be more than 6 char, at least 1 letter and 1 number. Without any symbols.'
-      }),
-    photo: Joi.string()
-  });
   const {
     handleSubmit,
     register,
@@ -61,7 +20,7 @@ const Form = () => {
     reset
   } = useForm({
     mode: 'onChange',
-    resolver: joiResolver(schema)
+    resolver: joiResolver(employeesValidation)
   });
   const dispatch = useDispatch();
   const isPending = useSelector((state) => state.employees.isPending);
@@ -79,7 +38,8 @@ const Form = () => {
       phone: employeeLogged.phone,
       birthDate: employeeLogged.birthDate,
       photo: employeeLogged.photo,
-      password: employeeLogged.password
+      password: employeeLogged.password,
+      active: employeeLogged.active
     });
   }, [employeeLogged]);
   const URL = process.env.REACT_APP_API_URL;
