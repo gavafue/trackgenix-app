@@ -1,8 +1,11 @@
 import styles from './navbar.module.css';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { employeeNavbar, defaultNavbaritems } from 'libs/navbarConfig';
 
 const Navbar = () => {
+  const location = useLocation().pathname;
+  const navBarItems = location.includes('/employee/') ? employeeNavbar : defaultNavbaritems;
   return (
     <nav className={styles.navbar}>
       <div className={styles.appName}>
@@ -13,24 +16,13 @@ const Navbar = () => {
         <p>Role</p>
       </div>
       <ul className={styles.rutes}>
-        <li>
-          <Link to="/admins">admins</Link>
-        </li>
-        <li>
-          <Link to="/super-admins">super admins</Link>
-        </li>
-        <li>
-          <Link to="/employees">employees</Link>
-        </li>
-        <li>
-          <Link to="/projects">projects</Link>
-        </li>
-        <li>
-          <Link to="/time-sheets">timesheets</Link>
-        </li>
-        <li>
-          <Link to="/tasks">tasks</Link>
-        </li>
+        {navBarItems.map((item) => {
+          return (
+            <li key={item.path}>
+              <Link to={item.path}>{item.name}</Link>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

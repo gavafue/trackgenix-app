@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-
 const membersJoiSch = Joi.object({
   name: Joi.string().required(),
   role: Joi.string().uppercase().valid('DEV', 'QA', 'PM', 'TL').required(),
