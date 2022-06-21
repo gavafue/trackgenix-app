@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from 'redux/admins/actions';
 import { editAdmin, postAdmin } from 'redux/admins/thunks';
@@ -13,12 +14,37 @@ import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import adminsValidation from 'validations/admins';
 
 const Form = () => {
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(adminsValidation)
+  });
+
   const dispatch = useDispatch();
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const adminSelected = useSelector((state) => state.admins.adminSelected);
   const isAdminSelected = Object.keys(adminSelected).length;
+
+  useEffect(() => {
+    reset({
+      name: adminSelected.name,
+      lastName: adminSelected.lastName,
+      email: adminSelected.email,
+      password: adminSelected.password,
+      gender: adminSelected.gender,
+      phone: adminSelected.phone,
+      dateBirth: adminSelected.dateBirth,
+      city: adminSelected.city,
+      zip: adminSelected.zip,
+      active: adminSelected.active
+    });
+  }, [adminSelected]);
 
   const arrayToMapGender = [
     { id: 'male', optionContent: 'Male' },
@@ -60,15 +86,6 @@ const Form = () => {
     ? `Editing ${adminSelected.name} ${adminSelected.lastName}'s information`
     : 'Add an Admin';
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors }
-  } = useForm({
-    mode: 'onChange',
-    resolver: joiResolver(adminsValidation)
-  });
-
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
@@ -81,7 +98,6 @@ const Form = () => {
           placeholder="Enter admin's first name"
           register={register}
           error={errors.name?.message}
-          value={adminSelected ? adminSelected.name : ''}
           required
         />
         <Input
@@ -92,7 +108,6 @@ const Form = () => {
           placeholder="Enter admin's last name"
           register={register}
           error={errors.lastName?.message}
-          value={adminSelected ? adminSelected.lastName : ''}
           required
         />
         <Input
@@ -103,7 +118,6 @@ const Form = () => {
           placeholder="Enter a valid email"
           register={register}
           error={errors.email?.message}
-          value={adminSelected ? adminSelected.email : ''}
           required
         />
         <Input
@@ -114,7 +128,6 @@ const Form = () => {
           placeholder="Enter your password"
           register={register}
           error={errors.password?.message}
-          value={adminSelected ? adminSelected.password : ''}
           required
         />
         <Select
@@ -125,7 +138,6 @@ const Form = () => {
           placeholder="Enter admin's gender"
           register={register}
           error={errors.gender?.message}
-          value={adminSelected ? adminSelected.gender : ''}
           required
         />
         <Input
@@ -136,7 +148,6 @@ const Form = () => {
           placeholder="Enter admin's phone number"
           register={register}
           error={errors.phone?.message}
-          value={adminSelected ? adminSelected.phone : ''}
           required
         />
         <Input
@@ -157,7 +168,6 @@ const Form = () => {
           placeholder="Enter admin's city"
           register={register}
           error={errors.city?.message}
-          value={adminSelected ? adminSelected.city : ''}
           required
         />
         <Input
@@ -168,7 +178,6 @@ const Form = () => {
           placeholder="Enter admin's postal code"
           register={register}
           error={errors.zip?.message}
-          value={adminSelected ? adminSelected.zip : ''}
           required
         />
         <Select
@@ -179,7 +188,6 @@ const Form = () => {
           placeholder="Enter admin's status"
           register={register}
           error={errors.active?.message}
-          value={adminSelected ? adminSelected.active : ''}
           required
         />
       </SharedForm>
