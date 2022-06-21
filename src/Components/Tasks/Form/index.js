@@ -60,11 +60,23 @@ const Form = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     mode: 'onChange',
     resolver: joiResolver(tasksValidation)
   });
+
+  useEffect(() => {
+    if (isItemSelected)
+      reset({
+        nameProject: selectedItem.nameProjectId || '',
+        day: selectedItem.day,
+        week: selectedItem.week,
+        hours: selectedItem.hours,
+        description: selectedItem.description
+      });
+  }, [selectedItem]);
 
   return (
     <div className={styles.container}>
