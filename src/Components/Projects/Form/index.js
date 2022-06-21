@@ -14,16 +14,6 @@ import projectsValidation from 'validations/projects';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 const Form = () => {
-  const {
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors }
-  } = useForm({
-    mode: 'onChange',
-    resolver: joiResolver(projectsValidation)
-  });
-
   const dispatch = useDispatch();
   const [employees, setEmployees] = useState([]);
   const isPending = useSelector((state) => state.projects.isPending);
@@ -33,24 +23,13 @@ const Form = () => {
   const isProjectSelected = Boolean(Object.keys(projectSelected).length);
   const URL = process.env.REACT_APP_API_URL;
 
-  useEffect(() => {
-    if (isProjectSelected)
-      reset({
-        name: projectSelected.name,
-        startDate: projectSelected.startDate?.slice(0, 10),
-        endDate: projectSelected.endDate?.slice(0, 10),
-        description: projectSelected.description,
-        client: projectSelected.client,
-        members: projectSelected.members[0].name?._id || '',
-        role: projectSelected.members?.role || '',
-        rate: projectSelected.members[0]?.rate || '',
-        active: projectSelected.active
-      });
-  }, [isProjectSelected]);
-
   const title = isProjectSelected
     ? `Editing ${projectSelected.name} projects's information.`
     : 'Add a Project';
+
+  const arrayToMapEmployees = employees.map((employee) => {
+    return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };
+  });
 
   useEffect(() => {
     fetch(`${URL}/employees`)
@@ -86,9 +65,34 @@ const Form = () => {
     };
     isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
-  const arrayToMapEmployees = employees.map((employee) => {
-    return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };
+
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(projectsValidation)
   });
+
+  useEffect(() => {
+    if (isProjectSelected)
+      reset({
+        name: projectSelected.name,
+        startDate: projectSelected.startDate?.slice(0, 10),
+        endDate: projectSelected.endDate?.slice(0, 10),
+        description: projectSelected.description,
+        client: projectSelected.client,
+        members: projectSelected.members[0]?.name || '',
+        role: projectSelected.members[0]?.role || '',
+        rate: projectSelected.members[0]?.rate || '',
+        active: projectSelected.active
+      });
+  }, [isProjectSelected]);
+
+  console.log(projectSelected.name);
+  console.log(errors);
 
   return (
     <div className={styles.container}>
@@ -96,10 +100,11 @@ const Form = () => {
       <h2>{title}</h2>
       <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <InputText
-          name="Name"
+          name="name"
           type="text"
           label="Name"
           placeholder="Write the project's name"
+          register={register}
           error={errors.name?.message}
           required
         />
@@ -159,7 +164,7 @@ const Form = () => {
           name="members"
           label="Members"
           register={register}
-          error={errors.members?._id?.message}
+          error={errors.members?.message}
           required
         />
         <InputSelect
@@ -175,7 +180,7 @@ const Form = () => {
           label="Role"
           placeholer="enter member role"
           register={register}
-          error={errors.members?.role?.message}
+          error={errors.role?.message}
           required
         />
         <InputText
@@ -184,7 +189,7 @@ const Form = () => {
           label="Rate"
           placeholder="Write the rate"
           register={register}
-          error={errors.members?.rate?.message}
+          error={errors.rate?.message}
           required
         />
       </SharedForm>
