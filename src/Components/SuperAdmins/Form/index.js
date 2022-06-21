@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -50,11 +51,24 @@ const Form = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     mode: 'onChange',
     resolver: joiResolver(superadminsValidation)
   });
+
+  useEffect(() => {
+    if (isSuperadminSelected)
+      reset({
+        firstName: selectedSuperadmin.firstName,
+        lastName: selectedSuperadmin.lastName,
+        email: selectedSuperadmin.email,
+        password: selectedSuperadmin.password,
+        active: selectedSuperadmin.active,
+        role: selectedSuperadmin.role
+      });
+  }, [selectedSuperadmin]);
 
   return (
     <div className={styles.container}>
@@ -69,7 +83,6 @@ const Form = () => {
           placeholder="Write your first name"
           register={register}
           error={errors.firstName?.message}
-          value={selectedSuperadmin ? selectedSuperadmin.firstName : ''}
           required
         />
         <Input
@@ -80,7 +93,6 @@ const Form = () => {
           placeholder="Write your last name"
           register={register}
           error={errors.lastName?.message}
-          value={selectedSuperadmin ? selectedSuperadmin.lastName : ''}
           required
         />
         <Input
@@ -91,7 +103,6 @@ const Form = () => {
           placeholder="Write your email"
           register={register}
           error={errors.email?.message}
-          value={selectedSuperadmin ? selectedSuperadmin.email : ''}
           required
         />
         <Input
@@ -102,7 +113,6 @@ const Form = () => {
           placeholder="Write your password"
           register={register}
           error={errors.password?.message}
-          value={selectedSuperadmin ? selectedSuperadmin.password : ''}
           required
         />
         <Select
@@ -113,7 +123,6 @@ const Form = () => {
           arrayToMap={arrayToMapStatus}
           register={register}
           error={errors.active?.message}
-          value={selectedSuperadmin ? selectedSuperadmin.active : ''}
           required
         />
         <Select
@@ -123,7 +132,6 @@ const Form = () => {
           arrayToMap={arrayToMapRole}
           register={register}
           error={errors.role?.message}
-          value={'SA'}
           required
         />
       </SharedForm>
