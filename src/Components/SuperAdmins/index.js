@@ -52,7 +52,7 @@ const SuperAdmins = () => {
     return {
       ...superAdmin,
       active: superAdmin.active,
-      isActive: superAdmin.active ? 'Yes' : 'No'
+      isActive: superAdmin.active ? 'Active' : 'Inactive'
     };
   });
 
@@ -64,7 +64,7 @@ const SuperAdmins = () => {
       </div>
       <Table
         data={superAdminData}
-        headersName={['Name', 'Last Name', 'Email', 'Role', 'Active']}
+        headersName={['Name', 'Last Name', 'Email', 'Role', 'Status']}
         headers={['firstName', 'lastName', 'email', 'role', 'isActive']}
         setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
         setInfoForDelete={(superAdminId) => dispatch(setInfoForDelete(superAdminId))}
