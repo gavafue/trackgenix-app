@@ -80,7 +80,6 @@ const Form = () => {
             placeholder="Write your name."
             error={errors.firstName?.message}
             name="firstName"
-            value={employeeLogged ? employeeLogged.firstName : ''}
             required
           />
           <Input
@@ -91,7 +90,6 @@ const Form = () => {
             placeholder="Write your last name."
             error={errors.lastName?.message}
             name="lastName"
-            value={employeeLogged ? employeeLogged.lastName : ''}
             required
           />
           <Input
@@ -102,7 +100,6 @@ const Form = () => {
             placeholder="Write your email"
             error={errors.email?.message}
             name="email"
-            value={employeeLogged ? employeeLogged.email : ''}
             required
           />
           <Input
@@ -113,7 +110,6 @@ const Form = () => {
             placeholder="Write your Country"
             error={errors.country?.message}
             name="country"
-            value={employeeLogged ? employeeLogged.country : ''}
             required
           />
           <Input
@@ -124,7 +120,6 @@ const Form = () => {
             placeholder="Write your City"
             error={errors.city?.message}
             name="city"
-            value={employeeLogged ? employeeLogged.city : ''}
             required
           />
         </div>
@@ -137,7 +132,6 @@ const Form = () => {
             placeholder="Write your Postal Code"
             error={errors.zip?.message}
             name="zip"
-            value={employeeLogged ? employeeLogged.zip : ''}
             required
           />
           <Input
@@ -148,7 +142,6 @@ const Form = () => {
             placeholder="Write your Phone"
             error={errors.phone?.message}
             name="phone"
-            value={employeeLogged ? employeeLogged.phone : ''}
             required
           />
           <Input
@@ -159,7 +152,6 @@ const Form = () => {
             placeholder="Write your birth date"
             error={errors.birthDate?.message}
             name="birthDate"
-            value={employeeLogged ? employeeLogged.birthDate : ''}
             required
           />
           <Input
@@ -170,7 +162,6 @@ const Form = () => {
             placeholder="Change your password"
             error={errors.password?.message}
             name="password"
-            value={employeeLogged ? employeeLogged.password : ''}
             required
           />
           <Input
@@ -181,7 +172,6 @@ const Form = () => {
             placeholder="Change your profile picture"
             error={errors.photo?.message}
             name="photo"
-            value={employeeLogged ? employeeLogged.photo : ''}
             required
           />
           <div className={styles.submitButton}>
