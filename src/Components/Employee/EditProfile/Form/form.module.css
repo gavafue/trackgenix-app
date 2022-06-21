@@ -29,7 +29,8 @@ width: 100%;
   border-radius: 50%;
   justify-self: flex-start;
   align-self: flex-start;
-  margin-left: 5%
+  margin-left: 5%;
+  margin-top: 3%;
 }
 
 label{
@@ -38,5 +39,6 @@ label{
 }
 
 .submitButton{
-  margin: 4%
+  margin: 5% 0%;
+  align-self: flex-end;
 }

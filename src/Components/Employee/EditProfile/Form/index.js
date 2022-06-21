@@ -45,11 +45,13 @@ const Form = () => {
     email: Joi.string().lowercase().messages({
       'string.email': 'Invalid email format. Try again.'
     }),
-    password: Joi.string().pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/),
-    photo: Joi.string().messages({
-      'string.pattern':
-        'Password must be more than 6 char, at least 1 letter and 1 number. Without any symbols.'
-    })
+    password: Joi.string()
+      .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
+      .messages({
+        'string.pattern':
+          'Password must be more than 6 char, at least 1 letter and 1 number. Without any symbols.'
+      }),
+    photo: Joi.string()
   });
   const {
     handleSubmit,
@@ -108,7 +110,6 @@ const Form = () => {
   console.log(errors);
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}> Edit profile</h1>
       <img className={styles.profileImg} src={employeeLogged.photo}></img>
       <form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.firstColumn}>
