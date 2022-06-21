@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from '../../Shared/Table/TableContent/tableContent.module.css';
-import Button from '../../Shared/Button';
+import styles from '../../../Shared/Table/TableContent/tableContent.module.css';
+import Button from '../../../Shared/Button';
 
-const projectsTableContent = ({ headers, data, editData, setShowModal, setInfoToShow }) => {
+const ProjectsTableContent = ({ headers, data, setShowModal, setInfoToShow }) => {
   return (
     <tbody>
       {data.map((row) => {
@@ -15,9 +15,6 @@ const projectsTableContent = ({ headers, data, editData, setShowModal, setInfoTo
                 </td>
               );
             })}
-            <td className={styles.rows}>
-              <Button onClick={() => editData(row)} label="Edit" />
-            </td>
             <td className={styles.rows}>
               <Button
                 label="Show More"
@@ -35,4 +32,4 @@ const projectsTableContent = ({ headers, data, editData, setShowModal, setInfoTo
   );
 };
 
-export default projectsTableContent;
+export default ProjectsTableContent;

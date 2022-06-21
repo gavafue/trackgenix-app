@@ -12,11 +12,10 @@ const EmployeeTable = ({ children, headersName }) => {
           <th></th>
           <th></th>
         </tr>
+        {children}
       </thead>
-      {children}
     </table>
   );
 };
 
 export default EmployeeTable;
-
