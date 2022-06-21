@@ -22,7 +22,7 @@ const Form = () => {
   const pending = useSelector((state) => state.timesheets.pending);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const selectedTimesheet = useSelector((store) => store.timesheets.timesheetSelected);
-  const isTimesheetSelected = Object.keys(selectedTimesheet).length;
+  const isTimesheetSelected = Boolean(Object.keys(selectedTimesheet).length);
   const title = isTimesheetSelected ? 'Update Timesheet' : 'Add Timesheet';
 
   const arrayToMapEmployees = employees.map((item) => {
@@ -77,11 +77,25 @@ const Form = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     mode: 'onChange',
     resolver: joiResolver(timesheetsValidation)
   });
+
+  useEffect(() => {
+    if (isTimesheetSelected)
+      reset({
+        project: selectedTimesheet.project?._id || '',
+        employee: selectedTimesheet.employee?._id || '',
+        weekSprint: selectedTimesheet.weekSprint,
+        date: selectedTimesheet.date?.slice(0, 10) ?? '',
+        hoursWorked: selectedTimesheet.hoursWorked,
+        hoursProject: selectedTimesheet.hoursProject,
+        workDescription: selectedTimesheet.workDescription
+      });
+  }, [selectedTimesheet]);
 
   return (
     <div className={styles.container}>
@@ -95,7 +109,6 @@ const Form = () => {
           placeholder="Choose the project"
           register={register}
           error={errors.project?.message}
-          value={selectedTimesheet ? selectedTimesheet.project : ''}
           required
         />
         <Select
@@ -106,7 +119,6 @@ const Form = () => {
           placeholder="Choose the employee"
           register={register}
           error={errors.employee?.message}
-          value={selectedTimesheet ? selectedTimesheet.employee : ''}
           required
         />
         <Input
@@ -117,7 +129,6 @@ const Form = () => {
           placeholder="Write the week sprint"
           register={register}
           error={errors.weekSprint?.message}
-          value={selectedTimesheet ? selectedTimesheet.weekSprint : ''}
           required
         />
         <Input
@@ -128,7 +139,6 @@ const Form = () => {
           placeholder="Write the date"
           register={register}
           error={errors.date?.message}
-          value={selectedTimesheet ? selectedTimesheet.date.slice(10) : ''}
           required
         />
         <Input
@@ -139,7 +149,6 @@ const Form = () => {
           placeholder="Write the hours worked"
           register={register}
           error={errors.hoursWorked?.message}
-          value={selectedTimesheet ? selectedTimesheet.hoursWorked : ''}
           required
         />
         <Input
@@ -150,7 +159,6 @@ const Form = () => {
           placeholder="Write the project hours"
           register={register}
           error={errors.hoursProject?.message}
-          value={selectedTimesheet ? selectedTimesheet.hoursProject : ''}
           required
         />
         <Input
@@ -161,7 +169,6 @@ const Form = () => {
           placeholder="Write the work description"
           register={register}
           error={errors.workDescription?.message}
-          value={selectedTimesheet ? selectedTimesheet.workDescription : ''}
           required
         />
       </SharedForm>
