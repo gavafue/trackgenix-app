@@ -2,7 +2,7 @@ import styles from './editProfile.module.css';
 import React from 'react';
 import Form from './Form';
 
-const editProfile = () => {
+const EditProfile = () => {
   return (
     <section className={styles.container}>
       <Form />
@@ -10,4 +10,4 @@ const editProfile = () => {
   );
 };
 
-export default editProfile;
+export default EditProfile;
