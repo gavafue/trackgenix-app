@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -9,17 +9,21 @@ import Select from '../../Shared/Input/InputSelect';
 import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import { editTimesheet, addTimesheet } from '../../../redux/timesheet/thunks';
-import { showFeedbackMessage } from '../../../redux/timesheet/actions';
+import { showFeedbackMessage } from 'redux/timesheet/actions';
+import { editTimesheet, addTimesheet } from 'redux/timesheet/thunks';
+import { getEmployee } from 'redux/employees/thunks';
+import { getProjects } from 'redux/projects/thunks';
 import timesheetsValidation from 'validations/timesheets';
 const URL = process.env.REACT_APP_API_URL;
 
 const Form = () => {
-  const [projects, setProjects] = useState([]);
-  const [employees, setEmployees] = useState([]);
   const dispatch = useDispatch();
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
-  const pending = useSelector((state) => state.timesheets.pending);
+  const isPending = useSelector(
+    (state) => state.timesheets.pending || state.projects.isPending || state.employees.isPending
+  );
+  const employees = useSelector((state) => state.employees.list);
+  const projects = useSelector((state) => state.projects.list);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const selectedTimesheet = useSelector((store) => store.timesheets.timesheetSelected);
   const isTimesheetSelected = Boolean(Object.keys(selectedTimesheet).length);
@@ -59,21 +63,6 @@ const Form = () => {
     isTimesheetSelected ? dispatch(editTimesheet(options)) : dispatch(addTimesheet(options));
   };
 
-  useEffect(() => {
-    fetch(`${URL}/projects`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProjects(data.data);
-      })
-      .catch((err) => console.log(err));
-    fetch(`${URL}/employees`)
-      .then((res) => res.json())
-      .then((data) => {
-        setEmployees(data.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   const {
     handleSubmit,
     register,
@@ -85,12 +74,14 @@ const Form = () => {
   });
 
   useEffect(() => {
+    dispatch(getEmployee());
+    dispatch(getProjects());
     if (isTimesheetSelected)
       reset({
-        project: selectedTimesheet.project?._id || '',
-        employee: selectedTimesheet.employee?._id || '',
+        project: selectedTimesheet.project?._id || undefined,
+        employee: selectedTimesheet.employee?._id || undefined,
         weekSprint: selectedTimesheet.weekSprint,
-        date: selectedTimesheet.date?.slice(0, 10) ?? '',
+        date: selectedTimesheet.date?.slice(0, 10) ?? undefined,
         hoursWorked: selectedTimesheet.hoursWorked,
         hoursProject: selectedTimesheet.hoursProject,
         workDescription: selectedTimesheet.workDescription
@@ -179,7 +170,7 @@ const Form = () => {
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
-        {pending && <Preloader />}
+        {isPending && <Preloader />}
       </Modal>
     </div>
   );
