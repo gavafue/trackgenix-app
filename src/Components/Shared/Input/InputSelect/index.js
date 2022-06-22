@@ -4,7 +4,6 @@ import styles from './inputSelect.module.css';
 const Select = ({
   id,
   name,
-  value,
   placeholder,
   required,
   register = () => {},
@@ -22,7 +21,7 @@ const Select = ({
         className={styles.select}
         id={id}
         name={name}
-        defaultValue={value ?? placeholder}
+        defaultValue={''}
         required={required}
         multiple={multiple}
         {...register(name)}
@@ -35,7 +34,7 @@ const Select = ({
           );
         })}
         ;
-        <option value={placeholder} disabled hidden>
+        <option value={''} disabled hidden>
           {placeholder}
         </option>
       </select>
