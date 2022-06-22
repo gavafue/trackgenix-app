@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styles from './super-admins.module.css';
 import Table from '../Shared/Table';
 import DeleteMessage from '../Shared/DeleteMessage';
@@ -7,67 +7,55 @@ import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import { useHistory } from 'react-router-dom';
 import Preloader from '../Shared/Preloader';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setInfoForDelete,
+  showDeleteMessage,
+  showFeedbackMessage,
+  getSelectedSuperadmin,
+  cleanSelectedSuperadmin
+} from '../../redux/superadmin/actions';
+import { deleteSuperAdmin, getSuperadmins } from '../../redux/superadmin/thunks';
 
 const SuperAdmins = () => {
-  const [superAdmins, setSuperAdmins] = useState([]);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [infoForDelete, setInfoForDelete] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showPreloader, setShowPreloader] = useState(false);
-  const history = useHistory();
-  const editData = (id) => {
-    history.push(`/super-admins/form/${id}`);
-  };
+  const dispatch = useDispatch();
+  const superadmins = useSelector((state) => state.superadmins.list);
+  const isPending = useSelector((state) => state.superadmins.isPending);
+  const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
+  const deleteInfo = useSelector((state) => state.superadmins.infoForDelete);
+  const showDelete = useSelector((state) => state.superadmins.showDeleteMessage);
+  const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
 
   useEffect(() => {
-    setShowPreloader(true);
-    fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSuperAdmins(data.data);
-        setShowPreloader(false);
-      })
-      .catch((err) => console.log(err));
+    dispatch(cleanSelectedSuperadmin());
   }, []);
+
+  const history = useHistory();
+  const editData = (row) => {
+    dispatch(getSelectedSuperadmin(row));
+    history.push(`/super-admins/form/`);
+  };
 
   const createSuperAdmin = () => {
     history.push('/super-admins/form');
   };
 
-  const deleteSuperAdmin = (superAdminId) => {
-    const options = {
-      method: 'DELETE',
-      url: `${`${process.env.REACT_APP_API_URL}`}/super-admin/${superAdminId}`
-    };
-    setShowPreloader(true);
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: response.message
-          });
-          setShowPreloader(false);
-        } else {
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          });
-          setSuperAdmins(superAdmins.filter((superAdmin) => superAdmin._id !== superAdminId));
-          setShowFeedbackMessage(true);
-          setShowPreloader(false);
-        }
-      })
-      .catch((err) => console.log(err));
+  useEffect(() => {
+    dispatch(getSuperadmins());
+  }, []);
+
+  const deleteHandler = () => {
+    dispatch(deleteSuperAdmin(deleteInfo));
   };
-  const superAdminData = superAdmins.map((superAdmin) => {
+
+  const superAdminData = superadmins.map((superAdmin) => {
     return {
       ...superAdmin,
-      active: superAdmin.active ? 'Yes' : 'No'
+      active: superAdmin.active,
+      isActive: superAdmin.active ? 'Yes' : 'No'
     };
   });
+
   return (
     <section className={styles.container}>
       <h1>Super Admins</h1>
@@ -77,35 +65,36 @@ const SuperAdmins = () => {
       <Table
         data={superAdminData}
         headersName={['Name', 'Last Name', 'Email', 'Role', 'Active']}
-        headers={['firstName', 'lastName', 'email', 'role', 'active']}
-        setShowModal={setShowDeleteMessage}
-        setInfoForDelete={setInfoForDelete}
+        headers={['firstName', 'lastName', 'email', 'role', 'isActive']}
+        setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
+        setInfoForDelete={(superAdminId) => dispatch(setInfoForDelete(superAdminId))}
         editData={editData}
+        deleteSuperAdmin={deleteHandler}
       />
       <Modal
-        isOpen={showDeleteMessage}
+        isOpen={showDelete}
         handleClose={() => {
-          setShowDeleteMessage(false);
+          dispatch(showDeleteMessage(!showDelete));
         }}
       >
         <DeleteMessage
           handleClose={() => {
-            setShowDeleteMessage(false);
+            dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={infoForDelete}
-          deleteItem={deleteSuperAdmin}
-          setShowModal={setShowDeleteMessage}
+          infoForDelete={deleteInfo}
+          deleteItem={deleteHandler}
+          setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
         />
       </Modal>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
       </Modal>
-      {showPreloader && <Preloader />}
+      {isPending && <Preloader />}
     </section>
   );
 };
