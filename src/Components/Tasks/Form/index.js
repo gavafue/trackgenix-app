@@ -1,5 +1,5 @@
 import styles from './form.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import SharedForm from '../../Shared/Form';
@@ -11,11 +11,12 @@ import Preloader from '../../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { editTask, postTask } from '../../../redux/tasks/thunks';
 import { showFeedbackMessage } from '../../../redux/tasks/actions';
+import { getProjects } from 'redux/projects/thunks';
 import tasksValidation from 'validations/tasks';
 
 const Form = () => {
   const dispatch = useDispatch();
-  const [projects, setProjects] = useState([]);
+  const projects = useSelector((state) => state.projects.list);
   const isPending = useSelector((state) => state.tasks.isPending);
   const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
   const infoForFeedback = useSelector((state) => state.tasks.infoForFeedback);
@@ -24,10 +25,10 @@ const Form = () => {
   const title = isItemSelected ? 'Update Task' : 'Add Task';
   const URL = process.env.REACT_APP_API_URL;
 
-  const arrayToMapProjects = projects.map((project) => {
+  const arrayToMapProjects = projects.map((item) => {
     return {
-      id: project._id,
-      optionContent: project.name || 'No project name'
+      id: item._id,
+      optionContent: `${item.name}`
     };
   });
 
@@ -49,14 +50,6 @@ const Form = () => {
     isItemSelected ? dispatch(editTask(options)) : dispatch(postTask(options));
   };
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/projects`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProjects(data.data);
-      });
-  }, []);
-
   const {
     handleSubmit,
     register,
@@ -68,6 +61,7 @@ const Form = () => {
   });
 
   useEffect(() => {
+    dispatch(getProjects());
     if (isItemSelected)
       reset({
         nameProject: selectedItem.nameProjectId || '',
