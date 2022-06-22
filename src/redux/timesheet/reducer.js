@@ -16,7 +16,10 @@ import {
   EDIT_TIMESHEET_PENDING,
   EDIT_TIMESHEET_SUCCESS,
   CLEAN_SELECTED_TIMESHEET,
-  SELECTED_TIMESHEET
+  SELECTED_TIMESHEET,
+  ADD_HOURS_TIMESHEET_ERROR,
+  ADD_HOURS_TIMESHEET_PENDING,
+  ADD_HOURS_TIMESHEET_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -135,6 +138,28 @@ export const timesheetsReducer = (state = initialState, action) => {
         ...state,
         timesheetSelected: {},
         isPending: false
+      };
+    case ADD_HOURS_TIMESHEET_ERROR:
+      return {
+        ...state,
+        error: true,
+        isPending: false
+      };
+    case ADD_HOURS_TIMESHEET_SUCCESS:
+      return {
+        ...state,
+        list: state.list.map((item) => {
+          if (item._id === action.payload._id) {
+            return { ...item, hoursWorked: action.payload };
+          }
+          return item;
+        }),
+        isPending: false
+      };
+    case ADD_HOURS_TIMESHEET_PENDING:
+      return {
+        ...state,
+        isPending: true
       };
     default:
       return state;

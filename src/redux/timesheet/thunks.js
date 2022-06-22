@@ -12,8 +12,10 @@ import {
   addTimesheetsSuccess,
   editTimesheetsError,
   editTimesheetsPending,
-  editTimesheetsSuccess
+  editTimesheetsSuccess,
+  addHoursTimesheetPending
 } from './actions';
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const getTimesheets = () => {
@@ -110,6 +112,7 @@ export const editTimesheet = (options) => {
         console.log(res);
         if (!res.error) {
           dispatch(editTimesheetsSuccess(res.data));
+          console.log(res.data);
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
@@ -134,5 +137,12 @@ export const editTimesheet = (options) => {
           setInfoForFeedback({ title: 'Something went wrong.', description: error.message })
         );
       });
+  };
+};
+
+export const addHoursToTimesheet = (options) => {
+  return (dispatch) => {
+    dispatch(addHoursTimesheetPending());
+    editTimesheet(options);
   };
 };

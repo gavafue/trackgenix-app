@@ -1,8 +1,11 @@
 import React from 'react';
 import styles from '../../../Shared/Table/TableContent/tableContent.module.css';
 import Button from '../../../Shared/Button';
+import { useDispatch } from 'react-redux';
+import { selectOneTimesheet } from 'redux/timesheet/actions';
 
-const ProjectsTableContent = ({ headers, data, setShowModal }) => {
+const TimesheetTableContent = ({ headers, data, setShowForm }) => {
+  const dispatch = useDispatch();
   return (
     <tbody>
       {data.map((row) => {
@@ -20,7 +23,8 @@ const ProjectsTableContent = ({ headers, data, setShowModal }) => {
                 label="Add hours +"
                 theme="secondary"
                 onClick={() => {
-                  setShowModal(true);
+                  dispatch(selectOneTimesheet(row));
+                  setShowForm(true);
                 }}
               />
             </td>
@@ -31,4 +35,4 @@ const ProjectsTableContent = ({ headers, data, setShowModal }) => {
   );
 };
 
-export default ProjectsTableContent;
+export default TimesheetTableContent;
