@@ -39,7 +39,7 @@ const Form = () => {
       password: adminSelected.password,
       gender: adminSelected.gender,
       phone: adminSelected.phone,
-      dateBirth: adminSelected.dateBirth,
+      dateBirth: adminSelected.dateBirth.slice(0, 10),
       city: adminSelected.city,
       zip: adminSelected.zip,
       active: adminSelected.active
@@ -157,7 +157,6 @@ const Form = () => {
           type="date"
           register={register}
           error={errors.dateBirth?.message}
-          value={adminSelected.dateBirth ? adminSelected.dateBirth.slice(0, 10) : ''}
           required
         />
         <Input
