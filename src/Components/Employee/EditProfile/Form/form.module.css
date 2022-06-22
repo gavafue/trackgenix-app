@@ -19,26 +19,26 @@ width: 100%;
 .firstColumn, .secondColumn{
   display: flex;
   flex-direction: column;
-  width: 40%;
   align-self: baseline;
+  width: 40%;
 }
 
 .profileImg{
-  width: 13%;
-  height: auto;
-  border-radius: 50%;
   justify-self: flex-start;
   align-self: flex-start;
   margin-left: 5%;
   margin-top: 3%;
+  width: 13%;
+  height: auto;
+  border-radius: 50%;
 }
 
 label{
+  margin: 2% 0%;
   text-align: left;
-  margin: 2% 0%
 }
 
 .submitButton{
-  margin: 5% 0%;
   align-self: flex-end;
+  margin: 5% 0%;
 }
