@@ -1,9 +1,8 @@
 import React from 'react';
 import styles from '../../../Shared/Table/TableContent/tableContent.module.css';
 import Button from '../../../Shared/Button';
-import Input from 'Components/Shared/Input/InputText';
 
-const ProjectsTableContent = ({ headers, data, setShowModal, setInfoToShow }) => {
+const ProjectsTableContent = ({ headers, data, setShowModal }) => {
   return (
     <tbody>
       {data.map((row) => {
@@ -17,15 +16,11 @@ const ProjectsTableContent = ({ headers, data, setShowModal, setInfoToShow }) =>
               );
             })}
             <td className={styles.rows}>
-              <Input label="Add Hours" theme="secondary" />
-            </td>
-            <td className={styles.rows}>
               <Button
-                label="+"
+                label="Add hours +"
                 theme="secondary"
                 onClick={() => {
                   setShowModal(true);
-                  setInfoToShow(row._id);
                 }}
               />
             </td>
