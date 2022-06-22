@@ -9,8 +9,6 @@ const EmployeeTable = ({ children, headersName }) => {
           {headersName.map((headerName, index) => {
             return <th key={index}>{headerName}</th>;
           })}
-          <th></th>
-          <th></th>
         </tr>
         {children}
       </thead>

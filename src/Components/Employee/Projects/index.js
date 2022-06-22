@@ -9,26 +9,24 @@ import ProjectsTableContent from '../TableAndContents/Content/projectsTableConte
 function Projects() {
   const projects = useSelector((state) => state.projects.list);
   const dispatch = useDispatch();
-  // const memberId = useSelector((state) => state.employees.employeeLogged);
-  // console.log(memberId);
+  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
 
-  // useEffect(() => {
-  //   dispatch(getProjectsByMemberId(memberId._id));
-  // }, []);
   useEffect(() => {
     dispatch(getProjects());
   }, []);
-  const projectsToTable = projects.map((project) => ({
-    projectId: project._id,
-    projectName: project.name,
-    memberRole: project.members[0]?.role || 'Not Found',
-    memberRate: project.members[0]?.rate || 'Not Found',
-    memberId: project.members[0]?._id || 'Not Found'
-  }));
+
+  const projectsToTable = projects
+    .filter((project) => project.members[0].name?._id === employeeLogged._id)
+    .map((project) => ({
+      projectId: project._id,
+      projectName: project.name,
+      memberRole: project.members[0]?.role || 'Not Found',
+      memberRate: project.members[0]?.rate || 'Not Found',
+      memberId: project.members[0]?.name?._id || 'Not Found'
+    }));
 
   return (
     <section className={styles.container}>
-      <h2>Your Projects</h2>
       <EmployeeTable headersName={['Project', 'Role', 'Hours']}>
         <ProjectsTableContent
           data={projectsToTable}

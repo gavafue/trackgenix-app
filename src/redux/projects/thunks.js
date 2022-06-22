@@ -119,19 +119,3 @@ export const editProject = (options) => {
       });
   };
 };
-
-export const getProjectsByMemberId = (memberId) => {
-  return (dispatch) => {
-    dispatch(getProjectsPending());
-    return fetch(`${process.env.REACT_APP_API_URL}/projects`)
-      .then((response) => response.json())
-      .then((response) => {
-        if (projects.members[0]._id === memberId)
-        dispatch(getProjectsSuccess(response.data));
-        return response.data;
-      })
-      .catch((error) => {
-        dispatch(getProjectsError(error.toString()));
-      });
-  };
-};
