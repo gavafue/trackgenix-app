@@ -116,7 +116,8 @@ export const timesheetsReducer = (state = initialState, action) => {
       return {
         ...state,
         list: state.list.map((item) => {
-          if (item._id === action.payload._id) {
+          if (action.payload._id === item._id) {
+            console.log(action.payload);
             return action.payload;
           }
           return item;

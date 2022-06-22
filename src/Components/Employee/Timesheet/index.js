@@ -16,6 +16,11 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import employeeTimesheetValidation from 'validations/employeeTimesheet';
 
 function EmployeeTimesheets() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getTimesheets());
+  }, []);
+
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   const timesheets = useSelector((state) => state.timesheets.list);
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
@@ -23,7 +28,6 @@ function EmployeeTimesheets() {
   const selectedTimesheet = useSelector((state) => state.timesheets.timesheetSelected);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const [showForm, setShowForm] = useState(false);
-  const dispatch = useDispatch();
 
   const {
     handleSubmit,
@@ -34,20 +38,14 @@ function EmployeeTimesheets() {
     mode: 'onSubmit',
     resolver: joiResolver(employeeTimesheetValidation)
   });
-
-  let timesheetData = timesheets
+  const timesheetData = timesheets
     .filter((timesheet) => timesheet.employee?._id === employeeLogged._id)
     .map((timesheet) => ({
       ...timesheet,
       projectName: timesheet?.project?.name || 'Project not found'
     }));
 
-  useEffect(() => {
-    dispatch(getTimesheets());
-  }, []);
-
   const onSubmitAddHours = (data, event) => {
-    console.log(data);
     event.preventDefault();
     const URL = process.env.REACT_APP_API_URL;
     const options = {
@@ -68,7 +66,6 @@ function EmployeeTimesheets() {
     reset({
       addHoursWorked: ''
     });
-    dispatch(getTimesheets());
     setShowForm(false);
   };
 
@@ -86,7 +83,7 @@ function EmployeeTimesheets() {
       >
         <TimesheetTableContent
           setShowForm={setShowForm}
-          data={timesheetData}
+          data={timesheetData ?? []}
           headers={['projectName', 'workDescription', 'weekSprint', 'hoursProject', 'hoursWorked']}
         />
       </EmployeeTable>
@@ -96,7 +93,7 @@ function EmployeeTimesheets() {
           setShowForm(false);
         }}
       >
-        <form onSubmit={handleSubmit(onSubmitAddHours)}>
+        <form className={styles.form} onSubmit={handleSubmit(onSubmitAddHours)}>
           <Input
             name="timesheetId"
             value={selectedTimesheet?._id}

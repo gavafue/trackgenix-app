@@ -22,9 +22,9 @@ import {
   ADD_HOURS_TIMESHEET_SUCCESS
 } from './constants';
 //ACTIONS FOR GET
-export const getTimesheetsSuccess = (tasks) => ({
+export const getTimesheetsSuccess = (timesheet) => ({
   type: GET_TIMESHEETS_SUCCESS,
-  payload: tasks
+  payload: timesheet
 });
 
 export const getTimesheetsPending = () => ({
