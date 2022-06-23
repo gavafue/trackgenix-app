@@ -8,6 +8,7 @@ import ProjectsTableContent from '../TableAndContents/Content/projectsTableConte
 import { setInfoToShow, showInfoMessage } from 'redux/projects/actions';
 import Modal from 'Components/Shared/Modal';
 import InfoMessage from 'Components/Shared/ShowInfoMessage';
+import { getTimesheets } from 'redux/timesheet/thunks';
 
 const Projects = () => {
   const projects = useSelector((state) => state.projects.list);
@@ -15,9 +16,11 @@ const Projects = () => {
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   const showInfo = useSelector((state) => state.projects.showInfo);
   const infoToShow = useSelector((state) => state.projects.infoToShow);
+  const timesheets = useSelector((state) => state.timesheets.list);
 
   useEffect(() => {
     dispatch(getProjects());
+    dispatch(getTimesheets());
   }, []);
 
   const projectsToTable = projects
@@ -28,6 +31,10 @@ const Projects = () => {
       memberRole: project.members[0]?.role || 'Not Found',
       memberRate: project.members[0]?.rate || 'Not Found'
     }));
+  // const timesheetToTable = timesheets.filter(
+  //   (timesheet) => timesheet.employee?._id === employeeLogged._id
+  // );
+  console.log(timesheets);
   return (
     <section className={styles.container}>
       <EmployeeTable headersName={['Project', 'Role', 'Rate']}>
