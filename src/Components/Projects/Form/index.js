@@ -6,10 +6,11 @@ import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
 import Loader from '../../Shared/Preloader';
+import Button from 'Components/Shared/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { editProject, postProject } from '../../../redux/projects/thunks';
 import { showFeedbackMessage } from '../../../redux/projects/actions';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import projectsValidation from 'validations/projects';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { getEmployee } from 'redux/employees/thunks';
@@ -47,7 +48,7 @@ const Form = () => {
         client: data.client,
         members: [
           {
-            name: data.name,
+            employee: data.employee,
             role: data.role,
             rate: data.rate
           }
@@ -75,6 +76,7 @@ const Form = () => {
   }, [isProjectSelected]);
 
   const {
+    control,
     handleSubmit,
     register,
     reset,
@@ -83,6 +85,13 @@ const Form = () => {
     mode: 'onChange',
     resolver: joiResolver(projectsValidation)
   });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'members'
+  });
+
+  console.log(errors);
 
   return (
     <div className={styles.container}>
@@ -148,43 +157,52 @@ const Form = () => {
           error={errors.active?.message}
           required
         />
-        <InputSelect
-          className={styles.select}
-          arrayToMap={arrayToMapEmployees}
-          id="employee"
-          name="employee"
-          label="Members"
-          placeholder="Select employee"
-          register={register}
-          error={errors.employee?.message}
-          required
-        />
-        <InputSelect
-          className={styles.select}
-          arrayToMap={[
-            { id: 'TL', optionContent: 'TL' },
-            { id: 'QA', optionContent: 'QA' },
-            { id: 'DEV', optionContent: 'DEV' },
-            { id: 'PM', optionContent: 'PM' }
-          ]}
-          id="role"
-          name="role"
-          label="Role"
-          placeholder="Select member role"
-          register={register}
-          error={errors.role?.message}
-          required
-        />
-        <InputText
-          id="rate"
-          name="rate"
-          type="text"
-          label="Rate"
-          placeholder="Write the rate"
-          register={register}
-          error={errors.rate?.message}
-          required
-        />
+        {fields.map(({ id }, index) => {
+          return (
+            <div className={styles.appended} key={id}>
+              <h3>Member</h3>
+              <InputSelect
+                className={styles.select}
+                arrayToMap={arrayToMapEmployees}
+                id="employee"
+                name="employee"
+                label="Employee"
+                placeholder="Select employee"
+                register={register}
+                error={errors.employee?.message}
+                required
+              />
+              <InputSelect
+                className={styles.select}
+                arrayToMap={[
+                  { id: 'TL', optionContent: 'TL' },
+                  { id: 'QA', optionContent: 'QA' },
+                  { id: 'DEV', optionContent: 'DEV' },
+                  { id: 'PM', optionContent: 'PM' }
+                ]}
+                id="role"
+                name="role"
+                label="Role"
+                placeholder="Select member role"
+                register={register}
+                error={errors.role?.message}
+                required
+              />
+              <InputText
+                id="rate"
+                name="rate"
+                type="text"
+                label="Rate"
+                placeholder="Write the rate"
+                register={register}
+                error={errors.rate?.message}
+                required
+              />
+              <Button onClick={() => remove(index)} label="Remove member"></Button>
+            </div>
+          );
+        })}
+        <Button onClick={() => append({})} label="Add member"></Button>
       </SharedForm>
       <Modal
         isOpen={showFeedback}
