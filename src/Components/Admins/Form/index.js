@@ -39,7 +39,7 @@ const Form = () => {
       password: adminSelected.password,
       gender: adminSelected.gender,
       phone: adminSelected.phone,
-      dateBirth: adminSelected.dateBirth.slice(0, 10),
+      dateBirth: adminSelected.dateBirth?.slice(0, 10),
       city: adminSelected.city,
       zip: adminSelected.zip,
       active: adminSelected.active
