@@ -2,18 +2,12 @@ import styles from './navbar.module.css';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { employeeNavbar, defaultNavbaritems } from 'libs/navbarConfig';
-import { useDispatch, useSelector } from 'react-redux';
-import { getProjects } from 'redux/projects/thunks';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-  const dispatch = useDispatch();
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   const location = useLocation().pathname;
   const navBarItems = location.includes('/employee/') ? employeeNavbar : defaultNavbaritems;
-  useEffect(() => {
-    dispatch(getProjects());
-  }, []);
   return (
     <nav className={styles.navbar}>
       <div className={styles.appName}>
