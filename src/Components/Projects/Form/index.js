@@ -160,7 +160,7 @@ const Form = () => {
         {fields.map(({ id }, index) => {
           return (
             <div className={styles.appended} key={id}>
-              <h3>Member</h3>
+              <h3>Member {index + 1}</h3>
               <InputSelect
                 className={styles.select}
                 arrayToMap={arrayToMapEmployees}
@@ -198,11 +198,15 @@ const Form = () => {
                 error={errors.rate?.message}
                 required
               />
-              <Button onClick={() => remove(index)} label="Remove member"></Button>
+              <Button
+                onClick={() => remove(index)}
+                label={`Remove member ${index + 1}`}
+                theme="secondary"
+              />
             </div>
           );
         })}
-        <Button onClick={() => append({})} label="Add member"></Button>
+        <Button onClick={() => append({})} label="Add member +"></Button>
       </SharedForm>
       <Modal
         isOpen={showFeedback}
