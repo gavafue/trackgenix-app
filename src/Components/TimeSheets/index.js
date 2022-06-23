@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './time-sheets.module.css';
 import Table from '../Shared/Table';
@@ -7,66 +7,48 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
 import Loader from '../Shared/Preloader';
+import { useSelector, useDispatch } from 'react-redux';
+import { getTimesheets, deleteTimesheet } from '../../redux/timesheet/thunks';
+import {
+  setInfoForDelete,
+  showDeleteMessage,
+  showFeedbackMessage,
+  selectOneTimesheet,
+  cleanSelectedTimesheet
+} from '../../redux/timesheet/actions';
 
 const TimeSheets = () => {
-  const [timeSheets, setTimeSheets] = useState([]);
-  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
-  const [showFeedbackMessage, setShowFeedbackMessage] = useState(false);
-  const [infoForDelete, setInfoForDelete] = useState('');
-  const [infoForFeedback, setInfoForFeedback] = useState({});
-  const [showLoader, setShowLoader] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(cleanSelectedTimesheet());
+    dispatch(getTimesheets());
+  }, []);
+
+  const timesheets = useSelector((state) => state.timesheets.list);
+  const isPending = useSelector((state) => state.timesheets.isPending);
+  const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
+  const deleteInfo = useSelector((state) => state.timesheets.infoForDelete);
+  const showDelete = useSelector((state) => state.timesheets.showDeleteMessage);
+  const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
+
   const history = useHistory();
 
-  const editData = (id) => {
-    history.push(`/time-sheets/form/${id}`);
+  const editData = (row) => {
+    dispatch(selectOneTimesheet(row));
+    history.push(`/time-sheets/form/`);
   };
-
+  const deleteHandler = () => {
+    dispatch(deleteTimesheet(deleteInfo));
+  };
   const createTimesheet = () => {
     history.push('/time-sheets/form');
   };
 
-  useEffect(() => {
-    setShowLoader(true);
-    fetch(`${process.env.REACT_APP_API_URL}/timesheets`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTimeSheets(data.data);
-        setShowLoader(false);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const deleteTimesheet = (string) => {
-    const options = {
-      method: 'DELETE',
-      url: `${`${process.env.REACT_APP_API_URL}`}/timesheets/${string}`
-    };
-    setShowLoader(true);
-    fetch(options.url, options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error === true) {
-          setInfoForFeedback({
-            title: 'Something went wrong',
-            description: response.message
-          });
-        } else {
-          setInfoForFeedback({
-            title: 'Request done!',
-            description: response.message
-          });
-          setTimeSheets(timeSheets.filter((timeSheet) => timeSheet._id !== string));
-          setShowFeedbackMessage(true);
-        }
-      })
-      .catch((err) => console.log(err));
-    setShowLoader(false);
-  };
-
-  const timesheetData = timeSheets.map((timeSheet) => {
+  const timesheetData = timesheets.map((timeSheet) => {
     return {
       ...timeSheet,
-      name: timeSheet.project.name
+      name: timeSheet?.project?.name || 'Project not found',
+      employeeName: timeSheet?.employee?.firstName || 'Employee not found'
     };
   });
   return (
@@ -78,37 +60,45 @@ const TimeSheets = () => {
       <div>
         <Table
           data={timesheetData}
-          headersName={['Project Name', 'Date', 'Hours Worked', 'WeekSprint']}
-          headers={['name', 'date', 'hoursWorked', 'weekSprint']}
-          setShowModal={setShowDeleteMessage}
-          setInfoForDelete={setInfoForDelete}
+          headersName={[
+            'Project Name',
+            'Date',
+            'Description',
+            'Hours Worked',
+            'WeekSprint',
+            'Employee'
+          ]}
+          headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
+          setShowModal={(isModalShowed) => dispatch(showDeleteMessage(isModalShowed))}
+          setInfoForDelete={(timesheetId) => dispatch(setInfoForDelete(timesheetId))}
           editData={editData}
+          deleteTimesheet={deleteHandler}
         />
       </div>
       <Modal
-        isOpen={showDeleteMessage}
+        isOpen={showDelete}
         handleClose={() => {
-          setShowDeleteMessage(false);
+          dispatch(showDeleteMessage(false));
         }}
       >
         <DeleteMessage
           handleClose={() => {
-            setShowDeleteMessage(false);
+            dispatch(showDeleteMessage(false));
           }}
-          infoForDelete={infoForDelete}
-          deleteItem={deleteTimesheet}
-          setShowModal={setShowDeleteMessage}
+          infoForDelete={deleteInfo}
+          deleteItem={deleteHandler}
+          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         />
       </Modal>
       <Modal
-        isOpen={showFeedbackMessage}
+        isOpen={showFeedback}
         handleClose={() => {
-          setShowFeedbackMessage(false);
+          dispatch(showFeedbackMessage(false));
         }}
       >
-        <FeedbackMessage infoForFeedback={infoForFeedback} />
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {showLoader && <Loader />}
+      {isPending && <Loader />}
     </section>
   );
 };

@@ -2,15 +2,15 @@ import React from 'react';
 import styles from './inputSelect.module.css';
 
 const Select = ({
-  arrayToMap,
-  itemValue,
-  label,
   id,
   name,
-  onChange,
+  placeholder,
   required,
-  value,
-  placeholder
+  register = () => {},
+  multiple,
+  label,
+  arrayToMap,
+  error
 }) => {
   return (
     <div className={styles.container}>
@@ -21,22 +21,24 @@ const Select = ({
         className={styles.select}
         id={id}
         name={name}
-        onChange={onChange}
-        value={value}
+        defaultValue={''}
         required={required}
+        multiple={multiple}
+        {...register(name)}
       >
         {arrayToMap.map((item) => {
           return (
-            <option defaultValue={Boolean(item.id === itemValue)} key={item.id} value={item.id}>
+            <option key={item.id} value={item.id}>
               {`${item.optionContent}`}
             </option>
           );
         })}
         ;
-        <option value="" disabled defaultValue hidden>
+        <option value={''} disabled hidden>
           {placeholder}
         </option>
       </select>
+      {error && <sub className={styles.error}>{error}</sub>}
     </div>
   );
 };
