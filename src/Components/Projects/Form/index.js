@@ -58,16 +58,6 @@ const Form = () => {
     isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
 
-  const {
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors }
-  } = useForm({
-    mode: 'onChange',
-    resolver: joiResolver(projectsValidation)
-  });
-
   useEffect(() => {
     dispatch(getEmployee());
     if (isProjectSelected)
@@ -77,12 +67,22 @@ const Form = () => {
         endDate: projectSelected.endDate?.slice(0, 10),
         description: projectSelected.description,
         client: projectSelected.client,
-        members: projectSelected.members[0]?.name?._id || undefined,
+        active: projectSelected.active,
+        employee: projectSelected.members[0]?.name?._id || undefined,
         role: projectSelected.members[0]?.role || undefined,
-        rate: projectSelected.members[0]?.rate || undefined,
-        active: projectSelected.active
+        rate: projectSelected.members[0]?.rate || undefined
       });
   }, [isProjectSelected]);
+
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(projectsValidation)
+  });
 
   return (
     <div className={styles.container}>
@@ -151,12 +151,12 @@ const Form = () => {
         <InputSelect
           className={styles.select}
           arrayToMap={arrayToMapEmployees}
-          id="members"
-          name="members"
+          id="employee"
+          name="employee"
           label="Members"
           placeholder="Select employee"
           register={register}
-          error={errors.members?.name?.message}
+          error={errors.employee?.message}
           required
         />
         <InputSelect
@@ -172,7 +172,7 @@ const Form = () => {
           label="Role"
           placeholder="Select member role"
           register={register}
-          error={errors.members?.role?.message}
+          error={errors.role?.message}
           required
         />
         <InputText
@@ -182,7 +182,7 @@ const Form = () => {
           label="Rate"
           placeholder="Write the rate"
           register={register}
-          error={errors.members?.role?.message}
+          error={errors.rate?.message}
           required
         />
       </SharedForm>
