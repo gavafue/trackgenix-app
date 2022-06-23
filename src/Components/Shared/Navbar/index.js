@@ -9,21 +9,11 @@ import { useEffect } from 'react';
 const Navbar = () => {
   const dispatch = useDispatch();
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
-  const projects = useSelector((state) => state.projects.list);
-  const members = projects.map((item) => {
-    return item.members;
-  });
-  const EmployeeLoggedRole = members
-    .filter((member) => member[0].name?._id === employeeLogged._id)
-    .map((member) => {
-      return member[0].role;
-    });
   const location = useLocation().pathname;
   const navBarItems = location.includes('/employee/') ? employeeNavbar : defaultNavbaritems;
   useEffect(() => {
     dispatch(getProjects());
   }, []);
-
   return (
     <nav className={styles.navbar}>
       <div className={styles.appName}>
@@ -31,17 +21,16 @@ const Navbar = () => {
           <div className={styles.userName}>
             {navBarItems != employeeNavbar
               ? 'Pepito'
-              : `${employeeLogged.firstName} ${employeeLogged.lastName}`}
+              : `${employeeLogged?.firstName} ${employeeLogged?.lastName}`}
           </div>
           <div className={styles.profileImg}>
             {navBarItems != employeeNavbar ? (
               <img src="http://www.4x4.ec/overlandecuador/wp-content/uploads/2017/06/default-user-icon-8.jpg" />
             ) : (
-              <img src={employeeLogged.photo}></img>
+              <img src={employeeLogged?.photo}></img>
             )}
           </div>
         </div>
-        {navBarItems != employeeNavbar ? <p>Role</p> : <p>{EmployeeLoggedRole}</p>}
       </div>
       <ul className={styles.rutes}>
         {navBarItems.map((item) => {
