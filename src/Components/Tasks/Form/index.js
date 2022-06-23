@@ -72,8 +72,6 @@ const Form = () => {
       });
   }, [selectedItem]);
 
-  console.log(errors);
-
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
