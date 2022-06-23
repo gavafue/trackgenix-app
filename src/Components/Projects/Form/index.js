@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import SharedForm from '../../Shared/Form';
 import InputText from '../../Shared/Input/InputText';
 import InputSelect from '../../Shared/Input/InputSelect';
@@ -12,10 +12,11 @@ import { showFeedbackMessage } from '../../../redux/projects/actions';
 import { useForm } from 'react-hook-form';
 import projectsValidation from 'validations/projects';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { getEmployee } from 'redux/employees/thunks';
 
 const Form = () => {
   const dispatch = useDispatch();
-  const [employees, setEmployees] = useState([]);
+  const employees = useSelector((state) => state.employees.list);
   const isPending = useSelector((state) => state.projects.isPending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
@@ -30,15 +31,6 @@ const Form = () => {
   const arrayToMapEmployees = employees.map((employee) => {
     return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };
   });
-
-  useEffect(() => {
-    fetch(`${URL}/employees`)
-      .then((res) => res.json())
-      .then((data) => {
-        setEmployees(data.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   const onSubmit = (data) => {
     const options = {
@@ -77,6 +69,7 @@ const Form = () => {
   });
 
   useEffect(() => {
+    dispatch(getEmployee());
     if (isProjectSelected)
       reset({
         name: projectSelected.name,
@@ -84,9 +77,9 @@ const Form = () => {
         endDate: projectSelected.endDate?.slice(0, 10),
         description: projectSelected.description,
         client: projectSelected.client,
-        members: projectSelected.members[0]?.name || '',
-        role: projectSelected.members[0]?.role || '',
-        rate: projectSelected.members[0]?.rate || '',
+        members: projectSelected.members[0]?.name?._id || undefined,
+        role: projectSelected.members[0]?.role || undefined,
+        rate: projectSelected.members[0]?.rate || undefined,
         active: projectSelected.active
       });
   }, [isProjectSelected]);
@@ -153,6 +146,7 @@ const Form = () => {
           id="active"
           name="active"
           label="Active"
+          placeholder="Is active?"
           register={register}
           error={errors.active?.message}
           required
@@ -163,8 +157,9 @@ const Form = () => {
           id="members"
           name="members"
           label="Members"
+          placeholder="Select employee"
           register={register}
-          error={errors.members?.message}
+          error={errors.members?.name?.message}
           required
         />
         <InputSelect
@@ -178,18 +173,19 @@ const Form = () => {
           id="role"
           name="role"
           label="Role"
-          placeholer="enter member role"
+          placeholder="Select member role"
           register={register}
-          error={errors.role?.message}
+          error={errors.members?.role?.message}
           required
         />
         <InputText
+          id="rate"
           name="rate"
           type="text"
           label="Rate"
           placeholder="Write the rate"
           register={register}
-          error={errors.rate?.message}
+          error={errors.members?.role?.message}
           required
         />
       </SharedForm>
