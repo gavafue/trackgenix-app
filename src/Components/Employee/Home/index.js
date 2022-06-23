@@ -1,9 +1,7 @@
 import styles from './home.module.css';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const employee = useSelector((state) => state.employees.employeeLogged);
   return (
     <section className={styles.container}>
       <div className={styles.images}>
