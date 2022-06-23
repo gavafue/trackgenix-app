@@ -43,7 +43,7 @@ const Form = () => {
         nameProject: data.nameProject,
         week: data.week,
         day: data.day,
-        description: data.descrption,
+        description: data.description,
         hours: data.hours
       })
     };
@@ -64,13 +64,15 @@ const Form = () => {
     dispatch(getProjects());
     if (isItemSelected)
       reset({
-        nameProject: selectedItem.nameProjectId || '',
+        nameProject: selectedItem.nameProjectId || undefined,
         day: selectedItem.day,
         week: selectedItem.week,
         hours: selectedItem.hours,
         description: selectedItem.description
       });
   }, [selectedItem]);
+
+  console.log(errors);
 
   return (
     <div className={styles.container}>
