@@ -84,9 +84,6 @@ const Form = () => {
       });
   }, [isProjectSelected]);
 
-  console.log(projectSelected.name);
-  console.log(errors);
-
   return (
     <div className={styles.container}>
       {isPending && <Loader />}
