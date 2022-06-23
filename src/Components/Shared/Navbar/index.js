@@ -8,14 +8,16 @@ const Navbar = () => {
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   const location = useLocation().pathname;
   const navBarItems = location.includes('/employee/') ? employeeNavbar : defaultNavbaritems;
+  const employeeName =
+    employeeLogged.firstName && employeeLogged.lastName != undefined
+      ? `${employeeLogged.firstName} ${employeeLogged.lastName}`
+      : '';
   return (
     <nav className={styles.navbar}>
       <div className={styles.appName}>
         <div className={styles.userContainer}>
           <div className={styles.userName}>
-            {navBarItems != employeeNavbar
-              ? 'Pepito'
-              : `${employeeLogged?.firstName} ${employeeLogged?.lastName}` || ''}
+            {navBarItems != employeeNavbar ? 'Pepito' : employeeName}
           </div>
           <div className={styles.profileImg}>
             {navBarItems != employeeNavbar ? (
