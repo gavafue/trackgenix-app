@@ -15,7 +15,7 @@ const Navbar = () => {
           <div className={styles.userName}>
             {navBarItems != employeeNavbar
               ? 'Pepito'
-              : `${employeeLogged?.firstName} ${employeeLogged?.lastName}`}
+              : `${employeeLogged?.firstName} ${employeeLogged?.lastName}` || ''}
           </div>
           <div className={styles.profileImg}>
             {navBarItems != employeeNavbar ? (
