@@ -107,7 +107,6 @@ export const editTimesheet = (options) => {
     fetch(options.url, options)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (!res.error) {
           dispatch(editTimesheetsSuccess(res.data));
           dispatch(

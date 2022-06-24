@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import styles from './time-sheets.module.css';
+import styles from './timesheets.module.css';
 import Table from '../Shared/Table';
 import Modal from '../Shared/Modal';
 import DeleteMessage from '../Shared/DeleteMessage';
