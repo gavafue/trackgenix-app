@@ -1,8 +1,7 @@
-import Button from 'Components/Shared/Button';
 import React from 'react';
 import styles from '../../../Shared/Table/TableContent/tableContent.module.css';
 
-const ProjectsTableContent = ({ headers, data, setInfoToShow, setShowModal }) => {
+const ProjectsTableContent = ({ headers, data }) => {
   return (
     <tbody>
       {data.map((row) => {
@@ -15,16 +14,6 @@ const ProjectsTableContent = ({ headers, data, setInfoToShow, setShowModal }) =>
                 </td>
               );
             })}
-            <td className={styles.rows}>
-              <Button
-                label="Show More"
-                theme="secondary"
-                onClick={() => {
-                  setShowModal(true);
-                  setInfoToShow(row._id);
-                }}
-              />
-            </td>
           </tr>
         );
       })}
