@@ -9,7 +9,7 @@ const Navbar = () => {
   const location = useLocation().pathname;
   const navBarItems = location.includes('/employee/') ? employeeNavbar : defaultNavbaritems;
   const employeeName =
-    employeeLogged.firstName && employeeLogged.lastName != undefined
+    employeeLogged.firstName && employeeLogged.lastName
       ? `${employeeLogged.firstName} ${employeeLogged.lastName}`
       : '';
   return (
@@ -17,13 +17,13 @@ const Navbar = () => {
       <div className={styles.appName}>
         <div className={styles.userContainer}>
           <div className={styles.userName}>
-            {navBarItems != employeeNavbar ? 'Pepito' : employeeName}
+            {location.includes('/employee/') ? employeeName : 'Pepito'}
           </div>
           <div className={styles.profileImg}>
-            {navBarItems != employeeNavbar ? (
-              <img src="http://www.4x4.ec/overlandecuador/wp-content/uploads/2017/06/default-user-icon-8.jpg" />
-            ) : (
+            {location.includes('/employee/') ? (
               <img src={employeeLogged?.photo}></img>
+            ) : (
+              <img src="http://www.4x4.ec/overlandecuador/wp-content/uploads/2017/06/default-user-icon-8.jpg" />
             )}
           </div>
         </div>
