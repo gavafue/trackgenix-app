@@ -115,15 +115,15 @@ export const timesheetsReducer = (state = initialState, action) => {
     case EDIT_TIMESHEET_SUCCESS:
       return {
         ...state,
-        list: state.list.map((item) => {
-          if (action.payload._id === item._id) {
-            console.log(action.payload);
+        list: state.list.map((timesheet) => {
+          if (timesheet._id === action.payload._id) {
             return action.payload;
           }
-          return item;
+          return timesheet;
         }),
         isPending: false
       };
+
     case EDIT_TIMESHEET_PENDING:
       return {
         ...state,

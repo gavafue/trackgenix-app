@@ -22,13 +22,20 @@ function EmployeeTimesheets() {
   }, []);
 
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
-  const timesheets = useSelector((state) => state.timesheets.list);
+  const timesheets = useSelector((state) =>
+    state.timesheets.list
+      .filter((timesheet) => timesheet.employee?._id === employeeLogged._id)
+      .map((timesheet) => ({
+        ...timesheet,
+        projectName: timesheet?.project?.name || 'Project not found'
+      }))
+  );
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const isPending = useSelector((state) => state.timesheets.isPending);
   const selectedTimesheet = useSelector((state) => state.timesheets.timesheetSelected);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const [showForm, setShowForm] = useState(false);
-
+  console.log(selectedTimesheet);
   const {
     handleSubmit,
     register,
@@ -38,12 +45,6 @@ function EmployeeTimesheets() {
     mode: 'onSubmit',
     resolver: joiResolver(employeeTimesheetValidation)
   });
-  const timesheetData = timesheets
-    .filter((timesheet) => timesheet.employee?._id === employeeLogged._id)
-    .map((timesheet) => ({
-      ...timesheet,
-      projectName: timesheet?.project?.name || 'Project not found'
-    }));
 
   const onSubmitAddHours = (data, event) => {
     event.preventDefault();
@@ -58,6 +59,8 @@ function EmployeeTimesheets() {
         ...selectedTimesheet,
         _id: undefined,
         __v: undefined,
+        project: selectedTimesheet.project._id,
+        employee: selectedTimesheet.employee._id,
         projectName: undefined,
         hoursWorked: parseInt(selectedTimesheet.hoursWorked) + parseInt(data.addHoursWorked)
       })
@@ -83,7 +86,7 @@ function EmployeeTimesheets() {
       >
         <TimesheetTableContent
           setShowForm={setShowForm}
-          data={timesheetData ?? []}
+          data={timesheets}
           headers={['projectName', 'workDescription', 'weekSprint', 'hoursProject', 'hoursWorked']}
         />
       </EmployeeTable>

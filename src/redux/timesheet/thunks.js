@@ -126,11 +126,12 @@ export const editTimesheet = (options) => {
             })
           );
           dispatch(showFeedbackMessage(true));
-          dispatch(editTimesheetsError(res.data.message));
+          dispatch(editTimesheetsError(res.message));
         }
       })
       .catch((error) => {
         dispatch(editTimesheetsError(error));
+        console.log(error);
         dispatch(
           setInfoForFeedback({ title: 'Something went wrong.', description: error.message })
         );
