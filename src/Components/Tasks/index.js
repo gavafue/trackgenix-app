@@ -62,8 +62,8 @@ const Tasks = () => {
       </div>
       <Table
         data={taskData}
-        headersName={['Project', 'Week', 'Day', 'Description', 'Hours']}
-        headers={['nameProject', 'week', 'day', 'description', 'hours']}
+        headersName={['Project', 'Description', 'Week', 'Day', 'Hours']}
+        headers={['nameProject', 'description', 'week', 'day', 'hours']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         setInfoForDelete={(taskId) => dispatch(setInfoForDelete(taskId))}
         editData={editData}
