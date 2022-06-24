@@ -10,10 +10,9 @@ const EmployeeTable = ({ children, headersName }) => {
             return <th key={index}>{headerName}</th>;
           })}
           <th></th>
-          <th></th>
         </tr>
-        {children}
       </thead>
+      {children}
     </table>
   );
 };
