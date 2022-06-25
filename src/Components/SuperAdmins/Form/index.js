@@ -1,75 +1,35 @@
-import { useEffect, useState } from 'react';
-import SharedForm from '../../Shared/Form';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
+import Preloader from '../../Shared/Preloader';
+import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from '../../Shared/Input/InputSelect';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Preloader from '../../Shared/Preloader';
-import { useDispatch, useSelector } from 'react-redux';
 import { editSuperAdmin, postSuperAdmin } from '../../../redux/superadmin/thunks';
 import { showFeedbackMessage } from '../../../redux/superadmin/actions';
+import superadminsValidation from 'validations/superadmins';
 
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
-  const selectedSuperadmin = useSelector((state) => state.superadmins.selectedSuperadmin);
-  const isSuperadminSelected = Object.keys(selectedSuperadmin).length;
   const isPending = useSelector((state) => state.superadmins.pending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
-
-  const [nameValue, setNameValue] = useState('');
-  const [lastNameValue, setLastNameValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
-  const [activeValue, setActiveValue] = useState('');
-  const [roleValue, setRoleValue] = useState('');
-
-  const onChangeNameInput = (e) => {
-    setNameValue(e.target.value);
-  };
-
-  const onChangeLastNameInput = (e) => {
-    setLastNameValue(e.target.value);
-  };
-
-  const onChangePasswordInput = (e) => {
-    setPasswordValue(e.target.value);
-  };
-
-  const onChangeEmailInput = (e) => {
-    setEmailValue(e.target.value);
-  };
-
-  const onChangeActiveInput = (e) => {
-    setActiveValue(e.target.value);
-  };
-
-  const onChangeRoleInput = (e) => {
-    setRoleValue(e.target.value);
-  };
-
-  useEffect(() => {
-    if (isSuperadminSelected) {
-      setNameValue(selectedSuperadmin.firstName);
-      setLastNameValue(selectedSuperadmin.lastName);
-      setEmailValue(selectedSuperadmin.email);
-      setPasswordValue(selectedSuperadmin.password);
-      setActiveValue(selectedSuperadmin.active);
-      setRoleValue(selectedSuperadmin.role);
-    }
-  }, []);
+  const selectedSuperadmin = useSelector((state) => state.superadmins.selectedSuperadmin);
+  const isSuperadminSelected = Boolean(Object.keys(selectedSuperadmin).length);
+  const title = isSuperadminSelected ? 'Update Super Admin' : 'Add Super Admin';
 
   const arrayToMapRole = [{ id: 'SA', optionContent: 'SuperAdmin' }];
   const arrayToMapStatus = [
-    { id: true, optionContent: 'True' },
-    { id: false, optionContent: 'False' }
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
   ];
 
-  const title = isSuperadminSelected ? 'Update Super Admin' : 'Add Super Admin';
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = (data) => {
     const options = {
       method: isSuperadminSelected ? 'PUT' : 'POST',
       url: isSuperadminSelected
@@ -77,79 +37,101 @@ const Form = () => {
         : `${URL}/super-admin`,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        firstName: nameValue,
-        lastName: lastNameValue,
-        password: passwordValue,
-        email: emailValue,
-        role: roleValue,
-        active: activeValue
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password: data.password,
+        email: data.email,
+        role: data.role,
+        active: data.active
       })
     };
     isSuperadminSelected ? dispatch(editSuperAdmin(options)) : dispatch(postSuperAdmin(options));
   };
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(superadminsValidation)
+  });
+
+  useEffect(() => {
+    if (isSuperadminSelected)
+      reset({
+        firstName: selectedSuperadmin.firstName,
+        lastName: selectedSuperadmin.lastName,
+        email: selectedSuperadmin.email,
+        password: selectedSuperadmin.password,
+        active: selectedSuperadmin.active,
+        role: selectedSuperadmin.role
+      });
+  }, [selectedSuperadmin]);
+
   return (
     <div className={styles.container}>
       {isPending && <Preloader />}
       <h2>{title}</h2>
-      <SharedForm onSubmit={onSubmit}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <Input
+          label="Name"
           id="firstName"
           name="firstName"
           type="text"
-          value={nameValue}
           placeholder="Write your first name"
-          onChange={onChangeNameInput}
+          register={register}
+          error={errors.firstName?.message}
           required
-          label="Name"
         />
         <Input
+          label="Last Name"
           name="lastName"
           id="lastName"
           type="text"
-          value={lastNameValue}
           placeholder="Write your last name"
-          onChange={onChangeLastNameInput}
-          label="Last Name"
+          register={register}
+          error={errors.lastName?.message}
           required
         />
         <Input
+          label="Email"
           name="email"
           id="email"
-          type="text"
-          value={emailValue}
+          type="email"
           placeholder="Write your email"
-          onChange={onChangeEmailInput}
-          label="Email"
+          register={register}
+          error={errors.email?.message}
           required
         />
         <Input
+          label="Password"
           name="password"
           id="password"
           type="password"
-          value={passwordValue}
           placeholder="Write your password"
-          onChange={onChangePasswordInput}
-          label="Password"
-          required
-        />
-        <Select
-          label="Role"
-          arrayToMap={arrayToMapRole}
-          id="role"
-          name="role"
-          value={roleValue}
-          onChange={onChangeRoleInput}
-          placeholder="Choose Role"
+          register={register}
+          error={errors.password?.message}
           required
         />
         <Select
           label="Active"
-          arrayToMap={arrayToMapStatus}
           id="active"
           name="active"
-          value={activeValue}
-          onChange={onChangeActiveInput}
           placeholder="Choose Status"
+          arrayToMap={arrayToMapStatus}
+          register={register}
+          error={errors.active?.message}
+          required
+        />
+        <Select
+          label="Role"
+          id="role"
+          name="role"
+          arrayToMap={arrayToMapRole}
+          register={register}
+          error={errors.role?.message}
           required
         />
       </SharedForm>

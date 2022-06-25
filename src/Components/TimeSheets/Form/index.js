@@ -1,99 +1,33 @@
-import { useEffect, useState } from 'react';
-import SharedForm from '../../Shared/Form';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
+import Preloader from '../../Shared/Preloader';
+import SharedForm from '../../Shared/Form';
 import Select from '../../Shared/Input/InputSelect';
 import Input from '../../Shared/Input/InputText';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Preloader from '../../Shared/Preloader';
-import { editTimesheet, addTimesheet } from '../../../redux/timesheet/thunks';
-import { useDispatch, useSelector } from 'react-redux';
-import { showFeedbackMessage } from '../../../redux/timesheet/actions';
+import { showFeedbackMessage } from 'redux/timesheet/actions';
+import { editTimesheet, addTimesheet } from 'redux/timesheet/thunks';
+import { getEmployee } from 'redux/employees/thunks';
+import { getProjects } from 'redux/projects/thunks';
+import timesheetsValidation from 'validations/timesheets';
 const URL = process.env.REACT_APP_API_URL;
 
 const Form = () => {
-  const [projects, setProjects] = useState([]);
-  const [employees, setEmployees] = useState([]);
-  const [projectValue, setProjectValue] = useState('');
-  const [employeeValue, setEmployeeValue] = useState('');
-  const [weekSprintValue, setWeekSprintValue] = useState('');
-  const [hoursWorkedValue, setHoursWorkedValue] = useState('');
-  const [dateValue, setDateValue] = useState('');
-  const [projectHoursValue, setProjectHoursValue] = useState('');
-  const [workDescriptionValue, setWorkDescriptionValue] = useState('');
   const dispatch = useDispatch();
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
-  const pending = useSelector((state) => state.timesheets.pending);
+  const isPending = useSelector(
+    (state) => state.timesheets.pending || state.projects.isPending || state.employees.isPending
+  );
+  const employees = useSelector((state) => state.employees.list);
+  const projects = useSelector((state) => state.projects.list);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const selectedTimesheet = useSelector((store) => store.timesheets.timesheetSelected);
-  const isTimesheetSelected = Object.keys(selectedTimesheet).length;
-  useEffect(() => {
-    //Get data for projects
-    fetch(`${URL}/projects`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProjects(data.data);
-      })
-      .catch((err) => console.log(err));
-    //Get data for employees
-    fetch(`${URL}/employees`)
-      .then((res) => res.json())
-      .then((data) => {
-        setEmployees(data.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const onChangeProjectSelect = (event) => {
-    setProjectValue(event.target.value);
-  };
-
-  const onChangeEmployeeSelect = (event) => {
-    setEmployeeValue(event.target.value);
-  };
-
-  const onChangeWeekSprint = (event) => {
-    setWeekSprintValue(event.target.value);
-  };
-
-  const onChangeDate = (event) => {
-    setDateValue(event.target.value);
-  };
-
-  const onChangeHoursWork = (event) => {
-    setHoursWorkedValue(event.target.value);
-  };
-
-  const onChangeProjectHours = (event) => {
-    setProjectHoursValue(event.target.value);
-  };
-
-  const onChangeWorkDescription = (event) => {
-    setWorkDescriptionValue(event.target.value);
-  };
-
+  const isTimesheetSelected = Boolean(Object.keys(selectedTimesheet).length);
   const title = isTimesheetSelected ? 'Update Timesheet' : 'Add Timesheet';
-
-  const options = {
-    method: isTimesheetSelected ? 'PUT' : 'POST',
-    url: isTimesheetSelected ? `${URL}/timesheets/${selectedTimesheet._id}` : `${URL}/timesheets`,
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      project: projectValue,
-      employee: employeeValue,
-      weekSprint: weekSprintValue,
-      date: dateValue,
-      hoursWorked: hoursWorkedValue,
-      hoursProject: projectHoursValue,
-      workDescription: workDescriptionValue
-    })
-  };
-  const onSubmit = (event) => {
-    event.preventDefault();
-    isTimesheetSelected ? dispatch(editTimesheet(options)) : dispatch(addTimesheet(options));
-  };
 
   const arrayToMapEmployees = employees.map((item) => {
     return {
@@ -109,35 +43,63 @@ const Form = () => {
     };
   });
 
-  useEffect(() => {
-    if (isTimesheetSelected) {
-      setProjectValue(selectedTimesheet.project?._id || '');
-      setEmployeeValue(selectedTimesheet.employee?._id || '');
-      setWeekSprintValue(selectedTimesheet.weekSprint);
-      setDateValue(selectedTimesheet.date ?? '');
-      setHoursWorkedValue(selectedTimesheet.hoursWorked);
-      setProjectHoursValue(selectedTimesheet.hoursProject);
-      setWorkDescriptionValue(selectedTimesheet.workDescription);
-    }
-  }, []);
+  const onSubmit = (data) => {
+    const options = {
+      method: isTimesheetSelected ? 'PUT' : 'POST',
+      url: isTimesheetSelected ? `${URL}/timesheets/${selectedTimesheet._id}` : `${URL}/timesheets`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        project: data.project,
+        employee: data.employee,
+        weekSprint: data.weekSprint,
+        date: data.date,
+        hoursWorked: data.hoursWorked,
+        hoursProject: data.hoursProject,
+        workDescription: data.workDescription
+      })
+    };
+    isTimesheetSelected ? dispatch(editTimesheet(options)) : dispatch(addTimesheet(options));
+  };
 
-  const dayInput = dateValue?.substring(5, 7);
-  const monthInput = dateValue?.substring(8, 10);
-  const yearInput = dateValue?.substring(0, 4);
-  const dateFormat = `${yearInput}-${monthInput}-${dayInput}`;
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(timesheetsValidation)
+  });
+
+  useEffect(() => {
+    dispatch(getEmployee());
+    dispatch(getProjects());
+    if (isTimesheetSelected)
+      reset({
+        project: selectedTimesheet.project?._id || undefined,
+        employee: selectedTimesheet.employee?._id || undefined,
+        weekSprint: selectedTimesheet.weekSprint,
+        date: selectedTimesheet.date?.slice(0, 10) ?? undefined,
+        hoursWorked: selectedTimesheet.hoursWorked,
+        hoursProject: selectedTimesheet.hoursProject,
+        workDescription: selectedTimesheet.workDescription
+      });
+  }, [selectedTimesheet]);
 
   return (
     <div className={styles.container}>
       <h2>{title}</h2>
-      <SharedForm onSubmit={onSubmit}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <Select
           label="Project"
           arrayToMap={arrayToMapProjects}
           id="project"
           name="project"
-          value={projectValue}
-          onChange={onChangeProjectSelect}
           placeholder="Choose the project"
+          register={register}
+          error={errors.project?.message}
           required
         />
         <Select
@@ -145,19 +107,19 @@ const Form = () => {
           arrayToMap={arrayToMapEmployees}
           id="employee"
           name="employee"
-          value={employeeValue}
-          onChange={onChangeEmployeeSelect}
           placeholder="Choose the employee"
+          register={register}
+          error={errors.employee?.message}
           required
         />
         <Input
           label="Week Sprint"
-          id="weeksprint"
-          name="weeksprint"
+          id="weekSprint"
+          name="weekSprint"
           type="text"
           placeholder="Write the week sprint"
-          value={weekSprintValue}
-          onChange={onChangeWeekSprint}
+          register={register}
+          error={errors.weekSprint?.message}
           required
         />
         <Input
@@ -166,28 +128,28 @@ const Form = () => {
           name="date"
           type="date"
           placeholder="Write the date"
-          value={dateFormat}
-          onChange={onChangeDate}
+          register={register}
+          error={errors.date?.message}
           required
         />
         <Input
           label="Hours worked"
-          type="number"
+          type="text"
           id="hoursWorked"
           name="hoursWorked"
-          value={hoursWorkedValue}
           placeholder="Write the hours worked"
-          onChange={onChangeHoursWork}
+          register={register}
+          error={errors.hoursWorked?.message}
           required
         />
         <Input
           label="Project Hours"
-          id="projectHours"
-          name="projectHours"
-          type="number"
+          id="hoursProject"
+          name="hoursProject"
+          type="text"
           placeholder="Write the project hours"
-          value={projectHoursValue}
-          onChange={onChangeProjectHours}
+          register={register}
+          error={errors.hoursProject?.message}
           required
         />
         <Input
@@ -196,8 +158,8 @@ const Form = () => {
           name="workDescription"
           type="text"
           placeholder="Write the work description"
-          value={workDescriptionValue}
-          onChange={onChangeWorkDescription}
+          register={register}
+          error={errors.workDescription?.message}
           required
         />
       </SharedForm>
@@ -208,7 +170,7 @@ const Form = () => {
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
-        {pending && <Preloader />}
+        {isPending && <Preloader />}
       </Modal>
     </div>
   );
