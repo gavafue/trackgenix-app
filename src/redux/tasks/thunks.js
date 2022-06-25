@@ -92,7 +92,6 @@ export const editTask = (options) => {
         return response.json();
       })
       .then((response) => {
-        console.log(response);
         if (!response.error) {
           dispatch(editTaskSuccess(response.data));
           dispatch(

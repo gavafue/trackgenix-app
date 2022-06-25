@@ -64,10 +64,7 @@ const employeesValidation = Joi.object({
     .required(),
   password: Joi.string()
     .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
-    .messages({
-      'string.pattern':
-        'Password must be more than 6 char, at least 1 letter and 1 number. Without any symbols.'
-    })
+    .message('Minimum is 6 non-special characters, 1 letter and 1 number')
     .required(),
   photo: Joi.string().required(),
   active: Joi.boolean().required()

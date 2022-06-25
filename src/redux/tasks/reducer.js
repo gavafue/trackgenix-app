@@ -33,19 +33,19 @@ export const tasksReducer = (state = initialState, action) => {
     case GET_TASKS_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case GET_TASKS_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_TASKS_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_SELECTED_ITEM:
       return {
@@ -55,19 +55,19 @@ export const tasksReducer = (state = initialState, action) => {
     case DELETE_TASK_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case DELETE_TASK_SUCCESS:
       return {
         ...state,
         list: state.list.filter((task) => task._id !== action.payload),
-        pending: false
+        isPending: false
       };
     case DELETE_TASK_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -93,13 +93,13 @@ export const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case POST_TASK_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
     case EDIT_TASK_SUCCESS:
       return {
@@ -110,19 +110,19 @@ export const tasksReducer = (state = initialState, action) => {
           }
           return item;
         }),
-        pending: false
+        isPending: false
       };
     case EDIT_TASK_ERROR:
       return {
         ...state,
         error: true,
-        pending: false
+        isPending: false
       };
     case CLEAN_SELECTED_ITEM:
       return {
         ...state,
         selectedItem: {},
-        pending: false
+        isPending: false
       };
     default:
       return state;
