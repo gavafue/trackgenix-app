@@ -1,85 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import SharedForm from '../../Shared/Form';
-import Input from '../../Shared/Input/InputText';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Modal from '../../Shared/Modal';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
 import Loader from '../../Shared/Preloader';
-import { useSelector, useDispatch } from 'react-redux';
+import SharedForm from '../../Shared/Form';
+import Input from '../../Shared/Input/InputText';
+import Select from 'Components/Shared/Input/InputSelect';
+import Modal from '../../Shared/Modal';
+import FeedbackMessage from '../../Shared/FeedbackMessage';
 import { showFeedbackMessage } from '../../../redux/employees/actions';
 import { editEmployee, postEmployee } from '../../../redux/employees/thunks';
+import employeesValidation from 'validations/employees';
 
 const Form = () => {
-  const [nameValue, setNameValue] = useState('');
-  const [lastNameValue, setLastNameValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
-  const [telephoneValue, setTelephoneValue] = useState('');
-  const [countryValue, setCountryValue] = useState('');
-  const [cityValue, setCityValue] = useState('');
-  const [zipValue, setZipValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
-  const [photoValue, setPhotoValue] = useState('');
-  const [birthdayValue, setBirthdayValue] = useState('');
-  const onChangeNameValue = (e) => {
-    setNameValue(e.target.value);
-  };
-  const onChangeLastNameValue = (e) => {
-    setLastNameValue(e.target.value);
-  };
-  const onChangeEmailValue = (e) => {
-    setEmailValue(e.target.value);
-  };
-  const onChangeTelephoneValue = (e) => {
-    setTelephoneValue(e.target.value);
-  };
-  const onChangeCountryValue = (e) => {
-    setCountryValue(e.target.value);
-  };
-  const onChangeCityValue = (e) => {
-    setCityValue(e.target.value);
-  };
-  const onChangeZipValue = (e) => {
-    setZipValue(e.target.value);
-  };
-  const onChangePasswordValue = (e) => {
-    setPasswordValue(e.target.value);
-  };
-  const onChangePhotoValue = (e) => {
-    setPhotoValue(e.target.value);
-  };
-  const onChangeBirthdayValue = (e) => {
-    setBirthdayValue(e.target.value);
-  };
   const dispatch = useDispatch();
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const employeeSelected = useSelector((state) => state.employees.employeeSelected) || NaN;
-  const isEmployeeSelected = Object.keys(employeeSelected).length;
+  const employeeSelected = useSelector((state) => state.employees.employeeSelected);
+  const isEmployeeSelected = Boolean(Object.keys(employeeSelected).length);
   const URL = process.env.REACT_APP_API_URL;
   const history = useHistory();
   const title = isEmployeeSelected
     ? `Update ${employeeSelected.firstName} ${employeeSelected.lastName}'s data`
     : 'Add Employee';
 
-  useEffect(() => {
-    if (isEmployeeSelected) {
-      setNameValue(employeeSelected.firstName);
-      setLastNameValue(employeeSelected.lastName);
-      setEmailValue(employeeSelected.email);
-      setPasswordValue(employeeSelected.password);
-      setCityValue(employeeSelected.city);
-      setBirthdayValue(employeeSelected.birthDate);
-      setPhotoValue(employeeSelected.photo);
-      setTelephoneValue(employeeSelected.phone);
-      setZipValue(employeeSelected.zip);
-      setCountryValue(employeeSelected.country);
-    }
-  }, []);
+  const arrayToMapActive = [
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
+  ];
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = (data) => {
     const options = {
       method: isEmployeeSelected ? 'PUT' : 'POST',
       url: isEmployeeSelected ? `${URL}/employees/${employeeSelected._id}` : `${URL}/employees`,
@@ -87,45 +40,72 @@ const Form = () => {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        firstName: nameValue,
-        lastName: lastNameValue,
-        email: emailValue,
-        country: countryValue,
-        city: cityValue,
-        zip: zipValue,
-        phone: telephoneValue,
-        birthDate: birthdayValue,
-        photo: photoValue,
-        password: passwordValue,
-        active: false
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        country: data.country,
+        city: data.city,
+        zip: data.zip,
+        phone: data.phone,
+        birthDate: data.birthDate,
+        photo: data.photo,
+        password: data.password,
+        active: data.active
       })
     };
     isEmployeeSelected ? dispatch(editEmployee(options)) : dispatch(postEmployee(options));
   };
 
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(employeesValidation)
+  });
+
+  useEffect(() => {
+    if (isEmployeeSelected)
+      reset({
+        firstName: employeeSelected.firstName,
+        lastName: employeeSelected.lastName,
+        email: employeeSelected.email,
+        country: employeeSelected.country,
+        city: employeeSelected.city,
+        zip: employeeSelected.zip,
+        phone: employeeSelected.phone,
+        birthDate: employeeSelected.birthDate?.slice(0, 10),
+        password: employeeSelected.password,
+        photo: employeeSelected.photo,
+        active: employeeSelected.active
+      });
+  }, [employeeSelected]);
+
   return (
     <div className={styles.container}>
       <h1>{title}</h1>
-      <SharedForm onSubmit={onSubmit}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <Input
           className={styles.input}
-          id="first-name"
+          id="firstName"
           label="First Name"
-          name="first-name"
+          name="firstName"
           type="text"
           placeholder="Write your name."
-          value={nameValue}
-          onChange={onChangeNameValue}
+          register={register}
+          error={errors.firstName?.message}
           required
         />
         <Input
           label="Last Name"
-          name="last-name"
-          id="last-name"
+          name="lastName"
+          id="lastName"
           type="text"
           placeholder="Write your last name."
-          value={lastNameValue}
-          onChange={onChangeLastNameValue}
+          register={register}
+          error={errors.lastName?.message}
           required
         />
         <Input
@@ -134,8 +114,8 @@ const Form = () => {
           id="email"
           type="email"
           placeholder="Write your email."
-          value={emailValue}
-          onChange={onChangeEmailValue}
+          register={register}
+          error={errors.email?.message}
           required
         />
         <Input
@@ -144,18 +124,18 @@ const Form = () => {
           id="password"
           type="password"
           placeholder="Write your password."
-          value={passwordValue}
-          onChange={onChangePasswordValue}
+          register={register}
+          error={errors.password?.message}
           required
         />
         <Input
           label="Date of birth"
-          name="birthday"
-          id="birthday"
+          name="birthDate"
+          id="birthDate"
           type="date"
           placeholder="Write your birthday on format dd/mm/yyyy"
-          value={birthdayValue.slice(0, 10)}
-          onChange={onChangeBirthdayValue}
+          register={register}
+          error={errors.birthDate?.message}
           required
         />
         <Input
@@ -164,8 +144,8 @@ const Form = () => {
           id="phone"
           type="tel"
           placeholder="Write your telephone."
-          value={telephoneValue}
-          onChange={onChangeTelephoneValue}
+          register={register}
+          error={errors.phone?.message}
           required
         />
         <Input
@@ -174,8 +154,8 @@ const Form = () => {
           id="country"
           type="text"
           placeholder="Write your country."
-          value={countryValue}
-          onChange={onChangeCountryValue}
+          register={register}
+          error={errors.country?.message}
           required
         />
         <Input
@@ -184,28 +164,38 @@ const Form = () => {
           id="city"
           type="text"
           placeholder="Write your city."
-          value={cityValue}
-          onChange={onChangeCityValue}
+          register={register}
+          error={errors.city?.message}
           required
         />
         <Input
           label="Postal Code"
-          name="ZIP"
-          id="ZIP"
+          name="zip"
+          id="zip"
           type="text"
           placeholder="Write your postal code."
-          value={zipValue}
-          onChange={onChangeZipValue}
+          register={register}
+          error={errors.zip?.message}
           required
         />
         <Input
           label="Profile picture"
-          name="profile-picture"
-          id="profile-picture"
+          name="photo"
+          id="photo"
           type="text"
           placeholder="Write your profile picture url."
-          value={photoValue}
-          onChange={onChangePhotoValue}
+          register={register}
+          error={errors.photo?.message}
+          required
+        />
+        <Select
+          label="Active"
+          arrayToMap={arrayToMapActive}
+          name="active"
+          id="active"
+          placeholder="Enter employee's status"
+          register={register}
+          error={errors.active?.message}
           required
         />
       </SharedForm>
