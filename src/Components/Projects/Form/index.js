@@ -118,7 +118,7 @@ const Form = () => {
           label="End date"
           placeholder="Write the end date"
           register={register}
-          error={errors.endDate?.message}
+          error={errors.endDate?.message ? 'End date should come after the start date' : ''}
           required
         />
         <InputText
@@ -193,7 +193,11 @@ const Form = () => {
                 label="Rate"
                 placeholder="Write the member's rate"
                 register={register}
-                error={errors?.['members']?.[index]?.['rate']?.message}
+                error={
+                  errors?.['members']?.[index]?.['rate']?.message
+                    ? 'Rate should be a positive number'
+                    : ''
+                }
                 required
               />
               <Button
