@@ -66,6 +66,7 @@ const Form = () => {
         members: data.members
       })
     };
+    console.log(data);
     isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
 
@@ -79,7 +80,9 @@ const Form = () => {
         description: projectSelected.description,
         client: projectSelected.client,
         active: projectSelected.active,
-        members: projectSelected.members
+        members: projectSelected.members.map((item) => {
+          return { name: item.name._id, role: item.role, rate: item.rate };
+        })
       });
   }, [projectSelected]);
 
