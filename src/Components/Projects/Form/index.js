@@ -81,7 +81,7 @@ const Form = () => {
         client: projectSelected.client,
         active: projectSelected.active,
         members: projectSelected.members.map((item) => {
-          return { name: item.name._id, role: item.role, rate: item.rate };
+          return { name: item.name?._id, role: item.role, rate: item.rate };
         })
       });
   }, [projectSelected]);
