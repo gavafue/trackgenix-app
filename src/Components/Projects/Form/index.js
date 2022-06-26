@@ -167,7 +167,7 @@ const Form = () => {
                 label="Employee"
                 placeholder="Select employee"
                 register={register}
-                error={errors.members?.name?.message}
+                error={errors?.['members']?.[index]?.['name']?.message}
                 required
               />
               <InputSelect
@@ -183,7 +183,7 @@ const Form = () => {
                 label="Role"
                 placeholder="Select member's role"
                 register={register}
-                error={errors.members?.role?.message}
+                error={errors?.['members']?.[index]?.['role']?.message}
                 required
               />
               <InputText
@@ -193,7 +193,7 @@ const Form = () => {
                 label="Rate"
                 placeholder="Write the member's rate"
                 register={register}
-                error={errors.members?.rate?.message}
+                error={errors?.['members']?.[index]?.['rate']?.message}
                 required
               />
               <Button
