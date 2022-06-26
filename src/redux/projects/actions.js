@@ -16,7 +16,9 @@ import {
   EDIT_PROJECT_PENDING,
   EDIT_PROJECT_SUCCESS,
   GET_SELECTED_PROJECT,
-  CLEAN_SELECTED_PROJECT
+  CLEAN_SELECTED_PROJECT,
+  SET_INFO_TO_SHOW,
+  SHOW_INFO
 } from './constants';
 
 export const getProjectsSuccess = (tasks) => ({
@@ -55,6 +57,16 @@ export const setInfoForFeedback = (message) => ({
 export const setInfoForDelete = (id) => ({
   type: SET_INFO_FOR_DELETE,
   payload: id
+});
+
+export const setInfoToShow = (id) => ({
+  type: SET_INFO_TO_SHOW,
+  payload: id
+});
+
+export const showInfoMessage = (showInfo) => ({
+  type: SHOW_INFO,
+  payload: showInfo
 });
 
 export const showDeleteMessage = (showDeleteMessage) => ({
