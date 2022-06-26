@@ -7,6 +7,7 @@ import {
   DELETE_PROJECT_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
   SET_INFO_FOR_DELETE,
+  SET_INFO_TO_SHOW,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
   POST_PROJECT_ERROR,
@@ -16,7 +17,8 @@ import {
   EDIT_PROJECT_PENDING,
   EDIT_PROJECT_SUCCESS,
   GET_SELECTED_PROJECT,
-  CLEAN_SELECTED_PROJECT
+  CLEAN_SELECTED_PROJECT,
+  SHOW_INFO
 } from './constants';
 
 const initialState = {
@@ -27,7 +29,10 @@ const initialState = {
   showDeleteMessage: false,
   infoForDelete: '',
   showFeedbackMessage: false,
-  projectSelected: {}
+  projectSelected: {},
+  infoToShow: '',
+  infoMessageToShow: { title: '', description: '' },
+  showInfo: false
 };
 
 export const projectsReducer = (state = initialState, action) => {
@@ -75,6 +80,17 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         infoForDelete: action.payload
+      };
+
+    case SET_INFO_TO_SHOW:
+      return {
+        ...state,
+        infoToShow: action.payload
+      };
+    case SHOW_INFO:
+      return {
+        ...state,
+        showInfo: action.payload
       };
     case SHOW_DELETE_MESSAGE:
       return {

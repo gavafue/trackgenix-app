@@ -1,10 +1,51 @@
 import styles from './projects.module.css';
-import React from 'react';
+import { useEffect } from 'react';
+import EmployeeTable from '../TableAndContents/table';
+import { useSelector } from 'react-redux';
+import { getProjects } from 'redux/projects/thunks';
+import { useDispatch } from 'react-redux';
+import ProjectsTableContent from '../TableAndContents/Content/projectsTableContent';
+import { getTimesheets } from 'redux/timesheet/thunks';
 
 const Projects = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProjects());
+    dispatch(getTimesheets());
+  }, []);
+
+  const projects = useSelector((state) => state.projects.list);
+  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
+
+  const employeeProjects = projects.reduce((acc, project) => {
+    const assignedProject = project.members.find((employee) => {
+      return employee?.name?._id === employeeLogged._id;
+    });
+    if (assignedProject && Object.keys(assignedProject).length) {
+      return [
+        ...acc,
+        {
+          projectName: project.name,
+          projectId: project._id,
+          status: project.active ? 'Active' : 'Inactive',
+          client: project.client,
+          description: project.description,
+          role: assignedProject.role,
+          rate: assignedProject.rate
+        }
+      ];
+    }
+    return acc;
+  }, []);
   return (
     <section className={styles.container}>
-      <h2>Employee Projects</h2>
+      <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
+        <ProjectsTableContent
+          data={employeeProjects}
+          headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
+        />
+      </EmployeeTable>
     </section>
   );
 };
