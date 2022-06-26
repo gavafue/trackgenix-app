@@ -3,7 +3,7 @@ import Joi from 'joi';
 const membersJoiSch = Joi.object({
   name: Joi.string().required(),
   role: Joi.string().uppercase().valid('DEV', 'QA', 'PM', 'TL').required(),
-  rate: Joi.number().integer().min(0).required()
+  rate: Joi.number().min(0).required()
 });
 
 const projectsValidation = Joi.object({

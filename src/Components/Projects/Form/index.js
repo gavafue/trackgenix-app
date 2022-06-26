@@ -149,7 +149,7 @@ const Form = () => {
           ]}
           id="active"
           name="active"
-          label="Active"
+          label="Status"
           placeholder="Select the project's status"
           register={register}
           error={errors.active?.message}
@@ -167,7 +167,7 @@ const Form = () => {
                 label="Employee"
                 placeholder="Select employee"
                 register={register}
-                error={errors?.['members']?.[index]?.['name']?.message}
+                error={errors?.members?.[index]?.name?.message}
                 required
               />
               <InputSelect
@@ -183,7 +183,7 @@ const Form = () => {
                 label="Role"
                 placeholder="Select member's role"
                 register={register}
-                error={errors?.['members']?.[index]?.['role']?.message}
+                error={errors?.members?.[index]?.role?.message}
                 required
               />
               <InputText
@@ -194,9 +194,7 @@ const Form = () => {
                 placeholder="Write the member's rate"
                 register={register}
                 error={
-                  errors?.['members']?.[index]?.['rate']?.message
-                    ? 'Rate should be a positive number'
-                    : ''
+                  errors?.members?.[index]?.rate?.message ? 'Rate should be a positive number' : ''
                 }
                 required
               />
