@@ -33,48 +33,6 @@ const Form = () => {
     return { id: employee._id, optionContent: `${employee.firstName} ${employee.lastName}` };
   });
 
-  const onSubmit = (data) => {
-    const options = {
-      method: isProjectSelected ? 'PUT' : 'POST',
-      url: isProjectSelected ? `${URL}/projects/${projectSelected._id}` : `${URL}/projects`,
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: data.name,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        description: data.description,
-        client: data.client,
-        members: [
-          {
-            employee: data.employee,
-            role: data.role,
-            rate: data.rate
-          }
-        ],
-        active: data.active
-      })
-    };
-    isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
-  };
-
-  useEffect(() => {
-    dispatch(getEmployee());
-    if (isProjectSelected)
-      reset({
-        name: projectSelected.name,
-        startDate: projectSelected.startDate?.slice(0, 10),
-        endDate: projectSelected.endDate?.slice(0, 10),
-        description: projectSelected.description,
-        client: projectSelected.client,
-        active: projectSelected.active,
-        employee: projectSelected.members[0]?.name?._id || undefined,
-        role: projectSelected.members[0]?.role || undefined,
-        rate: projectSelected.members[0]?.rate || undefined
-      });
-  }, [isProjectSelected]);
-
   const {
     control,
     handleSubmit,
@@ -91,7 +49,39 @@ const Form = () => {
     name: 'members'
   });
 
-  console.log(errors);
+  const onSubmit = (data) => {
+    const options = {
+      method: isProjectSelected ? 'PUT' : 'POST',
+      url: isProjectSelected ? `${URL}/projects/${projectSelected._id}` : `${URL}/projects`,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: data.name,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        description: data.description,
+        client: data.client,
+        active: data.active,
+        members: data.members
+      })
+    };
+    isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
+  };
+
+  useEffect(() => {
+    dispatch(getEmployee());
+    if (isProjectSelected)
+      reset({
+        name: projectSelected.name,
+        startDate: projectSelected.startDate?.slice(0, 10),
+        endDate: projectSelected.endDate?.slice(0, 10),
+        description: projectSelected.description,
+        client: projectSelected.client,
+        active: projectSelected.active,
+        members: projectSelected.members
+      });
+  }, [projectSelected]);
 
   return (
     <div className={styles.container}>
@@ -99,6 +89,7 @@ const Form = () => {
       <h2>{title}</h2>
       <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <InputText
+          id="name"
           name="name"
           type="text"
           label="Name"
@@ -108,6 +99,7 @@ const Form = () => {
           required
         />
         <InputText
+          id="startDate"
           name="startDate"
           type="date"
           label="Start date"
@@ -117,6 +109,7 @@ const Form = () => {
           required
         />
         <InputText
+          id="endDate"
           name="endDate"
           type="date"
           label="End date"
@@ -126,6 +119,7 @@ const Form = () => {
           required
         />
         <InputText
+          id="description"
           name="description"
           type="text"
           label="Description"
@@ -135,6 +129,7 @@ const Form = () => {
           required
         />
         <InputText
+          id="client"
           name="client"
           label="Client"
           type="text"
@@ -146,13 +141,13 @@ const Form = () => {
         <InputSelect
           className={styles.select}
           arrayToMap={[
-            { id: true, optionContent: 'True' },
-            { id: false, optionContent: 'False' }
+            { id: true, optionContent: 'Active' },
+            { id: false, optionContent: 'Inactive' }
           ]}
           id="active"
           name="active"
           label="Active"
-          placeholder="Is active?"
+          placeholder="Select the project's status"
           register={register}
           error={errors.active?.message}
           required
@@ -165,11 +160,11 @@ const Form = () => {
                 className={styles.select}
                 arrayToMap={arrayToMapEmployees}
                 id="employee"
-                name="employee"
+                name={`members[${index}].name`}
                 label="Employee"
                 placeholder="Select employee"
                 register={register}
-                error={errors.employee?.message}
+                error={errors.members?.name?.message}
                 required
               />
               <InputSelect
@@ -181,21 +176,21 @@ const Form = () => {
                   { id: 'PM', optionContent: 'PM' }
                 ]}
                 id="role"
-                name="role"
+                name={`members[${index}].role`}
                 label="Role"
-                placeholder="Select member role"
+                placeholder="Select member's role"
                 register={register}
-                error={errors.role?.message}
+                error={errors.members?.role?.message}
                 required
               />
               <InputText
                 id="rate"
-                name="rate"
+                name={`members[${index}].rate`}
                 type="text"
                 label="Rate"
-                placeholder="Write the rate"
+                placeholder="Write the member's rate"
                 register={register}
-                error={errors.rate?.message}
+                error={errors.members?.rate?.message}
                 required
               />
               <Button
