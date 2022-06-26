@@ -1,12 +1,13 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBAYPkbsT3fVUaPJa3EPgu_mjMgYNdB2DE",
-  authDomain: "basp-2022-samuel-trackgenix.firebaseapp.com",
-  projectId: "basp-2022-samuel-trackgenix",
-  storageBucket: "basp-2022-samuel-trackgenix.appspot.com",
-  messagingSenderId: "884218763261",
-  appId: "1:884218763261:web:990802ee0a5b8683ee6b94"
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
+  clientEmail: process.env.CLIENT_EMAIL
 };
  
 
