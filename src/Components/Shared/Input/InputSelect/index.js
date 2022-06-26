@@ -21,7 +21,7 @@ const Select = ({
         className={styles.select}
         id={id}
         name={name}
-        defaultValue={''}
+        defaultValue={multiple ? [''] : ''}
         required={required}
         multiple={multiple}
         {...register(name)}
@@ -34,7 +34,7 @@ const Select = ({
           );
         })}
         ;
-        <option value={''} disabled hidden>
+        <option value={multiple ? [''] : ''} disabled hidden>
           {placeholder}
         </option>
       </select>
