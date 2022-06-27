@@ -10,13 +10,13 @@ import { timesheetsReducer } from './timesheet/reducer';
 import { authReducer } from './auth/reducer';
 
 const rootReducer = combineReducers({
+  auth: authReducer,
   admins: adminsReducer,
   tasks: tasksReducer,
   projects: projectsReducer,
   employees: employeesReducer,
   superadmins: superadminReducer,
-  timesheets: timesheetsReducer,
-  auth: authReducer
+  timesheets: timesheetsReducer
 });
 
 const configureStore = () => {
