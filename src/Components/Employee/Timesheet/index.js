@@ -47,6 +47,7 @@ function EmployeeTimesheets() {
   });
 
   const onSubmitAddHours = (data, event) => {
+    console.log(selectedTimesheet);
     event.preventDefault();
     const URL = process.env.REACT_APP_API_URL;
     const options = {
@@ -56,13 +57,13 @@ function EmployeeTimesheets() {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        ...selectedTimesheet,
-        _id: undefined,
-        __v: undefined,
-        project: selectedTimesheet.project._id,
-        employee: selectedTimesheet.employee._id,
-        projectName: undefined,
-        hoursWorked: parseInt(selectedTimesheet.hoursWorked) + parseInt(data.addHoursWorked)
+        date: selectedTimesheet.date,
+        project: selectedTimesheet.project?._id,
+        employee: selectedTimesheet.employee?._id,
+        hoursProject: selectedTimesheet.hoursProject,
+        weekSprint: selectedTimesheet.weekSprint,
+        workDescription: selectedTimesheet.workDescription,
+        hoursWorked: parseInt(data.hoursWorked) + parseInt(data.addHoursWorked)
       })
     };
     dispatch(editTimesheet(options));
