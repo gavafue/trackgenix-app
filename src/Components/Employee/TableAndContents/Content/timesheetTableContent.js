@@ -4,7 +4,7 @@ import Button from '../../../Shared/Button';
 import { useDispatch } from 'react-redux';
 import { selectOneTimesheet } from 'redux/timesheet/actions';
 
-const TimesheetTableContent = ({ headers, data, setShowForm }) => {
+const TimesheetTableContent = ({ headers, resetFormAddHours, data, setShowForm }) => {
   const dispatch = useDispatch();
   return (
     <tbody>
@@ -24,6 +24,11 @@ const TimesheetTableContent = ({ headers, data, setShowForm }) => {
                 theme="secondary"
                 onClick={() => {
                   dispatch(selectOneTimesheet(row));
+                  resetFormAddHours({
+                    timesheetId: row._id,
+                    timesheetName: row.project?.name,
+                    hoursWorked: row.hoursWorked
+                  });
                   setShowForm(true);
                 }}
               />

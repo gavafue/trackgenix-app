@@ -35,7 +35,7 @@ function EmployeeTimesheets() {
   const selectedTimesheet = useSelector((state) => state.timesheets.timesheetSelected);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const [showForm, setShowForm] = useState(false);
-  console.log(selectedTimesheet);
+
   const {
     handleSubmit,
     register,
@@ -87,6 +87,7 @@ function EmployeeTimesheets() {
         <TimesheetTableContent
           setShowForm={setShowForm}
           data={timesheets}
+          resetFormAddHours={reset}
           headers={['projectName', 'workDescription', 'weekSprint', 'hoursProject', 'hoursWorked']}
         />
       </EmployeeTable>
@@ -99,20 +100,23 @@ function EmployeeTimesheets() {
         <form className={styles.form} onSubmit={handleSubmit(onSubmitAddHours)}>
           <Input
             name="timesheetId"
-            value={selectedTimesheet?._id}
+            register={register}
             label="Timesheet Id"
+            error={errors.timesheetId?.message}
             disabled="disabled"
           ></Input>
           <Input
             name="timesheetName"
-            value={selectedTimesheet?.projectName}
+            register={register}
             label="Name of the project"
+            error={errors.timesheetName?.message}
             disabled="disabled"
           ></Input>
           <Input
             name="hoursWorked"
-            value={selectedTimesheet?.hoursWorked}
+            register={register}
             label="Hours Worked"
+            error={errors.hoursWorked?.message}
             disabled="disabled"
           ></Input>
           <Input
