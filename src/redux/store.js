@@ -7,6 +7,7 @@ import { projectsReducer } from './projects/reducer';
 import { employeesReducer } from './employees/reducer';
 import { adminsReducer } from './admins/reducer';
 import { timesheetsReducer } from './timesheet/reducer';
+import { authReducer } from './auth/reducer';
 
 const rootReducer = combineReducers({
   admins: adminsReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   projects: projectsReducer,
   employees: employeesReducer,
   superadmins: superadminReducer,
-  timesheets: timesheetsReducer
+  timesheets: timesheetsReducer,
+  auth: authReducer
 });
 
 const configureStore = () => {
