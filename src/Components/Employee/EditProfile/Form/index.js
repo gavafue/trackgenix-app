@@ -29,17 +29,17 @@ const Form = () => {
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   useEffect(() => {
     reset({
-      firstName: employeeLogged.firstName,
-      lastName: employeeLogged.lastName,
-      email: employeeLogged.email,
-      country: employeeLogged.country,
-      city: employeeLogged.city,
-      zip: employeeLogged.zip,
-      phone: employeeLogged.phone,
-      birthDate: employeeLogged.birthDate,
-      photo: employeeLogged.photo,
-      password: employeeLogged.password,
-      active: employeeLogged.active
+      firstName: employeeLogged?.firstName,
+      lastName: employeeLogged?.lastName,
+      email: employeeLogged?.email,
+      country: employeeLogged?.country,
+      city: employeeLogged?.city,
+      zip: employeeLogged?.zip,
+      phone: employeeLogged?.phone,
+      birthDate: employeeLogged?.birthDate,
+      photo: employeeLogged?.photo,
+      password: employeeLogged?.password,
+      active: employeeLogged?.active
     });
   }, [employeeLogged]);
   const URL = process.env.REACT_APP_API_URL;
@@ -69,7 +69,7 @@ const Form = () => {
   };
   return (
     <div className={styles.container}>
-      <img className={styles.profileImg} src={employeeLogged.photo}></img>
+      <img className={styles.profileImg} src={employeeLogged?.photo}></img>
       <form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.firstColumn}>
           <Input
