@@ -16,12 +16,15 @@ import {
   EDIT_TIMESHEET_PENDING,
   EDIT_TIMESHEET_SUCCESS,
   SELECTED_TIMESHEET,
-  CLEAN_SELECTED_TIMESHEET
+  CLEAN_SELECTED_TIMESHEET,
+  ADD_HOURS_TIMESHEET_ERROR,
+  ADD_HOURS_TIMESHEET_PENDING,
+  ADD_HOURS_TIMESHEET_SUCCESS
 } from './constants';
 //ACTIONS FOR GET
-export const getTimesheetsSuccess = (tasks) => ({
+export const getTimesheetsSuccess = (timesheet) => ({
   type: GET_TIMESHEETS_SUCCESS,
-  payload: tasks
+  payload: timesheet
 });
 
 export const getTimesheetsPending = () => ({
@@ -80,7 +83,7 @@ export const addTimesheetsError = (error) => ({
   type: ADD_TIMESHEET_ERROR,
   payload: error
 });
-// Actions for put
+// ACTIONS FOR PUT
 export const editTimesheetsSuccess = (timesheet) => ({
   type: EDIT_TIMESHEET_SUCCESS,
   payload: timesheet
@@ -103,4 +106,19 @@ export const selectOneTimesheet = (timesheet) => ({
 //
 export const cleanSelectedTimesheet = () => ({
   type: CLEAN_SELECTED_TIMESHEET
+});
+
+// ACTIONS FOR ADD HOURS TO A TIMESHEET
+export const addHoursTimesheetSuccess = (timesheet) => ({
+  type: ADD_HOURS_TIMESHEET_SUCCESS,
+  payload: timesheet
+});
+
+export const addHoursTimesheetPending = () => ({
+  type: ADD_HOURS_TIMESHEET_PENDING
+});
+
+export const addHoursTimesheetError = (error) => ({
+  type: ADD_HOURS_TIMESHEET_ERROR,
+  payload: error
 });

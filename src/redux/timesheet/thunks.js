@@ -12,8 +12,10 @@ import {
   addTimesheetsSuccess,
   editTimesheetsError,
   editTimesheetsPending,
-  editTimesheetsSuccess
+  editTimesheetsSuccess,
+  addHoursTimesheetPending
 } from './actions';
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const getTimesheets = () => {
@@ -124,14 +126,22 @@ export const editTimesheet = (options) => {
             })
           );
           dispatch(showFeedbackMessage(true));
-          dispatch(editTimesheetsError(res.data.message));
+          dispatch(editTimesheetsError(res.message));
         }
       })
       .catch((error) => {
         dispatch(editTimesheetsError(error));
+        console.log(error);
         dispatch(
           setInfoForFeedback({ title: 'Something went wrong.', description: error.message })
         );
       });
+  };
+};
+
+export const addHoursToTimesheet = (options) => {
+  return (dispatch) => {
+    dispatch(addHoursTimesheetPending());
+    editTimesheet(options);
   };
 };
