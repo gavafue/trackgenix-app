@@ -20,7 +20,7 @@ const Projects = () => {
 
   const employeeProjects = projects.reduce((acc, project) => {
     const assignedProject = project.members.find((employee) => {
-      return employee?.name?._id === employeeLogged?._id;
+      return employee.name?._id === employeeLogged?._id;
     });
     if (assignedProject && Object.keys(assignedProject).length) {
       return [
