@@ -7,8 +7,10 @@ import { projectsReducer } from './projects/reducer';
 import { employeesReducer } from './employees/reducer';
 import { adminsReducer } from './admins/reducer';
 import { timesheetsReducer } from './timesheet/reducer';
+import { authReducer } from './auth/reducer';
 
 const rootReducer = combineReducers({
+  auth: authReducer,
   admins: adminsReducer,
   tasks: tasksReducer,
   projects: projectsReducer,
