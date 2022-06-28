@@ -13,9 +13,9 @@ import employeesValidation from 'validations/employees';
 
 const RegisterEmployee = () => {
   const dispatch = useDispatch();
-  const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const isPending = useSelector((state) => state.employees.isPending);
+  const feedbackInfo = useSelector((state) => state.employees?.infoForFeedback);
+  const showFeedback = useSelector((state) => state.employees?.showFeedbackMessage);
+  const isPending = useSelector((state) => state.employees?.isPending);
 
   const onSubmit = (data) => {
     const options = {

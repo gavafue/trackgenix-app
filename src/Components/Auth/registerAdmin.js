@@ -23,9 +23,9 @@ const RegisterAdmin = () => {
   });
 
   const dispatch = useDispatch();
-  const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
-  const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
-  const isPending = useSelector((state) => state.admins.isPending);
+  const feedbackInfo = useSelector((state) => state.admins?.infoForFeedback);
+  const showFeedback = useSelector((state) => state.admins?.showFeedbackMessage);
+  const isPending = useSelector((state) => state.admins?.isPending);
 
   const arrayToMapGender = [
     { id: 'male', optionContent: 'Male' },
