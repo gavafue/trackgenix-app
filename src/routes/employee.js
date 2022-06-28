@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, PrivateRoute, Redirect } from 'react-router-dom';
 import Home from 'Components/Employee/Home';
 import Profile from 'Components/Employee/EditProfile';
 import Timesheet from 'Components/Employee/Timesheet';
@@ -8,13 +8,13 @@ import Projects from 'Components/Employee/Projects';
 const Employee = () => {
   return (
     <Switch>
-      <Route path="/employee/home" component={Home} />
-      <Route exact path="/employee">
+      <PrivateRoute path="/employee/home" component={Home} />
+      <PrivateRoute exact path="/employee">
         <Redirect to="/employee/home" />
-      </Route>
-      <Route path="/employee/timesheet" component={Timesheet} />
-      <Route path="/employee/projects" component={Projects} />
-      <Route path="/employee/profile" component={Profile} />
+      </PrivateRoute>
+      <PrivateRoute path="/employee/timesheet" component={Timesheet} />
+      <PrivateRoute path="/employee/projects" component={Projects} />
+      <PrivateRoute path="/employee/profile" component={Profile} />
     </Switch>
   );
 };

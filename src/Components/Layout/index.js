@@ -23,6 +23,8 @@ import { useDispatch } from 'react-redux';
 import { getEmployeeById } from 'redux/employees/thunks';
 
 const Employee = lazy(() => import('routes/employee'));
+const Admin = lazy(() => import('routes/admin'));
+const SuperAdmin = lazy(() => import('routes/super-admin'));
 
 function Layout() {
   const dispatch = useDispatch();
@@ -59,6 +61,8 @@ function Layout() {
           <Route path="/tasks/form" component={TasksForm} />
           <Suspense fallback={Loader}>
             <Route path="/employee" component={Employee} />
+            <Route path="/admin" component={Admin} />
+            <Route path="/super-admin" component={SuperAdmin} />
           </Suspense>
         </Switch>
         <Footer />
