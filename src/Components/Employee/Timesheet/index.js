@@ -24,7 +24,7 @@ function EmployeeTimesheets() {
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   const timesheets = useSelector((state) =>
     state.timesheets.list
-      .filter((timesheet) => timesheet.employee?._id === employeeLogged._id)
+      .filter((timesheet) => timesheet.employee?._id === employeeLogged?._id)
       .map((timesheet) => ({
         ...timesheet,
         projectName: timesheet?.project?.name || 'Project not found'
