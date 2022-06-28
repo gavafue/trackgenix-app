@@ -56,7 +56,7 @@ const Form = () => {
           required
         />
         <div className={styles.submitButton}>
-          <Button type="Login" label="Submit" />
+          <Button type="Submit" label="Login" />
         </div>
       </form>
       {/* <Modal
