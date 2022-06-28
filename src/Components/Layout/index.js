@@ -58,7 +58,7 @@ function Layout() {
           <Route exact path="/tasks" component={Tasks} />
           <Route path="/tasks/form/:id" component={TasksForm} />
           <Route path="/tasks/form" component={TasksForm} />
-          <Route path="/register" component={RegisterForm} />
+          <Route path="/register/employee" component={RegisterForm} />
           <Suspense fallback={Loader}>
             <Route path="/employee" component={Employee} />
           </Suspense>

@@ -16,13 +16,13 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const URL = process.env.REACT_APP_API_URL;
+  // const URL = process.env.REACT_APP_API_URL;
   //   const history = useHistory();
 
   const onSubmit = (data) => {
     const options = {
       method: 'POST',
-      url: `${URL}/employees`,
+      url: `http://localhost:4000/register/employee`,
       headers: {
         'Content-type': 'application/json'
       },

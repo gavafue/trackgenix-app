@@ -66,8 +66,8 @@ const employeesValidation = Joi.object({
     .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
     .message('Minimum is 6 non-special characters, 1 letter and 1 number')
     .required(),
-  photo: Joi.string().required(),
-  active: Joi.boolean().required()
+  photo: Joi.string().required()
+  // active: Joi.boolean().required()
 });
 
 export default employeesValidation;
