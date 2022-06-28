@@ -11,20 +11,20 @@
 .loginImg{
   align-self: center;
   justify-content: center;
-  border-radius: 20% 20% 0% 0% ;
   width: 100%;
   margin: 0px;
+  border-radius: 20% 20% 0% 0% ;
 }
 
 .formContainer{
-  width: 100%;
   align-self: center;
-  text-align: center;
   justify-content: center;
+  width: 100%;
+  margin: 0px;
   padding: 3%;
   border: 2px solid #ccc;
   border-radius: 0% 0% 20% 20%;
-  margin: 0px;
+  text-align: center;
 }
 
 .submitButton{

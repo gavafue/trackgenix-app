@@ -29,7 +29,7 @@ const Form = () => {
     console.log(data);
   };
   return (
-    <div>
+    <div className={styles.container}>
       <img
         className={styles.loginImg}
         src="https://media.istockphoto.com/photos/computer-monitor-on-an-office-desk-with-equipment-picture-id814564524?b=1&k=20&m=814564524&s=170667a&w=0&h=FahLg9zTUDG7gx5hZjq6D9I-FI6jwV7CDSx7-2N1Bqw="
