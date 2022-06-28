@@ -1,21 +1,21 @@
-import FeedbackMessage from 'Components/Shared/FeedbackMessage';
-import Modal from 'Components/Shared/Modal';
+// import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+// import Modal from 'Components/Shared/Modal';
 import styles from './form.module.css';
 import Loader from 'Components/Shared/Preloader';
-import { showFeedbackMessage } from 'redux/employees/actions';
+// import { showFeedbackMessage } from 'redux/employees/actions';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Button from 'Components/Shared/Button';
 import Input from 'Components/Shared/Input/InputText';
 import employeesValidation from 'validations/employees';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
 const Form = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const isPending = useSelector((state) => state.employees.isPending);
-  const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
+  // const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
+  // const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const {
     handleSubmit,
     register,
@@ -29,10 +29,10 @@ const Form = () => {
     console.log(data);
   };
   return (
-    <div className={styles.container}>
+    <div>
       <img
         className={styles.loginImg}
-        src="https://miro.medium.com/max/1400/1*Ko3RF_zlnK43tTtJyueFJA.jpeg"
+        src="https://media.istockphoto.com/photos/computer-monitor-on-an-office-desk-with-equipment-picture-id814564524?b=1&k=20&m=814564524&s=170667a&w=0&h=FahLg9zTUDG7gx5hZjq6D9I-FI6jwV7CDSx7-2N1Bqw="
       ></img>
       <form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
         <Input
@@ -56,17 +56,17 @@ const Form = () => {
           required
         />
         <div className={styles.submitButton}>
-          <Button type="submit" label="Submit" />
+          <Button type="Login" label="Submit" />
         </div>
       </form>
-      <Modal
+      {/* <Modal
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
-      </Modal>
+      </Modal> */}
       {isPending && <Loader />}
     </div>
   );
