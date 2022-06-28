@@ -5,7 +5,9 @@ import { useSelector } from 'react-redux';
 function Header() {
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   const HeaderTitle = {
-    '/employee/home': `Welcome ${employeeLogged.firstName} ${employeeLogged.lastName}!`,
+    '/employee/home': employeeLogged
+      ? `Welcome ${employeeLogged?.firstName} ${employeeLogged?.lastName}!`
+      : 'Welcome!',
     '/employee/profile': 'Edit Profile',
     '/employee/projects': 'Projects',
     '/employee/timesheet': 'Personal Timesheet'
