@@ -1,33 +1,46 @@
-// import FeedbackMessage from 'Components/Shared/FeedbackMessage';
-// import Modal from 'Components/Shared/Modal';
-import styles from './form.module.css';
-import Loader from 'Components/Shared/Preloader';
-// import { showFeedbackMessage } from 'redux/employees/actions';
-import { useForm } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
-import Button from 'Components/Shared/Button';
-import Input from 'Components/Shared/Input/InputText';
-import employeesValidation from 'validations/employees';
-// import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+// import { joiResolver } from '@hookform/resolvers/joi';
+import styles from './form.module.css';
+import Preoader from 'Components/Shared/Preloader';
+import Input from 'Components/Shared/Input/InputText';
+import Button from 'Components/Shared/Button';
+// import employeesValidation from 'validations/employees';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import Modal from 'Components/Shared/Modal';
+import { showFeedbackMessage } from 'redux/employees/actions';
+import { useDispatch } from 'react-redux';
+import { login } from 'redux/auth/thunks';
 
 const Form = () => {
-  // const dispatch = useDispatch();
-  const isPending = useSelector((state) => state.employees.isPending);
-  // const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  // const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
+  const dispatch = useDispatch();
+  const isPending = useSelector((state) => state.auth.isPending);
+  const feedbackInfo = useSelector((state) => state.auth.infoForFeedback);
+  const showFeedback = useSelector((state) => state.auth.showFeedbackMessage);
   const {
     handleSubmit,
     register,
     formState: { errors }
   } = useForm({
-    mode: 'onBlur',
-    resolver: joiResolver(employeesValidation)
+    mode: 'onChange'
+    // resolver: joiResolver(employeesValidation)
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = (credentials) => {
+    const options = {
+      method: 'PATCH',
+      url: 'http://localhost:4000/login',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: credentials.email,
+        password: credentials.password
+      })
+    };
+    dispatch(login(options));
   };
+
   return (
     <div className={styles.container}>
       <img
@@ -59,15 +72,15 @@ const Form = () => {
           <Button type="Submit" label="Login" />
         </div>
       </form>
-      {/* <Modal
+      <Modal
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
-      </Modal> */}
-      {isPending && <Loader />}
+      </Modal>
+      {isPending && <Preoader />}
     </div>
   );
 };
