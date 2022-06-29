@@ -7,7 +7,7 @@ import Admins from '../Admins/index';
 import AdminsForm from '../Admins/Form';
 import Employees from '../Employees/index';
 import EmployeesForm from '../Employees/Form';
-import SuperAdmins from '../SuperAdmins/index';
+import SuperAdmins from 'Components/SuperAdmins';
 import SuperAdminsForm from '../SuperAdmins/Form';
 import Projects from '../Projects';
 import ProjectsForm from '../Projects/Form';
@@ -24,7 +24,7 @@ import { getEmployeeById } from 'redux/employees/thunks';
 
 const Employee = lazy(() => import('routes/employee'));
 const Admin = lazy(() => import('routes/admin'));
-const SuperAdmin = lazy(() => import('routes/super-admin'));
+const SuperAdmin = lazy(() => import('routes/superadmin'));
 
 function Layout() {
   const dispatch = useDispatch();

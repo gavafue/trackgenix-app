@@ -1,12 +1,13 @@
 import React from 'react';
-import { Switch, PrivateRoute } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import PrivateRoute from 'routes/privateRoute';
 
-const SuperAdmin = () => {
+const Superadmin = () => {
   return (
     <Switch>
-      <PrivateRoute path="/super-admin" component={SuperAdmin} />
+      <PrivateRoute path="/super-admin" component={Superadmin} />
     </Switch>
   );
 };
 
-export default SuperAdmin;
+export default Superadmin;

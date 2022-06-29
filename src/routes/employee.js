@@ -1,9 +1,10 @@
 import React from 'react';
-import { Switch, PrivateRoute, Redirect } from 'react-router-dom';
+import { Switch, Redirect } from 'react-router-dom';
 import Home from 'Components/Employee/Home';
 import Profile from 'Components/Employee/EditProfile';
 import Timesheet from 'Components/Employee/Timesheet';
 import Projects from 'Components/Employee/Projects';
+import PrivateRoute from 'routes/privateRoute';
 
 const Employee = () => {
   return (

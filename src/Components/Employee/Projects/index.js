@@ -1,11 +1,11 @@
 import styles from './projects.module.css';
 import { useEffect } from 'react';
-import EmployeeTable from '../TableAndContents/table';
 import { useSelector } from 'react-redux';
 import { getProjects } from 'redux/projects/thunks';
 import { useDispatch } from 'react-redux';
-import ProjectsTableContent from '../TableAndContents/Content/projectsTableContent';
 import { getTimesheets } from 'redux/timesheet/thunks';
+import EmployeeTable from '../TableAndContents';
+import ProjectsTableContent from '../TableAndContents/Content/projectsTableContent';
 
 const Projects = () => {
   const dispatch = useDispatch();

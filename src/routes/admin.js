@@ -1,5 +1,6 @@
 import React from 'react';
-import { Switch, PrivateRoute } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import PrivateRoute from 'routes/privateRoute';
 
 const Admin = () => {
   return (
