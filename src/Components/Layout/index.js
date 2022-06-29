@@ -24,7 +24,7 @@ import { getEmployeeById } from 'redux/employees/thunks';
 
 const Employee = lazy(() => import('routes/employee'));
 const Admin = lazy(() => import('routes/admin'));
-const SuperAdmin = lazy(() => import('routes/superAdmin'));
+const SuperAdmin = lazy(() => import('routes/superadmin'));
 
 function Layout() {
   const dispatch = useDispatch();

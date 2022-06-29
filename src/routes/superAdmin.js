@@ -5,7 +5,7 @@ import PrivateRoute from 'routes/privateRoute';
 const Superadmin = () => {
   return (
     <Switch>
-      <PrivateRoute path="/super-admin" component={Superadmin} />
+      <PrivateRoute path="/superadmin" component={Superadmin} />
     </Switch>
   );
 };
