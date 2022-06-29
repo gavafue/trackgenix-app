@@ -17,14 +17,14 @@ import Tasks from '../Tasks/index';
 import TasksForm from '../Tasks/Form';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import React, { Suspense, lazy } from 'react';
-import Loader from 'Components/Shared/Preloader';
+import Preloader from 'Components/Shared/Preloader';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getEmployeeById } from 'redux/employees/thunks';
 
 const Employee = lazy(() => import('routes/employee'));
 const Admin = lazy(() => import('routes/admin'));
-const SuperAdmin = lazy(() => import('routes/superadmin'));
+const SuperAdmin = lazy(() => import('routes/superAdmin'));
 
 function Layout() {
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ function Layout() {
           <Route exact path="/tasks" component={Tasks} />
           <Route path="/tasks/form/:id" component={TasksForm} />
           <Route path="/tasks/form" component={TasksForm} />
-          <Suspense fallback={Loader}>
+          <Suspense fallback={<Preloader />}>
             <Route path="/employee" component={Employee} />
             <Route path="/admin" component={Admin} />
             <Route path="/super-admin" component={SuperAdmin} />
