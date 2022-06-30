@@ -21,8 +21,8 @@ import Loader from 'Components/Shared/Preloader';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getEmployeeById } from 'redux/employees/thunks';
-import RegisterEmployee from 'Components/Auth/registerEmployee';
-import RegisterAdmin from 'Components/Auth/registerAdmin';
+import RegisterEmployee from 'Components/Auth/Register/registerEmployee';
+import RegisterAdmin from 'Components/Auth/Register/registerAdmin';
 
 const Employee = lazy(() => import('routes/employee'));
 
