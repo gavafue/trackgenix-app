@@ -42,7 +42,7 @@ const Form = () => {
           register={register}
           id="email"
           type="text"
-          placeholder="Write your email"
+          placeholder="Enter your email"
           error={errors.email?.message}
           name="email"
           required
@@ -52,7 +52,7 @@ const Form = () => {
           register={register}
           id="password"
           type="password"
-          placeholder="Change your password"
+          placeholder="Enter your password"
           error={errors.password?.message}
           name="password"
           required
