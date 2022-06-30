@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-// import { joiResolver } from '@hookform/resolvers/joi';
+import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
 import Preoader from 'Components/Shared/Preloader';
 import Input from 'Components/Shared/Input/InputText';
 import Button from 'Components/Shared/Button';
-// import employeesValidation from 'validations/employees';
+import loginValidation from 'validations/login';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Modal from 'Components/Shared/Modal';
 import { showFeedbackMessage } from 'redux/employees/actions';
@@ -22,8 +22,8 @@ const Form = () => {
     register,
     formState: { errors }
   } = useForm({
-    mode: 'onChange'
-    // resolver: joiResolver(employeesValidation)
+    mode: 'onChange',
+    resolver: joiResolver(loginValidation)
   });
 
   const onSubmit = (credentials) => {
