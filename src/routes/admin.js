@@ -1,11 +1,10 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
-import PrivateRoute from 'routes/privateRoute';
+import { Switch, Route } from 'react-router-dom';
 
 const Admin = () => {
   return (
     <Switch>
-      <PrivateRoute path="/admin" component={Admin} />
+      <Route path="/admin" component={Admin} />
     </Switch>
   );
 };

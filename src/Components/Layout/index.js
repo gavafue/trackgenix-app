@@ -1,70 +1,63 @@
-import styles from './layout.module.css';
-import Header from 'Components/Shared/Header/index';
-import Navbar from 'Components/Shared/Navbar';
-import Footer from 'Components/Shared/Footer/index';
-import Home from 'Components/Shared/Home/index';
-import Admins from '../Admins/index';
-import AdminsForm from '../Admins/Form';
-import Employees from '../Employees/index';
-import EmployeesForm from '../Employees/Form';
-import SuperAdmins from 'Components/SuperAdmins';
-import SuperAdminsForm from '../SuperAdmins/Form';
-import Projects from '../Projects';
-import ProjectsForm from '../Projects/Form';
-import TimeSheets from '../TimeSheets';
-import TimeSheetsForm from '../TimeSheets/Form';
-import Tasks from '../Tasks/index';
-import TasksForm from '../Tasks/Form';
+import * as React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import React, { Suspense, lazy } from 'react';
+import styles from './layout.module.css';
 import Preloader from 'Components/Shared/Preloader';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getEmployeeById } from 'redux/employees/thunks';
-
-const Employee = lazy(() => import('routes/employee'));
-const Admin = lazy(() => import('routes/admin'));
-const SuperAdmin = lazy(() => import('routes/superadmin'));
+import Navbar from 'Components/Shared/Navbar';
+import Header from 'Components/Shared/Header/index';
+import Footer from 'Components/Shared/Footer/index';
+import PrivateRoute from 'routes/privateRoute';
+const Home = React.lazy(() => import('Components/Shared/Home/index'));
+const Admins = React.lazy(() => import('Components/Admins/index'));
+const AdminsForm = React.lazy(() => import('Components/Admins/Form'));
+const Employees = React.lazy(() => import('Components/Employees/index'));
+const EmployeesForm = React.lazy(() => import('Components/Employees/Form'));
+const SuperAdmins = React.lazy(() => import('Components/SuperAdmins/index'));
+const SAForm = React.lazy(() => import('Components/SuperAdmins/Form'));
+const Projects = React.lazy(() => import('Components/Projects/index'));
+const ProjectsForm = React.lazy(() => import('Components/Projects/Form'));
+const TimeSheets = React.lazy(() => import('Components/TimeSheets/index'));
+const TimeSheetsForm = React.lazy(() => import('Components/TimeSheets/Form'));
+const Tasks = React.lazy(() => import('Components/Tasks/index'));
+const TasksForm = React.lazy(() => import('Components/Tasks/Form'));
+const Employee = React.lazy(() => import('routes/employee'));
+const Admin = React.lazy(() => import('routes/admin'));
+const Superadmin = React.lazy(() => import('routes/superadmin'));
 
 function Layout() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getEmployeeById('629a27952bdc7b21d99a5e1d'));
-  }, []);
   return (
     <div className={styles.container}>
       <Navbar />
       <div className={styles.mainContent}>
         <Header />
-        <Switch>
-          <Route path="/home" component={Home} />
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route>
-          <Route exact path="/admins" component={Admins} />
-          <Route path="/admins/form/:id" component={AdminsForm} />
-          <Route path="/admins/form" component={AdminsForm} />
-          <Route exact path="/super-admins" component={SuperAdmins} />
-          <Route path="/super-admins/form/:id" component={SuperAdminsForm} />
-          <Route path="/super-admins/form" component={SuperAdminsForm} />
-          <Route exact path="/employees" component={Employees} />
-          <Route path="/employees/form/:id" component={EmployeesForm} />
-          <Route path="/employees/form" component={EmployeesForm} />
-          <Route exact path="/projects" component={Projects} />
-          <Route path="/projects/form/:id" component={ProjectsForm} />
-          <Route path="/projects/form" component={ProjectsForm} />
-          <Route exact path="/time-sheets" component={TimeSheets} />
-          <Route path="/time-sheets/form/:id" component={TimeSheetsForm} />
-          <Route path="/time-sheets/form" component={TimeSheetsForm} />
-          <Route exact path="/tasks" component={Tasks} />
-          <Route path="/tasks/form/:id" component={TasksForm} />
-          <Route path="/tasks/form" component={TasksForm} />
-          <Suspense fallback={<Preloader />}>
-            <Route path="/employee" component={Employee} />
-            <Route path="/admin" component={Admin} />
-            <Route path="/super-admin" component={SuperAdmin} />
-          </Suspense>
-        </Switch>
+        <React.Suspense fallback={<Preloader />}>
+          <Switch>
+            <Route path="/home" component={Home} />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+            <PrivateRoute exact path="/admins" role="SUPERADMIN" component={Admins} />
+            <PrivateRoute path="/admins/form/:id" role="SUPERADMIN" component={AdminsForm} />
+            <PrivateRoute path="/admins/form" role="SUPERADMIN" component={AdminsForm} />
+            <PrivateRoute exact path="/super-admins" role="SUPERADMIN" component={SuperAdmins} />
+            <PrivateRoute path="/super-admins/form/:id" role="SUPERADMIN" component={SAForm} />
+            <PrivateRoute path="/super-admins/form" role="SUPERADMIN" component={SAForm} />
+            <PrivateRoute exact path="/employees" role="ADMIN" component={Employees} />
+            <PrivateRoute path="/employees/form/:id" role="ADMIN" component={EmployeesForm} />
+            <PrivateRoute path="/employees/form" role="ADMIN" component={EmployeesForm} />
+            <PrivateRoute exact path="/projects" role="ADMIN" component={Projects} />
+            <PrivateRoute path="/projects/form/:id" role="ADMIN" component={ProjectsForm} />
+            <PrivateRoute path="/projects/form" role="ADMIN" component={ProjectsForm} />
+            <PrivateRoute exact path="/time-sheets" role="ADMIN" component={TimeSheets} />
+            <PrivateRoute path="/time-sheets/form/:id" role="ADMIN" component={TimeSheetsForm} />
+            <PrivateRoute path="/time-sheets/form" role="ADMIN" component={TimeSheetsForm} />
+            <PrivateRoute exact path="/tasks" role="ADMIN" component={Tasks} />
+            <PrivateRoute path="/tasks/form/:id" role="ADMIN" component={TasksForm} />
+            <PrivateRoute path="/tasks/form" role="ADMIN" component={TasksForm} />
+            <PrivateRoute exact path="/employee" role="EMPLOYEE" component={Employee} />
+            <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
+            <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={Superadmin} />
+          </Switch>
+        </React.Suspense>
         <Footer />
       </div>
     </div>

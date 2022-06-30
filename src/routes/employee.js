@@ -1,21 +1,20 @@
 import React from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from 'Components/Employee/Home';
 import Profile from 'Components/Employee/EditProfile';
 import Timesheet from 'Components/Employee/Timesheet';
 import Projects from 'Components/Employee/Projects';
-import PrivateRoute from 'routes/privateRoute';
 
 const Employee = () => {
   return (
     <Switch>
-      <PrivateRoute path="/employee/home" component={Home} />
-      <PrivateRoute exact path="/employee">
+      <Route path="/employee/home" component={Home} />
+      <Route exact path="/employee">
         <Redirect to="/employee/home" />
-      </PrivateRoute>
-      <PrivateRoute path="/employee/timesheet" component={Timesheet} />
-      <PrivateRoute path="/employee/projects" component={Projects} />
-      <PrivateRoute path="/employee/profile" component={Profile} />
+      </Route>
+      <Route path="/employee/timesheet" component={Timesheet} />
+      <Route path="/employee/projects" component={Projects} />
+      <Route path="/employee/profile" component={Profile} />
     </Switch>
   );
 };
