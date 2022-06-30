@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
-import Preoader from 'Components/Shared/Preloader';
+import Preloader from 'Components/Shared/Preloader';
 import Input from 'Components/Shared/Input/InputText';
 import Button from 'Components/Shared/Button';
 import loginValidation from 'validations/login';
@@ -27,18 +27,7 @@ const Form = () => {
   });
 
   const onSubmit = (credentials) => {
-    const options = {
-      method: 'PATCH',
-      url: 'http://localhost:4000/login',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: credentials.email,
-        password: credentials.password
-      })
-    };
-    dispatch(login(options));
+    dispatch(login(credentials));
   };
 
   return (
@@ -80,7 +69,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Preoader />}
+      {isPending && <Preloader />}
     </div>
   );
 };
