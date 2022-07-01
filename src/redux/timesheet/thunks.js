@@ -92,7 +92,7 @@ export const addTimesheet = (options) => {
             })
           );
           dispatch(showFeedbackMessage(true));
-          dispatch(addTimesheetsError(res.data.message));
+          dispatch(addTimesheetsError(res.message));
         }
       })
       .catch((error) => {
