@@ -26,7 +26,14 @@ const tasksValidation = Joi.object({
       'string.max': 'Description cannot be longer than 300 characters'
     })
     .required(),
-  hours: Joi.number().min(1).message('Must add at least one hour in order to submit').required()
+  hours: Joi.number()
+    .min(1)
+    .max(100)
+    .messages({
+      'number.min': 'Must add at least 1 hour to submit',
+      'number.max': 'Cannot add more than 100 hours'
+    })
+    .required()
 });
 
 export default tasksValidation;

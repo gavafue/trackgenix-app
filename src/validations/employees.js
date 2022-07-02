@@ -44,8 +44,8 @@ const employeesValidation = Joi.object({
     .required(),
   zip: Joi.number()
     .integer()
-    .min(1000)
-    .max(99999)
+    .min(4)
+    .max(5)
     .messages({
       'string.min': 'Invalid zip, it must not contain less than 4 numbers',
       'string.max': 'Invalid zip, it must not contain more than 5 numbers'
@@ -64,9 +64,11 @@ const employeesValidation = Joi.object({
     .required(),
   password: Joi.string()
     .min(8)
+    .max(20)
     .regex(/^(?=.*?[a-zA-Z])(?=.*?[0-9])/)
     .messages({
       'string.min': 'Invalid password, it must contain at least 8 characters',
+      'string.max': 'Invalid password, it must not contain more than 20 characters',
       'string.pattern.base': 'Invalid password, it must contain both letters and numbers'
     })
     .required(),
