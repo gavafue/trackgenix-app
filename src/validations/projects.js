@@ -3,7 +3,7 @@ import Joi from 'joi';
 const membersJoiSch = Joi.object({
   name: Joi.string().required(),
   role: Joi.string().uppercase().valid('DEV', 'QA', 'PM', 'TL').required(),
-  rate: Joi.number().min(0).required()
+  rate: Joi.number().min(10).message('Rate must be greater than 10').required()
 });
 
 const projectsValidation = Joi.object({
@@ -12,11 +12,22 @@ const projectsValidation = Joi.object({
   startDate: Joi.date().required(),
   endDate: Joi.date().greater(Joi.ref('startDate')),
   description: Joi.string()
-    .min(6)
-    .message('Description should be at least 6 characters long')
+    .min(10)
+    .max(500)
+    .messages({
+      'string.min': 'Description must be at least 10 characters long',
+      'string.max': 'Description cannot be longer than 500 characters'
+    })
     .required(),
   active: Joi.boolean().required(),
-  client: Joi.string().min(3).message('Client name should be at least 3 characters long').required()
+  client: Joi.string()
+    .min(3)
+    .max(40)
+    .messages({
+      'string.min': 'Invalid name, it must not contain less than 3 letters',
+      'string.max': 'Invalid name, it must not contain more than 40 letters'
+    })
+    .required()
 });
 
 export default projectsValidation;
