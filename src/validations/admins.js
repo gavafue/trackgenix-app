@@ -54,7 +54,8 @@ const adminsValidation = Joi.object({
       'string.max': 'Invalid zip number, it must not contain more than 5 digits',
       'string.base': 'Invalid zip number, it must be a string'
     })
-    .required()
+    .required(),
+  active: Joi.boolean().required()
 });
 
 export default adminsValidation;

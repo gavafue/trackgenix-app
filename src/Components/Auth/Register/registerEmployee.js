@@ -5,6 +5,7 @@ import styles from './registerForm.module.css';
 import Preloader from 'Components/Shared/Preloader';
 import SharedForm from 'Components/Shared/Form';
 import Input from 'Components/Shared/Input/InputText';
+import Select from 'Components/Shared/Input/InputSelect';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { showFeedbackMessage } from 'redux/employees/actions';
@@ -16,11 +17,12 @@ const RegisterEmployee = () => {
   const feedbackInfo = useSelector((state) => state.employees?.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees?.showFeedbackMessage);
   const isPending = useSelector((state) => state.employees?.isPending);
+  const URL = process.env.REACT_APP_API_URL;
 
   const onSubmit = (data) => {
     const options = {
       method: 'POST',
-      url: `http://localhost:4000/register/employee`,
+      url: `${URL}/register/employee`,
       headers: {
         'Content-type': 'application/json'
       },
@@ -35,7 +37,7 @@ const RegisterEmployee = () => {
         birthDate: data.birthDate,
         photo: data.photo,
         password: data.password,
-        active: true
+        active: data.active
       })
     };
     dispatch(postEmployee(options));
@@ -49,6 +51,11 @@ const RegisterEmployee = () => {
     mode: 'onChange',
     resolver: joiResolver(employeesValidation)
   });
+
+  const arrayToMapActive = [
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
+  ];
 
   return (
     <div className={styles.container}>
@@ -143,6 +150,16 @@ const RegisterEmployee = () => {
           placeholder="Write your postal code."
           register={register}
           error={errors.zip?.message}
+          required
+        />
+        <Select
+          label="Active"
+          arrayToMap={arrayToMapActive}
+          name="active"
+          id="active"
+          placeholder="Enter employee's status"
+          register={register}
+          error={errors.active?.message}
           required
         />
         <Input

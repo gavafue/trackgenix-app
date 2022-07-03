@@ -26,6 +26,7 @@ const RegisterAdmin = () => {
   const feedbackInfo = useSelector((state) => state.admins?.infoForFeedback);
   const showFeedback = useSelector((state) => state.admins?.showFeedbackMessage);
   const isPending = useSelector((state) => state.admins?.isPending);
+  const URL = process.env.REACT_APP_API_URL;
 
   const arrayToMapGender = [
     { id: 'male', optionContent: 'Male' },
@@ -33,10 +34,15 @@ const RegisterAdmin = () => {
     { id: 'other', optionContent: 'Other' }
   ];
 
+  const arrayToMapActive = [
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
+  ];
+
   const onSubmit = (data) => {
     const options = {
       method: 'POST',
-      url: `http://localhost:4000/register/admin`,
+      url: `${URL}/register/admin`,
       headers: {
         'Content-type': 'application/json'
       },
@@ -50,12 +56,12 @@ const RegisterAdmin = () => {
         dateBirth: data.dateBirth,
         city: data.city,
         zip: data.zip,
-        active: true
+        active: data.active
       })
     };
     dispatch(postAdmin(options));
   };
-  console.log(errors);
+
   return (
     <div className={styles.container}>
       <h2>Register admin</h2>
@@ -147,6 +153,16 @@ const RegisterAdmin = () => {
           placeholder="Enter admin's postal code"
           register={register}
           error={errors.zip?.message}
+          required
+        />
+        <Select
+          label="Active"
+          arrayToMap={arrayToMapActive}
+          name="active"
+          id="active"
+          placeholder="Enter admins's status"
+          register={register}
+          error={errors.active?.message}
           required
         />
       </SharedForm>
