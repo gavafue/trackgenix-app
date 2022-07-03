@@ -21,6 +21,8 @@ import Loader from 'Components/Shared/Preloader';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getEmployeeById } from 'redux/employees/thunks';
+import RegisterEmployee from 'Components/Auth/Register/registerEmployee';
+import RegisterAdmin from 'Components/Auth/Register/registerAdmin';
 import Login from 'Components/Auth/Login';
 
 const Employee = lazy(() => import('routes/employee'));
@@ -59,6 +61,8 @@ function Layout() {
           <Route exact path="/tasks" component={Tasks} />
           <Route path="/tasks/form/:id" component={TasksForm} />
           <Route path="/tasks/form" component={TasksForm} />
+          <Route path="/register/employee" component={RegisterEmployee} />
+          <Route path="/register/admin" component={RegisterAdmin} />
           <Suspense fallback={Loader}>
             <Route path="/employee" component={Employee} />
           </Suspense>
