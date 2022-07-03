@@ -1,0 +1,32 @@
+*{
+  box-sizing: border-box;
+}
+.container{
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin: 0px;
+}
+
+.loginImg{
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  border-radius: 20% 20% 0% 0% ;
+}
+
+.formContainer{
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  padding: 3%;
+  border: 2px solid #ccc;
+  border-radius: 0% 0% 20% 20%;
+  text-align: center;
+}
+
+.submitButton{
+  margin: 5% 0%;
+}

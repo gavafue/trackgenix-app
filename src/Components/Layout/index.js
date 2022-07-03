@@ -23,6 +23,7 @@ import { useDispatch } from 'react-redux';
 import { getEmployeeById } from 'redux/employees/thunks';
 import RegisterEmployee from 'Components/Auth/Register/registerEmployee';
 import RegisterAdmin from 'Components/Auth/Register/registerAdmin';
+import Login from 'Components/Auth/Login';
 
 const Employee = lazy(() => import('routes/employee'));
 
@@ -41,6 +42,7 @@ function Layout() {
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
+          <Route exact path="/login" component={Login} />
           <Route exact path="/admins" component={Admins} />
           <Route path="/admins/form/:id" component={AdminsForm} />
           <Route path="/admins/form" component={AdminsForm} />
