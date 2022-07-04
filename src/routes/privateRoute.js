@@ -1,28 +1,26 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import { setAuthentication } from 'redux/auth/actions';
 
 const PrivateRoute = ({ component: RouteComponent, ...props }) => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      dispatch(setAuthentication());
-    }
-  }, []);
+  const role = useSelector((state) => state.auth.autenticated?.role);
+  const error = useSelector((state) => state.auth.error);
+  const token = sessionStorage.getItem('token');
 
   return (
     <Route
       {...props}
-      render={(routeProps) =>
-        sessionStorage.getItem('token') ? (
-          <RouteComponent {...routeProps} />
-        ) : (
-          <Redirect to={'/login'} />
-        )
-      }
+      render={(routeProps) => {
+        if (token) {
+          if (role === props.role) {
+            return <RouteComponent {...routeProps} />;
+          }
+          if (role && !error) {
+            return <Redirect to={'/auth/notAllowed'} />;
+          }
+        }
+        return <Redirect to={'/auth/login'} />;
+      }}
     />
   );
 };

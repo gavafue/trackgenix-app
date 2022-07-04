@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-
+import { setAuthentication } from 'redux/auth/actions';
+import store from 'redux/store';
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -11,5 +12,26 @@ const firebaseConfig = {
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+export const tokenListener = () => {
+  // Every time the token change, it is saved on sessionStorage
+  firebase.auth().onIdTokenChanged(async (user) => {
+    if (user) {
+      const token = await user.getIdToken();
+      const {
+        claims: { role }
+      } = await user.getIdTokenResult();
+      sessionStorage.setItem('token', token);
+      store.dispatch(
+        setAuthentication({
+          token,
+          role
+        })
+      );
+    } else {
+      sessionStorage.removeItem('token');
+    }
+  });
+};
 
 export default firebaseApp;
