@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Preloader from 'Components/Shared/Preloader';
 import Input from 'Components/Shared/Input/InputText';
@@ -17,6 +18,7 @@ const Form = () => {
   const isPending = useSelector((state) => state.auth.isPending);
   const feedbackInfo = useSelector((state) => state.auth.infoForFeedback);
   const showFeedback = useSelector((state) => state.auth.showFeedbackMessage);
+  const history = useHistory();
   const {
     handleSubmit,
     register,
@@ -27,7 +29,20 @@ const Form = () => {
   });
 
   const onSubmit = (credentials) => {
-    dispatch(login(credentials));
+    dispatch(login(credentials)).then((response) => {
+      if (response) {
+        switch (response.payload?.role) {
+          case 'EMPLOYEE':
+            return history.push('/employee');
+          case 'ADMIN':
+            return history.push('/admin');
+          case 'SUPERADMIN':
+            return history.push('/superadmin');
+          default:
+            break;
+        }
+      }
+    });
   };
 
   return (

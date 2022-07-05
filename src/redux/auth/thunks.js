@@ -12,6 +12,7 @@ export const login = (credentials) => {
         const {
           claims: { role }
         } = await response.user.getIdTokenResult();
+        sessionStorage.setItem('role', role);
         return dispatch(loginSuccess({ role, token }));
       })
       .catch((error) => {
