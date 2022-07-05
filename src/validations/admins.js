@@ -55,9 +55,7 @@ const adminsValidation = Joi.object({
       'string.base': 'Invalid zip number, it must be a string'
     })
     .required(),
-  active: Joi.boolean()
-    .messages({ 'boolean.base': 'Invalid active value, it must be a boolean' })
-    .required()
+  active: Joi.boolean().required()
 });
 
 export default adminsValidation;
