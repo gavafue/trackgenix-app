@@ -35,9 +35,6 @@ function Layout() {
         <Suspense fallback={<Preloader />}>
           <Switch>
             <Route path="/home" component={Home} />
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
             <Route exact path="/login" component={Login} />
             <Route exact path="/employees" component={Employees} />
             <Route path="/employees/form/:id" component={EmployeesForm} />
@@ -51,11 +48,13 @@ function Layout() {
             <Route exact path="/tasks" component={Tasks} />
             <Route path="/tasks/form/:id" component={TasksForm} />
             <Route path="/tasks/form" component={TasksForm} />
-            <Route path="/auth" component={AuthRoutes} />
-            <Redirect to="/home" />
             <PrivateRoute exact path="/employee" role="EMPLOYEE" component={Employee} />
             <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
             <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={Superadmin} />
+            <Route path="/auth" component={AuthRoutes} />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
           </Switch>
         </Suspense>
         <Footer />
