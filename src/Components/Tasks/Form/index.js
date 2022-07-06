@@ -1,5 +1,6 @@
 import styles from './form.module.css';
 import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import SharedForm from '../../Shared/Form';
@@ -16,6 +17,7 @@ import tasksValidation from 'validations/tasks';
 
 const Form = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const projects = useSelector((state) => state.projects.list);
   const isPending = useSelector((state) => state.tasks.isPending);
   const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
@@ -136,6 +138,9 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
+          if (!infoForFeedback.error) {
+            history.goBack();
+          }
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />

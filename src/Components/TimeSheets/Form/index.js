@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
@@ -18,6 +19,7 @@ const URL = process.env.REACT_APP_API_URL;
 
 const Form = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const isPending = useSelector(
     (state) => state.timesheets.pending || state.projects.isPending || state.employees.isPending
@@ -167,6 +169,9 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(false));
+          if (!feedbackInfo.error) {
+            history.goBack();
+          }
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />

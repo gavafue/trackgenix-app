@@ -1,22 +1,24 @@
 import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import styles from './form.module.css';
+import Preloader from '../../Shared/Preloader';
 import SharedForm from '../../Shared/Form';
 import InputText from '../../Shared/Input/InputText';
 import InputSelect from '../../Shared/Input/InputSelect';
-import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Loader from '../../Shared/Preloader';
 import Button from 'Components/Shared/Button';
-import { useSelector, useDispatch } from 'react-redux';
-import { editProject, postProject } from '../../../redux/projects/thunks';
 import { showFeedbackMessage } from '../../../redux/projects/actions';
-import { useForm, useFieldArray } from 'react-hook-form';
-import projectsValidation from 'validations/projects';
-import { joiResolver } from '@hookform/resolvers/joi';
+import { editProject, postProject } from '../../../redux/projects/thunks';
 import { getEmployee } from 'redux/employees/thunks';
+import projectsValidation from 'validations/projects';
 
 const Form = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const employees = useSelector((state) => state.employees.list);
   const isPending = useSelector((state) => state.projects.isPending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
@@ -88,7 +90,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      {isPending && <Loader />}
+      {isPending && <Preloader />}
       <h2>{title}</h2>
       <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <InputText
@@ -212,6 +214,9 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
+          if (!feedbackInfo.error) {
+            history.goBack();
+          }
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />

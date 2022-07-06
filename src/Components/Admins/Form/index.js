@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { showFeedbackMessage } from 'redux/admins/actions';
-import { editAdmin, postAdmin } from 'redux/admins/thunks';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
@@ -11,6 +10,8 @@ import Input from 'Components/Shared/Input/InputText';
 import Select from 'Components/Shared/Input/InputSelect';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import { showFeedbackMessage } from 'redux/admins/actions';
+import { editAdmin, postAdmin } from 'redux/admins/thunks';
 import adminsValidation from 'validations/admins';
 
 const Form = () => {
@@ -25,11 +26,12 @@ const Form = () => {
   });
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const adminSelected = useSelector((state) => state.admins.adminSelected);
-  const isAdminSelected = Object.keys(adminSelected).length;
+  const isAdminSelected = Boolean(Object.keys(adminSelected).length);
 
   useEffect(() => {
     reset({
@@ -194,6 +196,9 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
+          if (!feedbackInfo.error) {
+            history.goBack();
+          }
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
