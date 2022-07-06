@@ -17,7 +17,7 @@
 }
 .input {
   width: 100%;
-  margin: 1%;
+  margin: 1.5%;
   box-sizing: border-box;
   background-color: #FFF;
   border-style: solid;
@@ -25,5 +25,8 @@
 }
 
 .error {
+  align-self: center;
+  position: absolute;
+  margin-top: 4.5%;
   color: #ff0000;
 }
