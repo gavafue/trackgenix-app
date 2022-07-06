@@ -21,7 +21,7 @@ const Projects = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const projects = useSelector((state) => state.projects.list);
-  const isPending = useSelector((state) => state.projects.pending);
+  const isPending = useSelector((state) => state.projects.isPending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
   const deleteInfo = useSelector((state) => state.projects.infoForDelete);
   const showDelete = useSelector((state) => state.projects.showDeleteMessage);

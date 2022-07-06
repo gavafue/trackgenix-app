@@ -35,36 +35,36 @@ export const superadminReducer = (state = initialState, action) => {
     case GET_SUPERADMINS_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case GET_SUPERADMINS_SUCCESS:
       return {
         ...state,
         list: action.payload,
-        pending: false
+        isPending: false
       };
     case GET_SUPERADMINS_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case DELETE_SUPERADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case DELETE_SUPERADMIN_SUCCESS:
       return {
         ...state,
         list: state.list.filter((superadmin) => superadmin._id !== action.payload),
-        pending: false
+        isPending: false
       };
     case DELETE_SUPERADMIN_ERROR:
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case SET_INFO_FOR_FEEDBACK:
       return {
@@ -90,18 +90,18 @@ export const superadminReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-        pending: false
+        isPending: false
       };
     case POST_SUPERADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case POST_SUPERADMIN_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
-        pending: false
+        isPending: false
       };
     case EDIT_SUPERADMIN_SUCCESS:
       return {
@@ -112,24 +112,24 @@ export const superadminReducer = (state = initialState, action) => {
           }
           return superadmin;
         }),
-        pending: false
+        isPending: false
       };
     case EDIT_SUPERADMIN_PENDING:
       return {
         ...state,
-        pending: true
+        isPending: true
       };
     case EDIT_SUPERADMIN_ERROR:
       return {
         ...state,
         error: true,
-        pending: false
+        isPending: false
       };
     case CLEAN_SELECTED_SUPERADMIN:
       return {
         ...state,
         selectedSuperadmin: {},
-        pending: false
+        isPending: false
       };
     case GET_SELECTED_SUPERADMIN:
       return {

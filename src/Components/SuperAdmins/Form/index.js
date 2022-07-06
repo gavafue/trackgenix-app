@@ -16,7 +16,7 @@ import superadminsValidation from 'validations/superadmins';
 const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
-  const isPending = useSelector((state) => state.superadmins.pending);
+  const isPending = useSelector((state) => state.superadmins.isPending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
   const selectedSuperadmin = useSelector((state) => state.superadmins.selectedSuperadmin);

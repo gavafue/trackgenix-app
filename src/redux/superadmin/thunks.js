@@ -19,10 +19,10 @@ export const getSuperadmins = () => {
   return (dispatch) => {
     dispatch(getSuperAdminsPending());
     return fetch(`${process.env.REACT_APP_API_URL}/super-admin`)
-      .then((responseponse) => responseponse.json())
-      .then((responseponse) => {
-        dispatch(getSuperAdminsSuccess(responseponse.data));
-        return responseponse.data;
+      .then((response) => response.json())
+      .then((response) => {
+        dispatch(getSuperAdminsSuccess(response.data));
+        return response.data;
       })
       .catch((error) => {
         dispatch(getSuperAdminsError(error.toString()));
@@ -38,14 +38,14 @@ export const deleteSuperAdmin = (superAdminId) => {
       url: `${process.env.REACT_APP_API_URL}/super-admin/${superAdminId}`
     };
     return fetch(options.url, options)
-      .then((responseponse) => responseponse.json())
-      .then((responseponse) => {
-        if (responseponse.error) {
-          dispatch(deleteSuperAdminError(responseponse.error));
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.error) {
+          dispatch(deleteSuperAdminError(response.error));
           dispatch(
             setInfoForFeedback({
               title: 'Something went wrong',
-              description: responseponse.message
+              description: response.message
             })
           );
         } else {
@@ -53,7 +53,7 @@ export const deleteSuperAdmin = (superAdminId) => {
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
-              description: responseponse.message
+              description: response.message
             })
           );
           dispatch(showFeedbackMessage(true));
