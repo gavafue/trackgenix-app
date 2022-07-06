@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
-import Loader from '../../Shared/Preloader';
+import Preloader from '../../Shared/Preloader';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from 'Components/Shared/Input/InputSelect';
@@ -208,7 +208,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Loader />}
+      {isPending && <Preloader />}
     </div>
   );
 };

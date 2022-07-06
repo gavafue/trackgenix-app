@@ -4,7 +4,7 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
-import Loader from '../Shared/Preloader';
+import Preloader from '../Shared/Preloader';
 import { useHistory } from 'react-router-dom';
 import styles from './projects.module.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -78,7 +78,7 @@ const Projects = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Loader />}
+      {isPending && <Preloader />}
     </section>
   );
 };

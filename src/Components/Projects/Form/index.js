@@ -5,7 +5,7 @@ import InputSelect from '../../Shared/Input/InputSelect';
 import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Loader from '../../Shared/Preloader';
+import Preloader from '../../Shared/Preloader';
 import Button from 'Components/Shared/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { editProject, postProject } from '../../../redux/projects/thunks';
@@ -88,7 +88,6 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      {isPending && <Loader />}
       <h2>{title}</h2>
       <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <InputText
@@ -216,6 +215,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
+      {isPending && <Preloader />}
     </div>
   );
 };
