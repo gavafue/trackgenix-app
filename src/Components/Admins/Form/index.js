@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { showFeedbackMessage } from 'redux/admins/actions';
-import { editAdmin, postAdmin } from 'redux/admins/thunks';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
@@ -11,6 +10,8 @@ import Input from 'Components/Shared/Input/InputText';
 import Select from 'Components/Shared/Input/InputSelect';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import { showFeedbackMessage } from 'redux/admins/actions';
+import { editAdmin, postAdmin } from 'redux/admins/thunks';
 import adminsValidation from 'validations/admins';
 
 const Form = () => {
@@ -25,18 +26,18 @@ const Form = () => {
   });
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const adminSelected = useSelector((state) => state.admins.adminSelected);
-  const isAdminSelected = Object.keys(adminSelected).length;
+  const isAdminSelected = Boolean(Object.keys(adminSelected).length);
 
   useEffect(() => {
     reset({
       name: adminSelected.name,
       lastName: adminSelected.lastName,
       email: adminSelected.email,
-      password: adminSelected.password,
       gender: adminSelected.gender,
       phone: adminSelected.phone,
       dateBirth: adminSelected.dateBirth?.slice(0, 10),
@@ -70,7 +71,6 @@ const Form = () => {
         name: data.name,
         lastName: data.lastName,
         email: data.email,
-        password: data.password,
         gender: data.gender,
         phone: data.phone,
         dateBirth: data.dateBirth,
@@ -118,16 +118,6 @@ const Form = () => {
           placeholder="Enter a valid email"
           register={register}
           error={errors.email?.message}
-          required
-        />
-        <Input
-          label="Password"
-          name="password"
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          register={register}
-          error={errors.password?.message}
           required
         />
         <Select
@@ -194,6 +184,9 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
+          if (!feedbackInfo.error) {
+            history.goBack();
+          }
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
