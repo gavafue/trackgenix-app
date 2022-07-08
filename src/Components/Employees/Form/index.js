@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
-import Loader from '../../Shared/Preloader';
+import Preloader from '../../Shared/Preloader';
 import SharedForm from '../../Shared/Form';
 import Input from '../../Shared/Input/InputText';
 import Select from 'Components/Shared/Input/InputSelect';
@@ -16,13 +16,13 @@ import employeesValidation from 'validations/employees';
 
 const Form = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const employeeSelected = useSelector((state) => state.employees.employeeSelected);
   const isEmployeeSelected = Boolean(Object.keys(employeeSelected).length);
   const URL = process.env.REACT_APP_API_URL;
-  const history = useHistory();
   const title = isEmployeeSelected
     ? `Update ${employeeSelected.firstName} ${employeeSelected.lastName}'s data`
     : 'Add Employee';
@@ -191,12 +191,14 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          history.goBack();
+          if (!feedbackInfo.error) {
+            history.goBack();
+          }
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Loader />}
+      {isPending && <Preloader />}
     </div>
   );
 };

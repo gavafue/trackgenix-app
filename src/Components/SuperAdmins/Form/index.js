@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
@@ -14,13 +15,14 @@ import { showFeedbackMessage } from '../../../redux/superadmin/actions';
 import superadminsValidation from 'validations/superadmins';
 
 const Form = () => {
-  const URL = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
+  const history = useHistory();
   const isPending = useSelector((state) => state.superadmins.isPending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
   const selectedSuperadmin = useSelector((state) => state.superadmins.selectedSuperadmin);
   const isSuperadminSelected = Boolean(Object.keys(selectedSuperadmin).length);
+  const URL = process.env.REACT_APP_API_URL;
   const title = isSuperadminSelected ? 'Update Super Admin' : 'Add Super Admin';
 
   const arrayToMapStatus = [
@@ -116,6 +118,9 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
+          if (!infoForFeedback.error) {
+            history.goBack();
+          }
         }}
       >
         <FeedbackMessage infoForFeedback={infoForFeedback} />
