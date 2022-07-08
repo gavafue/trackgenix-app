@@ -1,7 +1,7 @@
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Modal from 'Components/Shared/Modal';
 import styles from './form.module.css';
-import Loader from 'Components/Shared/Preloader';
+import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from 'redux/employees/actions';
 import { editEmployee } from 'redux/employees/thunks';
@@ -187,7 +187,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Loader />}
+      {isPending && <Preloader />}
     </div>
   );
 };

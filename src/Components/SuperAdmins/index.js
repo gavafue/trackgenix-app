@@ -33,7 +33,7 @@ const SuperAdmins = () => {
   const history = useHistory();
   const editData = (row) => {
     dispatch(getSelectedSuperadmin(row));
-    history.push(`/super-admins/form/`);
+    history.push(`/super-admins/form/:id`);
   };
 
   const createSuperAdmin = () => {

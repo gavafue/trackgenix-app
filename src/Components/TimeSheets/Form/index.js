@@ -22,7 +22,7 @@ const Form = () => {
   const history = useHistory();
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const isPending = useSelector(
-    (state) => state.timesheets.pending || state.projects.isPending || state.employees.isPending
+    (state) => state.timesheets.isPending || state.projects.isPending || state.employees.isPending
   );
   const employees = useSelector((state) => state.employees.list);
   const projects = useSelector((state) => state.projects.list);

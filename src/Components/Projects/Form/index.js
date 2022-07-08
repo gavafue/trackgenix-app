@@ -90,7 +90,6 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      {isPending && <Preloader />}
       <h2>{title}</h2>
       <SharedForm onSubmit={handleSubmit(onSubmit)}>
         <InputText
@@ -221,6 +220,7 @@ const Form = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
+      {isPending && <Preloader />}
     </div>
   );
 };

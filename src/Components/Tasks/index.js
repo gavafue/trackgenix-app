@@ -6,8 +6,8 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
-import Preloader from '../Shared/Preloader';
-import { useSelector, useDispatch } from 'react-redux';
+import Preloader from 'Components/Shared/Preloader';
+import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, deleteTask } from '../../redux/tasks/thunks';
 import {
   setInfoForDelete,
@@ -20,7 +20,7 @@ import {
 const Tasks = () => {
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.tasks.list);
-  const isPending = useSelector((state) => state.tasks.pending);
+  const isPending = useSelector((state) => state.tasks.isPending);
   const feedbackInfo = useSelector((state) => state.tasks.infoForFeedback);
   const deleteInfo = useSelector((state) => state.tasks.infoForDelete);
   const showDelete = useSelector((state) => state.tasks.showDeleteMessage);
@@ -40,6 +40,7 @@ const Tasks = () => {
   };
 
   useEffect(() => {
+    dispatch(cleanSelectedItem());
     dispatch(getTasks());
   }, []);
 
@@ -51,9 +52,6 @@ const Tasks = () => {
       nameProjectId: task.nameProject?._id
     }));
 
-  useEffect(() => {
-    dispatch(cleanSelectedItem());
-  }, []);
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>

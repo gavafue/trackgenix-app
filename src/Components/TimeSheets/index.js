@@ -6,7 +6,7 @@ import Modal from '../Shared/Modal';
 import DeleteMessage from '../Shared/DeleteMessage';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
-import Loader from '../Shared/Preloader';
+import Preloader from '../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheets, deleteTimesheet } from '../../redux/timesheet/thunks';
 import {
@@ -98,7 +98,7 @@ const TimeSheets = () => {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Loader />}
+      {isPending && <Preloader />}
     </section>
   );
 };

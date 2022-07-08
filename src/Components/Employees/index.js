@@ -6,7 +6,7 @@ import DeleteMessage from '../Shared/DeleteMessage';
 import Modal from '../Shared/Modal';
 import FeedbackMessage from '../Shared/FeedbackMessage';
 import Button from '../Shared/Button';
-import Loader from '../Shared/Preloader';
+import Preloader from '../Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { getEmployee, deleteEmployee } from '../../redux/employees/thunks';
 import {
@@ -79,7 +79,7 @@ function Employees() {
         >
           <FeedbackMessage infoForFeedback={feedbackInfo} />
         </Modal>
-        {isPending && <Loader />}
+        {isPending && <Preloader />}
       </div>
     </section>
   );

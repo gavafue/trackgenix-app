@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheets } from 'redux/timesheet/thunks';
 import TimesheetTableContent from '../TableAndContents/Content/timesheetTableContent';
 import Modal from 'Components/Shared/Modal';
-import Loader from 'Components/Shared/Preloader';
+import Preloader from 'Components/Shared/Preloader';
 import { showFeedbackMessage } from 'redux/timesheet/actions';
 import Input from 'Components/Shared/Input/InputText';
 import { useForm } from 'react-hook-form';
@@ -138,7 +138,7 @@ function EmployeeTimesheets() {
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
-      {isPending && <Loader />}
+      {isPending && <Preloader />}
     </section>
   );
 }

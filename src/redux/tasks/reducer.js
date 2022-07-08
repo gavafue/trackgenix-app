@@ -2,7 +2,6 @@ import {
   GET_TASKS_PENDING,
   GET_TASKS_SUCCESS,
   GET_TASKS_ERROR,
-  GET_SELECTED_ITEM,
   DELETE_TASK_ERROR,
   DELETE_TASK_PENDING,
   DELETE_TASK_SUCCESS,
@@ -10,10 +9,13 @@ import {
   SET_INFO_FOR_DELETE,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  POST_TASK_ERROR,
+  POST_TASK_PENDING,
   POST_TASK_SUCCESS,
+  POST_TASK_ERROR,
+  EDIT_TASK_PENDING,
   EDIT_TASK_SUCCESS,
   EDIT_TASK_ERROR,
+  GET_SELECTED_ITEM,
   CLEAN_SELECTED_ITEM
 } from './constants';
 
@@ -46,11 +48,6 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
         isPending: false
-      };
-    case GET_SELECTED_ITEM:
-      return {
-        ...state,
-        selectedItem: action.payload
       };
     case DELETE_TASK_PENDING:
       return {
@@ -89,17 +86,27 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         showFeedbackMessage: action.payload
       };
-    case POST_TASK_ERROR:
+    case POST_TASK_PENDING:
       return {
         ...state,
-        error: action.payload,
-        isPending: false
+        isPending: true
       };
     case POST_TASK_SUCCESS:
       return {
         ...state,
         list: [...state.list, action.payload],
         isPending: false
+      };
+    case POST_TASK_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isPending: false
+      };
+    case EDIT_TASK_PENDING:
+      return {
+        ...state,
+        isPending: true
       };
     case EDIT_TASK_SUCCESS:
       return {
@@ -117,6 +124,11 @@ export const tasksReducer = (state = initialState, action) => {
         ...state,
         error: true,
         isPending: false
+      };
+    case GET_SELECTED_ITEM:
+      return {
+        ...state,
+        selectedItem: action.payload
       };
     case CLEAN_SELECTED_ITEM:
       return {
