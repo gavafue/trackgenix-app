@@ -38,7 +38,6 @@ const Form = () => {
       name: adminSelected.name,
       lastName: adminSelected.lastName,
       email: adminSelected.email,
-      password: adminSelected.password,
       gender: adminSelected.gender,
       phone: adminSelected.phone,
       dateBirth: adminSelected.dateBirth?.slice(0, 10),
@@ -72,7 +71,6 @@ const Form = () => {
         name: data.name,
         lastName: data.lastName,
         email: data.email,
-        password: data.password,
         gender: data.gender,
         phone: data.phone,
         dateBirth: data.dateBirth,
@@ -120,16 +118,6 @@ const Form = () => {
           placeholder="Enter a valid email"
           register={register}
           error={errors.email?.message}
-          required
-        />
-        <Input
-          label="Password"
-          name="password"
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          register={register}
-          error={errors.password?.message}
           required
         />
         <Select

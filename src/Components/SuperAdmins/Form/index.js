@@ -17,7 +17,7 @@ import superadminsValidation from 'validations/superadmins';
 const Form = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const isPending = useSelector((state) => state.superadmins.pending);
+  const isPending = useSelector((state) => state.superadmins.isPending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
   const selectedSuperadmin = useSelector((state) => state.superadmins.selectedSuperadmin);
@@ -25,7 +25,6 @@ const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
   const title = isSuperadminSelected ? 'Update Super Admin' : 'Add Super Admin';
 
-  const arrayToMapRole = [{ id: 'SA', optionContent: 'SuperAdmin' }];
   const arrayToMapStatus = [
     { id: true, optionContent: 'Active' },
     { id: false, optionContent: 'Inactive' }
@@ -41,9 +40,8 @@ const Form = () => {
       body: JSON.stringify({
         firstName: data.firstName,
         lastName: data.lastName,
-        password: data.password,
         email: data.email,
-        role: data.role,
+        role: 'SA',
         active: data.active
       })
     };
@@ -66,9 +64,7 @@ const Form = () => {
         firstName: selectedSuperadmin.firstName,
         lastName: selectedSuperadmin.lastName,
         email: selectedSuperadmin.email,
-        password: selectedSuperadmin.password,
-        active: selectedSuperadmin.active,
-        role: selectedSuperadmin.role
+        active: selectedSuperadmin.active
       });
   }, [selectedSuperadmin]);
 
@@ -107,16 +103,6 @@ const Form = () => {
           error={errors.email?.message}
           required
         />
-        <Input
-          label="Password"
-          name="password"
-          id="password"
-          type="password"
-          placeholder="Write your password"
-          register={register}
-          error={errors.password?.message}
-          required
-        />
         <Select
           label="Active"
           id="active"
@@ -125,15 +111,6 @@ const Form = () => {
           arrayToMap={arrayToMapStatus}
           register={register}
           error={errors.active?.message}
-          required
-        />
-        <Select
-          label="Role"
-          id="role"
-          name="role"
-          arrayToMap={arrayToMapRole}
-          register={register}
-          error={errors.role?.message}
           required
         />
       </SharedForm>

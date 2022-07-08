@@ -49,7 +49,6 @@ const Form = () => {
         phone: data.phone,
         birthDate: data.birthDate,
         photo: data.photo,
-        password: data.password,
         active: data.active
       })
     };
@@ -77,7 +76,6 @@ const Form = () => {
         zip: employeeSelected.zip,
         phone: employeeSelected.phone,
         birthDate: employeeSelected.birthDate?.slice(0, 10),
-        password: employeeSelected.password,
         photo: employeeSelected.photo,
         active: employeeSelected.active
       });
@@ -116,16 +114,6 @@ const Form = () => {
           placeholder="Write your email."
           register={register}
           error={errors.email?.message}
-          required
-        />
-        <Input
-          label="Password"
-          name="password"
-          id="password"
-          type="password"
-          placeholder="Write your password."
-          register={register}
-          error={errors.password?.message}
           required
         />
         <Input
