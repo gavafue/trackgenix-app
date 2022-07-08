@@ -22,8 +22,8 @@ const employeesValidation = Joi.object({
     .greater('1900-1-1')
     .less(new Date())
     .messages({
-      'date.greater': 'You can not get than older',
-      'date.less': 'Your birth date can not be tomorrow, you already born'
+      'date.greater': 'Invalid date',
+      'date.less': 'Invalid date, must be before current date'
     })
     .required(),
   country: Joi.string()
@@ -44,8 +44,8 @@ const employeesValidation = Joi.object({
     .required(),
   zip: Joi.number()
     .integer()
-    .min(1000)
-    .max(99999)
+    .min(4)
+    .max(5)
     .messages({
       'string.min': 'Invalid zip, it must not contain less than 4 numbers',
       'string.max': 'Invalid zip, it must not contain more than 5 numbers'
@@ -63,8 +63,14 @@ const employeesValidation = Joi.object({
     })
     .required(),
   password: Joi.string()
-    .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
-    .message('Minimum is 6 non-special characters, 1 letter and 1 number')
+    .min(8)
+    .max(20)
+    .regex(/^(?=.*?[a-zA-Z])(?=.*?[0-9])/)
+    .messages({
+      'string.min': 'Invalid password, it must contain at least 8 characters',
+      'string.max': 'Invalid password, it must not contain more than 20 characters',
+      'string.pattern.base': 'Invalid password, it must contain both letters and numbers'
+    })
     .required(),
   photo: Joi.string().required(),
   active: Joi.boolean().required()
