@@ -22,7 +22,7 @@ function Header() {
           <a href="#" rel="noreferrer">
             Log out
           </a>
-          <a href="#" rel="noreferrer">
+          <a href="/login" rel="noreferrer">
             Log in
           </a>
         </div>
