@@ -12,8 +12,6 @@ const PrivateRoute = ({ component: RouteComponent, ...props }) => {
       {...props}
       render={(routeProps) => {
         if (token) {
-          console.log(role);
-          console.log('props', props.role);
           if (role === props.role) {
             return <RouteComponent {...routeProps} />;
           }
