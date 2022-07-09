@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from '../../../Shared/Table/TableContent/tableContent.module.css';
-import Button from '../../../Shared/Button';
+import styles from 'Components/Shared/Table/TableContent/tableContent.module.css';
+import Button from 'Components/Shared/Button';
 import { useDispatch } from 'react-redux';
 import { selectOneTimesheet } from 'redux/timesheet/actions';
 

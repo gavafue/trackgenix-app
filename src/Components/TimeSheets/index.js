@@ -1,21 +1,21 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './timesheets.module.css';
-import Table from '../Shared/Table';
-import Modal from '../Shared/Modal';
-import DeleteMessage from '../Shared/DeleteMessage';
-import FeedbackMessage from '../Shared/FeedbackMessage';
-import Button from '../Shared/Button';
-import Preloader from '../Shared/Preloader';
+import Table from 'Components/Shared/Table';
+import Modal from 'Components/Shared/Modal';
+import DeleteMessage from 'Components/Shared/DeleteMessage';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import Button from 'Components/Shared/Button';
+import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTimesheets, deleteTimesheet } from '../../redux/timesheet/thunks';
+import { getTimesheets, deleteTimesheet } from 'redux/timesheet/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
   selectOneTimesheet,
   cleanSelectedTimesheet
-} from '../../redux/timesheet/actions';
+} from 'redux/timesheet/actions';
 
 const TimeSheets = () => {
   const dispatch = useDispatch();

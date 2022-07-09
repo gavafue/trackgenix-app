@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { getProjects } from 'redux/projects/thunks';
 import { useDispatch } from 'react-redux';
 import { getTimesheets } from 'redux/timesheet/thunks';
-import EmployeeTable from '../TableAndContents';
-import ProjectsTableContent from '../TableAndContents/Content/projectsTableContent';
+import EmployeeTable from 'Components/Employee/TableAndContents';
+import ProjectsTableContent from 'Components/Employee/TableAndContents/Content/projectsTableContent';
 
 const Projects = () => {
   const dispatch = useDispatch();

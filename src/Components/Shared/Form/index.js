@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './form.module.css';
-import Button from '../Button';
+import Button from 'Components/Shared/Button';
 import { useHistory } from 'react-router-dom';
 
 const Form = ({ children, onSubmit, name }) => {
