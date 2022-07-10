@@ -16,7 +16,10 @@ import {
   EDIT_ADMIN_PENDING,
   EDIT_ADMIN_SUCCESS,
   EDIT_ADMIN_ERROR,
-  CLEAN_SELECTED_ADMIN
+  CLEAN_SELECTED_ADMIN,
+  EDIT_ADMIN_STATUS_ERROR,
+  EDIT_ADMIN_STATUS_SUCCESS,
+  EDIT_ADMIN_STATUS_PENDING
 } from './constants';
 
 export const getAdminsSuccess = (admins) => ({
@@ -102,4 +105,18 @@ export const editAdminError = (error) => ({
 
 export const cleanSelectedAdmin = () => ({
   type: CLEAN_SELECTED_ADMIN
+});
+
+export const editAdminStatusPending = () => ({
+  type: EDIT_ADMIN_STATUS_PENDING
+});
+
+export const editAdminStatusSuccess = (adminEdited) => ({
+  type: EDIT_ADMIN_STATUS_SUCCESS,
+  payload: adminEdited
+});
+
+export const editAdminStatusError = (error) => ({
+  type: EDIT_ADMIN_STATUS_ERROR,
+  payload: error
 });

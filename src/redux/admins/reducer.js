@@ -16,7 +16,10 @@ import {
   EDIT_ADMIN_PENDING,
   EDIT_ADMIN_ERROR,
   EDIT_ADMIN_SUCCESS,
-  CLEAN_SELECTED_ADMIN
+  CLEAN_SELECTED_ADMIN,
+  EDIT_ADMIN_STATUS_ERROR,
+  EDIT_ADMIN_STATUS_PENDING,
+  EDIT_ADMIN_STATUS_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -135,6 +138,28 @@ export const adminsReducer = (state = initialState, action) => {
       return {
         ...state,
         adminSelected: {},
+        isPending: false
+      };
+    case EDIT_ADMIN_STATUS_PENDING:
+      return {
+        ...state,
+        isPending: true
+      };
+    case EDIT_ADMIN_STATUS_SUCCESS:
+      return {
+        ...state,
+        list: state.list.map((admin) => {
+          if (admin._id === action.payload._id) {
+            return action.payload;
+          }
+          return admin;
+        }),
+        isPending: false
+      };
+    case EDIT_ADMIN_STATUS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
         isPending: false
       };
     default:

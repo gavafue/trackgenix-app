@@ -12,7 +12,10 @@ import {
   postAdminError,
   editAdminPending,
   editAdminError,
-  editAdminSuccess
+  editAdminSuccess,
+  editAdminStatusError,
+  editAdminStatusPending,
+  editAdminStatusSuccess
 } from './actions';
 
 export const getAdmins = () => {
@@ -118,6 +121,73 @@ export const editAdmin = (options) => {
       .catch((error) => {
         console.log(error);
         dispatch(editAdminError(error.toString()));
+      });
+  };
+};
+
+// export const ChangeAdminStatus = (adminId, options) => {
+//   return (dispatch) => {
+//     dispatch(deleteAdminPending());
+//     const options = {
+//       method: 'DELETE',
+//       url: `${process.env.REACT_APP_API_URL}/admins/lowlogic/${adminId}`,
+//       body: {
+//       }
+//     };
+//     return fetch(options.url, options)
+//       .then((response) => response.json())
+//       .then((response) => {
+//         if (response.error) {
+//           dispatch(deleteAdminError(response.error));
+//           dispatch(
+//             setInfoForFeedback({ title: 'Something went wrong', description: response.message })
+//           );
+//         } else {
+//           dispatch(deleteAdminSuccess(adminId));
+//           dispatch(
+//             setInfoForFeedback({
+//               title: 'Request done!',
+//               description: response.message
+//             })
+//           );
+//           dispatch(showFeedbackMessage(true));
+//         }
+//       })
+//       .catch((err) => console.log(err));
+//   };
+// };
+
+export const editAdminStatus = (options) => {
+  return (dispatch) => {
+    dispatch(editAdminStatusPending());
+    fetch(options.url, options)
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.error) {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editAdminStatusError(response.data.message));
+        } else {
+          dispatch(editAdminStatusSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(editAdminStatusError(error.toString()));
       });
   };
 };

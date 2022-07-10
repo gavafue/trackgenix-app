@@ -3,7 +3,7 @@ import Table from 'Components/Shared/Table';
 import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { getAdmins } from 'redux/admins/thunks';
+import { editAdminStatus, getAdmins } from 'redux/admins/thunks';
 import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Preloader from 'Components/Shared/Preloader';
 import {
@@ -16,44 +16,63 @@ import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { useHistory } from 'react-router-dom';
 
 const SuperAdmin = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAdmins());
-  }, []);
   const [showModal, setShowModal] = useState(false);
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
   const deleteInfo = useSelector((state) => state.admins.infoForDelete);
   // const showDelete = useSelector((state) => state.admins.showDeleteMessage);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
+  const adminSelected = useSelector((state) => state.admins.adminSelected);
   const history = useHistory();
+  const dispatch = useDispatch();
+  // const token = sessionStorage.getItem('token');
+
+  useEffect(() => {
+    dispatch(getAdmins());
+  }, []);
+
   const editData = (row) => {
     dispatch(getSelectedAdmin(row));
     history.push(`/superadmin/form`);
   };
 
-  const deleteHandler = () => {
-    console.log('holi');
-  };
   const admins = useSelector((state) => state.admins.list)
-    // .filter((admin) => admin.active === true)
+    .filter((admin) => admin.active === true)
     .map((admin) => ({
+      ...admin,
       name: `${admin.name} ${admin.lastName}`,
-      location: admin.city,
-      status: admin.active ? 'Active' : 'Inactive'
+      location: admin.city
     }));
-  console.log(admins);
+  const deleteHandler = () => {
+    console.log('adminselected', adminSelected);
+    const options = {
+      headers: { 'Content-type': 'application/json' },
+      method: 'DELETE',
+      url: `${process.env.REACT_APP_API_URL}/admins/lowlogic/${deleteInfo}`,
+      body: JSON.stringify({
+        name: adminSelected.name,
+        lastName: adminSelected.lastName,
+        email: adminSelected.email,
+        gender: adminSelected.gender,
+        phone: adminSelected.phone,
+        dateBirth: adminSelected.dateBirth?.slice(0, 10),
+        city: adminSelected.city,
+        zip: adminSelected.zip,
+        active: false
+      })
+    };
+    dispatch(editAdminStatus(options));
+  };
+  console.log('deleteinfo', deleteInfo);
   return (
     <section className={styles.container}>
       <Table
         data={admins}
-        headers={['name', 'location', 'status']}
-        headersName={['Name', 'Location', 'Status']}
+        headers={['name', 'location']}
+        headersName={['Name', 'Location']}
         setShowModal={setShowModal}
         editData={editData}
-        setInfoForDelete={() => {
-          dispatch(setInfoForDelete());
-        }}
+        setInfoForDelete={(adminId) => dispatch(setInfoForDelete(adminId))}
       />
       <Modal
         isOpen={showModal}
@@ -68,7 +87,7 @@ const SuperAdmin = () => {
           }}
           resourceName={'Admin'}
           infoForDelete={deleteInfo}
-          deleteItem={deleteHandler}
+          deleteItem={() => deleteHandler()}
           setShowModal={setShowModal}
         />
       </Modal>

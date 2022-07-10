@@ -1,8 +1,11 @@
 import React from 'react';
 import styles from './tableContent.module.css';
 import Button from '../../Button';
+import { getSelectedAdmin } from 'redux/admins/actions';
+import { useDispatch } from 'react-redux';
 
 const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete }) => {
+  const dispatch = useDispatch();
   return (
     <tbody>
       {data.map((row) => {
@@ -25,6 +28,7 @@ const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete 
                 onClick={() => {
                   setShowModal(true);
                   setInfoForDelete(row._id);
+                  dispatch(getSelectedAdmin(row));
                 }}
               />
             </td>
