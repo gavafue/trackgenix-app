@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: RouteComponent, ...props }) => {
-  const role = useSelector((state) => state.auth.authenticated.role);
-  const error = useSelector((state) => state.auth.error);
+  const role = sessionStorage.getItem('role');
   const token = sessionStorage.getItem('token');
+  const error = useSelector((state) => state.auth.error);
 
   return (
     <Route
