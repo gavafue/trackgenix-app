@@ -73,7 +73,7 @@ const Form = () => {
         email: employeeSelected.email,
         country: employeeSelected.country,
         city: employeeSelected.city,
-        zip: employeeSelected.zip,
+        zip: employeeSelected.zip?.toString(),
         phone: employeeSelected.phone,
         birthDate: employeeSelected.birthDate?.slice(0, 10),
         photo: employeeSelected.photo,
