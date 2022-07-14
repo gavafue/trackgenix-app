@@ -67,8 +67,6 @@ const Form = () => {
       });
   }, [selectedSuperadmin]);
 
-  console.log(errors, selectedSuperadmin);
-
   return (
     <div className={styles.container}>
       {isPending && <Preloader />}
