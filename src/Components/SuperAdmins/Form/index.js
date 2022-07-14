@@ -41,7 +41,6 @@ const Form = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        role: 'SA',
         active: data.active
       })
     };
@@ -118,7 +117,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!infoForFeedback.error) {
+          if (infoForFeedback.title !== 'Something went wrong') {
             history.goBack();
           }
         }}
