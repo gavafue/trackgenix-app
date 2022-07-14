@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../Shared/Table/TableContent/tableContent.module.css';
+import styles from 'Components/Shared/Table/TableContent/tableContent.module.css';
 
 const ProjectsTableContent = ({ headers, data }) => {
   return (

@@ -1,21 +1,21 @@
 import styles from './tasks.module.css';
-import Table from '../Shared/Table';
+import Table from 'Components/Shared/Table';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import DeleteMessage from '../Shared/DeleteMessage';
-import Modal from '../Shared/Modal';
-import FeedbackMessage from '../Shared/FeedbackMessage';
-import Button from '../Shared/Button';
+import DeleteMessage from 'Components/Shared/DeleteMessage';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import Button from 'Components/Shared/Button';
 import Preloader from 'Components/Shared/Preloader';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTasks, deleteTask } from '../../redux/tasks/thunks';
+import { getTasks, deleteTask } from 'redux/tasks/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedItem,
   cleanSelectedItem
-} from '../../redux/tasks/actions';
+} from 'redux/tasks/actions';
 
 const Tasks = () => {
   const dispatch = useDispatch();

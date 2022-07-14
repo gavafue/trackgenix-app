@@ -1,21 +1,21 @@
 import styles from '../admins.module.css';
 import { useEffect } from 'react';
-import Table from '../../Shared/Table';
-import Modal from '../../Shared/Modal';
-import DeleteMessage from '../../Shared/DeleteMessage';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
-import Button from '../../Shared/Button';
-import Preloader from '../../Shared/Preloader';
+import Table from 'Components/Shared/Table';
+import Modal from 'Components/Shared/Modal';
+import DeleteMessage from 'Components/Shared/DeleteMessage';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import Button from 'Components/Shared/Button';
+import Preloader from 'Components/Shared/Preloader';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteAdmin } from '../../../redux/admins/thunks';
+import { deleteAdmin } from 'redux/admins/thunks';
 import {
   getSelectedAdmin,
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
   cleanSelectedAdmin
-} from '../../../redux/admins/actions';
+} from 'redux/admins/actions';
 
 const AdminsTable = () => {
   const dispatch = useDispatch();
