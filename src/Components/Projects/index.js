@@ -39,6 +39,12 @@ const Projects = () => {
   const deleteHandler = () => {
     dispatch(deleteProject(deleteInfo));
   };
+  const projectsData = projects.map((project) => {
+    return {
+      ...project,
+      pm: project.pm?.firstName
+    };
+  });
 
   return (
     <section className={styles.container}>
@@ -47,9 +53,9 @@ const Projects = () => {
         <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
       </div>
       <Table
-        data={projects}
-        headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date']}
-        headers={['name', 'description', 'client', 'startDate', 'endDate']}
+        data={projectsData}
+        headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}
+        headers={['name', 'pm', 'description', 'client', 'startDate', 'endDate']}
         deleteProject={deleteHandler}
         editData={editData}
         setShowModal={(show) => dispatch(showDeleteMessage(show))}

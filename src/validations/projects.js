@@ -41,7 +41,8 @@ const projectsValidation = Joi.object({
       'string.min': 'Invalid name, it must not contain less than 3 letters',
       'string.max': 'Invalid name, it must not contain more than 40 letters'
     })
-    .required()
+    .required(),
+  pm: Joi.string().required()
 });
 
 export default projectsValidation;
