@@ -41,7 +41,6 @@ const Form = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        role: 'SA',
         active: data.active
       })
     };
@@ -67,6 +66,8 @@ const Form = () => {
         active: selectedSuperadmin.active
       });
   }, [selectedSuperadmin]);
+
+  console.log(errors, selectedSuperadmin);
 
   return (
     <div className={styles.container}>

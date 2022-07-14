@@ -31,9 +31,7 @@ const superadminsValidation = Joi.object({
       'string.min': 'Invalid password, it must contain at least 8 characters',
       'string.max': 'Invalid password, it must not contain more than 20 characters',
       'string.pattern.base': 'Invalid password, it must contain both letters and numbers'
-    })
-    .required(),
-  role: Joi.string().uppercase().valid('SA').required(),
+    }),
   active: Joi.boolean().required()
 });
 
