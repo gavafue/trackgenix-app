@@ -25,7 +25,6 @@ const SuperAdmin = () => {
   const adminSelected = useSelector((state) => state.admins.adminSelected);
   const history = useHistory();
   const dispatch = useDispatch();
-  // const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     dispatch(getAdmins());
@@ -36,13 +35,13 @@ const SuperAdmin = () => {
     history.push(`/superadmin/form`);
   };
 
-  const admins = useSelector((state) => state.admins.list)
-    .filter((admin) => admin.active === true)
-    .map((admin) => ({
-      ...admin,
-      name: `${admin.name} ${admin.lastName}`,
-      location: admin.city
-    }));
+  const admins = useSelector((state) => state.admins.list).map((admin) => ({
+    ...admin,
+    name: `${admin.name} ${admin.lastName}`,
+    location: admin.city,
+    active: admin.active ? 'Active' : 'Inactive'
+  }));
+  console.log(admins);
   const deleteHandler = () => {
     console.log('adminselected', adminSelected);
     const options = {
@@ -63,13 +62,12 @@ const SuperAdmin = () => {
     };
     dispatch(editAdminStatus(options));
   };
-  console.log('deleteinfo', deleteInfo);
   return (
     <section className={styles.container}>
       <Table
         data={admins}
-        headers={['name', 'location']}
-        headersName={['Name', 'Location']}
+        headers={['name', 'location', 'active']}
+        headersName={['Name', 'Location', 'Status']}
         setShowModal={setShowModal}
         editData={editData}
         setInfoForDelete={(adminId) => dispatch(setInfoForDelete(adminId))}
