@@ -1,21 +1,21 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
-import Table from '../Shared/Table';
-import DeleteMessage from '../Shared/DeleteMessage';
-import Modal from '../Shared/Modal';
-import FeedbackMessage from '../Shared/FeedbackMessage';
-import Button from '../Shared/Button';
-import Preloader from '../Shared/Preloader';
+import Table from 'Components/Shared/Table';
+import DeleteMessage from 'Components/Shared/DeleteMessage';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import Button from 'Components/Shared/Button';
+import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEmployee, deleteEmployee } from '../../redux/employees/thunks';
+import { getEmployee, deleteEmployee } from 'redux/employees/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedEmployee,
   cleanSelectedEmployee
-} from '../../redux/employees/actions';
+} from 'redux/employees/actions';
 
 function Employees() {
   const dispatch = useDispatch();

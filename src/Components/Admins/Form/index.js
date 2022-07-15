@@ -183,7 +183,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!feedbackInfo.error) {
+          if (feedbackInfo.title !== 'Something went wrong') {
             history.goBack();
           }
         }}

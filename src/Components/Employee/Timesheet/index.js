@@ -1,9 +1,9 @@
 import styles from './timesheet.module.css';
 import { useEffect, useState } from 'react';
-import EmployeeTable from '../TableAndContents';
+import EmployeeTable from 'Components/Employee/TableAndContents';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheets } from 'redux/timesheet/thunks';
-import TimesheetTableContent from '../TableAndContents/Content/timesheetTableContent';
+import TimesheetTableContent from 'Components/Employee/TableAndContents/Content/timesheetTableContent';
 import Modal from 'Components/Shared/Modal';
 import Preloader from 'Components/Shared/Preloader';
 import { showFeedbackMessage } from 'redux/timesheet/actions';
