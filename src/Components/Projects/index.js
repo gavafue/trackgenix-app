@@ -42,7 +42,7 @@ const Projects = () => {
   const projectsData = projects.map((project) => {
     return {
       ...project,
-      pm: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
+      pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
       startDate: project.startDate.slice(0, 10),
       endDate: project.endDate.slice(0, 10)
     };
@@ -57,7 +57,7 @@ const Projects = () => {
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}
-        headers={['name', 'pm', 'description', 'client', 'startDate', 'endDate']}
+        headers={['name', 'pmValue', 'description', 'client', 'startDate', 'endDate']}
         deleteProject={deleteHandler}
         editData={editData}
         setShowModal={(show) => dispatch(showDeleteMessage(show))}

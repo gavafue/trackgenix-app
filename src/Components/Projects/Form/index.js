@@ -88,7 +88,6 @@ const Form = () => {
         })
       });
   }, [projectSelected]);
-  console.log(projectSelected);
 
   return (
     <div className={styles.container}>
