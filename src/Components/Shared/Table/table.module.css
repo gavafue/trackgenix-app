@@ -1,11 +1,19 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.table {
   margin-block: 1%;
   border-radius: 5px;
   background-color: #fff;
   border: #D4D4DF 2px solid;
   border-spacing: 0;
   width: 85%;
-  height: 100%;
   text-align: center;
 }
 
@@ -15,4 +23,8 @@
   border-collapse: collapse;
   font-weight: bold;
   color: #373867;
+}
+
+.headers tr th {
+  padding-block: 10px;
 }
