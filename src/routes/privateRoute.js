@@ -4,7 +4,6 @@ import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: RouteComponent, ...props }) => {
   const role = useSelector((state) => state.auth.authenticated.role);
-  const error = useSelector((state) => state.auth.error);
   const token = sessionStorage.getItem('token');
   const status = useSelector((state) => state.auth.authenticated.data.active) || '';
 
@@ -14,13 +13,13 @@ const PrivateRoute = ({ component: RouteComponent, ...props }) => {
       render={(routeProps) => {
         if (token) {
           if (status === false) {
-            return <Redirect to={'/auth/accountInactive'} />;
+            return <Redirect to={'/accountInactive'} />;
           }
           if (role === props.role) {
             return <RouteComponent {...routeProps} />;
           }
-          if (role && !error) {
-            return <Redirect to={'/auth/notAllowed'} />;
+          if (role != props.role) {
+            return <Redirect to={'/notAllowed'} />;
           }
         }
         return <Redirect to={'/login'} />;

@@ -21,6 +21,8 @@ import TimeSheets from 'Components/TimeSheets';
 import TimeSheetsForm from 'Components/TimeSheets/Form';
 import Tasks from 'Components/Tasks/index';
 import TasksForm from 'Components/Tasks/Form';
+import AccountInactive from 'Components/Auth/Errors/AccountInactive';
+import NotAllowed from 'Components/Auth/Errors/NotAllowed';
 const Employee = lazy(() => import('routes/employee'));
 const Admin = lazy(() => import('routes/admin'));
 const Superadmin = lazy(() => import('routes/superadmin'));
@@ -58,6 +60,8 @@ function Layout() {
             <Route exact path="/tasks" component={Tasks} />
             <Route path="/tasks/form/:id" component={TasksForm} />
             <Route path="/tasks/form" component={TasksForm} />
+            <Route path="/accountinactive" component={AccountInactive} />;
+            <Route path="/notAllowed" component={NotAllowed} />;
             <PrivateRoute exact path="/employee" role="EMPLOYEE" component={Employee} />
             <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
             <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={Superadmin} />
