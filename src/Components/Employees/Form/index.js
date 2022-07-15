@@ -4,14 +4,14 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
-import Preloader from '../../Shared/Preloader';
-import SharedForm from '../../Shared/Form';
-import Input from '../../Shared/Input/InputText';
+import Preloader from 'Components/Shared/Preloader';
+import SharedForm from 'Components/Shared/Form';
+import Input from 'Components/Shared/Input/InputText';
 import Select from 'Components/Shared/Input/InputSelect';
-import Modal from '../../Shared/Modal';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
-import { showFeedbackMessage } from '../../../redux/employees/actions';
-import { editEmployee, postEmployee } from '../../../redux/employees/thunks';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import { showFeedbackMessage } from 'redux/employees/actions';
+import { editEmployee, postEmployee } from 'redux/employees/thunks';
 import employeesValidation from 'validations/employees';
 
 const Form = () => {
@@ -73,7 +73,7 @@ const Form = () => {
         email: employeeSelected.email,
         country: employeeSelected.country,
         city: employeeSelected.city,
-        zip: employeeSelected.zip,
+        zip: employeeSelected.zip?.toString(),
         phone: employeeSelected.phone,
         birthDate: employeeSelected.birthDate?.slice(0, 10),
         photo: employeeSelected.photo,
@@ -191,7 +191,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!feedbackInfo.error) {
+          if (feedbackInfo.title !== 'Something went wrong') {
             history.goBack();
           }
         }}

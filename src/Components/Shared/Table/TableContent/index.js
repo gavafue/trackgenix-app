@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './tableContent.module.css';
-import Button from '../../Button';
+import Button from 'Components/Shared/Button';
 
 const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete }) => {
   return (

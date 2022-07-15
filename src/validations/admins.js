@@ -27,8 +27,7 @@ const adminsValidation = Joi.object({
     .messages({
       'string.min': 'Invalid password, it must contain at least 8 characters',
       'string.pattern.base': 'Invalid password, it must contain both letters and numbers'
-    })
-    .required(),
+    }),
   gender: Joi.string()
     .lowercase()
     .valid('female', 'male', 'other')
@@ -47,14 +46,10 @@ const adminsValidation = Joi.object({
     .message('Invalid city name, it must contain at least 3 letters')
     .required(),
   zip: Joi.string()
-    .min(4)
-    .max(5)
-    .messages({
-      'string.min': 'Invalid zip number, it must not contain less than 4 digits',
-      'string.max': 'Invalid zip number, it must not contain more than 5 digits',
-      'string.base': 'Invalid zip number, it must be a string'
-    })
+    .regex(/^[0-9]{4,5}$/)
+    .message('Postal code should be a 4 or 5 digits value')
     .required(),
+  role: Joi.string().uppercase().valid('ADMIN'),
   active: Joi.boolean().required()
 });
 

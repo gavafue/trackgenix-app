@@ -4,15 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
-import Preloader from '../../Shared/Preloader';
-import SharedForm from '../../Shared/Form';
-import InputText from '../../Shared/Input/InputText';
-import InputSelect from '../../Shared/Input/InputSelect';
-import Modal from '../../Shared/Modal';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Preloader from 'Components/Shared/Preloader';
+import SharedForm from 'Components/Shared/Form';
+import InputText from 'Components/Shared/Input/InputText';
+import InputSelect from 'Components/Shared/Input/InputSelect';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
-import { showFeedbackMessage } from '../../../redux/projects/actions';
-import { editProject, postProject } from '../../../redux/projects/thunks';
+import { showFeedbackMessage } from 'redux/projects/actions';
+import { editProject, postProject } from 'redux/projects/thunks';
 import { getEmployee } from 'redux/employees/thunks';
 import projectsValidation from 'validations/projects';
 
@@ -213,7 +213,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!feedbackInfo.error) {
+          if (feedbackInfo.title !== 'Something went wrong') {
             history.goBack();
           }
         }}
