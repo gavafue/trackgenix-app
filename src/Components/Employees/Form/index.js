@@ -83,8 +83,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      <h1>{title}</h1>
-      <SharedForm onSubmit={handleSubmit(onSubmit)}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)} header={title}>
         <Input
           className={styles.input}
           id="firstName"
