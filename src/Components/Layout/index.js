@@ -61,7 +61,7 @@ function Layout() {
             <Route path="/tasks/form" component={TasksForm} />
             <PrivateRoute exact path="/employee" role="EMPLOYEE" component={Employee} />
             <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
-            <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={Superadmin} />
+            <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
             <Route path="/auth" component={AuthRoutes} />
             <Route exact path="/">
               <Redirect to="/home" />

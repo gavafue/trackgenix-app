@@ -65,7 +65,6 @@ const SuperAdmin = () => {
   };
   return (
     <section className={styles.container}>
-      <h1>Welcome</h1>
       <Form header="Create New admin" onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Name"
