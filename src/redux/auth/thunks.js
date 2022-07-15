@@ -1,41 +1,24 @@
 import { loginPending, loginSuccess, loginError } from './actions';
 import firebase from 'helper/firebase';
-const URL = process.env.REACT_APP_API_URL;
-const fetchUser = async (role, userEmail) => {
-  if (role === 'SUPERADMIN') {
-    try {
-      const response = await fetch(`${URL}/super-admin`);
-      const data = await response.json();
-      const user = data.data.filter((item) => item.email === userEmail);
-      return user[0];
-    } catch (error) {
-      dispatch(loginError(error.toString()));
-    }
-  }
-  if (role === 'ADMIN') {
-    try {
-      const response = await fetch(`${URL}/admins`);
-      const data = await response.json();
-      const user = data.data.filter((item) => item.email === userEmail);
-      return user[0];
-    } catch (error) {
-      dispatch(loginError(error.toString()));
-    }
-  }
-  if (role === 'EMPLOYEE') {
-    try {
-      const response = await fetch(`${URL}/employees`);
-      const data = await response.json();
-      const user = data.data.filter((item) => item.email === userEmail);
-      return user[0];
-    } catch (error) {
-      dispatch(loginError(error.toString()));
-    }
-  }
-};
 
 export const login = (credentials) => {
   return (dispatch) => {
+    const fetchUser = async (role, userEmail) => {
+      const URL = {
+        SUPERADMIN: `${process.env.REACT_APP_API_URL}/super-admin`,
+        ADMIN: `${process.env.REACT_APP_API_URL}/admins`,
+        EMPLOYEE: `${process.env.REACT_APP_API_URL}/employees`
+      };
+      try {
+        const response = await fetch(`${URL[role]}`);
+        const data = await response.json();
+        const user = data.data.filter((item) => item.email === userEmail);
+        return user[0];
+      } catch (error) {
+        dispatch(loginError(error.toString()));
+      }
+    };
+
     dispatch(loginPending());
     return firebase
       .auth()
@@ -46,12 +29,12 @@ export const login = (credentials) => {
           claims: { role }
         } = await response.user.getIdTokenResult();
         sessionStorage.setItem('role', role);
-
+        const userData = await fetchUser(role, credentials.email);
         return dispatch(
           loginSuccess({
             role,
             token,
-            data: (await fetchUser(role, credentials.email)) || 'User not found'
+            data: userData || 'User not found'
           })
         );
       })

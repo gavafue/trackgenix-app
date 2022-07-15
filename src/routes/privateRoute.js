@@ -13,7 +13,7 @@ const PrivateRoute = ({ component: RouteComponent, ...props }) => {
       {...props}
       render={(routeProps) => {
         if (token) {
-          if (!status) {
+          if (status === false) {
             return <Redirect to={'/auth/accountInactive'} />;
           }
           if (role === props.role) {
