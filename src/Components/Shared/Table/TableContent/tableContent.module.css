@@ -4,13 +4,17 @@
   width: 85%;
 }
 
-.cell {
-  padding-block: 5px;
-  border: none;
-  border-bottom: #D4D4DF 2px solid;
-  color: #373867;
-}
-
 .rows:hover{
   background-color: #AACE9B50;
+}
+
+.cell {
+  padding: 5px 10px;
+  border: none;
+  color: #373867;
+  border-bottom: #D4D4DF 2px solid;
+}
+
+.cell > Button{
+  margin: 1%;
 }

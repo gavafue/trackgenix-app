@@ -11,7 +11,6 @@ const Table = ({ data, headersName, headers, editData, setShowModal, setInfoForD
             return <th key={index}>{headerName}</th>;
           })}
           <th></th>
-          <th></th>
         </tr>
       </thead>
       <TableContent

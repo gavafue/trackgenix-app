@@ -55,9 +55,7 @@ const Tasks = () => {
   return (
     <section className={styles.container}>
       <h2>Tasks</h2>
-      <div className={styles.buttonContainer}>
-        <Button onClick={createTask} label="Add new task" />
-      </div>
+      <Button onClick={createTask} label="Add new task" />
       <Table
         data={taskData}
         headersName={['Project', 'Description', 'Week', 'Day', 'Hours']}

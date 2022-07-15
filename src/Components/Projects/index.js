@@ -51,9 +51,7 @@ const Projects = () => {
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      <div>
-        <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
-      </div>
+      <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}

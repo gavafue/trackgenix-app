@@ -4,7 +4,7 @@ import Button from 'Components/Shared/Button';
 
 const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete }) => {
   return (
-    <tbody>
+    <tbody className={styles.container}>
       {data.map((row) => {
         return (
           <tr key={row._id} id={row._id} className={styles.rows}>
@@ -17,8 +17,6 @@ const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete 
             })}
             <td className={styles.cell}>
               <Button onClick={() => editData(row)} label="Edit" />
-            </td>
-            <td className={styles.cell}>
               <Button
                 label="Delete"
                 theme="secondary"
