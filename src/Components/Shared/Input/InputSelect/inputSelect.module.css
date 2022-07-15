@@ -8,13 +8,16 @@
   width: 100%;
   text-align: center;
 }
+
 .label {
-  width: 100%;
-  justify-content: center;
-  margin: auto;
-  padding: 2% 0 1% 0;
-  text-align: center;
+  align-self: flex-start;
+  color: #373867;
+  font-family: 'Roboto';
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 23px;
 }
+
 .select {
   width: 100%;
   margin: 2%;

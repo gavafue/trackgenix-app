@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 const membersJoiSch = Joi.object({
   name: Joi.string().required(),
-  role: Joi.string().uppercase().valid('DEV', 'QA', 'PM', 'TL').required(),
+  role: Joi.string().uppercase().valid('DEV', 'QA', 'TL').required(),
   rate: Joi.number()
     .min(10)
     .max(2000)
@@ -41,7 +41,8 @@ const projectsValidation = Joi.object({
       'string.min': 'Invalid name, it must not contain less than 3 letters',
       'string.max': 'Invalid name, it must not contain more than 40 letters'
     })
-    .required()
+    .required(),
+  pm: Joi.string().required()
 });
 
 export default projectsValidation;

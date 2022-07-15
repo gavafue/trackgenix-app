@@ -60,6 +60,7 @@ const Form = () => {
       },
       body: JSON.stringify({
         name: data.name,
+        pm: data.pm,
         startDate: data.startDate,
         endDate: data.endDate,
         description: data.description,
@@ -68,7 +69,6 @@ const Form = () => {
         members: data.members
       })
     };
-    console.log(data);
     isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
 
@@ -77,6 +77,7 @@ const Form = () => {
     if (isProjectSelected)
       reset({
         name: projectSelected.name,
+        pm: projectSelected.pm?._id,
         startDate: projectSelected.startDate?.slice(0, 10),
         endDate: projectSelected.endDate?.slice(0, 10),
         description: projectSelected.description,
@@ -90,8 +91,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      <h2>{title}</h2>
-      <SharedForm onSubmit={handleSubmit(onSubmit)}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)} header={title}>
         <InputText
           id="name"
           name="name"
@@ -100,6 +100,17 @@ const Form = () => {
           placeholder="Write the project's name"
           register={register}
           error={errors.name?.message}
+          required
+        />
+        <InputSelect
+          className={styles.select}
+          arrayToMap={arrayToMapEmployees}
+          id="pm"
+          name="pm"
+          label="Project Manager"
+          placeholder="Select PM"
+          register={register}
+          error={errors.pm?.message}
           required
         />
         <InputText
@@ -176,8 +187,7 @@ const Form = () => {
                 arrayToMap={[
                   { id: 'TL', optionContent: 'TL' },
                   { id: 'QA', optionContent: 'QA' },
-                  { id: 'DEV', optionContent: 'DEV' },
-                  { id: 'PM', optionContent: 'PM' }
+                  { id: 'DEV', optionContent: 'DEV' }
                 ]}
                 id="role"
                 name={`members[${index}].role`}
