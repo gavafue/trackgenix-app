@@ -1,6 +1,5 @@
 import styles from './index.module.css';
 import Select from 'Components/Shared/Input/InputSelect';
-import FormUI from 'Components/Shared/FormUI';
 import Input from 'Components/Shared/Input/InputText';
 import { useSelector, useDispatch } from 'react-redux';
 import { showFeedbackMessage } from 'redux/admins/actions';
@@ -11,6 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import adminsValidation from 'validations/admins';
+import Form from 'Components/Shared/Form';
 
 const SuperAdmin = () => {
   const {
@@ -39,7 +39,7 @@ const SuperAdmin = () => {
     { id: true, optionContent: 'Active' },
     { id: false, optionContent: 'Inactive' }
   ];
-
+  console.log('Probando');
   const onSubmit = (data) => {
     const options = {
       method: 'POST',
@@ -66,7 +66,7 @@ const SuperAdmin = () => {
   return (
     <section className={styles.container}>
       <h1>Welcome</h1>
-      <FormUI header="Create New admin" onSubmit={handleSubmit(onSubmit)}>
+      <Form header="Create New admin" onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Name"
           name="name"
@@ -166,7 +166,7 @@ const SuperAdmin = () => {
           error={errors.active?.message}
           required
         />
-      </FormUI>
+      </Form>
       <Modal
         isOpen={showFeedback}
         handleClose={() => {
