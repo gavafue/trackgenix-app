@@ -9,7 +9,7 @@ const fetchUser = async (role, userEmail) => {
       const user = data.data.filter((item) => item.email === userEmail);
       return user[0];
     } catch (error) {
-      console.log(error);
+      dispatch(loginError(error.toString()));
     }
   }
   if (role === 'ADMIN') {
@@ -19,7 +19,7 @@ const fetchUser = async (role, userEmail) => {
       const user = data.data.filter((item) => item.email === userEmail);
       return user[0];
     } catch (error) {
-      console.log(error);
+      dispatch(loginError(error.toString()));
     }
   }
   if (role === 'EMPLOYEE') {
@@ -29,7 +29,7 @@ const fetchUser = async (role, userEmail) => {
       const user = data.data.filter((item) => item.email === userEmail);
       return user[0];
     } catch (error) {
-      console.log(error);
+      dispatch(loginError(error.toString()));
     }
   }
 };
