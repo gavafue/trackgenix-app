@@ -46,15 +46,6 @@
   border: none;
 }
 
-.fieldset label {
-  text-align: left !important;
-  color: #373867;
-  font-family: 'Roboto';
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 23px;
-}
-
 .fieldset Button {
   margin-block: 1%;
 }
