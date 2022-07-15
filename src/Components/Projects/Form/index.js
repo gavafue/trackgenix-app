@@ -68,7 +68,6 @@ const Form = () => {
         members: data.members
       })
     };
-    console.log(data);
     isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
 
