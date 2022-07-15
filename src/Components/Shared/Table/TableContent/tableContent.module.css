@@ -1,4 +1,16 @@
-.rows {
-  padding: 2px 15px;
-  border:#37386720 2px solid;
+.container {
+  background-color: #fff;
+  text-align: inherit;
+  width: 85%;
+}
+
+.cell {
+  padding-block: 5px;
+  border: none;
+  border-bottom: #D4D4DF 2px solid;
+  color: #373867;
+}
+
+.rows:hover{
+  background-color: #AACE9B50;
 }
