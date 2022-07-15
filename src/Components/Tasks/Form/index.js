@@ -76,8 +76,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      <h2>{title}</h2>
-      <SharedForm onSubmit={handleSubmit(onSubmit)}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)} header={title}>
         <Select
           label="Project"
           id="nameProject"
@@ -86,7 +85,6 @@ const Form = () => {
           placeholder="Select Project"
           register={register}
           error={errors.nameProject?.message}
-          value={selectedItem ? selectedItem.nameProject : ''}
           required
         />
         <Input
@@ -97,7 +95,6 @@ const Form = () => {
           placeholder="Description"
           register={register}
           error={errors.description?.message}
-          value={selectedItem ? selectedItem.description : ''}
           required
         />
         <Input
@@ -108,7 +105,6 @@ const Form = () => {
           placeholder="Week"
           register={register}
           error={errors.week?.message}
-          value={selectedItem ? selectedItem.week : ''}
           required
         />
         <Input
@@ -119,7 +115,6 @@ const Form = () => {
           placeholder="Day"
           register={register}
           error={errors.day?.message}
-          value={selectedItem ? selectedItem.day : ''}
           required
         />
         <Input
@@ -130,7 +125,6 @@ const Form = () => {
           placeholder="Hours"
           register={register}
           error={errors.hours?.message}
-          value={selectedItem ? selectedItem.hours : ''}
           required
         />
       </SharedForm>
@@ -138,7 +132,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!infoForFeedback.error) {
+          if (infoForFeedback.title !== 'Something went wrong') {
             history.goBack();
           }
         }}

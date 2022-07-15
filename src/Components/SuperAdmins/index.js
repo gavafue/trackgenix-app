@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import styles from './super-admins.module.css';
-import Table from '../Shared/Table';
-import DeleteMessage from '../Shared/DeleteMessage';
-import Modal from '../Shared/Modal';
-import FeedbackMessage from '../Shared/FeedbackMessage';
-import Button from '../Shared/Button';
+import Table from 'Components/Shared/Table';
+import DeleteMessage from 'Components/Shared/DeleteMessage';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import Button from 'Components/Shared/Button';
 import { useHistory } from 'react-router-dom';
-import Preloader from '../Shared/Preloader';
+import Preloader from 'Components/Shared/Preloader';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setInfoForDelete,
@@ -14,8 +14,8 @@ import {
   showFeedbackMessage,
   getSelectedSuperadmin,
   cleanSelectedSuperadmin
-} from '../../redux/superadmin/actions';
-import { deleteSuperAdmin, getSuperadmins } from '../../redux/superadmin/thunks';
+} from 'redux/superadmin/actions';
+import { deleteSuperAdmin, getSuperadmins } from 'redux/superadmin/thunks';
 
 const SuperAdmins = () => {
   const dispatch = useDispatch();

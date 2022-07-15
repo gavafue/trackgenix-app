@@ -42,14 +42,9 @@ const employeesValidation = Joi.object({
       'string.max': 'Invalid city, it must not contain more than 60 letters'
     })
     .required(),
-  zip: Joi.number()
-    .integer()
-    .min(4)
-    .max(5)
-    .messages({
-      'string.min': 'Invalid zip, it must not contain less than 4 numbers',
-      'string.max': 'Invalid zip, it must not contain more than 5 numbers'
-    })
+  zip: Joi.string()
+    .regex(/^[0-9]{4,5}$/)
+    .message('Postal code should be a 4 or 5 digits value')
     .required(),
   phone: Joi.string()
     .regex(/^[0-9]{10}$/)
@@ -70,9 +65,9 @@ const employeesValidation = Joi.object({
       'string.min': 'Invalid password, it must contain at least 8 characters',
       'string.max': 'Invalid password, it must not contain more than 20 characters',
       'string.pattern.base': 'Invalid password, it must contain both letters and numbers'
-    })
-    .required(),
+    }),
   photo: Joi.string().required(),
+  role: Joi.string().uppercase().valid('EMPLOYEE'),
   active: Joi.boolean().required()
 });
 

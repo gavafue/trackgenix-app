@@ -1,21 +1,21 @@
 import { useEffect } from 'react';
-import Table from '../Shared/Table';
-import DeleteMessage from '../Shared/DeleteMessage';
-import Modal from '../Shared/Modal';
-import FeedbackMessage from '../Shared/FeedbackMessage';
-import Button from '../Shared/Button';
-import Preloader from '../Shared/Preloader';
+import Table from 'Components/Shared/Table';
+import DeleteMessage from 'Components/Shared/DeleteMessage';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import Button from 'Components/Shared/Button';
+import Preloader from 'Components/Shared/Preloader';
 import { useHistory } from 'react-router-dom';
 import styles from './projects.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProjects, deleteProject } from '../../redux/projects/thunks';
+import { getProjects, deleteProject } from 'redux/projects/thunks';
 import {
   setInfoForDelete,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedProject,
   cleanSelectedProject
-} from '../../redux/projects/actions';
+} from 'redux/projects/actions';
 
 const Projects = () => {
   const dispatch = useDispatch();
@@ -39,6 +39,14 @@ const Projects = () => {
   const deleteHandler = () => {
     dispatch(deleteProject(deleteInfo));
   };
+  const projectsData = projects.map((project) => {
+    return {
+      ...project,
+      pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
+      startDate: project.startDate.slice(0, 10),
+      endDate: project.endDate.slice(0, 10)
+    };
+  });
 
   return (
     <section className={styles.container}>
@@ -47,9 +55,9 @@ const Projects = () => {
         <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
       </div>
       <Table
-        data={projects}
-        headersName={['Project', 'Description', 'Client', 'Start Date', 'End Date']}
-        headers={['name', 'description', 'client', 'startDate', 'endDate']}
+        data={projectsData}
+        headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}
+        headers={['name', 'pmValue', 'description', 'client', 'startDate', 'endDate']}
         deleteProject={deleteHandler}
         editData={editData}
         setShowModal={(show) => dispatch(showDeleteMessage(show))}

@@ -4,15 +4,15 @@ import { useHistory } from 'react-router-dom';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
-import Preloader from '../../Shared/Preloader';
-import SharedForm from '../../Shared/Form';
-import InputText from '../../Shared/Input/InputText';
-import InputSelect from '../../Shared/Input/InputSelect';
-import Modal from '../../Shared/Modal';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
+import Preloader from 'Components/Shared/Preloader';
+import SharedForm from 'Components/Shared/Form';
+import InputText from 'Components/Shared/Input/InputText';
+import InputSelect from 'Components/Shared/Input/InputSelect';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
-import { showFeedbackMessage } from '../../../redux/projects/actions';
-import { editProject, postProject } from '../../../redux/projects/thunks';
+import { showFeedbackMessage } from 'redux/projects/actions';
+import { editProject, postProject } from 'redux/projects/thunks';
 import { getEmployee } from 'redux/employees/thunks';
 import projectsValidation from 'validations/projects';
 
@@ -60,6 +60,7 @@ const Form = () => {
       },
       body: JSON.stringify({
         name: data.name,
+        pm: data.pm,
         startDate: data.startDate,
         endDate: data.endDate,
         description: data.description,
@@ -68,7 +69,6 @@ const Form = () => {
         members: data.members
       })
     };
-    console.log(data);
     isProjectSelected ? dispatch(editProject(options)) : dispatch(postProject(options));
   };
 
@@ -77,6 +77,7 @@ const Form = () => {
     if (isProjectSelected)
       reset({
         name: projectSelected.name,
+        pm: projectSelected.pm?._id,
         startDate: projectSelected.startDate?.slice(0, 10),
         endDate: projectSelected.endDate?.slice(0, 10),
         description: projectSelected.description,
@@ -90,8 +91,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      <h2>{title}</h2>
-      <SharedForm onSubmit={handleSubmit(onSubmit)}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)} header={title}>
         <InputText
           id="name"
           name="name"
@@ -100,6 +100,17 @@ const Form = () => {
           placeholder="Write the project's name"
           register={register}
           error={errors.name?.message}
+          required
+        />
+        <InputSelect
+          className={styles.select}
+          arrayToMap={arrayToMapEmployees}
+          id="pm"
+          name="pm"
+          label="Project Manager"
+          placeholder="Select PM"
+          register={register}
+          error={errors.pm?.message}
           required
         />
         <InputText
@@ -176,8 +187,7 @@ const Form = () => {
                 arrayToMap={[
                   { id: 'TL', optionContent: 'TL' },
                   { id: 'QA', optionContent: 'QA' },
-                  { id: 'DEV', optionContent: 'DEV' },
-                  { id: 'PM', optionContent: 'PM' }
+                  { id: 'DEV', optionContent: 'DEV' }
                 ]}
                 id="role"
                 name={`members[${index}].role`}
@@ -213,7 +223,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!feedbackInfo.error) {
+          if (feedbackInfo.title !== 'Something went wrong') {
             history.goBack();
           }
         }}
