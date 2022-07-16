@@ -6,7 +6,7 @@ import {
   DELETE_EMPLOYEE_PENDING,
   DELETE_EMPLOYEE_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
-  SET_INFO_FOR_DELETE,
+  GET_ID_FROM_ROW,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
   POST_EMPLOYEE_ERROR,
@@ -28,7 +28,7 @@ const initialState = {
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
-  infoForDelete: '',
+  idFromRow: '',
   showFeedbackMessage: false,
   employeeSelected: {},
   employeeLogged: {}
@@ -75,10 +75,10 @@ export const employeesReducer = (state = initialState, action) => {
         ...state,
         infoForFeedback: action.payload
       };
-    case SET_INFO_FOR_DELETE:
+    case GET_ID_FROM_ROW:
       return {
         ...state,
-        infoForDelete: action.payload
+        idFromRow: action.payload
       };
     case SHOW_DELETE_MESSAGE:
       return {

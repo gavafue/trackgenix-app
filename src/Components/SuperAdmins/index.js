@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom';
 import Preloader from 'Components/Shared/Preloader';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  setInfoForDelete,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedSuperadmin,
@@ -22,7 +22,7 @@ const SuperAdmins = () => {
   const superadmins = useSelector((state) => state.superadmins.list);
   const isPending = useSelector((state) => state.superadmins.isPending);
   const infoForFeedback = useSelector((state) => state.superadmins.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.superadmins.infoForDelete);
+  const deleteInfo = useSelector((state) => state.superadmins.idFromRow);
   const showDelete = useSelector((state) => state.superadmins.showDeleteMessage);
   const showFeedback = useSelector((state) => state.superadmins.showFeedbackMessage);
 
@@ -65,7 +65,7 @@ const SuperAdmins = () => {
         headersName={['Name', 'Last Name', 'Email', 'Role', 'Status']}
         headers={['firstName', 'lastName', 'email', 'role', 'isActive']}
         setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
-        setInfoForDelete={(superAdminId) => dispatch(setInfoForDelete(superAdminId))}
+        setidFromRow={(superAdminId) => dispatch(setidFromRow(superAdminId))}
         editData={editData}
         deleteSuperAdmin={deleteHandler}
       />
@@ -79,7 +79,7 @@ const SuperAdmins = () => {
           handleClose={() => {
             dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={deleteInfo}
+          idFromRow={deleteInfo}
           deleteItem={deleteHandler}
           setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
         />

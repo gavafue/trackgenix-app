@@ -2,7 +2,7 @@ import React from 'react';
 import TableContent from './TableContent';
 import styles from './table.module.css';
 
-const Table = ({ data, headersName, headers, editData, setShowModal, setInfoForDelete }) => {
+const Table = ({ data, headersName, headers, editData, setShowModal, setidFromRow }) => {
   return (
     <section className={styles.container}>
       <table className={styles.table}>
@@ -19,7 +19,7 @@ const Table = ({ data, headersName, headers, editData, setShowModal, setInfoForD
           headers={headers}
           editData={editData}
           setShowModal={setShowModal}
-          setInfoForDelete={setInfoForDelete}
+          setidFromRow={setidFromRow}
         />
       </table>
     </section>
