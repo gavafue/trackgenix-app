@@ -31,7 +31,6 @@ export const tokenListener = () => {
   // Every time the token change, it is saved on sessionStorage
   firebase.auth().onIdTokenChanged(async (user) => {
     if (user) {
-      console.log(user);
       const token = await user.getIdToken();
       const {
         claims: { role }
