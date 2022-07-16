@@ -40,12 +40,13 @@ const Projects = () => {
     dispatch(deleteProject(deleteInfo));
   };
   const projectsData = projects.map((project) => {
-    return {
-      ...project,
-      pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
-      startDate: project.startDate.slice(0, 10),
-      endDate: project.endDate.slice(0, 10)
-    };
+    if (project.active)
+      return {
+        ...project,
+        pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
+        startDate: project.startDate.slice(0, 10),
+        endDate: project.endDate.slice(0, 10)
+      };
   });
 
   return (
