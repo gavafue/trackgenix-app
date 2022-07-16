@@ -1,24 +1,24 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: RouteComponent, ...props }) => {
-  const role = useSelector((state) => state.auth.authenticated.role);
-  const error = useSelector((state) => state.auth.error);
+  const role = sessionStorage.getItem('role');
   const token = sessionStorage.getItem('token');
+  const status = JSON.parse(sessionStorage.getItem('userStatus'));
 
   return (
     <Route
       {...props}
       render={(routeProps) => {
         if (token) {
-          console.log(role);
-          console.log('props', props.role);
+          if (status === false) {
+            return <Redirect to={'/accountInactive'} />;
+          }
+          if (role && role != props.role) {
+            return <Redirect to={'/notAllowed'} />;
+          }
           if (role === props.role) {
             return <RouteComponent {...routeProps} />;
-          }
-          if (role && !error) {
-            return <Redirect to={'/auth/notAllowed'} />;
           }
         }
         return <Redirect to={'/login'} />;

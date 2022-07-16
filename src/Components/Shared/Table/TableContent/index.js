@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './tableContent.module.css';
 import Button from 'Components/Shared/Button';
 
-const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete }) => {
+const TableContent = ({ headers, data, editData, setShowModal, setidFromRow }) => {
   return (
     <tbody className={styles.container}>
       {data.map((row) => {
@@ -23,7 +23,7 @@ const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete 
                   theme="secondary"
                   onClick={() => {
                     setShowModal(true);
-                    setInfoForDelete(row._id);
+                    setidFromRow(row._id);
                   }}
                 />
               </td>

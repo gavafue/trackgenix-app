@@ -10,7 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, deleteTask } from 'redux/tasks/thunks';
 import {
-  setInfoForDelete,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedItem,
@@ -22,7 +22,7 @@ const Tasks = () => {
   const tasks = useSelector((state) => state.tasks.list);
   const isPending = useSelector((state) => state.tasks.isPending);
   const feedbackInfo = useSelector((state) => state.tasks.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.tasks.infoForDelete);
+  const deleteInfo = useSelector((state) => state.tasks.idFromRow);
   const showDelete = useSelector((state) => state.tasks.showDeleteMessage);
   const showFeedback = useSelector((state) => state.tasks.showFeedbackMessage);
 
@@ -61,7 +61,7 @@ const Tasks = () => {
         headersName={['Project', 'Description', 'Week', 'Day', 'Hours']}
         headers={['nameProject', 'description', 'week', 'day', 'hours']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        setInfoForDelete={(taskId) => dispatch(setInfoForDelete(taskId))}
+        setidFromRow={(taskId) => dispatch(setidFromRow(taskId))}
         editData={editData}
         deleteTask={deleteHandler}
       />
@@ -75,7 +75,7 @@ const Tasks = () => {
           handleClose={() => {
             dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={deleteInfo}
+          idFromRow={deleteInfo}
           deleteItem={deleteHandler}
           setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         />
