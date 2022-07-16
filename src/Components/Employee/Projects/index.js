@@ -16,8 +16,7 @@ const Projects = () => {
   }, []);
 
   const projects = useSelector((state) => state.projects.list);
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
-
+  const employeeLogged = useSelector((state) => state.auth.authenticated?.data);
   const employeeProjects = projects.reduce((acc, project) => {
     const assignedProject = project.members.find((employee) => {
       return employee.name?._id === employeeLogged?._id;
@@ -38,14 +37,19 @@ const Projects = () => {
     }
     return acc;
   }, []);
+
   return (
     <section className={styles.container}>
-      <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
-        <ProjectsTableContent
-          data={employeeProjects}
-          headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
-        />
-      </EmployeeTable>
+      {employeeProjects.length > 0 ? (
+        <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
+          <ProjectsTableContent
+            data={employeeProjects}
+            headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
+          />
+        </EmployeeTable>
+      ) : (
+        `${employeeLogged.firstName} ${employeeLogged.lastName} has not projects assigned`
+      )}
     </section>
   );
 };
