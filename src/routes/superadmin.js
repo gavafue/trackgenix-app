@@ -1,13 +1,13 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import SuperAdmin from 'Components/SuperAdmin/index';
-import SAForm from 'Components/SuperAdmins/Form';
+import AddNewAdmin from 'Components/SuperAdmin/RegisterAdmin/index';
+
 const Superadmin = () => {
   return (
     <Switch>
-      <Route path="/" component={SuperAdmin} />
-      <Route path="/form/:id" component={SAForm} />
-      <Route path="/form" component={SAForm} />
+      <Route exact path="/superadmin" component={SuperAdmin} />
+      <Route path="/superadmin/addAdmin" component={AddNewAdmin} />
     </Switch>
   );
 };

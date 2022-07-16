@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteAdmin } from 'redux/admins/thunks';
 import {
   getSelectedAdmin,
-  setInfoForDelete,
+  getIdFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   cleanSelectedAdmin
@@ -22,7 +22,7 @@ const AdminsTable = () => {
   const admins = useSelector((state) => state.admins.list);
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.admins.infoForDelete);
+  const deleteInfo = useSelector((state) => state.admins.idFromRow);
   const showDelete = useSelector((state) => state.admins.showDeleteMessage);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const history = useHistory();
@@ -57,7 +57,7 @@ const AdminsTable = () => {
         deleteAdmin={deleteHandler}
         editData={editData}
         setShowModal={(handler) => dispatch(showDeleteMessage(handler))}
-        setInfoForDelete={(adminId) => dispatch(setInfoForDelete(adminId))}
+        getIdFromRow={(adminId) => dispatch(getIdFromRow(adminId))}
       />
       <Modal
         isOpen={showDelete}
@@ -69,7 +69,7 @@ const AdminsTable = () => {
           handleClose={() => {
             dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={deleteInfo}
+          idFromRow={deleteInfo}
           deleteItem={deleteHandler}
           setShowModal={(handler) => dispatch(showDeleteMessage(handler))}
         />

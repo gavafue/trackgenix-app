@@ -1,34 +1,28 @@
 import React from 'react';
 import styles from './tableContent.module.css';
-import Button from '../../Button';
-import { getSelectedAdmin } from 'redux/admins/actions';
-import { useDispatch } from 'react-redux';
+import Button from 'Components/Shared/Button';
 
-const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete }) => {
-  const dispatch = useDispatch();
+const TableContent = ({ headers, data, editData, setShowModal, getIdFromRow }) => {
   return (
-    <tbody>
+    <tbody className={styles.container}>
       {data.map((row) => {
         return (
-          <tr key={row._id} id={row._id}>
+          <tr key={row._id} id={row._id} className={styles.rows}>
             {headers.map((header, index) => {
               return (
-                <td key={index} className={styles.rows}>
+                <td key={index} className={styles.cell}>
                   {row[header]}
                 </td>
               );
             })}
-            <td className={styles.rows}>
+            <td className={styles.cell}>
               <Button onClick={() => editData(row)} label="Edit" />
-            </td>
-            <td className={styles.rows}>
               <Button
                 label="Delete"
                 theme="secondary"
                 onClick={() => {
                   setShowModal(true);
-                  setInfoForDelete(row._id);
-                  dispatch(getSelectedAdmin(row));
+                  getIdFromRow(row._id);
                 }}
               />
             </td>

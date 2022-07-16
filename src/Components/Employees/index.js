@@ -10,7 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { getEmployee, deleteEmployee } from 'redux/employees/thunks';
 import {
-  setInfoForDelete,
+  getIdFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedEmployee,
@@ -22,7 +22,7 @@ function Employees() {
   const employees = useSelector((state) => state.employees.list);
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.employees.infoForDelete);
+  const deleteInfo = useSelector((state) => state.employees.idFromRow);
   const showDelete = useSelector((state) => state.employees.showDeleteMessage);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const history = useHistory();
@@ -45,42 +45,40 @@ function Employees() {
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <div>
-        <Button label="Add new employee" onClick={createEmployee} />
-        <Table
-          data={employees}
-          headersName={['Name', 'Last Name', 'Email', 'Phone']}
-          headers={['firstName', 'lastName', 'email', 'phone']}
-          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-          setInfoForDelete={(employeeId) => dispatch(setInfoForDelete(employeeId))}
-          editData={editData}
-          deleteEmployee={deleteHandler}
-        />
-        <Modal
-          isOpen={showDelete}
+      <Button label="Add new employee" onClick={createEmployee} />
+      <Table
+        data={employees}
+        headersName={['Name', 'Last Name', 'Email', 'Phone']}
+        headers={['firstName', 'lastName', 'email', 'phone']}
+        setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+        getIdFromRow={(employeeId) => dispatch(getIdFromRow(employeeId))}
+        editData={editData}
+        deleteEmployee={deleteHandler}
+      />
+      <Modal
+        isOpen={showDelete}
+        handleClose={() => {
+          dispatch(showDeleteMessage(!showDelete));
+        }}
+      >
+        <DeleteMessage
           handleClose={() => {
             dispatch(showDeleteMessage(!showDelete));
           }}
-        >
-          <DeleteMessage
-            handleClose={() => {
-              dispatch(showDeleteMessage(!showDelete));
-            }}
-            infoForDelete={deleteInfo}
-            deleteItem={deleteHandler}
-            setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-          />
-        </Modal>
-        <Modal
-          isOpen={showFeedback}
-          handleClose={() => {
-            dispatch(showFeedbackMessage(!showFeedback));
-          }}
-        >
-          <FeedbackMessage infoForFeedback={feedbackInfo} />
-        </Modal>
-        {isPending && <Preloader />}
-      </div>
+          idFromRow={deleteInfo}
+          deleteItem={deleteHandler}
+          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+        />
+      </Modal>
+      <Modal
+        isOpen={showFeedback}
+        handleClose={() => {
+          dispatch(showFeedbackMessage(!showFeedback));
+        }}
+      >
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
+      </Modal>
+      {isPending && <Preloader />}
     </section>
   );
 }

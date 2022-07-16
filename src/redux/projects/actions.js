@@ -6,7 +6,7 @@ import {
   DELETE_PROJECT_PENDING,
   DELETE_PROJECT_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
-  SET_INFO_FOR_DELETE,
+  GET_ID_FROM_ROW,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
   POST_PROJECT_ERROR,
@@ -54,8 +54,8 @@ export const setInfoForFeedback = (message) => ({
   payload: message
 });
 
-export const setInfoForDelete = (id) => ({
-  type: SET_INFO_FOR_DELETE,
+export const getIdFromRow = (id) => ({
+  type: GET_ID_FROM_ROW,
   payload: id
 });
 

@@ -18,6 +18,7 @@ const Form = () => {
   const isPending = useSelector((state) => state.auth.isPending);
   const feedbackInfo = useSelector((state) => state.auth.infoForFeedback);
   const showFeedback = useSelector((state) => state.auth.showFeedbackMessage);
+  const status = useSelector((state) => state.auth?.authenticated?.data?.active) || false;
   const history = useHistory();
   const {
     handleSubmit,
@@ -33,9 +34,9 @@ const Form = () => {
       if (response) {
         switch (response.payload?.role) {
           case 'EMPLOYEE':
-            return history.push('/employee');
+            return history.push(status ? '/employee' : '/accountinactive');
           case 'ADMIN':
-            return history.push('/admin');
+            return history.push(status ? '/admin' : '/accountinactive');
           case 'SUPERADMIN':
             return history.push('/superadmin');
           default:

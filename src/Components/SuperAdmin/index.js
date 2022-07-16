@@ -6,12 +6,7 @@ import { useEffect, useState } from 'react';
 import { editAdminStatus, getAdmins } from 'redux/admins/thunks';
 import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Preloader from 'Components/Shared/Preloader';
-import {
-  showFeedbackMessage,
-  setInfoForDelete,
-  // showDeleteMessage,
-  getSelectedAdmin
-} from 'redux/admins/actions';
+import { showFeedbackMessage, getIdFromRow, getSelectedAdmin } from 'redux/admins/actions';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { useHistory } from 'react-router-dom';
 import Button from 'Components/Shared/Button';
@@ -20,8 +15,7 @@ const SuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.admins.infoForDelete);
-  // const showDelete = useSelector((state) => state.admins.showDeleteMessage);
+  const deleteInfo = useSelector((state) => state.admins.idFromRow);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const adminSelected = useSelector((state) => state.admins.adminSelected);
   const history = useHistory();
@@ -70,9 +64,11 @@ const SuperAdmin = () => {
         headersName={['Name', 'Location', 'Status']}
         setShowModal={setShowModal}
         editData={editData}
-        setInfoForDelete={(adminId) => dispatch(setInfoForDelete(adminId))}
+        getIdFromRow={(adminId) => dispatch(getIdFromRow(adminId))}
       />
-      <Button />
+      <div className={styles.button}>
+        <Button label={'Add admin'} onClick={() => history.push(`/superadmin/addAdmin/`)} />
+      </div>
       <Modal
         isOpen={showModal}
         handleClose={() => {
@@ -85,7 +81,7 @@ const SuperAdmin = () => {
             setShowModal(false);
           }}
           resourceName={'Admin'}
-          infoForDelete={deleteInfo}
+          idFromRow={deleteInfo}
           deleteItem={() => deleteHandler()}
           setShowModal={setShowModal}
         />

@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   isPending: false,
-  authenticated: { role: '', token: '' },
+  authenticated: { role: '', token: '', data: {} },
   error: ''
 };
 export const authReducer = (state = initialState, action) => {

@@ -10,7 +10,7 @@ import styles from './projects.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProjects, deleteProject } from 'redux/projects/thunks';
 import {
-  setInfoForDelete,
+  getIdFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedProject,
@@ -23,7 +23,7 @@ const Projects = () => {
   const projects = useSelector((state) => state.projects.list);
   const isPending = useSelector((state) => state.projects.isPending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.projects.infoForDelete);
+  const deleteInfo = useSelector((state) => state.projects.idFromRow);
   const showDelete = useSelector((state) => state.projects.showDeleteMessage);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
 
@@ -51,9 +51,7 @@ const Projects = () => {
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      <div>
-        <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
-      </div>
+      <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}
@@ -61,7 +59,7 @@ const Projects = () => {
         deleteProject={deleteHandler}
         editData={editData}
         setShowModal={(show) => dispatch(showDeleteMessage(show))}
-        setInfoForDelete={(projectId) => dispatch(setInfoForDelete(projectId))}
+        getIdFromRow={(projectId) => dispatch(getIdFromRow(projectId))}
       />
       <Modal
         isOpen={showDelete}
@@ -73,7 +71,7 @@ const Projects = () => {
           handleClose={() => {
             dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={deleteInfo}
+          idFromRow={deleteInfo}
           deleteItem={deleteHandler}
           setShowModal={(show) => dispatch(showDeleteMessage(show))}
         />
