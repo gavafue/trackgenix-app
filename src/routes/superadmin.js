@@ -5,7 +5,7 @@ import SAForm from 'Components/SuperAdmins/Form';
 const Superadmin = () => {
   return (
     <Switch>
-      <Route exact path="/super-admin" component={SuperAdmins} />
+      <Route exact path="/" component={SuperAdmins} />
       <Route path="/super-admin/form/:id" component={SAForm} />
       <Route path="/super-admin/form" component={SAForm} />
     </Switch>
