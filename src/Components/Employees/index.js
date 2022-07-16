@@ -42,12 +42,16 @@ function Employees() {
     dispatch(deleteEmployee(deleteInfo));
   };
 
+  const employeesData = employees.map((employee) => {
+    if (employee.active) return employee;
+  });
+
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
       <Button label="Add new employee" onClick={createEmployee} />
       <Table
-        data={employees}
+        data={employeesData}
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
         headers={['firstName', 'lastName', 'email', 'phone']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
