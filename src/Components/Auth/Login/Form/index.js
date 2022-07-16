@@ -18,7 +18,7 @@ const Form = () => {
   const isPending = useSelector((state) => state.auth.isPending);
   const feedbackInfo = useSelector((state) => state.auth.infoForFeedback);
   const showFeedback = useSelector((state) => state.auth.showFeedbackMessage);
-  const status = JSON.parse(sessionStorage.getItem('userStatus'));
+
   const history = useHistory();
   const {
     handleSubmit,
@@ -32,6 +32,7 @@ const Form = () => {
   const onSubmit = (credentials) => {
     dispatch(login(credentials)).then((response) => {
       if (response) {
+        const status = JSON.parse(sessionStorage.getItem('userStatus'));
         switch (response.payload?.role) {
           case 'EMPLOYEE':
             return history.push(status ? '/employee' : '/accountinactive');
