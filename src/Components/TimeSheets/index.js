@@ -10,7 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheets, deleteTimesheet } from 'redux/timesheet/thunks';
 import {
-  setInfoForDelete,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   selectOneTimesheet,
@@ -27,7 +27,7 @@ const TimeSheets = () => {
   const timesheets = useSelector((state) => state.timesheets.list);
   const isPending = useSelector((state) => state.timesheets.isPending);
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.timesheets.infoForDelete);
+  const deleteInfo = useSelector((state) => state.timesheets.idFromRow);
   const showDelete = useSelector((state) => state.timesheets.showDeleteMessage);
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
 
@@ -54,27 +54,23 @@ const TimeSheets = () => {
   return (
     <section className={styles.container}>
       <h1>Timesheets</h1>
-      <div>
-        <Button onClick={createTimesheet} label="Add new timesheet" />
-      </div>
-      <div>
-        <Table
-          data={timesheetData}
-          headersName={[
-            'Project Name',
-            'Date',
-            'Description',
-            'Hours Worked',
-            'WeekSprint',
-            'Employee'
-          ]}
-          headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
-          setShowModal={(isModalShowed) => dispatch(showDeleteMessage(isModalShowed))}
-          setInfoForDelete={(timesheetId) => dispatch(setInfoForDelete(timesheetId))}
-          editData={editData}
-          deleteTimesheet={deleteHandler}
-        />
-      </div>
+      <Button onClick={createTimesheet} label="Add new timesheet" />
+      <Table
+        data={timesheetData}
+        headersName={[
+          'Project Name',
+          'Date',
+          'Description',
+          'Hours Worked',
+          'WeekSprint',
+          'Employee'
+        ]}
+        headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
+        setShowModal={(isModalShowed) => dispatch(showDeleteMessage(isModalShowed))}
+        setidFromRow={(timesheetId) => dispatch(setidFromRow(timesheetId))}
+        editData={editData}
+        deleteTimesheet={deleteHandler}
+      />
       <Modal
         isOpen={showDelete}
         handleClose={() => {
@@ -85,7 +81,7 @@ const TimeSheets = () => {
           handleClose={() => {
             dispatch(showDeleteMessage(false));
           }}
-          infoForDelete={deleteInfo}
+          idFromRow={deleteInfo}
           deleteItem={deleteHandler}
           setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         />

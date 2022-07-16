@@ -6,7 +6,7 @@ import {
   DELETE_ADMIN_PENDING,
   DELETE_ADMIN_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
-  SET_INFO_FOR_DELETE,
+  GET_ID_FROM_ROW,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
   POST_ADMIN_PENDING,
@@ -52,8 +52,8 @@ export const setInfoForFeedback = (message) => ({
   payload: message
 });
 
-export const setInfoForDelete = (id) => ({
-  type: SET_INFO_FOR_DELETE,
+export const setidFromRow = (id) => ({
+  type: GET_ID_FROM_ROW,
   payload: id
 });
 

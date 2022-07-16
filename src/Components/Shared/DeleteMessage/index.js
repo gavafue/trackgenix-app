@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'Components/Shared/Button';
 import styles from './deleteMessage.module.css';
 
-const DeleteMessage = ({ resourceName, deleteItem, handleClose, infoForDelete, setShowModal }) => {
+const DeleteMessage = ({ resourceName, deleteItem, handleClose, idFromRow, setShowModal }) => {
   return (
     <div>
       <h1 className={styles.title}>Delete {resourceName}</h1>
@@ -13,7 +13,7 @@ const DeleteMessage = ({ resourceName, deleteItem, handleClose, infoForDelete, s
             label="Delete"
             theme="secondary"
             onClick={() => {
-              deleteItem(infoForDelete);
+              deleteItem(idFromRow);
               setShowModal(false);
             }}
           />
