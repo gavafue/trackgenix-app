@@ -64,6 +64,7 @@ function Employees() {
         setidFromRow={(employeeId) => dispatch(setidFromRow(employeeId))}
         editData={editData}
         deleteEmployee={deleteHandler}
+        lowLogic={false}
       />
       <Modal
         isOpen={showDelete}
