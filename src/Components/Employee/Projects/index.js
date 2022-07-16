@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { getTimesheets } from 'redux/timesheet/thunks';
 import EmployeeTable from 'Components/Employee/TableAndContents';
 import ProjectsTableContent from 'Components/Employee/TableAndContents/Content/projectsTableContent';
-
+import ProjectManagerProjectsContent from '../TableAndContents/Content/PMprojectsTableContent';
 const Projects = () => {
   const dispatch = useDispatch();
 
@@ -18,10 +18,10 @@ const Projects = () => {
   const projects = useSelector((state) => state.projects.list);
   const employeeLogged = useSelector((state) => state.auth.authenticated?.data);
   const employeeProjects = projects.reduce((acc, project) => {
-    const assignedProject = project.members.find((employee) => {
-      return employee.name?._id === employeeLogged?._id;
+    const assignedProjectEmployee = project.members.find((employee) => {
+      return employee.name?._id === employeeLogged?._id && employee.role != 'PM';
     });
-    if (assignedProject && Object.keys(assignedProject).length) {
+    if (assignedProjectEmployee && Object.keys(assignedProjectEmployee).length) {
       return [
         ...acc,
         {
@@ -30,8 +30,29 @@ const Projects = () => {
           status: project.active ? 'Active' : 'Inactive',
           client: project.client,
           description: project.description,
-          role: assignedProject.role,
-          rate: assignedProject.rate
+          role: assignedProjectEmployee.role,
+          rate: assignedProjectEmployee.rate
+        }
+      ];
+    }
+    return acc;
+  }, []);
+
+  const projectManagerProjects = projects.reduce((acc, project) => {
+    const assignedPMProjects = project.members.find((employee) => {
+      return employee.name?._id === employeeLogged?._id && employee.role === 'PM';
+    });
+    if (assignedPMProjects && Object.keys(assignedPMProjects).length) {
+      return [
+        ...acc,
+        {
+          projectName: project.name,
+          projectId: project._id,
+          status: project.active ? 'Active' : 'Inactive',
+          client: project.client,
+          description: project.description,
+          role: assignedPMProjects.role,
+          rate: assignedPMProjects.rate
         }
       ];
     }
@@ -40,16 +61,19 @@ const Projects = () => {
 
   return (
     <section className={styles.container}>
-      {employeeProjects.length > 0 ? (
-        <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
-          <ProjectsTableContent
-            data={employeeProjects}
-            headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
-          />
-        </EmployeeTable>
-      ) : (
-        `${employeeLogged.firstName} ${employeeLogged.lastName} has not projects assigned`
-      )}
+      <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
+        <ProjectsTableContent
+          data={employeeProjects}
+          headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
+        />
+      </EmployeeTable>
+
+      <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
+        <ProjectManagerProjectsContent
+          data={projectManagerProjects}
+          headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
+        />
+      </EmployeeTable>
     </section>
   );
 };
