@@ -36,13 +36,9 @@ const Projects = () => {
     }
     return acc;
   }, []);
-  console.log(projects);
 
   const projectManagerProjects = projects.reduce((acc, project) => {
-    const assignedPMProjects = projects.find((project) => {
-      return project.pm?._id === employeeLogged?._id;
-    });
-    if (assignedPMProjects && Object.keys(assignedPMProjects).length) {
+    if (project.pm === employeeLogged?._id) {
       return [
         ...acc,
         {
@@ -50,14 +46,37 @@ const Projects = () => {
           projectId: project._id,
           status: project.active ? 'Active' : 'Inactive',
           client: project.client,
-          description: project.description,
-          role: assignedPMProjects.role,
-          rate: assignedPMProjects.rate
+          description: project.description
         }
       ];
     }
     return acc;
   }, []);
+
+  // const projectManagerProjects = projects.reduce((acc, project) => {
+  //   const assignedPMProjects = projects.find((project) => {
+  //     return project.pm === employeeLogged?._id;
+  //   });
+  //   console.log('assigned', assignedPMProjects);
+  //   if (assignedPMProjects && Object.keys(assignedPMProjects).length) {
+  //     return [
+  //       {
+  //         projectName: project.name,
+  //         projectId: project._id,
+  //         status: project.active ? 'Active' : 'Inactive',
+  //         client: project.client,
+  //         description: project.description,
+  //         role: assignedPMProjects.members.map((member) => {
+  //           return member.role;
+  //         }),
+  //         rate: assignedPMProjects.members.map((member) => {
+  //           return member.rate;
+  //         })
+  //       }
+  //     ];
+  //   }
+  //   return acc;
+  // }, []);
 
   return (
     <section className={styles.container}>
@@ -82,12 +101,10 @@ const Projects = () => {
       {!toggleTable && (
         <span>
           <h2>Project Manager Table</h2>
-          <EmployeeTable
-            headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}
-          >
+          <EmployeeTable headersName={['Project', 'Status', 'Client', 'Description']}>
             <ProjectManagerProjectsContent
               data={projectManagerProjects}
-              headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
+              headers={['projectName', 'status', 'client', 'description']}
             />
           </EmployeeTable>
         </span>
