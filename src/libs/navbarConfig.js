@@ -17,6 +17,17 @@ export const employeeNavbar = [
   }
 ];
 
+export const superAdminNavbar = [
+  { path: '/superadmin/home', name: 'Home' },
+  { path: '/superadmin/admins', name: 'Admins' }
+];
+
+export const adminNavbar = [
+  { path: '/admin/home', name: 'Home' },
+  { path: '/admin/employees', name: 'Employees' },
+  { path: '/admin/projects', name: 'Projects' }
+];
+
 export const defaultNavbaritems = [
   { path: '/admins', name: 'Admins' },
   { path: '/super-admins', name: 'Super Admins' },
