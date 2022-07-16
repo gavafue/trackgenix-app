@@ -18,7 +18,7 @@ const Form = () => {
   const isPending = useSelector((state) => state.auth.isPending);
   const feedbackInfo = useSelector((state) => state.auth.infoForFeedback);
   const showFeedback = useSelector((state) => state.auth.showFeedbackMessage);
-  const status = useSelector((state) => state.auth?.authenticated?.data?.active) || false;
+  const status = JSON.parse(sessionStorage.getItem('userStatus'));
   const history = useHistory();
   const {
     handleSubmit,
