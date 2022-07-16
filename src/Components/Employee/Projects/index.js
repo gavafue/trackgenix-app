@@ -1,18 +1,17 @@
 import styles from './projects.module.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getProjects } from 'redux/projects/thunks';
 import { useDispatch } from 'react-redux';
-import { getTimesheets } from 'redux/timesheet/thunks';
 import EmployeeTable from 'Components/Employee/TableAndContents';
 import ProjectsTableContent from 'Components/Employee/TableAndContents/Content/projectsTableContent';
 import ProjectManagerProjectsContent from '../TableAndContents/Content/PMprojectsTableContent';
+import Button from 'Components/Shared/Button';
 const Projects = () => {
   const dispatch = useDispatch();
-
+  const [toggleTable, setToggleTable] = useState(true);
   useEffect(() => {
     dispatch(getProjects());
-    dispatch(getTimesheets());
   }, []);
 
   const projects = useSelector((state) => state.projects.list);
@@ -37,10 +36,11 @@ const Projects = () => {
     }
     return acc;
   }, []);
+  console.log(projects);
 
   const projectManagerProjects = projects.reduce((acc, project) => {
-    const assignedPMProjects = project.members.find((employee) => {
-      return employee.name?._id === employeeLogged?._id && employee.role === 'PM';
+    const assignedPMProjects = projects.find((project) => {
+      return project.pm?._id === employeeLogged?._id;
     });
     if (assignedPMProjects && Object.keys(assignedPMProjects).length) {
       return [
@@ -61,19 +61,37 @@ const Projects = () => {
 
   return (
     <section className={styles.container}>
-      <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
-        <ProjectsTableContent
-          data={employeeProjects}
-          headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
-        />
-      </EmployeeTable>
+      <Button
+        label={toggleTable ? 'Change to PM' : 'Change to Employee'}
+        onClick={() => setToggleTable(!toggleTable)}
+      />
+      {toggleTable && (
+        <span>
+          <h2>Employees Table</h2>
+          <EmployeeTable
+            headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}
+          >
+            <ProjectsTableContent
+              data={employeeProjects}
+              headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
+            />
+          </EmployeeTable>
+        </span>
+      )}
 
-      <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
-        <ProjectManagerProjectsContent
-          data={projectManagerProjects}
-          headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
-        />
-      </EmployeeTable>
+      {!toggleTable && (
+        <span>
+          <h2>Project Manager Table</h2>
+          <EmployeeTable
+            headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}
+          >
+            <ProjectManagerProjectsContent
+              data={projectManagerProjects}
+              headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
+            />
+          </EmployeeTable>
+        </span>
+      )}
     </section>
   );
 };
