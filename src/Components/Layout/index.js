@@ -41,30 +41,30 @@ function Layout() {
         <Suspense fallback={<Preloader />}>
           <Switch>
             <Route path="/home" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/admins" component={Admins} />
+            <Route path="/login" component={Login} />
+            <Route path="/admins" component={Admins} />
             <Route path="/admins/form/:id" component={AdminsForm} />
             <Route path="/admins/form" component={AdminsForm} />
-            <Route exact path="/employees" component={Employees} />
+            <Route path="/employees" component={Employees} />
             <Route path="/employees/form/:id" component={EmployeesForm} />
             <Route path="/employees/form" component={EmployeesForm} />
-            <Route exact path="/projects" component={Projects} />
+            <Route path="/projects" component={Projects} />
             <Route path="/projects/form/:id" component={ProjectsForm} />
             <Route path="/projects/form" component={ProjectsForm} />
-            <Route exact path="/super-admins" component={Superadmins} />
+            <Route path="/super-admins" component={Superadmins} />
             <Route path="/super-admins/form/:id" component={SuperadminsForm} />
             <Route path="/super-admins/form" component={AdminsForm} />
-            <Route exact path="/time-sheets" component={TimeSheets} />
+            <Route path="/time-sheets" component={TimeSheets} />
             <Route path="/time-sheets/form/:id" component={TimeSheetsForm} />
             <Route path="/time-sheets/form" component={TimeSheetsForm} />
-            <Route exact path="/tasks" component={Tasks} />
+            <Route path="/tasks" component={Tasks} />
             <Route path="/tasks/form/:id" component={TasksForm} />
             <Route path="/tasks/form" component={TasksForm} />
             <Route path="/accountinactive" component={AccountInactive} />;
             <Route path="/notAllowed" component={NotAllowed} />;
-            <PrivateRoute exact path="/employee" role="EMPLOYEE" component={Employee} />
-            <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
-            <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={Superadmin} />
+            <PrivateRoute path="/employee" role="EMPLOYEE" component={Employee} />
+            <PrivateRoute path="/admin" role="ADMIN" component={Admin} />
+            <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
             <Route path="/auth" component={AuthRoutes} />
             <Route exact path="/">
               <Redirect to="/home" />
