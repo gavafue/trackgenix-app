@@ -31,6 +31,7 @@ export const tokenListener = () => {
   // Every time the token change, it is saved on sessionStorage
   firebase.auth().onIdTokenChanged(async (user) => {
     if (user) {
+      console.log(user);
       const token = await user.getIdToken();
       const {
         claims: { role }
@@ -38,7 +39,8 @@ export const tokenListener = () => {
       const userData = await fetchUser({ role }.role, user.email);
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('role', { role }.role);
-      sessionStorage.setItem('userStatus', userData.active);
+      sessionStorage.setItem('userStatus', userData?.active);
+      console.log('userData', userData);
       store.dispatch(
         setAuthentication({
           token,
