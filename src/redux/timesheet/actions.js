@@ -5,7 +5,7 @@ import {
   DELETE_TIMESHEET_ERROR,
   DELETE_TIMESHEET_SUCCESS,
   DELETE_TIMESHEET_PENDING,
-  SET_INFO_FOR_DELETE,
+  GET_ID_FROM_ROW,
   SET_INFO_FOR_FEEDBACK,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
@@ -55,8 +55,8 @@ export const setInfoForFeedback = (message) => ({
   payload: message
 });
 
-export const setInfoForDelete = (id) => ({
-  type: SET_INFO_FOR_DELETE,
+export const setidFromRow = (id) => ({
+  type: GET_ID_FROM_ROW,
   payload: id
 });
 

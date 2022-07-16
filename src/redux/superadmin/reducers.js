@@ -6,7 +6,7 @@ import {
   DELETE_SUPERADMIN_PENDING,
   DELETE_SUPERADMIN_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
-  SET_INFO_FOR_DELETE,
+  GET_ID_FROM_ROW,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
   POST_SUPERADMIN_ERROR,
@@ -25,7 +25,7 @@ const initialState = {
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
-  infoForDelete: '',
+  idFromRow: '',
   showFeedbackMessage: false,
   selectedSuperadmin: {}
 };
@@ -71,10 +71,10 @@ export const superadminReducer = (state = initialState, action) => {
         ...state,
         infoForFeedback: action.payload
       };
-    case SET_INFO_FOR_DELETE:
+    case GET_ID_FROM_ROW:
       return {
         ...state,
-        infoForDelete: action.payload
+        idFromRow: action.payload
       };
     case SHOW_DELETE_MESSAGE:
       return {

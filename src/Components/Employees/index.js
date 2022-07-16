@@ -10,7 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { getEmployee, deleteEmployee } from 'redux/employees/thunks';
 import {
-  setInfoForDelete,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedEmployee,
@@ -22,7 +22,7 @@ function Employees() {
   const employees = useSelector((state) => state.employees.list);
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.employees.infoForDelete);
+  const deleteInfo = useSelector((state) => state.employees.idFromRow);
   const showDelete = useSelector((state) => state.employees.showDeleteMessage);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const history = useHistory();
@@ -51,7 +51,7 @@ function Employees() {
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
         headers={['firstName', 'lastName', 'email', 'phone']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        setInfoForDelete={(employeeId) => dispatch(setInfoForDelete(employeeId))}
+        setidFromRow={(employeeId) => dispatch(setidFromRow(employeeId))}
         editData={editData}
         deleteEmployee={deleteHandler}
       />
@@ -65,7 +65,7 @@ function Employees() {
           handleClose={() => {
             dispatch(showDeleteMessage(!showDelete));
           }}
-          infoForDelete={deleteInfo}
+          idFromRow={deleteInfo}
           deleteItem={deleteHandler}
           setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
         />
