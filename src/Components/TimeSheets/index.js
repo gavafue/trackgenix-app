@@ -54,27 +54,23 @@ const TimeSheets = () => {
   return (
     <section className={styles.container}>
       <h1>Timesheets</h1>
-      <div>
-        <Button onClick={createTimesheet} label="Add new timesheet" />
-      </div>
-      <div>
-        <Table
-          data={timesheetData}
-          headersName={[
-            'Project Name',
-            'Date',
-            'Description',
-            'Hours Worked',
-            'WeekSprint',
-            'Employee'
-          ]}
-          headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
-          setShowModal={(isModalShowed) => dispatch(showDeleteMessage(isModalShowed))}
-          setInfoForDelete={(timesheetId) => dispatch(setInfoForDelete(timesheetId))}
-          editData={editData}
-          deleteTimesheet={deleteHandler}
-        />
-      </div>
+      <Button onClick={createTimesheet} label="Add new timesheet" />
+      <Table
+        data={timesheetData}
+        headersName={[
+          'Project Name',
+          'Date',
+          'Description',
+          'Hours Worked',
+          'WeekSprint',
+          'Employee'
+        ]}
+        headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
+        setShowModal={(isModalShowed) => dispatch(showDeleteMessage(isModalShowed))}
+        setInfoForDelete={(timesheetId) => dispatch(setInfoForDelete(timesheetId))}
+        editData={editData}
+        deleteTimesheet={deleteHandler}
+      />
       <Modal
         isOpen={showDelete}
         handleClose={() => {
