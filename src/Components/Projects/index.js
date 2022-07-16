@@ -26,7 +26,7 @@ const Projects = () => {
   const deleteInfo = useSelector((state) => state.projects.idFromRow);
   const showDelete = useSelector((state) => state.projects.showDeleteMessage);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const toggleIsActive = () => {
     setIsActive((current) => !current);
   };
@@ -63,7 +63,7 @@ const Projects = () => {
     <section className={styles.container}>
       <h2>Projects</h2>
       <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
-      <Button label={`Show ${isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
+      <Button label={`Show ${!isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}

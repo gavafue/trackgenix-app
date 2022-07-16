@@ -25,7 +25,7 @@ function Employees() {
   const deleteInfo = useSelector((state) => state.employees.idFromRow);
   const showDelete = useSelector((state) => state.employees.showDeleteMessage);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const toggleIsActive = () => {
     setIsActive((current) => !current);
   };
@@ -55,7 +55,7 @@ function Employees() {
     <section className={styles.container}>
       <h2>Employees</h2>
       <Button label="Add new employee" onClick={createEmployee} />
-      <Button label={`Show ${isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
+      <Button label={`Show ${!isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
       <Table
         data={employeesData}
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
