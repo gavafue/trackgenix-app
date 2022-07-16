@@ -5,8 +5,8 @@ import AddNewAdmin from 'Components/SuperAdmin/RegisterAdmin/index';
 const Superadmin = () => {
   return (
     <Switch>
-      <Route path="/addAdmin" component={AddNewAdmin} />
-      <Route exact path="/" component={SuperAdmins} />
+      <Route path="/superadmin/addAdmin" component={AddNewAdmin} />
+      <Route path="/superadmin" component={SuperAdmins} />
     </Switch>
   );
 };
