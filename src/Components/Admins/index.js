@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAdmins } from '../../redux/admins/thunks';
+import { getAdmins } from 'redux/admins/thunks';
 import styles from './admins.module.css';
 import AdminsTable from './Table';
-import Button from '../Shared/Button';
+import Button from 'Components/Shared/Button';
 
 const Admins = () => {
   const dispatch = useDispatch();

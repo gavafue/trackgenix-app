@@ -88,8 +88,7 @@ const Form = () => {
 
   return (
     <div className={styles.container}>
-      <h2>{title}</h2>
-      <SharedForm onSubmit={handleSubmit(onSubmit)}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)} header={title}>
         <Input
           label="Name"
           name="name"
@@ -184,7 +183,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!feedbackInfo.error) {
+          if (feedbackInfo.title !== 'Something went wrong') {
             history.goBack();
           }
         }}

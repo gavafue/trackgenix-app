@@ -1,5 +1,5 @@
 import styles from 'Components/SuperAdmin/index.module.css';
-import Table from 'Components/Shared/Table';
+import Table from 'Components/SuperAdmin/Table';
 import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import {
 } from 'redux/admins/actions';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { useHistory } from 'react-router-dom';
+import Button from 'Components/Shared/Button';
 
 const SuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
@@ -37,17 +38,16 @@ const SuperAdmin = () => {
 
   const admins = useSelector((state) => state.admins.list).map((admin) => ({
     ...admin,
-    name: `${admin.name} ${admin.lastName}`,
+    fullName: `${admin.name} ${admin.lastName}`,
     location: admin.city,
-    active: admin.active ? 'Active' : 'Inactive'
+    isActive: admin.active ? 'Active' : 'Inactive'
   }));
-  console.log(admins);
+  console.log(adminSelected);
   const deleteHandler = () => {
-    console.log('adminselected', adminSelected);
     const options = {
       headers: { 'Content-type': 'application/json' },
-      method: 'DELETE',
-      url: `${process.env.REACT_APP_API_URL}/admins/lowlogic/${deleteInfo}`,
+      method: 'PUT',
+      url: `${process.env.REACT_APP_API_URL}/admins/status/${deleteInfo}`,
       body: JSON.stringify({
         name: adminSelected.name,
         lastName: adminSelected.lastName,
@@ -57,7 +57,7 @@ const SuperAdmin = () => {
         dateBirth: adminSelected.dateBirth?.slice(0, 10),
         city: adminSelected.city,
         zip: adminSelected.zip,
-        active: false
+        active: !adminSelected.active
       })
     };
     dispatch(editAdminStatus(options));
@@ -66,12 +66,13 @@ const SuperAdmin = () => {
     <section className={styles.container}>
       <Table
         data={admins}
-        headers={['name', 'location', 'active']}
+        headers={['fullName', 'location', 'isActive']}
         headersName={['Name', 'Location', 'Status']}
         setShowModal={setShowModal}
         editData={editData}
         setInfoForDelete={(adminId) => dispatch(setInfoForDelete(adminId))}
       />
+      <Button />
       <Modal
         isOpen={showModal}
         handleClose={() => {

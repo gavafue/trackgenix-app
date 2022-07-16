@@ -173,7 +173,7 @@ export const editAdminStatus = (options) => {
             })
           );
           dispatch(showFeedbackMessage(true));
-          dispatch(editAdminStatusError(response.data.message));
+          dispatch(editAdminStatusError(response.message));
         } else {
           dispatch(editAdminStatusSuccess(response.data));
           dispatch(

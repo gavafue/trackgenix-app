@@ -4,14 +4,14 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './form.module.css';
-import Preloader from '../../Shared/Preloader';
-import SharedForm from '../../Shared/Form';
-import Input from '../../Shared/Input/InputText';
-import Select from '../../Shared/Input/InputSelect';
-import Modal from '../../Shared/Modal';
-import FeedbackMessage from '../../Shared/FeedbackMessage';
-import { editSuperAdmin, postSuperAdmin } from '../../../redux/superadmin/thunks';
-import { showFeedbackMessage } from '../../../redux/superadmin/actions';
+import Preloader from 'Components/Shared/Preloader';
+import SharedForm from 'Components/Shared/Form';
+import Input from 'Components/Shared/Input/InputText';
+import Select from 'Components/Shared/Input/InputSelect';
+import Modal from 'Components/Shared/Modal';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import { editSuperAdmin, postSuperAdmin } from 'redux/superadmin/thunks';
+import { showFeedbackMessage } from 'redux/superadmin/actions';
 import superadminsValidation from 'validations/superadmins';
 
 const Form = () => {
@@ -41,7 +41,6 @@ const Form = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        role: 'SA',
         active: data.active
       })
     };
@@ -71,8 +70,7 @@ const Form = () => {
   return (
     <div className={styles.container}>
       {isPending && <Preloader />}
-      <h2>{title}</h2>
-      <SharedForm onSubmit={handleSubmit(onSubmit)}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)} header={title}>
         <Input
           label="Name"
           id="firstName"
@@ -118,7 +116,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
-          if (!infoForFeedback.error) {
+          if (infoForFeedback.title !== 'Something went wrong') {
             history.goBack();
           }
         }}

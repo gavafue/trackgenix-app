@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../Button';
+import Button from 'Components/Shared/Button';
 import styles from './deleteMessage.module.css';
 
 const DeleteMessage = ({ resourceName, deleteItem, handleClose, infoForDelete, setShowModal }) => {
