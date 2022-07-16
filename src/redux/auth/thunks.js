@@ -30,6 +30,7 @@ export const login = (credentials) => {
         } = await response.user.getIdTokenResult();
         sessionStorage.setItem('role', role);
         const userData = await fetchUser(role, credentials.email);
+        sessionStorage.setItem('userStatus', userData.active);
         return dispatch(
           loginSuccess({
             role,
