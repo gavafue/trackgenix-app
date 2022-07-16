@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Table from 'Components/Shared/Table';
 import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Modal from 'Components/Shared/Modal';
@@ -26,7 +26,10 @@ const Projects = () => {
   const deleteInfo = useSelector((state) => state.projects.idFromRow);
   const showDelete = useSelector((state) => state.projects.showDeleteMessage);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
-
+  const [isActive, setIsActive] = useState(false);
+  const toggleIsActive = () => {
+    setIsActive((current) => !current);
+  };
   const editData = (row) => {
     dispatch(getSelectedProject(row));
     history.push(`/projects/form/`);
@@ -40,7 +43,14 @@ const Projects = () => {
     dispatch(deleteProject(deleteInfo));
   };
   const projectsData = projects.map((project) => {
-    if (project.active)
+    if (isActive && project.active)
+      return {
+        ...project,
+        pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
+        startDate: project.startDate.slice(0, 10),
+        endDate: project.endDate.slice(0, 10)
+      };
+    if (!isActive && !project.active)
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
@@ -53,6 +63,7 @@ const Projects = () => {
     <section className={styles.container}>
       <h2>Projects</h2>
       <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
+      <Button label={`Show ${isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}

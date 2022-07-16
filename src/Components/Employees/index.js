@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
 import Table from 'Components/Shared/Table';
@@ -25,6 +25,10 @@ function Employees() {
   const deleteInfo = useSelector((state) => state.employees.idFromRow);
   const showDelete = useSelector((state) => state.employees.showDeleteMessage);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
+  const [isActive, setIsActive] = useState(false);
+  const toggleIsActive = () => {
+    setIsActive((current) => !current);
+  };
   const history = useHistory();
   const editData = (row) => {
     dispatch(getSelectedEmployee(row));
@@ -43,13 +47,15 @@ function Employees() {
   };
 
   const employeesData = employees.map((employee) => {
-    if (employee.active) return employee;
+    if (isActive && employee.active) return employee;
+    if (!isActive && !employee.active) return employee;
   });
 
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
       <Button label="Add new employee" onClick={createEmployee} />
+      <Button label={`Show ${isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
       <Table
         data={employeesData}
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
