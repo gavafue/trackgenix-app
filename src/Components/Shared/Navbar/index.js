@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 const Navbar = () => {
   const employeeLogged = useSelector((state) => state.employees.employeeLogged);
   const location = useLocation().pathname;
-  const locationEmployee = location.includes('/employee/');
+  const locationEmployee = location.includes('/employee');
   const navBarItems = locationEmployee ? employeeNavbar : defaultNavbaritems;
   const employeeName =
     employeeLogged?.firstName && employeeLogged?.lastName

@@ -1,7 +1,16 @@
 import styles from './home.module.css';
 import React from 'react';
+import Button from '../Button';
+import Form from '../Form';
+import Input from '../Input/InputText';
+import Select from '../Input/InputSelect';
 
 function Home() {
+  const arrayToMapSelect = [
+    { optionContent: 'Human Resources' },
+    { optionContent: 'Systems' },
+    { optionContent: 'Commercialization' }
+  ];
   return (
     <section className={styles.container}>
       <section className={styles.home}>
@@ -18,7 +27,7 @@ function Home() {
             alt="Home Draw"
           />
         </div>
-        <button className="learn-more">LEARN MORE</button>
+        <Button className="learn-more" label="LEARN MORE" />
       </section>
       <section className={styles.functions}>
         <h3>Functions</h3>
@@ -90,7 +99,7 @@ function Home() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo, venenatis volutpat fusce
               vitae, in suspendisse proin massa. Mattis nulla libero nibh eu nisl sed.
             </p>
-            <button className="more">MORE</button>
+            <Button className="more" label="MORE" />
           </div>
           <div className={styles.asset}>
             <img
@@ -102,7 +111,7 @@ function Home() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo, venenatis volutpat fusce
               vitae, in suspendisse proin massa. Mattis nulla libero nibh eu nisl sed.
             </p>
-            <button className="more">MORE</button>
+            <Button className="more" label="MORE" />
           </div>
           <div className={styles.asset}>
             <img
@@ -114,7 +123,7 @@ function Home() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo, venenatis volutpat fusce
               vitae, in suspendisse proin massa. Mattis nulla libero nibh eu nisl sed.
             </p>
-            <button className="more">MORE</button>
+            <Button className="more" label="MORE" />
           </div>
           <div className={styles.asset}>
             <img
@@ -126,48 +135,56 @@ function Home() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo, venenatis volutpat fusce
               vitae, in suspendisse proin massa. Mattis nulla libero nibh eu nisl sed.
             </p>
-            <button className="more">MORE</button>
+            <Button className="more" label="MORE" />
           </div>
         </div>
       </section>
-      <h3>Form</h3>
-      <form>
-        <div className="txtshorts">
-          <div className="label-textbox">
-            <input type="text" id="name" className="short-textbox" name="name" placeholder="Name" />
-            <p className="label-error-none">Invalid value. Must have only letters.</p>
+      <div className={styles.form}>
+        <h3>Form</h3>
+        <Form>
+          <div className="txtshorts">
+            <div>
+              <h6>Name</h6>
+              <Input
+                type="text"
+                id="name"
+                className="short-textbox"
+                name="name"
+                placeholder="Name"
+              />
+            </div>
+            <div>
+              <h6>E-mail</h6>
+              <Input
+                type="text"
+                id="email"
+                className="short-textbox"
+                name="mail"
+                placeholder="Mail"
+              />
+            </div>
           </div>
-          <div className="label-textbox">
-            <input
-              type="text"
-              id="email"
-              className="short-textbox"
-              name="mail"
-              placeholder="Mail"
-            />
-            <p className="label-error-none">Invalid e-mail</p>
-          </div>
-        </div>
-        <select id="cat" name="category">
-          <option value="Human Resources">Human Resources</option>
-          <option value="Systems">Systems</option>
-          <option value="Commercialization">Commercialization</option>
-        </select>
-        <div className="label-textbox">
-          <input
-            type="text"
-            id="message"
-            className="long-textbox"
-            name="message"
-            placeholder="Enter your message"
+          <Select
+            className={styles.select}
+            id="cat"
+            name="category"
+            arrayToMap={arrayToMapSelect}
           />
-          <p className="label-error-none">Invalid message</p>
-        </div>
-        <div className="buttons">
-          <input type="submit" id="submit" value="SEND MESSAGE" />
-          <input type="reset" value="RESET" />
-        </div>
-      </form>
+          <div>
+            <h6>Enter your message</h6>
+            <Input
+              type="text"
+              id="message"
+              className={styles.textBox}
+              name="message"
+              placeholder="Enter your message"
+            />
+          </div>
+          <div>
+            <Input type="reset" value="RESET" />
+          </div>
+        </Form>
+      </div>
       <section className={styles.aboutUs}>
         <h3>About us</h3>
         <div>
