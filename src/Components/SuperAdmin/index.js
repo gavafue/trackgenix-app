@@ -4,18 +4,19 @@ import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { editAdminStatus, getAdmins } from 'redux/admins/thunks';
-import DeleteMessage from 'Components/Shared/DeleteMessage';
+// import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Preloader from 'Components/Shared/Preloader';
 import { showFeedbackMessage, getIdFromRow, getSelectedAdmin } from 'redux/admins/actions';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { useHistory } from 'react-router-dom';
 import Button from 'Components/Shared/Button';
+import ChangeStatusMessage from 'Components/Shared/ChangeStatusMessage';
 
 const SuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.admins.idFromRow);
+  const idFromRow = useSelector((state) => state.admins.idFromRow);
   const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
   const adminSelected = useSelector((state) => state.admins.adminSelected);
   const history = useHistory();
@@ -36,12 +37,14 @@ const SuperAdmin = () => {
     location: admin.city,
     isActive: admin.active ? 'Active' : 'Inactive'
   }));
+  const changeStatus = adminSelected.active ? 'disable' : 'activate';
+
   console.log(adminSelected);
   const deleteHandler = () => {
     const options = {
       headers: { 'Content-type': 'application/json' },
       method: 'PUT',
-      url: `${process.env.REACT_APP_API_URL}/admins/status/${deleteInfo}`,
+      url: `${process.env.REACT_APP_API_URL}/admins/status/${idFromRow}`,
       body: JSON.stringify({
         name: adminSelected.name,
         lastName: adminSelected.lastName,
@@ -76,13 +79,14 @@ const SuperAdmin = () => {
         }}
       >
         {' '}
-        <DeleteMessage
+        <ChangeStatusMessage
           handleClose={() => {
             setShowModal(false);
           }}
           resourceName={'Admin'}
-          idFromRow={deleteInfo}
-          deleteItem={() => deleteHandler()}
+          operation={changeStatus}
+          idFromRow={idFromRow}
+          confirmChange={() => deleteHandler()}
           setShowModal={setShowModal}
         />
       </Modal>
