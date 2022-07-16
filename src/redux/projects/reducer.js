@@ -6,7 +6,7 @@ import {
   DELETE_PROJECT_PENDING,
   DELETE_PROJECT_SUCCESS,
   SET_INFO_FOR_FEEDBACK,
-  SET_INFO_FOR_DELETE,
+  GET_ID_FROM_ROW,
   SET_INFO_TO_SHOW,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
@@ -27,7 +27,7 @@ const initialState = {
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
-  infoForDelete: '',
+  idFromRow: '',
   showFeedbackMessage: false,
   projectSelected: {},
   infoToShow: '',
@@ -76,10 +76,10 @@ export const projectsReducer = (state = initialState, action) => {
         ...state,
         infoForFeedback: action.payload
       };
-    case SET_INFO_FOR_DELETE:
+    case GET_ID_FROM_ROW:
       return {
         ...state,
-        infoForDelete: action.payload
+        idFromRow: action.payload
       };
 
     case SET_INFO_TO_SHOW:
