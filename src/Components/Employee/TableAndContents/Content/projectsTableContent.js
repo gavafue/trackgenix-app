@@ -3,16 +3,12 @@ import styles from 'Components/Shared/Table/TableContent/tableContent.module.css
 
 const ProjectsTableContent = ({ headers, data }) => {
   return (
-    <tbody>
+    <tbody className={styles.container}>
       {data.map((row) => {
         return (
-          <tr key={row._id} id={row._id}>
+          <tr key={row._id} id={row._id} className={styles.rows}>
             {headers.map((header, index) => {
-              return (
-                <td key={index} className={styles.rows}>
-                  {row[header]}
-                </td>
-              );
+              return <td key={index}>{row[header]}</td>;
             })}
           </tr>
         );
