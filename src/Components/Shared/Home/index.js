@@ -139,29 +139,17 @@ function Home() {
           </div>
         </div>
       </section>
-      <div className={styles.form}>
-        <h3>Form</h3>
+      <div className={styles.form} id="contact">
+        <h3>Contact Us</h3>
         <Form>
           <div className="txtshorts">
             <div>
               <h6>Name</h6>
-              <Input
-                type="text"
-                id="name"
-                className="short-textbox"
-                name="name"
-                placeholder="Name"
-              />
+              <Input type="text" id="name" name="name" placeholder="Name" />
             </div>
             <div>
               <h6>E-mail</h6>
-              <Input
-                type="text"
-                id="email"
-                className="short-textbox"
-                name="mail"
-                placeholder="Mail"
-              />
+              <Input type="text" id="email" name="mail" placeholder="Mail" />
             </div>
           </div>
           <Select
@@ -172,20 +160,14 @@ function Home() {
           />
           <div>
             <h6>Enter your message</h6>
-            <Input
-              type="text"
-              id="message"
-              className={styles.textBox}
-              name="message"
-              placeholder="Enter your message"
-            />
+            <Input type="text" id="message" name="message" placeholder="Enter your message" />
           </div>
           <div>
             <Input type="reset" value="RESET" />
           </div>
         </Form>
       </div>
-      <section className={styles.aboutUs}>
+      <section className={styles.aboutUs} id="aboutUs">
         <h3>About us</h3>
         <div>
           <p>

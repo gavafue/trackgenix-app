@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Layout from 'Components/Layout';
 import PrivateRoute from './privateRoute';
 import Login from 'Components/Auth/Login';
@@ -53,6 +53,9 @@ const Routes = () => {
         <PrivateRoute path="/admin" role="ADMIN" component={Admin} />
         <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
         <Route path="/auth" component={AuthRoutes} />
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
       </Switch>
     </Layout>
   );

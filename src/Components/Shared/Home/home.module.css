@@ -104,12 +104,13 @@
   width: 100%;
 }
 .form h6 {
+  margin-top: 0%;
   margin-bottom: 0%;
 }
 .form select {
   width: 40%;
 }
-.textBox {
+#message {
   width: 40%;
   height: 40%;
 }
