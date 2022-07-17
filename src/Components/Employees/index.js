@@ -31,7 +31,7 @@ function Employees() {
     history.push(`/employees/form/`);
   };
   const createEmployee = () => {
-    history.push('/employees/form');
+    history.push('/register/employee');
   };
   useEffect(() => {
     dispatch(cleanSelectedEmployee());

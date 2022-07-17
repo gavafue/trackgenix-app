@@ -90,7 +90,7 @@ const Form = () => {
           label="First Name"
           name="firstName"
           type="text"
-          placeholder="Write your name."
+          placeholder="Enter Admin's first name"
           register={register}
           error={errors.firstName?.message}
           required
@@ -100,7 +100,7 @@ const Form = () => {
           name="lastName"
           id="lastName"
           type="text"
-          placeholder="Write your last name."
+          placeholder="Enter Admin's last name"
           register={register}
           error={errors.lastName?.message}
           required
@@ -110,7 +110,7 @@ const Form = () => {
           name="email"
           id="email"
           type="email"
-          placeholder="Write your email."
+          placeholder="Enter Admin's email"
           register={register}
           error={errors.email?.message}
           required
@@ -120,7 +120,7 @@ const Form = () => {
           name="birthDate"
           id="birthDate"
           type="date"
-          placeholder="Write your birthday on format dd/mm/yyyy"
+          placeholder="Enter Admin's date of birth"
           register={register}
           error={errors.birthDate?.message}
           required
@@ -130,7 +130,7 @@ const Form = () => {
           name="phone"
           id="phone"
           type="tel"
-          placeholder="Write your telephone."
+          placeholder="Enter Admin's telephone number"
           register={register}
           error={errors.phone?.message}
           required
@@ -140,7 +140,7 @@ const Form = () => {
           name="country"
           id="country"
           type="text"
-          placeholder="Write your country."
+          placeholder="Enter Admin's country"
           register={register}
           error={errors.country?.message}
           required
@@ -150,7 +150,7 @@ const Form = () => {
           name="city"
           id="city"
           type="text"
-          placeholder="Write your city."
+          placeholder="Enter Admin's city"
           register={register}
           error={errors.city?.message}
           required
@@ -160,7 +160,7 @@ const Form = () => {
           name="zip"
           id="zip"
           type="text"
-          placeholder="Write your postal code."
+          placeholder="Enter Admin's postal code"
           register={register}
           error={errors.zip?.message}
           required
@@ -170,7 +170,7 @@ const Form = () => {
           name="photo"
           id="photo"
           type="text"
-          placeholder="Write your profile picture url."
+          placeholder="Enter Admin's profile picture url."
           register={register}
           error={errors.photo?.message}
           required
@@ -180,7 +180,7 @@ const Form = () => {
           arrayToMap={arrayToMapActive}
           name="active"
           id="active"
-          placeholder="Enter employee's status"
+          placeholder="Enter Admin's status"
           register={register}
           error={errors.active?.message}
           required
