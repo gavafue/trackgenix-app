@@ -1,10 +1,10 @@
 import React from 'react';
-import Form from './Form';
+import ProfileForm from './Form';
 
 const EditProfile = () => {
   return (
     <section>
-      <Form />
+      <ProfileForm />
     </section>
   );
 };

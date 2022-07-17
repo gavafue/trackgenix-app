@@ -19,6 +19,7 @@ import TasksForm from 'Components/Tasks/Form';
 import AccountInactive from 'Components/Auth/Errors/AccountInactive';
 import NotAllowed from 'Components/Auth/Errors/NotAllowed';
 import RegisterEmployee from 'Components/Auth/Register/registerEmployee';
+import AdminProfile from 'Components/Admin/EditProfile';
 const Employee = lazy(() => import('routes/employee'));
 const Admin = lazy(() => import('routes/admin'));
 const Superadmin = lazy(() => import('routes/superadmin'));
@@ -52,7 +53,8 @@ const Routes = () => {
         <Route path="/notAllowed" component={NotAllowed} />
         <Route path="/register/employee" component={RegisterEmployee} />
         <PrivateRoute path="/employee" role="EMPLOYEE" component={Employee} />
-        <PrivateRoute path="/admin" role="ADMIN" component={Admin} />
+        <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
+        <Route path="/admin/profile" role="ADMIN" component={AdminProfile} />
         <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
         <Route path="/auth" component={AuthRoutes} />
       </Switch>
