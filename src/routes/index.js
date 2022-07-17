@@ -54,7 +54,7 @@ const Routes = () => {
         <Route path="/register/employee" component={RegisterEmployee} />
         <PrivateRoute path="/employee" role="EMPLOYEE" component={Employee} />
         <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
-        <Route path="/admin/profile" role="ADMIN" component={AdminProfile} />
+        <PrivateRoute path="/admin/profile" role="ADMIN" component={AdminProfile} />
         <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
         <Route path="/auth" component={AuthRoutes} />
       </Switch>
