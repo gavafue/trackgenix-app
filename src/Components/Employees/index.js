@@ -2,15 +2,13 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
 import Table from 'Components/Shared/Table';
-import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
 import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEmployee, deleteEmployee } from 'redux/employees/thunks';
+import { getEmployee } from 'redux/employees/thunks';
 import {
-  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedEmployee,
@@ -22,8 +20,6 @@ function Employees() {
   const employees = useSelector((state) => state.employees.list);
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.employees.idFromRow);
-  const showDelete = useSelector((state) => state.employees.showDeleteMessage);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
   const [isActive, setIsActive] = useState(true);
   const toggleIsActive = () => {
@@ -42,10 +38,6 @@ function Employees() {
     dispatch(getEmployee());
   }, []);
 
-  const deleteHandler = () => {
-    dispatch(deleteEmployee(deleteInfo));
-  };
-
   const employeesData = employees.map((employee) => {
     if (isActive && employee.active) return employee;
     if (!isActive && !employee.active) return employee;
@@ -61,26 +53,8 @@ function Employees() {
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
         headers={['firstName', 'lastName', 'email', 'phone']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        setidFromRow={(employeeId) => dispatch(setidFromRow(employeeId))}
         editData={editData}
-        deleteEmployee={deleteHandler}
-        lowLogic={false}
       />
-      <Modal
-        isOpen={showDelete}
-        handleClose={() => {
-          dispatch(showDeleteMessage(!showDelete));
-        }}
-      >
-        <DeleteMessage
-          handleClose={() => {
-            dispatch(showDeleteMessage(!showDelete));
-          }}
-          idFromRow={deleteInfo}
-          deleteItem={deleteHandler}
-          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        />
-      </Modal>
       <Modal
         isOpen={showFeedback}
         handleClose={() => {
