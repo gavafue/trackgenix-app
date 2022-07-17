@@ -1,22 +1,20 @@
 import styles from './navbar.module.css';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { employeeNavbar, superAdminNavbar, adminNavbar, publicNavbar } from 'libs/navbarConfig';
 import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const userLogged = useSelector((state) => state.auth.authenticated.data);
-  const location = useLocation().pathname;
-  const locationEmployee = location.includes('/employee/');
-  const locationSuperAdmin = location.includes('/superadmin/');
-  const locationAdmin = location.includes('/admin/');
-  const navbarItems = locationEmployee
-    ? employeeNavbar
-    : locationSuperAdmin
-    ? superAdminNavbar
-    : locationAdmin
-    ? adminNavbar
-    : publicNavbar;
+  const userLoggedRole = useSelector((state) => state.auth.authenticated.role);
+  const navbarItems =
+    userLoggedRole == 'EMPLOYEE'
+      ? employeeNavbar
+      : userLoggedRole == 'SUPERADMIN'
+      ? superAdminNavbar
+      : userLoggedRole == 'ADMIN'
+      ? adminNavbar
+      : publicNavbar;
   const userName =
     userLogged?.firstName && userLogged?.lastName
       ? `${userLogged?.firstName} ${userLogged?.lastName}`
