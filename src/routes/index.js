@@ -34,12 +34,6 @@ const Routes = () => {
         <Route exact path="/admins" component={Admins} />
         <Route path="/admins/form/:id" component={AdminsForm} />
         <Route path="/admins/form" component={AdminsForm} />
-        <Route exact path="/employees" component={Employees} />
-        <Route path="/employees/form/:id" component={EmployeesForm} />
-        <Route path="/employees/form" component={EmployeesForm} />
-        <Route exact path="/projects" component={Projects} />
-        <Route path="/projects/form/:id" component={ProjectsForm} />
-        <Route path="/projects/form" component={ProjectsForm} />
         <Route exact path="/super-admins" component={Superadmins} />
         <Route path="/super-admins/form/:id" component={SuperadminsForm} />
         <Route path="/super-admins/form" component={AdminsForm} />
@@ -55,6 +49,12 @@ const Routes = () => {
         <PrivateRoute path="/employee" role="EMPLOYEE" component={Employee} />
         <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
         <PrivateRoute path="/admin/profile" role="ADMIN" component={AdminProfile} />
+        <PrivateRoute exact path="/employees" role="ADMIN" component={Employees} />
+        <PrivateRoute path="/employees/form/:id" role="ADMIN" component={EmployeesForm} />
+        <PrivateRoute path="/employees/form" role="ADMIN" component={EmployeesForm} />
+        <PrivateRoute exact path="/projects" role="ADMIN" component={Projects} />
+        <PrivateRoute path="/projects/form/:id" role="ADMIN" component={ProjectsForm} />
+        <PrivateRoute path="/projects/form" role="ADMIN" component={ProjectsForm} />
         <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
         <Route path="/auth" component={AuthRoutes} />
       </Switch>
