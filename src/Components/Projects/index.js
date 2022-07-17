@@ -62,7 +62,11 @@ const Projects = () => {
     <section className={styles.container}>
       <h2>Projects</h2>
       <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
-      <Button label={`Show ${!isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
+      <Button
+        label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
+        onClick={toggleIsActive}
+        theme="secondary"
+      />
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}

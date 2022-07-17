@@ -47,7 +47,11 @@ function Employees() {
     <section className={styles.container}>
       <h2>Employees</h2>
       <Button label="Add new employee" onClick={createEmployee} />
-      <Button label={`Show ${!isActive ? 'Active' : 'Inactive'}`} onClick={toggleIsActive} />
+      <Button
+        label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
+        onClick={toggleIsActive}
+        theme="secondary"
+      />
       <Table
         data={employeesData}
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
