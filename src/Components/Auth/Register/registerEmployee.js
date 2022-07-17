@@ -58,9 +58,8 @@ const RegisterEmployee = () => {
   ];
 
   return (
-    <div className={styles.container}>
-      <h1>Register employee</h1>
-      <SharedForm onSubmit={handleSubmit(onSubmit)}>
+    <section className={styles.container}>
+      <SharedForm onSubmit={handleSubmit(onSubmit)} header="Register employee">
         <Input
           className={styles.input}
           id="firstName"
@@ -185,7 +184,7 @@ const RegisterEmployee = () => {
         <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
       {isPending && <Preloader />}
-    </div>
+    </section>
   );
 };
 
