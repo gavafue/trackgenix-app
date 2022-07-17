@@ -67,7 +67,7 @@ const RegisterEmployee = () => {
           label="First Name"
           name="firstName"
           type="text"
-          placeholder="Enter Admin's first name"
+          placeholder="Enter Employee's first name"
           register={register}
           error={errors.firstName?.message}
           required
@@ -77,7 +77,7 @@ const RegisterEmployee = () => {
           name="lastName"
           id="lastName"
           type="text"
-          placeholder="Enter Admin's last name"
+          placeholder="Enter Employee's last name"
           register={register}
           error={errors.lastName?.message}
           required
@@ -87,7 +87,7 @@ const RegisterEmployee = () => {
           name="email"
           id="email"
           type="email"
-          placeholder="Enter Admin's email"
+          placeholder="Enter Employee's email"
           register={register}
           error={errors.email?.message}
           required
@@ -97,7 +97,7 @@ const RegisterEmployee = () => {
           name="password"
           id="password"
           type="password"
-          placeholder="Enter Admin's password"
+          placeholder="Enter Employee's password"
           register={register}
           error={errors.password?.message}
           required
@@ -107,7 +107,7 @@ const RegisterEmployee = () => {
           name="birthDate"
           id="birthDate"
           type="date"
-          placeholder="Enter Admin's date of birth"
+          placeholder="Enter Employee's date of birth"
           register={register}
           error={errors.birthDate?.message}
           required
@@ -117,7 +117,7 @@ const RegisterEmployee = () => {
           name="phone"
           id="phone"
           type="tel"
-          placeholder="Enter Admin's telephone number"
+          placeholder="Enter Employee's telephone number"
           register={register}
           error={errors.phone?.message}
           required
@@ -127,7 +127,7 @@ const RegisterEmployee = () => {
           name="country"
           id="country"
           type="text"
-          placeholder="Enter Admin's country"
+          placeholder="Enter Employee's country"
           register={register}
           error={errors.country?.message}
           required
@@ -137,7 +137,7 @@ const RegisterEmployee = () => {
           name="city"
           id="city"
           type="text"
-          placeholder="Enter Admin's city"
+          placeholder="Enter Employee's city"
           register={register}
           error={errors.city?.message}
           required
@@ -147,7 +147,7 @@ const RegisterEmployee = () => {
           name="zip"
           id="zip"
           type="text"
-          placeholder="Enter Admin's postal code"
+          placeholder="Enter Employee's postal code"
           register={register}
           error={errors.zip?.message}
           required
@@ -157,7 +157,7 @@ const RegisterEmployee = () => {
           name="photo"
           id="photo"
           type="text"
-          placeholder="Enter Admin's profile picture url"
+          placeholder="Enter Employee's profile picture url"
           register={register}
           error={errors.photo?.message}
           required
@@ -167,7 +167,7 @@ const RegisterEmployee = () => {
           arrayToMap={arrayToMapActive}
           name="active"
           id="active"
-          placeholder="Enter Admin's status"
+          placeholder="Enter Employee's status"
           register={register}
           error={errors.active?.message}
           required
