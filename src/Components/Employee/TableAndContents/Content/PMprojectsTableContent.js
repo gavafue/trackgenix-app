@@ -1,7 +1,16 @@
 import React from 'react';
 import styles from 'Components/Shared/Table/TableContent/tableContent.module.css';
 import Button from 'Components/Shared/Button';
+import { getSelectedProject } from 'redux/projects/actions';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 const ProjectManagerProjectsContent = ({ headers, data }) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const editData = (row) => {
+    dispatch(getSelectedProject(row));
+    history.push(`/employee/projects/edit`);
+  };
   return (
     <tbody className={styles.container}>
       {data.map((row) => {
@@ -11,7 +20,7 @@ const ProjectManagerProjectsContent = ({ headers, data }) => {
               return <td key={index}>{row[header]}</td>;
             })}
             <td>
-              <Button label="Edit" />
+              <Button label="Edit" onClick={() => editData(row)} />
             </td>
           </tr>
         );
