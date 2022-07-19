@@ -26,7 +26,8 @@ const Form = () => {
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
+  const employeeLogged = useSelector((state) => state.auth.authenticated.data);
+  console.log(employeeLogged);
   useEffect(() => {
     reset({
       firstName: employeeLogged?.firstName,

@@ -17,9 +17,13 @@ const ProjectManagerProjectsContent = ({ headers, data }) => {
         return (
           <tr key={row._id} id={row._id} className={styles.rows}>
             {headers.map((header, index) => {
-              return <td key={index}>{row[header]}</td>;
+              return (
+                <td key={index} className={styles.cell}>
+                  {row[header]}
+                </td>
+              );
             })}
-            <td>
+            <td className={styles.cell}>
               <Button label="Edit" onClick={() => editData(row)} />
             </td>
           </tr>
