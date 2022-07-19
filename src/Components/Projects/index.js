@@ -10,7 +10,7 @@ import styles from './projects.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getProjects, deleteProject } from 'redux/projects/thunks';
 import {
-  getIdFromRow,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedProject,
@@ -59,7 +59,7 @@ const Projects = () => {
         deleteProject={deleteHandler}
         editData={editData}
         setShowModal={(show) => dispatch(showDeleteMessage(show))}
-        getIdFromRow={(projectId) => dispatch(getIdFromRow(projectId))}
+        setidFromRow={(projectId) => dispatch(setidFromRow(projectId))}
       />
       <Modal
         isOpen={showDelete}

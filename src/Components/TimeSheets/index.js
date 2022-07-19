@@ -10,7 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheets, deleteTimesheet } from 'redux/timesheet/thunks';
 import {
-  getIdFromRow,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   selectOneTimesheet,
@@ -67,7 +67,7 @@ const TimeSheets = () => {
         ]}
         headers={['name', 'date', 'workDescription', 'hoursWorked', 'weekSprint', 'employeeName']}
         setShowModal={(isModalShowed) => dispatch(showDeleteMessage(isModalShowed))}
-        getIdFromRow={(timesheetId) => dispatch(getIdFromRow(timesheetId))}
+        setidFromRow={(timesheetId) => dispatch(setidFromRow(timesheetId))}
         editData={editData}
         deleteTimesheet={deleteHandler}
       />

@@ -54,7 +54,7 @@ export const setInfoForFeedback = (message) => ({
   payload: message
 });
 
-export const getIdFromRow = (id) => ({
+export const setidFromRow = (id) => ({
   type: GET_ID_FROM_ROW,
   payload: id
 });

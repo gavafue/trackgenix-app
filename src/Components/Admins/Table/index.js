@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteAdmin } from 'redux/admins/thunks';
 import {
   getSelectedAdmin,
-  getIdFromRow,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   cleanSelectedAdmin
@@ -57,7 +57,7 @@ const AdminsTable = () => {
         deleteAdmin={deleteHandler}
         editData={editData}
         setShowModal={(handler) => dispatch(showDeleteMessage(handler))}
-        getIdFromRow={(adminId) => dispatch(getIdFromRow(adminId))}
+        setidFromRow={(adminId) => dispatch(setidFromRow(adminId))}
       />
       <Modal
         isOpen={showDelete}

@@ -1,5 +1,5 @@
-import styles from './login.module.css';
 import React from 'react';
+import styles from './login.module.css';
 import Form from './Form';
 
 const Login = () => {

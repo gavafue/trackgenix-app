@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom';
 import Preloader from 'Components/Shared/Preloader';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  getIdFromRow,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedSuperadmin,
@@ -65,7 +65,7 @@ const SuperAdmins = () => {
         headersName={['Name', 'Last Name', 'Email', 'Role', 'Status']}
         headers={['firstName', 'lastName', 'email', 'role', 'isActive']}
         setShowModal={(showOrNot) => dispatch(showDeleteMessage(showOrNot))}
-        getIdFromRow={(superAdminId) => dispatch(getIdFromRow(superAdminId))}
+        setidFromRow={(superAdminId) => dispatch(setidFromRow(superAdminId))}
         editData={editData}
         deleteSuperAdmin={deleteHandler}
       />

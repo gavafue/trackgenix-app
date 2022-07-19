@@ -10,7 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import { useSelector, useDispatch } from 'react-redux';
 import { getEmployee, deleteEmployee } from 'redux/employees/thunks';
 import {
-  getIdFromRow,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedEmployee,
@@ -51,7 +51,7 @@ function Employees() {
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
         headers={['firstName', 'lastName', 'email', 'phone']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        getIdFromRow={(employeeId) => dispatch(getIdFromRow(employeeId))}
+        setidFromRow={(employeeId) => dispatch(setidFromRow(employeeId))}
         editData={editData}
         deleteEmployee={deleteHandler}
       />

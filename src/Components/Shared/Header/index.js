@@ -4,14 +4,18 @@ import { useSelector } from 'react-redux';
 import firebase from 'helper/firebase';
 
 function Header() {
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
+  const userLogged = useSelector((state) => state.auth.authenticated.data);
   const HeaderTitle = {
-    '/employee/home': employeeLogged
-      ? `Welcome ${employeeLogged?.firstName} ${employeeLogged?.lastName}!`
-      : 'Welcome!',
+    '/employee/home': `Welcome ${userLogged?.firstName} ${userLogged?.lastName}!`,
     '/employee/profile': 'Edit Profile',
     '/employee/projects': 'Projects',
-    '/employee/timesheet': 'Personal Timesheet'
+    '/employee/timesheet': 'Personal Timesheet',
+    '/superadmin/home': `Welcome ${userLogged?.firstName} ${userLogged?.lastName}!`,
+    '/superadmin/admins': 'Admins',
+    '/superadmin/addAdmin': 'Admins',
+    '/admin/home': `Welcome ${userLogged?.firstName} ${userLogged?.lastName}!`,
+    '/admin/employees': 'Employees',
+    '/admin/projects': 'Projects'
   };
   const location = useLocation();
 

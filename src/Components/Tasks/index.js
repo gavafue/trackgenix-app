@@ -10,7 +10,7 @@ import Preloader from 'Components/Shared/Preloader';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, deleteTask } from 'redux/tasks/thunks';
 import {
-  getIdFromRow,
+  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedItem,
@@ -61,7 +61,7 @@ const Tasks = () => {
         headersName={['Project', 'Description', 'Week', 'Day', 'Hours']}
         headers={['nameProject', 'description', 'week', 'day', 'hours']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        getIdFromRow={(taskId) => dispatch(getIdFromRow(taskId))}
+        setidFromRow={(taskId) => dispatch(setidFromRow(taskId))}
         editData={editData}
         deleteTask={deleteHandler}
       />
