@@ -8,7 +8,7 @@ const Superadmin = () => {
   return (
     <Switch>
       <Route path="/superadmin/home" component={Home} />
-      <Route path="/superadmin/adminsList" component={AdminList} />
+      <Route path="/superadmin/admins" component={AdminList} />
       <Route path="/superadmin/addAdmin" component={AddNewAdmin} />
       <Route exact path="/superadmin">
         <Redirect to="/superadmin/home" />

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { editAdminStatus, getAdmins } from 'redux/admins/thunks';
 // import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Preloader from 'Components/Shared/Preloader';
-import { showFeedbackMessage, getIdFromRow } from 'redux/admins/actions';
+import { showFeedbackMessage, setidFromRow } from 'redux/admins/actions';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { useHistory } from 'react-router-dom';
 import Button from 'Components/Shared/Button';
@@ -67,7 +67,7 @@ const AdminsList = () => {
         headersName={['Name', 'Location', 'Status']}
         setShowModal={setShowModal}
         // editData={editData}
-        getIdFromRow={(adminId) => dispatch(getIdFromRow(adminId))}
+        getIdFromRow={(adminId) => dispatch(setidFromRow(adminId))}
       />
       <div className={styles.button}>
         <Button label={'Add admin'} onClick={() => history.push(`/superadmin/addAdmin/`)} />
