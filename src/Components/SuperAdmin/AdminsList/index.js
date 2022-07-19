@@ -1,4 +1,4 @@
-import styles from 'Components/SuperAdmin/index.module.css';
+import styles from 'Components/SuperAdmin/AdminsList/index.module.css';
 import Table from 'Components/SuperAdmin/Table';
 import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react';
 import { editAdminStatus, getAdmins } from 'redux/admins/thunks';
 // import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Preloader from 'Components/Shared/Preloader';
-import { showFeedbackMessage, getIdFromRow, getSelectedAdmin } from 'redux/admins/actions';
+import { showFeedbackMessage, getIdFromRow } from 'redux/admins/actions';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { useHistory } from 'react-router-dom';
 import Button from 'Components/Shared/Button';
 import ChangeStatusMessage from 'Components/Shared/ChangeStatusMessage';
 
-const SuperAdmin = () => {
+const AdminsList = () => {
   const [showModal, setShowModal] = useState(false);
   const isPending = useSelector((state) => state.admins.isPending);
   const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
@@ -26,10 +26,10 @@ const SuperAdmin = () => {
     dispatch(getAdmins());
   }, []);
 
-  const editData = (row) => {
-    dispatch(getSelectedAdmin(row));
-    history.push(`/superadmin/form`);
-  };
+  // const editData = (row) => {
+  //   dispatch(getSelectedAdmin(row));
+  //   history.push(`/superadmin/form`);
+  // };
 
   const admins = useSelector((state) => state.admins.list).map((admin) => ({
     ...admin,
@@ -66,7 +66,7 @@ const SuperAdmin = () => {
         headers={['fullName', 'location', 'isActive']}
         headersName={['Name', 'Location', 'Status']}
         setShowModal={setShowModal}
-        editData={editData}
+        // editData={editData}
         getIdFromRow={(adminId) => dispatch(getIdFromRow(adminId))}
       />
       <div className={styles.button}>
@@ -103,4 +103,4 @@ const SuperAdmin = () => {
   );
 };
 
-export default SuperAdmin;
+export default AdminsList;
