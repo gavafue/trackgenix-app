@@ -13,7 +13,7 @@ function Header() {
     '/superadmin/home': `Welcome ${userLogged?.firstName} ${userLogged?.lastName}!`,
     '/superadmin/admins': 'Admins',
     '/superadmin/addAdmin': 'Admins',
-    '/admin/home': `Welcome ${userLogged?.firstName} ${userLogged?.lastName}!`,
+    '/admin/home': `Welcome ${userLogged?.name} ${userLogged?.lastName}!`,
     '/admin/employees': 'Employees',
     '/admin/projects': 'Projects'
   };

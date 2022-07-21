@@ -18,6 +18,8 @@ import Tasks from 'Components/Tasks/index';
 import TasksForm from 'Components/Tasks/Form';
 import AccountInactive from 'Components/Auth/Errors/AccountInactive';
 import NotAllowed from 'Components/Auth/Errors/NotAllowed';
+import RegisterEmployee from 'Components/Auth/Register/registerEmployee';
+import AdminProfile from 'Components/Admin/EditProfile';
 const Employee = lazy(() => import('routes/employee'));
 const Admin = lazy(() => import('routes/admin'));
 const Superadmin = lazy(() => import('routes/superadmin'));
@@ -32,12 +34,6 @@ const Routes = () => {
         <Route exact path="/admins" component={Admins} />
         <Route path="/admins/form/:id" component={AdminsForm} />
         <Route path="/admins/form" component={AdminsForm} />
-        <Route exact path="/employees" component={Employees} />
-        <Route path="/employees/form/:id" component={EmployeesForm} />
-        <Route path="/employees/form" component={EmployeesForm} />
-        <Route exact path="/projects" component={Projects} />
-        <Route path="/projects/form/:id" component={ProjectsForm} />
-        <Route path="/projects/form" component={ProjectsForm} />
         <Route exact path="/super-admins" component={Superadmins} />
         <Route path="/super-admins/form/:id" component={SuperadminsForm} />
         <Route path="/super-admins/form" component={AdminsForm} />
@@ -47,10 +43,18 @@ const Routes = () => {
         <Route exact path="/tasks" component={Tasks} />
         <Route path="/tasks/form/:id" component={TasksForm} />
         <Route path="/tasks/form" component={TasksForm} />
-        <Route path="/accountinactive" component={AccountInactive} />;
-        <Route path="/notAllowed" component={NotAllowed} />;
+        <Route path="/accountinactive" component={AccountInactive} />
+        <Route path="/notAllowed" component={NotAllowed} />
+        <Route path="/register/employee" component={RegisterEmployee} />
         <PrivateRoute path="/employee" role="EMPLOYEE" component={Employee} />
-        <PrivateRoute path="/admin" role="ADMIN" component={Admin} />
+        <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
+        <PrivateRoute path="/admin/profile" role="ADMIN" component={AdminProfile} />
+        <PrivateRoute exact path="/employees" role="ADMIN" component={Employees} />
+        <PrivateRoute path="/employees/form/:id" role="ADMIN" component={EmployeesForm} />
+        <PrivateRoute path="/employees/form" role="ADMIN" component={EmployeesForm} />
+        <PrivateRoute exact path="/projects" role="ADMIN" component={Projects} />
+        <PrivateRoute path="/projects/form/:id" role="ADMIN" component={ProjectsForm} />
+        <PrivateRoute path="/projects/form" role="ADMIN" component={ProjectsForm} />
         <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
         <Route path="/auth" component={AuthRoutes} />
       </Switch>
