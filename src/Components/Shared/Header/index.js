@@ -29,7 +29,7 @@ function Header() {
           {!userLogged && location.pathname !== '/login' && (
             <Button label="Login" onClick={() => history.push('/login')} theme="secondary" />
           )}
-          {!userLogged && location.pathname == '/login' && (
+          {!userLogged && (
             <Button label="Home" onClick={() => history.push('/home')} theme="secondary" />
           )}
           {!userLogged && location.pathname !== '/register/employee' && (
