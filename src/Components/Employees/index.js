@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
@@ -40,7 +39,7 @@ function Employees() {
     dispatch(getEmployee());
   }, []);
 
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = useState('');
 
   const handleSearch = (event) => {
     setSearch(event.target.value);

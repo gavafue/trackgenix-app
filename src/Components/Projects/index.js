@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import Table from 'Components/Shared/Table';
 import DeleteMessage from 'Components/Shared/DeleteMessage';
@@ -43,7 +42,7 @@ const Projects = () => {
   const deleteHandler = () => {
     dispatch(deleteProject(deleteInfo));
   };
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = useState('');
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
