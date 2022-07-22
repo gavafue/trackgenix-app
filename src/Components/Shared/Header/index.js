@@ -43,8 +43,8 @@ function Header() {
             <Button
               label="Logout"
               onClick={() => {
-                history.push('/home');
                 firebase.auth().signOut();
+                history.push('/home');
               }}
               theme="secondary"
             />

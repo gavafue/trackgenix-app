@@ -139,38 +139,23 @@ function Home() {
           </div>
         </div>
       </section>
-      <Form goBack={false} header="Contact us" id="contact">
+      <Form goBack={false} header="Contact us">
         <Input
           label="Full name"
           type="text"
-          id="name"
-          className="short-textbox"
-          name="name"
+          id="fullName"
+          name="fullName"
           placeholder="Enter your full name"
         />
-        <Input
-          label="Email"
-          type="text"
-          id="email"
-          className="short-textbox"
-          name="mail"
-          placeholder="Enter your email"
-        />
+        <Input label="Email" type="email" id="email" name="email" placeholder="Enter your email" />
         <Select
           label="Category"
-          className={styles.select}
-          id="cat"
+          id="category"
           name="category"
-          placeholder="Enter a category"
+          placeholder="Select a category"
           arrayToMap={arrayToMapSelect}
         />
-        <Input
-          type="text"
-          id="message"
-          className={styles.textBox}
-          name="message"
-          placeholder="Enter your message"
-        />
+        <Input type="text" id="message" name="message" placeholder="Enter your message" />
       </Form>
       <section className={styles.aboutUs}>
         <h3>About us</h3>
