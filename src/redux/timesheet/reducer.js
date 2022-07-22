@@ -7,7 +7,7 @@ import {
   DELETE_TIMESHEET_SUCCESS,
   SHOW_DELETE_MESSAGE,
   SHOW_FEEDBACK_MESSAGE,
-  SET_INFO_FOR_DELETE,
+  GET_ID_FROM_ROW,
   SET_INFO_FOR_FEEDBACK,
   ADD_TIMESHEET_ERROR,
   ADD_TIMESHEET_PENDING,
@@ -28,7 +28,7 @@ const initialState = {
   error: '',
   infoForFeedback: { title: '', description: '' },
   showDeleteMessage: false,
-  infoForDelete: '',
+  idFromRow: '',
   showFeedbackMessage: false,
   timesheetSelected: {}
 };
@@ -74,10 +74,10 @@ export const timesheetsReducer = (state = initialState, action) => {
         ...state,
         infoForFeedback: action.payload
       };
-    case SET_INFO_FOR_DELETE:
+    case GET_ID_FROM_ROW:
       return {
         ...state,
-        infoForDelete: action.payload
+        idFromRow: action.payload
       };
     case SHOW_DELETE_MESSAGE:
       return {

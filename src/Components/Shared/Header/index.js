@@ -1,30 +1,53 @@
 import styles from './header.module.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import firebase from 'helper/firebase';
+import Button from '../Button';
 
 function Header() {
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
+  const userLogged = useSelector((state) => state.auth.authenticated.data);
   const HeaderTitle = {
-    '/employee/home': employeeLogged
-      ? `Welcome ${employeeLogged?.firstName} ${employeeLogged?.lastName}!`
-      : 'Welcome!',
+    '/employee/home': `Welcome ${userLogged?.firstName} ${userLogged?.lastName}!`,
     '/employee/profile': 'Edit Profile',
     '/employee/projects': 'Projects',
-    '/employee/timesheet': 'Personal Timesheet'
+    '/employee/timesheet': 'Personal Timesheet',
+    '/superadmin/home': `Welcome ${userLogged?.firstName} ${userLogged?.lastName}!`,
+    '/superadmin/admins': 'Admins',
+    '/superadmin/addAdmin': 'Admins',
+    '/admin/home': `Welcome ${userLogged?.name} ${userLogged?.lastName}!`,
+    '/admin/employees': 'Employees',
+    '/admin/projects': 'Projects'
   };
   const location = useLocation();
+  const history = useHistory();
 
   return (
     <header>
       <div className={styles.container}>
         <div className={styles.title}>{HeaderTitle[location.pathname] ?? 'TRACKGENIX'}</div>
         <div>
-          <a href="#" rel="noreferrer">
-            Log out
-          </a>
-          <a href="/login" rel="noreferrer">
-            Log in
-          </a>
+          {!userLogged && location.pathname !== '/login' && (
+            <Button label="Login" onClick={() => history.push('/login')} theme="secondary" />
+          )}
+          {!userLogged && location.pathname == '/login' && (
+            <Button label="Home" onClick={() => history.push('/home')} theme="secondary" />
+          )}
+          {!userLogged && location.pathname !== '/register/employee' && (
+            <Button
+              label="Signup"
+              onClick={() => history.push('/register/employee')}
+              theme="secondary"
+            />
+          )}
+          {userLogged && (
+            <Button
+              label="Logout"
+              onClick={() => {
+                firebase.auth().signOut();
+              }}
+              theme="secondary"
+            />
+          )}
         </div>
       </div>
     </header>

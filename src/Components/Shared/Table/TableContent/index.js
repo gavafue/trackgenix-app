@@ -2,34 +2,37 @@ import React from 'react';
 import styles from './tableContent.module.css';
 import Button from 'Components/Shared/Button';
 
-const TableContent = ({ headers, data, editData, setShowModal, setInfoForDelete }) => {
+const TableContent = ({ headers, data, editData, setShowModal, setidFromRow, lowLogic }) => {
   return (
-    <tbody>
+    <tbody className={styles.container}>
       {data.map((row) => {
-        return (
-          <tr key={row._id} id={row._id}>
-            {headers.map((header, index) => {
-              return (
-                <td key={index} className={styles.rows}>
-                  {row[header]}
+        if (row)
+          return (
+            <tr key={row._id} id={row._id} className={styles.rows}>
+              {headers.map((header, index) => {
+                return (
+                  <td key={index} className={styles.cell}>
+                    {row[header]}
+                  </td>
+                );
+              })}
+              {(editData || setidFromRow) && (
+                <td className={styles.cell}>
+                  {editData && <Button onClick={() => editData(row)} label="Edit" />}
+                  {setidFromRow && (
+                    <Button
+                      label={`${lowLogic ? 'Change state' : 'Delete'}`}
+                      theme="secondary"
+                      onClick={() => {
+                        setShowModal(true);
+                        setidFromRow(row._id);
+                      }}
+                    />
+                  )}
                 </td>
-              );
-            })}
-            <td className={styles.rows}>
-              <Button onClick={() => editData(row)} label="Edit" />
-            </td>
-            <td className={styles.rows}>
-              <Button
-                label="Delete"
-                theme="secondary"
-                onClick={() => {
-                  setShowModal(true);
-                  setInfoForDelete(row._id);
-                }}
-              />
-            </td>
-          </tr>
-        );
+              )}
+            </tr>
+          );
       })}
     </tbody>
   );
