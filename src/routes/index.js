@@ -30,6 +30,7 @@ const Routes = () => {
   return (
     <Layout>
       <Switch>
+        <Route exact path="/" component={Home} />
         <Route path="/home" component={Home} />
         <PrivateRoute exact path="/employee" role="EMPLOYEE" component={HomeForUser} />
         <PrivateRoute exact path="/admin" role="ADMIN" component={HomeForUser} />
