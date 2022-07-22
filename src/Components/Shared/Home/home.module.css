@@ -100,15 +100,6 @@
   font-size: 1rem;
   font-weight: lighter;
 }
-.form {
-  width: 100%;
-}
-.form h6 {
-  margin-bottom: 0%;
-}
-.form select {
-  width: 40%;
-}
 .textBox {
   width: 40%;
   height: 40%;
@@ -138,6 +129,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  text-align: center;
   width: 100%;
 }
 .lists {

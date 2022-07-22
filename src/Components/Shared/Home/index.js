@@ -139,52 +139,39 @@ function Home() {
           </div>
         </div>
       </section>
-      <div className={styles.form}>
-        <h3>Form</h3>
-        <Form>
-          <div className="txtshorts">
-            <div>
-              <h6>Name</h6>
-              <Input
-                type="text"
-                id="name"
-                className="short-textbox"
-                name="name"
-                placeholder="Name"
-              />
-            </div>
-            <div>
-              <h6>E-mail</h6>
-              <Input
-                type="text"
-                id="email"
-                className="short-textbox"
-                name="mail"
-                placeholder="Mail"
-              />
-            </div>
-          </div>
-          <Select
-            className={styles.select}
-            id="cat"
-            name="category"
-            arrayToMap={arrayToMapSelect}
-          />
-          <div>
-            <h6>Enter your message</h6>
-            <Input
-              type="text"
-              id="message"
-              className={styles.textBox}
-              name="message"
-              placeholder="Enter your message"
-            />
-          </div>
-          <div>
-            <Input type="reset" value="RESET" />
-          </div>
-        </Form>
-      </div>
+      <Form goBack={false} header="Contact us" id="contact">
+        <Input
+          label="Full name"
+          type="text"
+          id="name"
+          className="short-textbox"
+          name="name"
+          placeholder="Enter your full name"
+        />
+        <Input
+          label="Email"
+          type="text"
+          id="email"
+          className="short-textbox"
+          name="mail"
+          placeholder="Enter your email"
+        />
+        <Select
+          label="Category"
+          className={styles.select}
+          id="cat"
+          name="category"
+          placeholder="Enter a category"
+          arrayToMap={arrayToMapSelect}
+        />
+        <Input
+          type="text"
+          id="message"
+          className={styles.textBox}
+          name="message"
+          placeholder="Enter your message"
+        />
+      </Form>
       <section className={styles.aboutUs}>
         <h3>About us</h3>
         <div>
@@ -201,35 +188,35 @@ function Home() {
             alt="AboutUs"
           />
         </div>
-        <section className={styles.listsContainer}>
-          <div className={styles.lists}>
-            <h5>Products</h5>
-            <ol>
-              <li>Functions</li>
-              <li>Downloads</li>
-              <li>Integrations</li>
-              <li>Extras</li>
-            </ol>
-          </div>
-          <div className={styles.lists}>
-            <h5>Company</h5>
-            <ol>
-              <li>About us</li>
-              <li>Customers</li>
-              <li>Resources</li>
-              <li>Blog</li>
-            </ol>
-          </div>
-          <div className={styles.lists}>
-            <h5>Support</h5>
-            <ol>
-              <li>Help</li>
-              <li>Tutorial</li>
-              <li>API</li>
-              <li>Contact</li>
-            </ol>
-          </div>
-        </section>
+      </section>
+      <section className={styles.listsContainer}>
+        <div className={styles.lists}>
+          <h5>Products</h5>
+          <ol>
+            <li>Functions</li>
+            <li>Downloads</li>
+            <li>Integrations</li>
+            <li>Extras</li>
+          </ol>
+        </div>
+        <div className={styles.lists}>
+          <h5>Company</h5>
+          <ol>
+            <li>About us</li>
+            <li>Customers</li>
+            <li>Resources</li>
+            <li>Blog</li>
+          </ol>
+        </div>
+        <div className={styles.lists}>
+          <h5>Support</h5>
+          <ol>
+            <li>Help</li>
+            <li>Tutorial</li>
+            <li>API</li>
+            <li>Contact</li>
+          </ol>
+        </div>
       </section>
     </section>
   );
