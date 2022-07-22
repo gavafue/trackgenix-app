@@ -1,34 +1,41 @@
 import styles from './navbar.module.css';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { employeeNavbar, defaultNavbaritems } from 'libs/navbarConfig';
+import { Link } from 'react-router-dom';
+import { employeeNavbar, superAdminNavbar, adminNavbar, publicNavbar } from 'libs/navbarConfig';
 import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
-  const location = useLocation().pathname;
-  const locationEmployee = location.includes('/employee');
-  const navBarItems = locationEmployee ? employeeNavbar : defaultNavbaritems;
-  const employeeName =
-    employeeLogged?.firstName && employeeLogged?.lastName
-      ? `${employeeLogged?.firstName} ${employeeLogged?.lastName}`
+  const userLogged = useSelector((state) => state.auth.authenticated.data);
+  const userLoggedRole = useSelector((state) => state.auth.authenticated.role);
+  const navbarItems =
+    userLoggedRole == 'EMPLOYEE'
+      ? employeeNavbar
+      : userLoggedRole == 'SUPERADMIN'
+      ? superAdminNavbar
+      : userLoggedRole == 'ADMIN'
+      ? adminNavbar
+      : publicNavbar;
+  const userName =
+    userLogged?.firstName && userLogged?.lastName
+      ? `${userLogged?.firstName} ${userLogged?.lastName}`
       : '';
   return (
     <nav className={styles.navbar}>
       <div className={styles.appName}>
         <div className={styles.userContainer}>
-          <div className={styles.userName}>{locationEmployee ? employeeName : 'Pepito'}</div>
+          <div className={styles.userName}>{userLogged ? userName : 'Menu'}</div>
           <div className={styles.profileImg}>
-            {locationEmployee ? (
-              <img src={employeeLogged?.photo}></img>
-            ) : (
-              <img src="http://www.4x4.ec/overlandecuador/wp-content/uploads/2017/06/default-user-icon-8.jpg" />
-            )}
+            {
+              navbarItems === employeeNavbar ? <img src={userLogged?.photo}></img> : ''
+              // : (
+              //   <img src="http://www.4x4.ec/overlandecuador/wp-content/uploads/2017/06/default-user-icon-8.jpg" />
+              // )
+            }
           </div>
         </div>
       </div>
       <ul className={styles.rutes}>
-        {navBarItems.map((item) => {
+        {navbarItems.map((item) => {
           return (
             <li key={item.path}>
               <Link to={item.path}>{item.name}</Link>
