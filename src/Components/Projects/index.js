@@ -48,14 +48,14 @@ const Projects = () => {
     setSearch(event.target.value);
   };
   const projectsData = projects.map((project) => {
-    if (isActive && project.active && project.name?.toLowerCase().includes(search))
+    if (isActive && project.active && project.name?.toLowerCase().includes(search.toLowerCase()))
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
         startDate: project.startDate.slice(0, 10),
         endDate: project.endDate.slice(0, 10)
       };
-    if (!isActive && !project.active && project.name?.toLowerCase().includes(search))
+    if (!isActive && !project.active && project.name?.toLowerCase().includes(search.toLowerCase()))
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',

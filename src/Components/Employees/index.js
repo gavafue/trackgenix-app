@@ -46,9 +46,13 @@ function Employees() {
   };
 
   const employeesData = employees.map((employee) => {
-    if (isActive && employee.active && employee.email?.toLowerCase().includes(search))
+    if (isActive && employee.active && employee.email?.toLowerCase().includes(search.toLowerCase()))
       return employee;
-    if (!isActive && !employee.active && employee.email?.toLowerCase().includes(search))
+    if (
+      !isActive &&
+      !employee.active &&
+      employee.email?.toLowerCase().includes(search.toLowerCase())
+    )
       return employee;
   });
 
