@@ -39,7 +39,6 @@ const RegisterAdmin = () => {
     { id: true, optionContent: 'Active' },
     { id: false, optionContent: 'Inactive' }
   ];
-  console.log('Probando');
   const onSubmit = (data) => {
     const options = {
       method: 'POST',
