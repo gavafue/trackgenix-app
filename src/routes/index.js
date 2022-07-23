@@ -1,9 +1,10 @@
 import { lazy } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Layout from 'Components/Layout';
 import PrivateRoute from './privateRoute';
 import Login from 'Components/Auth/Login';
 import Home from 'Components/Shared/Home/index';
+import HomeForUser from 'Components/Shared/HomeForUser';
 import Admins from 'Components/Admins';
 import AdminsForm from 'Components/Admins/Form';
 import Employees from 'Components/Employees/index';
@@ -32,6 +33,9 @@ const Routes = () => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/home" component={Home} />
+        <PrivateRoute exact path="/employee" role="EMPLOYEE" component={HomeForUser} />
+        <PrivateRoute exact path="/admin" role="ADMIN" component={HomeForUser} />
+        <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={HomeForUser} />
         <Route path="/login" component={Login} />
         <Route exact path="/admins" component={Admins} />
         <Route path="/admins/form/:id" component={AdminsForm} />
@@ -59,6 +63,9 @@ const Routes = () => {
         <PrivateRoute path="/projects/form" role="ADMIN" component={ProjectsForm} />
         <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
         <Route path="/auth" component={AuthRoutes} />
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </Layout>
