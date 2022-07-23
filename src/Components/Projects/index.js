@@ -5,6 +5,7 @@ import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
 import Preloader from 'Components/Shared/Preloader';
+import Input from 'Components/Shared/Input/InputText';
 import { useHistory } from 'react-router-dom';
 import styles from './projects.module.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -41,15 +42,20 @@ const Projects = () => {
   const deleteHandler = () => {
     dispatch(deleteProject(deleteInfo));
   };
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
   const projectsData = projects.map((project) => {
-    if (isActive && project.active)
+    if (isActive && project.active && project.name?.toLowerCase().includes(search.toLowerCase()))
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
         startDate: project.startDate.slice(0, 10),
         endDate: project.endDate.slice(0, 10)
       };
-    if (!isActive && !project.active)
+    if (!isActive && !project.active && project.name?.toLowerCase().includes(search.toLowerCase()))
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
@@ -61,12 +67,15 @@ const Projects = () => {
   return (
     <section className={styles.container}>
       <h2>Projects</h2>
-      <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
-      <Button
-        label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
-        onClick={toggleIsActive}
-        theme="secondary"
-      />
+      <div>
+        <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
+        <Button
+          label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
+          onClick={toggleIsActive}
+          theme="secondary"
+        />
+        <Input label="Search by project name:" id="search" type="text" onChange={handleSearch} />
+      </div>
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}

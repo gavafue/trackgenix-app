@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './registerForm.module.css';
 import Preloader from 'Components/Shared/Preloader';
@@ -14,10 +16,26 @@ import employeesValidation from 'validations/employees';
 
 const RegisterEmployee = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const userLoggedRole = useSelector((state) => state.auth.authenticated.role);
   const feedbackInfo = useSelector((state) => state.employees?.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees?.showFeedbackMessage);
   const isPending = useSelector((state) => state.employees?.isPending);
   const URL = process.env.REACT_APP_API_URL;
+  const arrayToMapActive = [
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
+  ];
+
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(employeesValidation)
+  });
 
   const onSubmit = (data) => {
     const options = {
@@ -37,36 +55,31 @@ const RegisterEmployee = () => {
         birthDate: data.birthDate,
         photo: data.photo,
         password: data.password,
-        active: data.active
+        active: userLoggedRole === 'ADMIN' ? data.active : true
       })
     };
     dispatch(postEmployee(options));
   };
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors }
-  } = useForm({
-    mode: 'onChange',
-    resolver: joiResolver(employeesValidation)
-  });
-
-  const arrayToMapActive = [
-    { id: true, optionContent: 'Active' },
-    { id: false, optionContent: 'Inactive' }
-  ];
+  useEffect(() => {
+    reset({
+      active: true
+    });
+  }, []);
 
   return (
     <section className={styles.container}>
-      <SharedForm onSubmit={handleSubmit(onSubmit)} header="Register employee">
+      <SharedForm
+        onSubmit={handleSubmit(onSubmit)}
+        header={userLoggedRole === 'ADMIN' ? 'Register employee' : 'Sign up'}
+      >
         <Input
           className={styles.input}
           id="firstName"
           label="First Name"
           name="firstName"
           type="text"
-          placeholder="Enter Employee's first name"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `your`} first name`}
           register={register}
           error={errors.firstName?.message}
           required
@@ -76,7 +89,7 @@ const RegisterEmployee = () => {
           name="lastName"
           id="lastName"
           type="text"
-          placeholder="Enter Employee's last name"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `your`} last name`}
           register={register}
           error={errors.lastName?.message}
           required
@@ -86,7 +99,7 @@ const RegisterEmployee = () => {
           name="email"
           id="email"
           type="email"
-          placeholder="Enter Employee's email"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `your`} email`}
           register={register}
           error={errors.email?.message}
           required
@@ -96,7 +109,7 @@ const RegisterEmployee = () => {
           name="password"
           id="password"
           type="password"
-          placeholder="Enter Employee's password"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `a`} password`}
           register={register}
           error={errors.password?.message}
           required
@@ -106,7 +119,7 @@ const RegisterEmployee = () => {
           name="birthDate"
           id="birthDate"
           type="date"
-          placeholder="Enter Employee's date of birth"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `your`} date of birth`}
           register={register}
           error={errors.birthDate?.message}
           required
@@ -116,7 +129,7 @@ const RegisterEmployee = () => {
           name="phone"
           id="phone"
           type="tel"
-          placeholder="Enter Employee's telephone number"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `your`} phone number`}
           register={register}
           error={errors.phone?.message}
           required
@@ -126,7 +139,9 @@ const RegisterEmployee = () => {
           name="country"
           id="country"
           type="text"
-          placeholder="Enter Employee's country"
+          placeholder={`Enter ${
+            userLoggedRole === 'ADMIN' ? `employee's` : `your`
+          } current country`}
           register={register}
           error={errors.country?.message}
           required
@@ -136,7 +151,7 @@ const RegisterEmployee = () => {
           name="city"
           id="city"
           type="text"
-          placeholder="Enter Employee's city"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `your`} current city`}
           register={register}
           error={errors.city?.message}
           required
@@ -146,7 +161,7 @@ const RegisterEmployee = () => {
           name="zip"
           id="zip"
           type="text"
-          placeholder="Enter Employee's postal code"
+          placeholder={`Enter ${userLoggedRole === 'ADMIN' ? `employee's` : `your`} postal code`}
           register={register}
           error={errors.zip?.message}
           required
@@ -156,21 +171,26 @@ const RegisterEmployee = () => {
           name="photo"
           id="photo"
           type="text"
-          placeholder="Enter Employee's profile picture url"
+          placeholder={`Enter ${
+            userLoggedRole === 'ADMIN' ? `employee's` : `a`
+          } profile picture url`}
           register={register}
           error={errors.photo?.message}
           required
         />
-        <Select
-          label="Active"
-          arrayToMap={arrayToMapActive}
-          name="active"
-          id="active"
-          placeholder="Enter Employee's status"
-          register={register}
-          error={errors.active?.message}
-          required
-        />
+        {userLoggedRole == 'ADMIN' && (
+          <Select
+            label="Active"
+            arrayToMap={arrayToMapActive}
+            name="active"
+            id="active"
+            placeholder="Enter employee's status"
+            register={register}
+            error={errors.active?.message}
+            hidden={userLoggedRole === 'ADMIN' ? false : true}
+            required
+          />
+        )}
       </SharedForm>
       <Modal
         isOpen={showFeedback}

@@ -6,6 +6,7 @@ import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
 import Preloader from 'Components/Shared/Preloader';
+import Input from 'Components/Shared/Input/InputText';
 import { useSelector, useDispatch } from 'react-redux';
 import { getEmployee } from 'redux/employees/thunks';
 import {
@@ -38,20 +39,35 @@ function Employees() {
     dispatch(getEmployee());
   }, []);
 
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
   const employeesData = employees.map((employee) => {
-    if (isActive && employee.active) return employee;
-    if (!isActive && !employee.active) return employee;
+    if (isActive && employee.active && employee.email?.toLowerCase().includes(search.toLowerCase()))
+      return employee;
+    if (
+      !isActive &&
+      !employee.active &&
+      employee.email?.toLowerCase().includes(search.toLowerCase())
+    )
+      return employee;
   });
 
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <Button label="Add new employee" onClick={createEmployee} />
-      <Button
-        label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
-        onClick={toggleIsActive}
-        theme="secondary"
-      />
+      <div>
+        <Button label="Add new employee" onClick={createEmployee} />
+        <Button
+          label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
+          onClick={toggleIsActive}
+          theme="secondary"
+        />
+        <Input label="Search by email:" id="search" type="text" onChange={handleSearch} />
+      </div>
       <Table
         data={employeesData}
         headersName={['Name', 'Last Name', 'Email', 'Phone']}

@@ -10,7 +10,8 @@ const Select = ({
   multiple,
   label,
   arrayToMap,
-  error
+  error,
+  onChange
 }) => {
   return (
     <div className={styles.container}>
@@ -25,6 +26,7 @@ const Select = ({
         required={required}
         multiple={multiple}
         {...register(name)}
+        onChange={onChange}
       >
         {arrayToMap.map((item) => {
           return (
