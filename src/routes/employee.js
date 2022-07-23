@@ -9,12 +9,12 @@ const Employee = () => {
   return (
     <Switch>
       <Route path="/employee/home" component={Home} />
-      <Route exact path="/employee">
-        <Redirect to="/employee/home" />
-      </Route>
       <Route path="/employee/timesheet" component={Timesheet} />
       <Route path="/employee/projects" component={Projects} />
       <Route path="/employee/profile" component={Profile} />
+      <Route path="/">
+        <Redirect to="/employee/home" />
+      </Route>
     </Switch>
   );
 };
