@@ -1,6 +1,243 @@
 .container {
   flex: 8;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+}
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 3px solid #c4c4c4;
+}
+.home div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.home p {
+  width: 60%;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.home img {
+  width: 60%;
+  max-width: max-content;
+  height: auto;
+}
+
+.functions,
+.assets,
+.aboutUs {
+  padding: 1rem;
+  border-bottom: 3px solid #c4c4c4;
+  height: max-content;
+}
+.functionContainer {
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+.function {
+  display: flex;
+  margin-top: 2rem;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.function div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.function p {
+  width: 50%;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: lighter;
+}
+.function img {
+  width: 80px;
+  max-width: max-content;
+  height: auto;
+}
+.assetsContainer{
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.asset {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.asset div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.asset img {
+  margin: 0.5rem;
+  width: 40%;
+  max-width: max-content;
+  height: auto;
+  border-radius: 23px;
+}
+.asset p {
+  width: 70%;
+  margin: 0.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: lighter;
+}
+.formContainer {
+  display: flex;
+  width: 100%;
+}
+.aboutUs div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.aboutUs div p {
+  width: 80%;
+  margin: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+.aboutUs div img {
+  width: 80%;
+  margin: 1rem;
+  max-width: max-content;
+  height: auto;
+  border-radius: 23px;
+}
+.listsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+.lists {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 50%;
+  padding: 10px;
+}
+.lists h5 {
+  font-size: 1.2rem;
+}
+.lists ol {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+  width: 56%;
+  font-size: 1.2rem;
+  font-weight: lighter;
+}
+.lists ol li {
+  margin: 1rem 2rem;
+  margin: 0%;
+}
+@media (min-width: 768px) {
+  .home div {
+    flex-direction: row;
+  }
+  .home p {
+    width: 40%;
+    text-align: left;
+  }
+  h3 {
+    text-align: left;
+  }
+  .function {
+    flex-direction: row;
+    justify-content: center;
+    margin-left: 5rem;
+  }
+  .function div {
+    align-items: flex-start;
+    margin-left: 1rem;
+  }
+  .functions-text {
+    text-align: left;
+  }
+  .assets div {
+    align-items: center;
+  }
+  .asset {
+    align-items: flex-start;
+  }
+  .asset p {
+    text-align: left;
+  }
+  .aboutUs div {
+    align-items: flex-start;
+  }
+  .aboutUs div p {
+    text-align: left;
+  }
+  .listsContainer {
+    flex-direction: row;
+  }
+  .lists {
+    width: 30%;
+  }
+}
+@media (min-width: 1024px) {
+  h2 {
+    width: 40%;
+  }
+  .home {
+    align-items: flex-start;
+  }
+  .functionContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .function {
+    width: 50%;
+    margin-left: 0;
+  }
+  .assets div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .asset {
+    width: 45%;
+  }
+  .aboutUs div {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .aboutUs div p {
+    width: 40%;
+  }
+  .aboutUs div img {
+    width: 60%;
+  }
+  .listsContainer div {
+    display: flex;
+    flex-direction: column;
+  }
 }

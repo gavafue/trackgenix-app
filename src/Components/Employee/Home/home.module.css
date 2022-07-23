@@ -5,19 +5,4 @@
   align-items: center;
   flex-direction: column;
 }
-.images img{
-  width: 280px;
-  height: 200px;
-  margin: 10px;
-}
-.firstTwo{
-  display: flex;
-  flex-direction: row;
-}
-.secondTwo{
-  display: flex;
-  flex-direction: row;
-}
-.secondTwo img{
-  margin-bottom: 20px;
-}
+
