@@ -11,7 +11,8 @@ const Input = ({
   type,
   required,
   placeholder,
-  error
+  error,
+  onChange
 }) => {
   return (
     <div className={styles.container}>
@@ -28,6 +29,7 @@ const Input = ({
         disabled={disabled}
         value={value}
         {...register(name)}
+        onChange={onChange}
       />
       {error && <sub className={styles.error}>{error}</sub>}
     </div>

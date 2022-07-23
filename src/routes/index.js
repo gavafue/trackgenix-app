@@ -1,9 +1,10 @@
 import { lazy } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Layout from 'Components/Layout';
 import PrivateRoute from './privateRoute';
 import Login from 'Components/Auth/Login';
 import Home from 'Components/Shared/Home/index';
+import HomeForUser from 'Components/Shared/HomeForUser';
 import Admins from 'Components/Admins';
 import AdminsForm from 'Components/Admins/Form';
 import Employees from 'Components/Employees/index';
@@ -18,6 +19,9 @@ import Tasks from 'Components/Tasks/index';
 import TasksForm from 'Components/Tasks/Form';
 import AccountInactive from 'Components/Auth/Errors/AccountInactive';
 import NotAllowed from 'Components/Auth/Errors/NotAllowed';
+import NotFound from 'Components/Shared/NotFound';
+import RegisterEmployee from 'Components/Auth/Register/registerEmployee';
+import AdminProfile from 'Components/Admin/EditProfile';
 const Employee = lazy(() => import('routes/employee'));
 const Admin = lazy(() => import('routes/admin'));
 const Superadmin = lazy(() => import('routes/superadmin'));
@@ -27,17 +31,15 @@ const Routes = () => {
   return (
     <Layout>
       <Switch>
+        <Route exact path="/" component={Home} />
         <Route path="/home" component={Home} />
+        <PrivateRoute exact path="/employee" role="EMPLOYEE" component={HomeForUser} />
+        <PrivateRoute exact path="/admin" role="ADMIN" component={HomeForUser} />
+        <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={HomeForUser} />
         <Route path="/login" component={Login} />
         <Route exact path="/admins" component={Admins} />
         <Route path="/admins/form/:id" component={AdminsForm} />
         <Route path="/admins/form" component={AdminsForm} />
-        <Route exact path="/employees" component={Employees} />
-        <Route path="/employees/form/:id" component={EmployeesForm} />
-        <Route path="/employees/form" component={EmployeesForm} />
-        <Route exact path="/projects" component={Projects} />
-        <Route path="/projects/form/:id" component={ProjectsForm} />
-        <Route path="/projects/form" component={ProjectsForm} />
         <Route exact path="/super-admins" component={Superadmins} />
         <Route path="/super-admins/form/:id" component={SuperadminsForm} />
         <Route path="/super-admins/form" component={AdminsForm} />
@@ -47,12 +49,24 @@ const Routes = () => {
         <Route exact path="/tasks" component={Tasks} />
         <Route path="/tasks/form/:id" component={TasksForm} />
         <Route path="/tasks/form" component={TasksForm} />
-        <Route path="/accountinactive" component={AccountInactive} />;
-        <Route path="/notAllowed" component={NotAllowed} />;
+        <Route path="/accountinactive" component={AccountInactive} />
+        <Route path="/notAllowed" component={NotAllowed} />
+        <Route path="/register/employee" component={RegisterEmployee} />
         <PrivateRoute path="/employee" role="EMPLOYEE" component={Employee} />
-        <PrivateRoute path="/admin" role="ADMIN" component={Admin} />
+        <PrivateRoute exact path="/admin" role="ADMIN" component={Admin} />
+        <PrivateRoute path="/admin/profile" role="ADMIN" component={AdminProfile} />
+        <PrivateRoute exact path="/employees" role="ADMIN" component={Employees} />
+        <PrivateRoute path="/employees/form/:id" role="ADMIN" component={EmployeesForm} />
+        <PrivateRoute path="/employees/form" role="ADMIN" component={EmployeesForm} />
+        <PrivateRoute exact path="/projects" role="ADMIN" component={Projects} />
+        <PrivateRoute path="/projects/form/:id" role="ADMIN" component={ProjectsForm} />
+        <PrivateRoute path="/projects/form" role="ADMIN" component={ProjectsForm} />
         <PrivateRoute path="/superadmin" role="SUPERADMIN" component={Superadmin} />
         <Route path="/auth" component={AuthRoutes} />
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
+        <Route component={NotFound} />
       </Switch>
     </Layout>
   );
