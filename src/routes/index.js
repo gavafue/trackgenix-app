@@ -19,6 +19,7 @@ import Tasks from 'Components/Tasks/index';
 import TasksForm from 'Components/Tasks/Form';
 import AccountInactive from 'Components/Auth/Errors/AccountInactive';
 import NotAllowed from 'Components/Auth/Errors/NotAllowed';
+import NotFound from 'Components/Shared/NotFound';
 import RegisterEmployee from 'Components/Auth/Register/registerEmployee';
 import AdminProfile from 'Components/Admin/EditProfile';
 const Employee = lazy(() => import('routes/employee'));
@@ -30,6 +31,7 @@ const Routes = () => {
   return (
     <Layout>
       <Switch>
+        <Route exact path="/" component={Home} />
         <Route path="/home" component={Home} />
         <PrivateRoute exact path="/employee" role="EMPLOYEE" component={HomeForUser} />
         <PrivateRoute exact path="/admin" role="ADMIN" component={HomeForUser} />
@@ -64,6 +66,7 @@ const Routes = () => {
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
+        <Route component={NotFound} />
       </Switch>
     </Layout>
   );
