@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import { joiResolver } from '@hookform/resolvers/joi';
 import styles from './registerForm.module.css';
 import Preloader from 'Components/Shared/Preloader';
@@ -14,10 +16,26 @@ import employeesValidation from 'validations/employees';
 
 const RegisterEmployee = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const userLoggedRole = useSelector((state) => state.auth.authenticated.role);
   const feedbackInfo = useSelector((state) => state.employees?.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees?.showFeedbackMessage);
   const isPending = useSelector((state) => state.employees?.isPending);
   const URL = process.env.REACT_APP_API_URL;
+  const arrayToMapActive = [
+    { id: true, optionContent: 'Active' },
+    { id: false, optionContent: 'Inactive' }
+  ];
+
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors }
+  } = useForm({
+    mode: 'onChange',
+    resolver: joiResolver(employeesValidation)
+  });
 
   const onSubmit = (data) => {
     const options = {
@@ -37,25 +55,17 @@ const RegisterEmployee = () => {
         birthDate: data.birthDate,
         photo: data.photo,
         password: data.password,
-        active: data.active
+        active: userLoggedRole === 'ADMIN' ? data.active : true
       })
     };
     dispatch(postEmployee(options));
   };
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors }
-  } = useForm({
-    mode: 'onChange',
-    resolver: joiResolver(employeesValidation)
-  });
-
-  const arrayToMapActive = [
-    { id: true, optionContent: 'Active' },
-    { id: false, optionContent: 'Inactive' }
-  ];
+  useEffect(() => {
+    reset({
+      active: true
+    });
+  }, []);
 
   return (
     <section className={styles.container}>
@@ -161,16 +171,19 @@ const RegisterEmployee = () => {
           error={errors.photo?.message}
           required
         />
-        <Select
-          label="Active"
-          arrayToMap={arrayToMapActive}
-          name="active"
-          id="active"
-          placeholder="Enter Employee's status"
-          register={register}
-          error={errors.active?.message}
-          required
-        />
+        {userLoggedRole == 'ADMIN' && (
+          <Select
+            label="Active"
+            arrayToMap={arrayToMapActive}
+            name="active"
+            id="active"
+            placeholder="Enter Employee's status"
+            register={register}
+            error={errors.active?.message}
+            hidden={userLoggedRole === 'ADMIN' ? false : true}
+            required
+          />
+        )}
       </SharedForm>
       <Modal
         isOpen={showFeedback}
