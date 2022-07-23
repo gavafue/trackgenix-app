@@ -31,15 +31,6 @@ export const adminNavbar = [
 
 export const publicNavbar = [
   { path: '/home', name: 'Home' },
-  { path: '/home/#aboutUs', name: 'About us' },
-  { path: '/home/#contact', name: 'Contact' }
+  { path: '/login', name: 'Login' },
+  { path: '/register/employee', name: 'Signup' }
 ];
-
-// export const defaultNavbaritems = [
-//   { path: '/admins', name: 'Admins' },
-//   { path: '/super-admins', name: 'Super Admins' },
-//   { path: '/employees', name: 'Employees' },
-//   { path: '/projects', name: 'Projects' },
-//   { path: '/time-sheets', name: 'Timesheets' },
-//   { path: '/tasks', name: 'Tasks' }
-// ];

@@ -1,8 +1,8 @@
-import styles from './navbar.module.css';
 import React from 'react';
-// import { Link } from 'react-router-dom';
-import { employeeNavbar, superAdminNavbar, adminNavbar, publicNavbar } from 'libs/navbarConfig';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import styles from './navbar.module.css';
+import { employeeNavbar, superAdminNavbar, adminNavbar, publicNavbar } from 'libs/navbarConfig';
 
 const Navbar = () => {
   const userLogged = useSelector((state) => state.auth.authenticated.data);
@@ -33,7 +33,7 @@ const Navbar = () => {
         {navbarItems.map((item) => {
           return (
             <li key={item.path}>
-              <a href={item.path}>{item.name}</a>
+              <Link to={item.path}>{item.name}</Link>
             </li>
           );
         })}
