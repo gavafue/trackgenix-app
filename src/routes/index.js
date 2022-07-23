@@ -4,6 +4,7 @@ import Layout from 'Components/Layout';
 import PrivateRoute from './privateRoute';
 import Login from 'Components/Auth/Login';
 import Home from 'Components/Shared/Home/index';
+import HomeForUser from 'Components/Shared/HomeForUser';
 import Admins from 'Components/Admins';
 import AdminsForm from 'Components/Admins/Form';
 import Employees from 'Components/Employees/index';
@@ -29,7 +30,11 @@ const Routes = () => {
   return (
     <Layout>
       <Switch>
+        <Route exact path="/" component={Home} />
         <Route path="/home" component={Home} />
+        <PrivateRoute exact path="/employee" role="EMPLOYEE" component={HomeForUser} />
+        <PrivateRoute exact path="/admin" role="ADMIN" component={HomeForUser} />
+        <PrivateRoute exact path="/superadmin" role="SUPERADMIN" component={HomeForUser} />
         <Route path="/login" component={Login} />
         <Route exact path="/admins" component={Admins} />
         <Route path="/admins/form/:id" component={AdminsForm} />
