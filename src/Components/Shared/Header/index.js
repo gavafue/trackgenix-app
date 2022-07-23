@@ -23,17 +23,27 @@ function Header() {
     <header>
       <div className={styles.container}>
         <div className={styles.title}>{HeaderTitle[location.pathname] ?? 'TRACKGENIX'}</div>
-        <div
-          onClick={() => {
-            firebase.auth().signOut();
-          }}
-        >
-          <a href="/home" rel="noreferrer">
-            Log out
-          </a>
-          <a href="/login" rel="noreferrer">
-            Log in
-          </a>
+        <div>
+          {userLogged ? (
+            <a
+              href="/home"
+              rel="noreferrer"
+              onClick={() => {
+                firebase.auth().signOut();
+              }}
+            >
+              Log out
+            </a>
+          ) : (
+            ''
+          )}
+          {location.pathname === '/login' || userLogged ? (
+            ''
+          ) : (
+            <a href="/login" rel="noreferrer">
+              Log in
+            </a>
+          )}
         </div>
       </div>
     </header>
