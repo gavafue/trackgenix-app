@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './tableContent.module.css';
 import Button from 'Components/Shared/Button';
 
-const TableContent = ({ headers, data, editData, setShowModal, setidFromRow }) => {
+const TableContent = ({ headers, data, editData, setShowModal, setidFromRow, lowLogic }) => {
   return (
     <tbody className={styles.container}>
       {data.map((row) => {
@@ -16,17 +16,21 @@ const TableContent = ({ headers, data, editData, setShowModal, setidFromRow }) =
                   </td>
                 );
               })}
-              <td className={styles.cell}>
-                <Button onClick={() => editData(row)} label="Edit" />
-                <Button
-                  label="Delete"
-                  theme="secondary"
-                  onClick={() => {
-                    setShowModal(true);
-                    setidFromRow(row._id);
-                  }}
-                />
-              </td>
+              {(editData || setidFromRow) && (
+                <td className={styles.cell}>
+                  {editData && <Button onClick={() => editData(row)} label="Edit" />}
+                  {setidFromRow && (
+                    <Button
+                      label={`${lowLogic ? 'Change state' : 'Delete'}`}
+                      theme="secondary"
+                      onClick={() => {
+                        setShowModal(true);
+                        setidFromRow(row._id);
+                      }}
+                    />
+                  )}
+                </td>
+              )}
             </tr>
           );
       })}

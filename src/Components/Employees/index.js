@@ -1,16 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './employees.module.css';
 import Table from 'Components/Shared/Table';
-import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
 import Preloader from 'Components/Shared/Preloader';
+import Input from 'Components/Shared/Input/InputText';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEmployee, deleteEmployee } from 'redux/employees/thunks';
+import { getEmployee } from 'redux/employees/thunks';
 import {
-  setidFromRow,
   showDeleteMessage,
   showFeedbackMessage,
   getSelectedEmployee,
@@ -22,54 +21,60 @@ function Employees() {
   const employees = useSelector((state) => state.employees.list);
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.employees.idFromRow);
-  const showDelete = useSelector((state) => state.employees.showDeleteMessage);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
+  const [isActive, setIsActive] = useState(true);
+  const toggleIsActive = () => {
+    setIsActive((current) => !current);
+  };
   const history = useHistory();
   const editData = (row) => {
     dispatch(getSelectedEmployee(row));
     history.push(`/employees/form/`);
   };
   const createEmployee = () => {
-    history.push('/employees/form');
+    history.push('/register/employee');
   };
   useEffect(() => {
     dispatch(cleanSelectedEmployee());
     dispatch(getEmployee());
   }, []);
 
-  const deleteHandler = () => {
-    dispatch(deleteEmployee(deleteInfo));
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
   };
+
+  const employeesData = employees.map((employee) => {
+    if (isActive && employee.active && employee.email?.toLowerCase().includes(search.toLowerCase()))
+      return employee;
+    if (
+      !isActive &&
+      !employee.active &&
+      employee.email?.toLowerCase().includes(search.toLowerCase())
+    )
+      return employee;
+  });
 
   return (
     <section className={styles.container}>
       <h2>Employees</h2>
-      <Button label="Add new employee" onClick={createEmployee} />
+      <div>
+        <Button label="Add new employee" onClick={createEmployee} />
+        <Button
+          label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
+          onClick={toggleIsActive}
+          theme="secondary"
+        />
+        <Input label="Search by email:" id="search" type="text" onChange={handleSearch} />
+      </div>
       <Table
-        data={employees}
+        data={employeesData}
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
         headers={['firstName', 'lastName', 'email', 'phone']}
         setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        setidFromRow={(employeeId) => dispatch(setidFromRow(employeeId))}
         editData={editData}
-        deleteEmployee={deleteHandler}
       />
-      <Modal
-        isOpen={showDelete}
-        handleClose={() => {
-          dispatch(showDeleteMessage(!showDelete));
-        }}
-      >
-        <DeleteMessage
-          handleClose={() => {
-            dispatch(showDeleteMessage(!showDelete));
-          }}
-          idFromRow={deleteInfo}
-          deleteItem={deleteHandler}
-          setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
-        />
-      </Modal>
       <Modal
         isOpen={showFeedback}
         handleClose={() => {
