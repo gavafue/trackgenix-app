@@ -4,6 +4,7 @@ import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { editAdminStatus, getAdmins } from 'redux/admins/thunks';
+// import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Preloader from 'Components/Shared/Preloader';
 import { showFeedbackMessage, setidFromRow } from 'redux/admins/actions';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
@@ -25,6 +26,11 @@ const AdminsList = () => {
     dispatch(getAdmins());
   }, []);
 
+  // const editData = (row) => {
+  //   dispatch(getSelectedAdmin(row));
+  //   history.push(`/superadmin/form`);
+  // };
+
   const admins = useSelector((state) => state.admins.list).map((admin) => ({
     ...admin,
     fullName: `${admin.name} ${admin.lastName}`,
@@ -33,7 +39,8 @@ const AdminsList = () => {
   }));
   const changeStatus = adminSelected.active ? 'disable' : 'activate';
 
-  const updateHandler = () => {
+  console.log(adminSelected);
+  const deleteHandler = () => {
     const options = {
       headers: { 'Content-type': 'application/json' },
       method: 'PUT',
@@ -59,6 +66,7 @@ const AdminsList = () => {
         headers={['fullName', 'location', 'isActive']}
         headersName={['Name', 'Location', 'Status']}
         setShowModal={setShowModal}
+        // editData={editData}
         getIdFromRow={(adminId) => dispatch(setidFromRow(adminId))}
       />
       <div className={styles.button}>
@@ -78,7 +86,7 @@ const AdminsList = () => {
           resourceName={'Admin'}
           operation={changeStatus}
           idFromRow={idFromRow}
-          confirmChange={() => updateHandler()}
+          confirmChange={() => deleteHandler()}
           setShowModal={setShowModal}
         />
       </Modal>
