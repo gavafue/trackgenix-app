@@ -19,7 +19,10 @@ import {
   CLEAN_SELECTED_EMPLOYEE,
   GET_EMPLOYEE_BY_ID_ERROR,
   GET_EMPLOYEE_BY_ID_PENDING,
-  GET_EMPLOYEE_BY_ID_SUCCESS
+  GET_EMPLOYEE_BY_ID_SUCCESS,
+  EDIT_EMPLOYEE_STATUS_ERROR,
+  EDIT_EMPLOYEE_STATUS_SUCCESS,
+  EDIT_EMPLOYEE_STATUS_PENDING
 } from './constants';
 
 export const getEmployeeSuccess = (employees) => ({
@@ -126,3 +129,17 @@ export const getEmployeeByIdError = (error) => {
     payload: error
   };
 };
+
+export const editEmployeeStatusPending = () => ({
+  type: EDIT_EMPLOYEE_STATUS_PENDING
+});
+
+export const editEmployeeStatusSuccess = (employeeEdited) => ({
+  type: EDIT_EMPLOYEE_STATUS_SUCCESS,
+  payload: employeeEdited
+});
+
+export const editEmployeeStatusError = (error) => ({
+  type: EDIT_EMPLOYEE_STATUS_ERROR,
+  payload: error
+});
