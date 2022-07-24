@@ -12,7 +12,7 @@ import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import adminsValidation from 'validations/admins';
 import Form from 'Components/Shared/Form';
 
-const SuperAdmin = () => {
+const RegisterAdmin = () => {
   const {
     handleSubmit,
     register,
@@ -39,7 +39,6 @@ const SuperAdmin = () => {
     { id: true, optionContent: 'Active' },
     { id: false, optionContent: 'Inactive' }
   ];
-  console.log('Probando');
   const onSubmit = (data) => {
     const options = {
       method: 'POST',
@@ -179,4 +178,4 @@ const SuperAdmin = () => {
   );
 };
 
-export default SuperAdmin;
+export default RegisterAdmin;
