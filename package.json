@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fullcalendar/daygrid": "^5.11.0",
+    "@fullcalendar/interaction": "^5.11.0",
+    "@fullcalendar/react": "^5.11.1",
     "@hookform/resolvers": "^2.9.1",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^11.2.7",
@@ -10,6 +13,7 @@
     "firebase": "^9.8.4",
     "joi": "^17.6.0",
     "react": "^17.0.2",
+    "react-big-calendar": "^1.5.0",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.32.2",
     "react-redux": "^7.2.6",

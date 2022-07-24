@@ -45,7 +45,6 @@ const Form = () => {
   const URL = process.env.REACT_APP_API_URL;
 
   const onSubmit = (data) => {
-    console.log(data);
     const options = {
       method: 'PUT',
       url: `${URL}/employees/${employeeLogged._id}`,
