@@ -27,7 +27,6 @@ function Employees() {
   const [isActive, setIsActive] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState('');
-  const changeStatus = isActive ? 'disable this' : 'activate this';
   const toggleIsActive = () => {
     setIsActive((current) => !current);
   };
@@ -78,7 +77,7 @@ function Employees() {
           onClick={toggleIsActive}
           theme="secondary"
         />
-        <Input label="Search by email:" id="search" type="text" onChange={handleSearch} />
+        <Input label="Search&nbsp;by&nbsp;email:" id="search" type="text" onChange={handleSearch} />
       </div>
       <Table
         data={employeesData}
@@ -98,8 +97,8 @@ function Employees() {
           handleClose={() => {
             setShowModal(false);
           }}
-          resourceName={'Employee'}
-          operation={changeStatus}
+          resourceName={'this employee'}
+          operation={isActive ? 'disable' : 'activate'}
           idFromRow={idFromRow}
           confirmChange={() => lowLogicHandler()}
           setShowModal={setShowModal}

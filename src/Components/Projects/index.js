@@ -28,7 +28,6 @@ const Projects = () => {
   const [isActive, setIsActive] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState('');
-  const changeStatus = isActive ? 'disable this' : 'activate this';
   const toggleIsActive = () => {
     setIsActive((current) => !current);
   };
@@ -49,6 +48,10 @@ const Projects = () => {
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
+        descriptionFormat:
+          project.description.length > 40
+            ? `${project.description.slice(0, 33)} [...]`
+            : project.description,
         startDate: project.startDate.slice(0, 10),
         endDate: project.endDate.slice(0, 10)
       };
@@ -82,12 +85,17 @@ const Projects = () => {
           onClick={toggleIsActive}
           theme="secondary"
         />
-        <Input label="Search by project name:" id="search" type="text" onChange={handleSearch} />
+        <Input
+          label="Search&nbsp;by&nbsp;project&nbsp;name:"
+          id="search"
+          type="text"
+          onChange={handleSearch}
+        />
       </div>
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}
-        headers={['name', 'pmValue', 'description', 'client', 'startDate', 'endDate']}
+        headers={['name', 'pmValue', 'descriptionFormat', 'client', 'startDate', 'endDate']}
         setShowModal={setShowModal}
         editData={editData}
         setidFromRow={(projectId) => dispatch(setidFromRow(projectId))}
@@ -102,8 +110,8 @@ const Projects = () => {
           handleClose={() => {
             setShowModal(false);
           }}
-          resourceName={'Project'}
-          operation={changeStatus}
+          resourceName={'this project'}
+          operation={isActive ? 'disable' : 'activate'}
           idFromRow={idFromRow}
           confirmChange={() => lowLogicHandler()}
           setShowModal={setShowModal}
