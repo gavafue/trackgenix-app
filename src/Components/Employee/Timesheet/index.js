@@ -14,6 +14,7 @@ import Button from 'Components/Shared/Button';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { joiResolver } from '@hookform/resolvers/joi';
 import employeeTimesheetValidation from 'validations/employeeTimesheet';
+import Calendario from '../Calendar';
 
 function EmployeeTimesheets() {
   const dispatch = useDispatch();
@@ -91,6 +92,7 @@ function EmployeeTimesheets() {
           headers={['projectName', 'workDescription', 'weekSprint', 'hoursProject', 'hoursWorked']}
         />
       </EmployeeTable>
+      <Calendario />
       <Modal
         isOpen={showForm}
         handleClose={() => {

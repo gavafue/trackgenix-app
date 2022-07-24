@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from 'Components/Shared/Table/TableContent/tableContent.module.css';
-import Button from 'Components/Shared/Button';
-import { useDispatch } from 'react-redux';
-import { selectOneTimesheet } from 'redux/timesheet/actions';
+// import Button from 'Components/Shared/Button';
+// import { useDispatch } from 'react-redux';
+// import { selectOneTimesheet } from 'redux/timesheet/actions';
 
-const TimesheetTableContent = ({ headers, resetFormAddHours, data, setShowForm }) => {
-  const dispatch = useDispatch();
+const TimesheetTableContent = ({ headers, data /* setShowForm, resetFormAddHours */ }) => {
+  // const dispatch = useDispatch();
   return (
     <tbody>
       {data.map((row) => {
@@ -18,7 +18,7 @@ const TimesheetTableContent = ({ headers, resetFormAddHours, data, setShowForm }
                 </td>
               );
             })}
-            <td className={styles.rows}>
+            {/* <td className={styles.rows}>
               <Button
                 label="Add hours +"
                 theme="secondary"
@@ -32,7 +32,7 @@ const TimesheetTableContent = ({ headers, resetFormAddHours, data, setShowForm }
                   setShowForm(true);
                 }}
               />
-            </td>
+            </td> */}
           </tr>
         );
       })}
