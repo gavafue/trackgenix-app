@@ -3,12 +3,12 @@
 }
 
 .container{
-  display:flex
+  display: flex
 }
 
 .buttons{
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin:3%;
+  margin: 3%;
 }
