@@ -60,9 +60,9 @@ const Projects = () => {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
         descriptionFormat:
-        project.description.length > 40
-          ? `${project.description.slice(0, 33)} [...]`
-          : project.description,
+          project.description.length > 40
+            ? `${project.description.slice(0, 33)} [...]`
+            : project.description,
         startDate: project.startDate.slice(0, 10),
         endDate: project.endDate.slice(0, 10)
       };
