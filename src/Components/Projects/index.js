@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import styles from './projects.module.css';
 import Table from 'Components/Shared/Table';
-import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Modal from 'Components/Shared/Modal';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
 import Preloader from 'Components/Shared/Preloader';
 import Input from 'Components/Shared/Input/InputText';
-import { useHistory } from 'react-router-dom';
-import styles from './projects.module.css';
+import ChangeStatusMessage from 'Components/Shared/ChangeStatusMessage';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProjects, deleteProject } from 'redux/projects/thunks';
+import { getProjects, editProjectStatus } from 'redux/projects/thunks';
 import {
-  showDeleteMessage,
   showFeedbackMessage,
   getSelectedProject,
-  cleanSelectedProject
+  cleanSelectedProject,
+  setidFromRow
 } from 'redux/projects/actions';
 
 const Projects = () => {
@@ -23,12 +23,16 @@ const Projects = () => {
   const projects = useSelector((state) => state.projects.list);
   const isPending = useSelector((state) => state.projects.isPending);
   const feedbackInfo = useSelector((state) => state.projects.infoForFeedback);
-  const deleteInfo = useSelector((state) => state.projects.idFromRow);
-  const showDelete = useSelector((state) => state.projects.showDeleteMessage);
   const showFeedback = useSelector((state) => state.projects.showFeedbackMessage);
+  const idFromRow = useSelector((state) => state.projects.idFromRow);
   const [isActive, setIsActive] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState('');
   const toggleIsActive = () => {
     setIsActive((current) => !current);
+  };
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
   };
   const editData = (row) => {
     dispatch(getSelectedProject(row));
@@ -39,19 +43,15 @@ const Projects = () => {
     dispatch(getProjects());
   }, []);
 
-  const deleteHandler = () => {
-    dispatch(deleteProject(deleteInfo));
-  };
-  const [search, setSearch] = useState('');
-
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-  };
   const projectsData = projects.map((project) => {
     if (isActive && project.active && project.name?.toLowerCase().includes(search.toLowerCase()))
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
+        descriptionFormat:
+          project.description.length > 40
+            ? `${project.description.slice(0, 33)} [...]`
+            : project.description,
         startDate: project.startDate.slice(0, 10),
         endDate: project.endDate.slice(0, 10)
       };
@@ -59,10 +59,25 @@ const Projects = () => {
       return {
         ...project,
         pmValue: project.pm ? `${project.pm?.firstName} ${project.pm?.lastName}` : '',
+        descriptionFormat:
+          project.description.length > 40
+            ? `${project.description.slice(0, 33)} [...]`
+            : project.description,
         startDate: project.startDate.slice(0, 10),
         endDate: project.endDate.slice(0, 10)
       };
   });
+  const lowLogicHandler = () => {
+    const options = {
+      method: 'PUT',
+      url: `${process.env.REACT_APP_API_URL}/projects/${idFromRow}`,
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({
+        active: !isActive
+      })
+    };
+    dispatch(editProjectStatus(options));
+  };
 
   return (
     <section className={styles.container}>
@@ -74,33 +89,42 @@ const Projects = () => {
           onClick={toggleIsActive}
           theme="secondary"
         />
-        <Input label="Search by project name:" id="search" type="text" onChange={handleSearch} />
+        <Input
+          label="Search&nbsp;by&nbsp;project&nbsp;name:"
+          id="search"
+          type="text"
+          onChange={handleSearch}
+        />
       </div>
       <Table
         data={projectsData}
         headersName={['Project', 'PM', 'Description', 'Client', 'Start Date', 'End Date']}
-        headers={['name', 'pmValue', 'description', 'client', 'startDate', 'endDate']}
+        headers={['name', 'pmValue', 'descriptionFormat', 'client', 'startDate', 'endDate']}
+        setShowModal={setShowModal}
         editData={editData}
+        setidFromRow={(projectId) => dispatch(setidFromRow(projectId))}
       />
       <Modal
-        isOpen={showDelete}
+        isOpen={showModal}
         handleClose={() => {
-          dispatch(showDeleteMessage(!showDelete));
+          setShowModal(false);
         }}
       >
-        <DeleteMessage
+        <ChangeStatusMessage
           handleClose={() => {
-            dispatch(showDeleteMessage(!showDelete));
+            setShowModal(false);
           }}
-          idFromRow={deleteInfo}
-          deleteItem={deleteHandler}
-          setShowModal={(show) => dispatch(showDeleteMessage(show))}
+          resourceName={'this project'}
+          operation={isActive ? 'disable' : 'activate'}
+          idFromRow={idFromRow}
+          confirmChange={() => lowLogicHandler()}
+          setShowModal={setShowModal}
         />
       </Modal>
       <Modal
         isOpen={showFeedback}
         handleClose={() => {
-          dispatch(showFeedbackMessage(!showFeedback));
+          dispatch(showFeedbackMessage(false));
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
