@@ -1,6 +1,3 @@
-// import { Calendar, momentLocalizer } from 'react-big-calendar';
-// import 'react-big-calendar/lib/css/react-big-calendar.css';
-// import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { getTimesheets } from 'redux/timesheet/thunks';
 import { useSelector } from 'react-redux';
@@ -15,14 +12,13 @@ const Calendario = ({ setShowForm }) => {
   const handleDateClick = () => {
     setShowForm(true);
   };
-  // console.log(handleDateClick);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getTimesheets());
   }, []);
   const userLogged = useSelector((state) => state.auth.authenticated.data);
   const timesheets = useSelector((state) => state.timesheets.list);
-  // console.log(timesheets);
 
   const timesheetForCalendar = timesheets.reduce((acc, timesheet) => {
     if (timesheet.employee?._id === userLogged?._id) {
@@ -37,15 +33,15 @@ const Calendario = ({ setShowForm }) => {
     }
     return acc;
   }, []);
-  console.log(timesheetForCalendar);
+  console.log('calendar', timesheetForCalendar);
 
-  const eventList = timesheets.map((timesheet) => ({
+  const eventList = timesheetForCalendar.map((timesheet) => ({
     ...timesheet,
-    title: `${timesheet.hoursWorked} hours on ${timesheet.project.name}`,
+    title: `${timesheet.hours} hours on ${timesheet.projectName}`,
     date: new Date(timesheet.date),
     allDay: true
   }));
-  console.log(eventList);
+
   return (
     <div>
       <FullCalendar
@@ -56,23 +52,6 @@ const Calendario = ({ setShowForm }) => {
       <Modal />
     </div>
   );
-  //   // require('moment/locale/en.js');
-
-  //   console.log(timesheets);
-  //   console.log(userLogged);
-  //   return (
-  //     <div style={{ height: '400px' }} className="bigCalendar-container">
-  //       <Calendar localizer={localizer} events={eventList} startAccessor="start" endAccessor="end" />
-  //     </div>
-  //   );
 };
 
 export default Calendario;
-
-// export default class DemoApp extends React.Component {
-
-//   render() {
-
-//   }
-
-// }

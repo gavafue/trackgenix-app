@@ -8,6 +8,7 @@ import Modal from 'Components/Shared/Modal';
 import Preloader from 'Components/Shared/Preloader';
 import { showFeedbackMessage } from 'redux/timesheet/actions';
 import Input from 'Components/Shared/Input/InputText';
+import Select from 'Components/Shared/Input/InputSelect';
 import { useForm } from 'react-hook-form';
 import { editTimesheet } from 'redux/timesheet/thunks';
 import Button from 'Components/Shared/Button';
@@ -22,15 +23,30 @@ function EmployeeTimesheets() {
     dispatch(getTimesheets());
   }, []);
 
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
-  const timesheets = useSelector((state) =>
-    state.timesheets.list
-      .filter((timesheet) => timesheet.employee?._id === employeeLogged?._id)
-      .map((timesheet) => ({
-        ...timesheet,
-        projectName: timesheet?.project?.name || 'Project not found'
-      }))
-  );
+  const employeeLogged = useSelector((state) => state.auth.authenticated.data);
+  const allTimesheets = useSelector((state) => state.timesheets.list);
+
+  const timesheets = allTimesheets.reduce((acc, timesheet) => {
+    const employeeTimesheet = timesheet.employee?._id === employeeLogged?._id;
+    if (employeeTimesheet) {
+      return [
+        ...acc,
+        {
+          ...timesheet,
+          projectName: timesheet?.project?.name || 'Project not found'
+        }
+      ];
+    }
+    return acc;
+  }, []);
+  const arrayToSelect = timesheets.map((timesheet) => {
+    return {
+      id: timesheet._id,
+      optionContent: `${timesheet.projectName}`
+    };
+  });
+  console.log('array', arrayToSelect);
+
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const isPending = useSelector((state) => state.timesheets.isPending);
   const selectedTimesheet = useSelector((state) => state.timesheets.timesheetSelected);
@@ -92,7 +108,7 @@ function EmployeeTimesheets() {
           headers={['projectName', 'workDescription', 'weekSprint', 'hoursProject', 'hoursWorked']}
         />
       </EmployeeTable>
-      <Calendario />
+      <Calendario setShowForm={setShowForm} />
       <Modal
         isOpen={showForm}
         handleClose={() => {
@@ -100,27 +116,28 @@ function EmployeeTimesheets() {
         }}
       >
         <form className={styles.form} onSubmit={handleSubmit(onSubmitAddHours)}>
-          <Input
+          {/* <Input
             name="timesheetId"
             register={register}
             label="Timesheet Id"
             error={errors.timesheetId?.message}
             disabled="disabled"
-          ></Input>
-          <Input
+          ></Input> */}
+          <Select
             name="timesheetName"
             register={register}
             label="Name of the project"
             error={errors.timesheetName?.message}
             disabled="disabled"
-          ></Input>
-          <Input
+            arrayToMap={arrayToSelect}
+          ></Select>
+          {/* <Input
             name="hoursWorked"
             register={register}
             label="Hours Worked"
             error={errors.hoursWorked?.message}
             disabled="disabled"
-          ></Input>
+          ></Input> */}
           <Input
             name="addHoursWorked"
             type="number"
