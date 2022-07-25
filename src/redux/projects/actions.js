@@ -18,7 +18,10 @@ import {
   GET_SELECTED_PROJECT,
   CLEAN_SELECTED_PROJECT,
   SET_INFO_TO_SHOW,
-  SHOW_INFO
+  SHOW_INFO,
+  EDIT_PROJECT_STATUS_ERROR,
+  EDIT_PROJECT_STATUS_SUCCESS,
+  EDIT_PROJECT_STATUS_PENDING
 } from './constants';
 
 export const getProjectsSuccess = (tasks) => ({
@@ -114,4 +117,18 @@ export const getSelectedProject = (project) => ({
 
 export const cleanSelectedProject = () => ({
   type: CLEAN_SELECTED_PROJECT
+});
+
+export const editProjectStatusPending = () => ({
+  type: EDIT_PROJECT_STATUS_PENDING
+});
+
+export const editProjectStatusSuccess = (projectEdited) => ({
+  type: EDIT_PROJECT_STATUS_SUCCESS,
+  payload: projectEdited
+});
+
+export const editProjectStatusError = (error) => ({
+  type: EDIT_PROJECT_STATUS_ERROR,
+  payload: error
 });

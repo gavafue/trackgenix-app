@@ -1,8 +1,12 @@
 .container {
-  flex: 8;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  width: 100%;
+  margin: 2%
+}
+
+.button{
+  margin: 2%
 }

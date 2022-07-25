@@ -46,7 +46,6 @@ function EmployeeTimesheets() {
   });
 
   const onSubmitAddHours = (data, event) => {
-    console.log(selectedTimesheet);
     event.preventDefault();
     const URL = process.env.REACT_APP_API_URL;
     const options = {

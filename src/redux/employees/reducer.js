@@ -19,7 +19,10 @@ import {
   CLEAN_SELECTED_EMPLOYEE,
   GET_EMPLOYEE_BY_ID_ERROR,
   GET_EMPLOYEE_BY_ID_PENDING,
-  GET_EMPLOYEE_BY_ID_SUCCESS
+  GET_EMPLOYEE_BY_ID_SUCCESS,
+  EDIT_EMPLOYEE_STATUS_ERROR,
+  EDIT_EMPLOYEE_STATUS_PENDING,
+  EDIT_EMPLOYEE_STATUS_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -160,6 +163,28 @@ export const employeesReducer = (state = initialState, action) => {
         isPending: false
       };
     }
+    case EDIT_EMPLOYEE_STATUS_PENDING:
+      return {
+        ...state,
+        isPending: true
+      };
+    case EDIT_EMPLOYEE_STATUS_SUCCESS:
+      return {
+        ...state,
+        list: state.list.map((employee) => {
+          if (employee._id === action.payload._id) {
+            return action.payload;
+          }
+          return employee;
+        }),
+        isPending: false
+      };
+    case EDIT_EMPLOYEE_STATUS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isPending: false
+      };
     default:
       return state;
   }

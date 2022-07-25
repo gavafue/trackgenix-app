@@ -18,7 +18,10 @@ import {
   EDIT_PROJECT_SUCCESS,
   GET_SELECTED_PROJECT,
   CLEAN_SELECTED_PROJECT,
-  SHOW_INFO
+  SHOW_INFO,
+  EDIT_PROJECT_STATUS_ERROR,
+  EDIT_PROJECT_STATUS_PENDING,
+  EDIT_PROJECT_STATUS_SUCCESS
 } from './constants';
 
 const initialState = {
@@ -150,6 +153,28 @@ export const projectsReducer = (state = initialState, action) => {
       return {
         ...state,
         projectSelected: {},
+        isPending: false
+      };
+    case EDIT_PROJECT_STATUS_PENDING:
+      return {
+        ...state,
+        isPending: true
+      };
+    case EDIT_PROJECT_STATUS_SUCCESS:
+      return {
+        ...state,
+        list: state.list.map((project) => {
+          if (project._id === action.payload._id) {
+            return action.payload;
+          }
+          return project;
+        }),
+        isPending: false
+      };
+    case EDIT_PROJECT_STATUS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
         isPending: false
       };
     default:

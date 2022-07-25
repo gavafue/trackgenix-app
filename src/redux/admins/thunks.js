@@ -12,7 +12,10 @@ import {
   postAdminError,
   editAdminPending,
   editAdminError,
-  editAdminSuccess
+  editAdminSuccess,
+  editAdminStatusError,
+  editAdminStatusPending,
+  editAdminStatusSuccess
 } from './actions';
 
 export const getAdmins = () => {
@@ -118,6 +121,41 @@ export const editAdmin = (options) => {
       .catch((error) => {
         console.log(error);
         dispatch(editAdminError(error.toString()));
+      });
+  };
+};
+
+export const editAdminStatus = (options) => {
+  return (dispatch) => {
+    dispatch(editAdminStatusPending());
+    fetch(options.url, options)
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.error) {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editAdminStatusError(response.message));
+        } else {
+          dispatch(editAdminStatusSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(editAdminStatusError(error.toString()));
       });
   };
 };
