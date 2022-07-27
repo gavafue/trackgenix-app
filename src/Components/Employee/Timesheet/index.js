@@ -21,15 +21,14 @@ function EmployeeTimesheets() {
     dispatch(getTimesheets());
   }, []);
 
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
-  const timesheets = useSelector((state) =>
-    state.timesheets.list
-      .filter((timesheet) => timesheet.employee?._id === employeeLogged?._id)
-      .map((timesheet) => ({
-        ...timesheet,
-        projectName: timesheet?.project?.name || 'Project not found'
-      }))
-  );
+  const userLogged = useSelector((state) => state.auth.authenticated.data);
+  const timesheets = useSelector((state) => state.timesheets.list);
+  const employeeTimesheets = timesheets
+    .map((timesheet) => ({
+      ...timesheet,
+      projectName: timesheet?.project?.name || 'Project not found'
+    }))
+    .filter((timesheet) => timesheet.employee?._id === userLogged._id);
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const isPending = useSelector((state) => state.timesheets.isPending);
   const selectedTimesheet = useSelector((state) => state.timesheets.timesheetSelected);
@@ -86,7 +85,7 @@ function EmployeeTimesheets() {
       >
         <TimesheetTableContent
           setShowForm={setShowForm}
-          data={timesheets}
+          data={employeeTimesheets}
           resetFormAddHours={reset}
           headers={['projectName', 'workDescription', 'weekSprint', 'hoursProject', 'hoursWorked']}
         />
