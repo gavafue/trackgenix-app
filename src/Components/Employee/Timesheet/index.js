@@ -1,30 +1,45 @@
 import styles from './timesheet.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import EmployeeTable from 'Components/Employee/TableAndContents';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheets } from 'redux/timesheet/thunks';
 import TimesheetTableContent from 'Components/Employee/TableAndContents/Content/timesheetTableContent';
-import Modal from 'Components/Shared/Modal';
 import Preloader from 'Components/Shared/Preloader';
-import { showFeedbackMessage } from 'redux/timesheet/actions';
-import Input from 'Components/Shared/Input/InputText';
-import Select from 'Components/Shared/Input/InputSelect';
-import { useForm } from 'react-hook-form';
-import { editTimesheet } from 'redux/timesheet/thunks';
-import Button from 'Components/Shared/Button';
-import FeedbackMessage from 'Components/Shared/FeedbackMessage';
-import { joiResolver } from '@hookform/resolvers/joi';
-import employeeTimesheetValidation from 'validations/employeeTimesheet';
 import Calendario from '../Calendar';
+import { getProjects } from 'redux/projects/thunks';
 
 function EmployeeTimesheets() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getTimesheets());
+    dispatch(getProjects());
   }, []);
 
   const employeeLogged = useSelector((state) => state.auth.authenticated.data);
   const allTimesheets = useSelector((state) => state.timesheets.list);
+  const projects = useSelector((state) => state.projects.list);
+
+  //ARRAY OF PROJECTS
+  const employeeProjects = projects.reduce((acc, project) => {
+    const assignedProject = project.members.find((employee) => {
+      return employee.name?._id === employeeLogged?._id;
+    });
+    if (assignedProject || project.pm._id === employeeLogged._id) {
+      return [
+        ...acc,
+        {
+          projectName: project.name,
+          projectId: project._id,
+          status: project.active ? 'Active' : 'Inactive',
+          client: project.client,
+          description: project.description,
+          role: assignedProject?.role || 'PM',
+          rate: assignedProject?.rate
+        }
+      ];
+    }
+    return acc;
+  }, []);
 
   const timesheets = allTimesheets.reduce((acc, timesheet) => {
     const employeeTimesheet = timesheet.employee?._id === employeeLogged?._id;
@@ -39,123 +54,46 @@ function EmployeeTimesheets() {
     }
     return acc;
   }, []);
-  const arrayToSelect = timesheets.map((timesheet) => {
-    return {
-      id: timesheet._id,
-      optionContent: `${timesheet.projectName}`
-    };
-  });
-  console.log('array', arrayToSelect);
 
-  const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const isPending = useSelector((state) => state.timesheets.isPending);
-  const selectedTimesheet = useSelector((state) => state.timesheets.timesheetSelected);
-  const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
-  const [showForm, setShowForm] = useState(false);
 
-  const {
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors }
-  } = useForm({
-    mode: 'onSubmit',
-    resolver: joiResolver(employeeTimesheetValidation)
-  });
-
-  const onSubmitAddHours = (data, event) => {
-    event.preventDefault();
-    const URL = process.env.REACT_APP_API_URL;
-    const options = {
-      method: 'PUT',
-      url: `${URL}/timesheets/${selectedTimesheet._id}`,
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        date: selectedTimesheet.date,
-        project: selectedTimesheet.project?._id,
-        employee: selectedTimesheet.employee?._id,
-        hoursProject: selectedTimesheet.hoursProject,
-        weekSprint: selectedTimesheet.weekSprint,
-        workDescription: selectedTimesheet.workDescription,
-        hoursWorked: parseInt(data.hoursWorked) + parseInt(data.addHoursWorked)
-      })
-    };
-    dispatch(editTimesheet(options));
-    reset({
-      addHoursWorked: ''
-    });
-    setShowForm(false);
-  };
+  // const onSubmitAddHours = (data, event) => {
+  //   event.preventDefault();
+  //   const URL = process.env.REACT_APP_API_URL;
+  //   const options = {
+  //     method: 'PUT',
+  //     url: `${URL}/timesheets/${selectedTimesheet._id}`,
+  //     headers: {
+  //       'Content-type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       date: selectedTimesheet.date,
+  //       project: selectedTimesheet.project?._id,
+  //       employee: selectedTimesheet.employee?._id,
+  //       hoursProject: selectedTimesheet.hoursProject,
+  //       weekSprint: selectedTimesheet.weekSprint,
+  //       workDescription: selectedTimesheet.workDescription,
+  //       hoursWorked: parseInt(data.hoursWorked) + parseInt(data.addHoursWorked)
+  //     })
+  //   };
+  //   dispatch(editTimesheet(options));
+  //   reset({
+  //     addHoursWorked: ''
+  //   });
+  //   setShowForm(false);
+  // };
 
   return (
     <section className={styles.container}>
       <h2>Your Timesheets</h2>
-      <EmployeeTable
-        headersName={[
-          'Project',
-          'Work Description',
-          'Week Sprint',
-          'Hours Projected',
-          'Hours Worked'
-        ]}
-      >
+      <Calendario timesheetForCalendar={timesheets} />
+      <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
         <TimesheetTableContent
-          setShowForm={setShowForm}
-          data={timesheets}
-          resetFormAddHours={reset}
-          headers={['projectName', 'workDescription', 'weekSprint', 'hoursProject', 'hoursWorked']}
+          // setShowForm={setShowForm}
+          data={employeeProjects}
+          headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
         />
       </EmployeeTable>
-      <Calendario setShowForm={setShowForm} />
-      <Modal
-        isOpen={showForm}
-        handleClose={() => {
-          setShowForm(false);
-        }}
-      >
-        <form className={styles.form} onSubmit={handleSubmit(onSubmitAddHours)}>
-          {/* <Input
-            name="timesheetId"
-            register={register}
-            label="Timesheet Id"
-            error={errors.timesheetId?.message}
-            disabled="disabled"
-          ></Input> */}
-          <Select
-            name="timesheetName"
-            register={register}
-            label="Name of the project"
-            error={errors.timesheetName?.message}
-            disabled="disabled"
-            arrayToMap={arrayToSelect}
-          ></Select>
-          {/* <Input
-            name="hoursWorked"
-            register={register}
-            label="Hours Worked"
-            error={errors.hoursWorked?.message}
-            disabled="disabled"
-          ></Input> */}
-          <Input
-            name="addHoursWorked"
-            type="number"
-            register={register}
-            error={errors.addHoursWorked?.message}
-            label="Hours to add"
-          ></Input>
-          <Button type="submit" label="Submit" />
-        </form>
-      </Modal>
-      <Modal
-        isOpen={showFeedback}
-        handleClose={() => {
-          dispatch(showFeedbackMessage(false));
-        }}
-      >
-        <FeedbackMessage infoForFeedback={feedbackInfo} />
-      </Modal>
       {isPending && <Preloader />}
     </section>
   );

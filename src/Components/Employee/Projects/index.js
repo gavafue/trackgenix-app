@@ -16,7 +16,7 @@ const Projects = () => {
   }, []);
 
   const projects = useSelector((state) => state.projects.list);
-  const employeeLogged = useSelector((state) => state.employees.employeeLogged);
+  const employeeLogged = useSelector((state) => state.auth.authenticated.data);
 
   const employeeProjects = projects.reduce((acc, project) => {
     const assignedProject = project.members.find((employee) => {

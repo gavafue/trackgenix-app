@@ -1,11 +1,16 @@
 import React from 'react';
 import styles from 'Components/Shared/Table/TableContent/tableContent.module.css';
-// import Button from 'Components/Shared/Button';
-// import { useDispatch } from 'react-redux';
-// import { selectOneTimesheet } from 'redux/timesheet/actions';
+import Button from 'Components/Shared/Button';
+import { useDispatch } from 'react-redux';
+import { getSelectedProject } from 'redux/projects/actions';
+import { useHistory } from 'react-router-dom';
 
-const TimesheetTableContent = ({ headers, data /* setShowForm, resetFormAddHours */ }) => {
-  // const dispatch = useDispatch();
+const TimesheetTableContent = ({ headers, data }) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const moveToAddTimesheet = () => {
+    history.push('/employee/timesheet/addNewTimesheet');
+  };
   return (
     <tbody>
       {data.map((row) => {
@@ -18,21 +23,16 @@ const TimesheetTableContent = ({ headers, data /* setShowForm, resetFormAddHours
                 </td>
               );
             })}
-            {/* <td className={styles.rows}>
+            <td className={styles.rows}>
               <Button
-                label="Add hours +"
+                label="Add timesheet +"
                 theme="secondary"
                 onClick={() => {
-                  dispatch(selectOneTimesheet(row));
-                  resetFormAddHours({
-                    timesheetId: row._id,
-                    timesheetName: row.project?.name,
-                    hoursWorked: row.hoursWorked
-                  });
-                  setShowForm(true);
+                  dispatch(getSelectedProject(row));
+                  moveToAddTimesheet();
                 }}
               />
-            </td> */}
+            </td>
           </tr>
         );
       })}
