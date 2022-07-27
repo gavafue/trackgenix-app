@@ -159,7 +159,7 @@ const ProfileForm = () => {
           register={register}
           id="password"
           type="password"
-          placeholder="Enter your password"
+          placeholder="CAUTION: this will edit your password"
           error={errors.password?.message}
           name="password"
           required
@@ -170,7 +170,7 @@ const ProfileForm = () => {
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
           if (feedbackInfo.title !== 'Something went wrong') {
-            history.push(`/admin/home/`);
+            history.push(`/admin/`);
           }
         }}
       >
