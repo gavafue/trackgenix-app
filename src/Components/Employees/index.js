@@ -7,26 +7,32 @@ import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import Button from 'Components/Shared/Button';
 import Preloader from 'Components/Shared/Preloader';
 import Input from 'Components/Shared/Input/InputText';
+import ChangeStatusMessage from 'Components/Shared/ChangeStatusMessage';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEmployee } from 'redux/employees/thunks';
+import { getEmployee, editEmployeeStatus } from 'redux/employees/thunks';
 import {
-  showDeleteMessage,
   showFeedbackMessage,
   getSelectedEmployee,
-  cleanSelectedEmployee
+  cleanSelectedEmployee,
+  setidFromRow
 } from 'redux/employees/actions';
-
 function Employees() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const employees = useSelector((state) => state.employees.list);
   const isPending = useSelector((state) => state.employees.isPending);
   const feedbackInfo = useSelector((state) => state.employees.infoForFeedback);
   const showFeedback = useSelector((state) => state.employees.showFeedbackMessage);
+  const idFromRow = useSelector((state) => state.employees.idFromRow);
   const [isActive, setIsActive] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState('');
   const toggleIsActive = () => {
     setIsActive((current) => !current);
   };
-  const history = useHistory();
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
   const editData = (row) => {
     dispatch(getSelectedEmployee(row));
     history.push(`/employees/form/`);
@@ -39,12 +45,6 @@ function Employees() {
     dispatch(getEmployee());
   }, []);
 
-  const [search, setSearch] = useState('');
-
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-  };
-
   const employeesData = employees.map((employee) => {
     if (isActive && employee.active && employee.email?.toLowerCase().includes(search.toLowerCase()))
       return employee;
@@ -55,6 +55,17 @@ function Employees() {
     )
       return employee;
   });
+  const lowLogicHandler = () => {
+    const options = {
+      method: 'PUT',
+      url: `${process.env.REACT_APP_API_URL}/employees/${idFromRow}`,
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({
+        active: !isActive
+      })
+    };
+    dispatch(editEmployeeStatus(options));
+  };
 
   return (
     <section className={styles.container}>
@@ -66,19 +77,37 @@ function Employees() {
           onClick={toggleIsActive}
           theme="secondary"
         />
-        <Input label="Search by email:" id="search" type="text" onChange={handleSearch} />
+        <Input label="Search&nbsp;by&nbsp;email:" id="search" type="text" onChange={handleSearch} />
       </div>
       <Table
         data={employeesData}
         headersName={['Name', 'Last Name', 'Email', 'Phone']}
         headers={['firstName', 'lastName', 'email', 'phone']}
-        setShowModal={(boolean) => dispatch(showDeleteMessage(boolean))}
+        setShowModal={setShowModal}
         editData={editData}
+        setidFromRow={(employeeId) => dispatch(setidFromRow(employeeId))}
       />
+      <Modal
+        isOpen={showModal}
+        handleClose={() => {
+          setShowModal(false);
+        }}
+      >
+        <ChangeStatusMessage
+          handleClose={() => {
+            setShowModal(false);
+          }}
+          resourceName={'this employee'}
+          operation={isActive ? 'disable' : 'activate'}
+          idFromRow={idFromRow}
+          confirmChange={() => lowLogicHandler()}
+          setShowModal={setShowModal}
+        />
+      </Modal>
       <Modal
         isOpen={showFeedback}
         handleClose={() => {
-          dispatch(showFeedbackMessage(!showFeedback));
+          dispatch(showFeedbackMessage(false));
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />

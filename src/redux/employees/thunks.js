@@ -15,7 +15,10 @@ import {
   editEmployeeSuccess,
   getEmployeeByIdError,
   getEmployeeByIdPending,
-  getEmployeeByIdSuccess
+  getEmployeeByIdSuccess,
+  editEmployeeStatusError,
+  editEmployeeStatusPending,
+  editEmployeeStatusSuccess
 } from './actions';
 
 export const getEmployee = () => {
@@ -126,6 +129,42 @@ export const getEmployeeById = (id) => {
       })
       .catch((error) => {
         dispatch(getEmployeeByIdError(error.toString()));
+      });
+  };
+};
+
+export const editEmployeeStatus = (options) => {
+  return (dispatch) => {
+    dispatch(editEmployeeStatusPending());
+    fetch(options.url, options)
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.error) {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editEmployeeStatusError(response.message));
+        } else {
+          dispatch(editEmployeeStatusSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(getEmployee());
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(editEmployeeStatusError(error.toString()));
       });
   };
 };

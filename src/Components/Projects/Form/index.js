@@ -26,7 +26,7 @@ const Form = () => {
   const projectSelected = useSelector((state) => state.projects.projectSelected);
   const isProjectSelected = Boolean(Object.keys(projectSelected).length);
   const URL = process.env.REACT_APP_API_URL;
-
+  console.log(projectSelected);
   const title = isProjectSelected
     ? `Editing ${projectSelected.name} projects's information.`
     : 'Add a Project';

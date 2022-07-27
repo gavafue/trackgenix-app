@@ -1,16 +1,30 @@
-.container{
-  margin: 1%;
-  background-color:#fff;
-  border:#37386720 2px solid;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.table {
+  margin-block: 1%;
   border-radius: 5px;
+  background-color: #fff;
+  border: #D4D4DF 2px solid;
+  border-spacing: 0;
+  width: 85%;
   text-align: center;
 }
 
 .headers {
   width: 100%;
-  background-color: #37386720;
-  border: #373867 1px solid;
+  background-color: #D4D4DF;
   border-collapse: collapse;
-  text-align: center;
   font-weight: bold;
+  color: #373867;
+}
+
+.headers tr th {
+  padding-block: 10px;
 }

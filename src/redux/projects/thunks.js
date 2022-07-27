@@ -12,7 +12,10 @@ import {
   postProjectPending,
   editProjectPending,
   editProjectError,
-  editProjectSuccess
+  editProjectSuccess,
+  editProjectStatusError,
+  editProjectStatusPending,
+  editProjectStatusSuccess
 } from './actions';
 
 export const getProjects = () => {
@@ -116,6 +119,42 @@ export const editProject = (options) => {
       })
       .catch((error) => {
         dispatch(editProjectError(error));
+      });
+  };
+};
+
+export const editProjectStatus = (options) => {
+  return (dispatch) => {
+    dispatch(editProjectStatusPending());
+    fetch(options.url, options)
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.error) {
+          dispatch(
+            setInfoForFeedback({
+              title: 'Something went wrong',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(editProjectStatusError(response.message));
+        } else {
+          dispatch(editProjectStatusSuccess(response.data));
+          dispatch(
+            setInfoForFeedback({
+              title: 'Request done!',
+              description: response.message
+            })
+          );
+          dispatch(showFeedbackMessage(true));
+          dispatch(getProjects());
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(editProjectStatusError(error.toString()));
       });
   };
 };
