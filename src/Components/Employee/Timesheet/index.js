@@ -85,8 +85,9 @@ function EmployeeTimesheets() {
 
   return (
     <section className={styles.container}>
-      <h2>Your Timesheets</h2>
+      <h2>Timesheets</h2>
       <Calendario timesheetForCalendar={timesheets} />
+      <h2>Projects</h2>
       <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
         <TimesheetTableContent
           // setShowForm={setShowForm}

@@ -2,15 +2,11 @@ import Joi from 'joi';
 
 const timesheetsValidation = Joi.object({
   project: Joi.string().required(),
-  employee: Joi.string().required(),
-  weekSprint: Joi.number()
-    .min(2)
-    .max(6)
-    .messages({
-      'number.min': 'Sprint must be at least 2 weeks long',
-      'number.max': 'Sprint cannot be more than 6 weeks long'
-    })
-    .required(),
+  employee: Joi.string(),
+  weekSprint: Joi.number().min(2).max(6).messages({
+    'number.min': 'Sprint must be at least 2 weeks long',
+    'number.max': 'Sprint cannot be more than 6 weeks long'
+  }),
   date: Joi.date().required(),
   hoursWorked: Joi.number()
     .min(1)
@@ -20,14 +16,10 @@ const timesheetsValidation = Joi.object({
       'number.max': 'Cannot add more than 100 hours'
     })
     .required(),
-  hoursProject: Joi.number()
-    .min(1)
-    .max(1000)
-    .messages({
-      'number.min': 'Must add at least 1 hour to submit',
-      'number.max': 'Cannot add more than 1000 hours'
-    })
-    .required(),
+  hoursProject: Joi.number().min(1).max(1000).messages({
+    'number.min': 'Must add at least 1 hour to submit',
+    'number.max': 'Cannot add more than 1000 hours'
+  }),
   workDescription: Joi.string()
     .min(10)
     .max(500)

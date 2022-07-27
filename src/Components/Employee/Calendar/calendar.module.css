@@ -1,4 +1,10 @@
 .container {
-  margin: 5%;
-  width: 60%
+  margin-bottom: 5%;
+  width: 60%;
+  align-items: center;
+  max-height: 1000px;
+}
+
+h2{
+  text-align: center;
 }
