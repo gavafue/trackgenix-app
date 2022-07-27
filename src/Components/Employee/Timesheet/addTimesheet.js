@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import styles from './timesheet.module.css';
+import form from './form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getTimesheets } from 'redux/timesheet/thunks';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { addTimesheet } from 'redux/timesheet/thunks';
-import SharedForm from 'Components/Shared/Form';
 import Input from 'Components/Shared/Input/InputText';
 import timesheetsValidation from 'validations/timesheets';
 import Calendar from '../Calendar';
-import Modal from 'Components/Shared/Modal';
+import ModalS from 'Components/Shared/Modal2';
 import EmployeeTable from 'Components/Employee/TableAndContents';
 import ProjectsTableContent from '../TableAndContents/Content/projectsTableContent';
+import Button from 'Components/Shared/Button';
+import Modal from 'Components/Shared/Modal';
+import Preloader from 'Components/Shared/Preloader';
+import FeedbackMessage from 'Components/Shared/FeedbackMessage';
+import { showFeedbackMessage } from 'redux/timesheet/actions';
+import { useHistory } from 'react-router-dom';
+
 const AddNewTimesheet = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getTimesheets());
@@ -22,6 +30,9 @@ const AddNewTimesheet = () => {
   const selectedProject = useSelector((state) => state.projects.projectSelected);
   const allTimesheets = useSelector((state) => state.timesheets.list);
   const employeeLogged = useSelector((state) => state.auth.authenticated.data);
+  const isPending = useSelector((state) => state.timesheets.isPending);
+  const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
+  const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const [showForm, setShowForm] = useState(false);
   const {
     handleSubmit,
@@ -64,31 +75,35 @@ const AddNewTimesheet = () => {
       })
     };
     dispatch(addTimesheet(options));
+    setShowForm(false);
   };
   return (
     <div className={styles.container}>
       <h2>Timesheets for {selectedProject.projectName}</h2>
+      <div className={styles.tableContainer}>
+        <EmployeeTable headersName={['Date', 'Hours Worked', 'Task Description']}>
+          <ProjectsTableContent
+            data={timesheetsFromProjectAndUserLogged}
+            headers={['date', 'hoursWorked', 'workDescription']}
+          />
+        </EmployeeTable>
+      </div>
       <h3>Click on date to add new timesheet</h3>
       <Calendar
         reset={reset}
         setShowForm={setShowForm}
         timesheetForCalendar={timesheetsFromProjectAndUserLogged}
       />
-      <EmployeeTable headersName={['Project', 'Date', 'Hours Worked', 'Task Description']}>
-        <ProjectsTableContent
-          data={timesheetsFromProjectAndUserLogged}
-          headers={['projectName', 'date', 'hoursWorked', 'workDescription']}
-        />
-      </EmployeeTable>
-      <Modal isOpen={showForm} handleClose={() => setShowForm(false)}>
+      <Button label="Go back" onClick={() => history.goBack()} theme="secondary" />
+      <ModalS isOpen={showForm} handleClose={() => setShowForm(false)}>
         <div className={styles.container}>
-          <SharedForm onSubmit={handleSubmit(onSubmit)} header={'Add Timesheet'}>
+          <form onSubmit={handleSubmit(onSubmit)} className={form.form}>
+            <div className={form.header}>Add New Timesheet</div>
             <Input
               label="Project"
               id="project"
               name="project"
               value={selectedProject.projectName}
-              // disabled
               register={register}
               error={errors.project?.message}
             />
@@ -122,9 +137,21 @@ const AddNewTimesheet = () => {
               error={errors.workDescription?.message}
               required
             />
-          </SharedForm>
+            <div className={form.submit}>
+              <Button type="submit" label="Submit" />
+            </div>
+          </form>
         </div>
+      </ModalS>
+      <Modal
+        isOpen={showFeedback}
+        handleClose={() => {
+          dispatch(showFeedbackMessage(!showFeedback));
+        }}
+      >
+        <FeedbackMessage infoForFeedback={feedbackInfo} />
       </Modal>
+      {isPending && <Preloader />}
     </div>
   );
 };
