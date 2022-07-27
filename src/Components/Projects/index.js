@@ -36,7 +36,7 @@ const Projects = () => {
   };
   const editData = (row) => {
     dispatch(getSelectedProject(row));
-    history.push(`/projects/form/`);
+    history.push(`${location.pathname}/form/`);
   };
   useEffect(() => {
     dispatch(cleanSelectedProject());
@@ -83,7 +83,7 @@ const Projects = () => {
     <section className={styles.container}>
       <h2>Projects</h2>
       <div>
-        <Button label="Add new project" onClick={() => history.push(`/projects/form`)} />
+        <Button label="Add new project" onClick={() => history.push(`${location.pathname}/form`)} />
         <Button
           label={`Show ${!isActive ? 'Active' : 'Inactive'}`}
           onClick={toggleIsActive}
