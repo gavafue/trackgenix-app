@@ -24,8 +24,8 @@ export const superAdminNavbar = [
 
 export const adminNavbar = [
   { path: '/admin', name: 'Home' },
-  { path: '/employees', name: 'Employees' },
-  { path: '/projects', name: 'Projects' },
+  { path: '/admin/employees', name: 'Employees' },
+  { path: '/admin/projects', name: 'Projects' },
   { path: '/admin/profile', name: 'Edit Profile' }
 ];
 
