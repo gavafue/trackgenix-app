@@ -10,7 +10,7 @@ import { addTimesheet } from 'redux/timesheet/thunks';
 import Input from 'Components/Shared/Input/InputText';
 import timesheetsValidation from 'validations/timesheets';
 import Calendar from '../../Calendar';
-import ModalS from 'Components/Shared/Modal2';
+import WiderModal from 'Components/Shared/WiderModal';
 import EmployeeTable from 'Components/Employee/TableAndContents';
 import ProjectsTableContent from '../../TableAndContents/Content/projectsTableContent';
 import Button from 'Components/Shared/Button';
@@ -101,7 +101,7 @@ const AddNewTimesheet = () => {
         timesheetForCalendar={timesheetsFromProjectAndUserLogged}
       />
       <Button label="Go back" onClick={() => history.goBack()} theme="secondary" />
-      <ModalS isOpen={showForm} handleClose={() => setShowForm(false)}>
+      <WiderModal isOpen={showForm} handleClose={() => setShowForm(false)}>
         <div className={styles.container}>
           <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <div className={styles.header}>Add New Timesheet</div>
@@ -148,7 +148,7 @@ const AddNewTimesheet = () => {
             </div>
           </form>
         </div>
-      </ModalS>
+      </WiderModal>
       <Modal
         isOpen={showFeedback}
         handleClose={() => {
