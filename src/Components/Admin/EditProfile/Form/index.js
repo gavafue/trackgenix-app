@@ -46,7 +46,6 @@ const ProfileForm = () => {
         dateBirth: data.dateBirth,
         city: data.city,
         zip: data.zip,
-        password: data.password,
         active: true
       })
     };
@@ -67,7 +66,6 @@ const ProfileForm = () => {
       zip: adminLogged?.zip,
       phone: adminLogged?.phone,
       dateBirth: adminLogged?.dateBirth?.slice(0, 10),
-      password: '',
       active: true
     });
   }, [adminLogged]);
@@ -152,16 +150,6 @@ const ProfileForm = () => {
           placeholder="Enter your postal code"
           register={register}
           error={errors.zip?.message}
-          required
-        />
-        <Input
-          label="Password"
-          register={register}
-          id="password"
-          type="password"
-          placeholder="CAUTION: this will edit your password"
-          error={errors.password?.message}
-          name="password"
           required
         />
       </Form>
