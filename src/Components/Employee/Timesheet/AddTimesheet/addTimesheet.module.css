@@ -22,3 +22,17 @@
   align-self: center;
   margin: 2%;
 }
+
+.tableContainer{
+  width: 65%;
+  margin-bottom: 5%;
+}
+
+.container {
+  flex: 8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 5%;
+}
