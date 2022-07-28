@@ -35,7 +35,7 @@ function Employees() {
   };
   const editData = (row) => {
     dispatch(getSelectedEmployee(row));
-    history.push(`/employees/form/`);
+    history.push(`${location.pathname}/form/`);
   };
   const createEmployee = () => {
     history.push('/register/employee');
