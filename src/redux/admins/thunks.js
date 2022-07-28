@@ -144,6 +144,7 @@ export const editAdminStatus = (options) => {
           dispatch(editAdminStatusError(response.message));
         } else {
           dispatch(editAdminStatusSuccess(response.data));
+          dispatch(getAdmins());
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',

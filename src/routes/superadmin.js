@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import AdminList from 'Components/SuperAdmin/AdminsList/index';
 import AddNewAdmin from 'Components/SuperAdmin/RegisterAdmin/index';
-import Home from 'Components/Shared/Home';
+import Home from 'Components/SuperAdmin/Home';
 
 const Superadmin = () => {
   return (

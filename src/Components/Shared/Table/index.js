@@ -9,7 +9,8 @@ const Table = ({
   editData,
   setShowModal,
   setidFromRow,
-  lowLogic = true
+  lowLogic = true,
+  getSelected
 }) => {
   return (
     <section className={styles.container}>
@@ -29,6 +30,7 @@ const Table = ({
           setShowModal={setShowModal}
           setidFromRow={setidFromRow}
           lowLogic={lowLogic}
+          getSelected={getSelected}
         />
       </table>
     </section>

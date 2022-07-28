@@ -8,5 +8,9 @@
 }
 
 .button{
-  margin: 2%
+  margin: 2% 0% 0% 0%;
+}
+
+.searchBar{
+  margin: 2% 0% 0% 0%;
 }
