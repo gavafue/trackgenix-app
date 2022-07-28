@@ -23,8 +23,13 @@ import { useHistory } from 'react-router-dom';
 const AddNewTimesheet = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  // const [selectedProject, setProjectSelected] = useState({});
+  // const projectSelected = () => {
+  //   setProjectSelected ()
+  // }
   useEffect(() => {
     dispatch(getTimesheets());
+    // dispatch(projectSelected());
   }, []);
   const URL = process.env.REACT_APP_API_URL;
   const selectedProject = useSelector((state) => state.projects.projectSelected);
@@ -34,6 +39,7 @@ const AddNewTimesheet = () => {
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const [showForm, setShowForm] = useState(false);
+  console.log('selected', selectedProject);
   const {
     handleSubmit,
     register,

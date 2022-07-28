@@ -57,32 +57,6 @@ function EmployeeTimesheets() {
 
   const isPending = useSelector((state) => state.timesheets.isPending);
 
-  // const onSubmitAddHours = (data, event) => {
-  //   event.preventDefault();
-  //   const URL = process.env.REACT_APP_API_URL;
-  //   const options = {
-  //     method: 'PUT',
-  //     url: `${URL}/timesheets/${selectedTimesheet._id}`,
-  //     headers: {
-  //       'Content-type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       date: selectedTimesheet.date,
-  //       project: selectedTimesheet.project?._id,
-  //       employee: selectedTimesheet.employee?._id,
-  //       hoursProject: selectedTimesheet.hoursProject,
-  //       weekSprint: selectedTimesheet.weekSprint,
-  //       workDescription: selectedTimesheet.workDescription,
-  //       hoursWorked: parseInt(data.hoursWorked) + parseInt(data.addHoursWorked)
-  //     })
-  //   };
-  //   dispatch(editTimesheet(options));
-  //   reset({
-  //     addHoursWorked: ''
-  //   });
-  //   setShowForm(false);
-  // };
-
   return (
     <section className={styles.container}>
       <h2>Timesheets</h2>
@@ -90,7 +64,6 @@ function EmployeeTimesheets() {
       <h3>Projects</h3>
       <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
         <TimesheetTableContent
-          // setShowForm={setShowForm}
           data={employeeProjects}
           headers={['projectName', 'role', 'rate', 'status', 'client', 'description']}
         />
