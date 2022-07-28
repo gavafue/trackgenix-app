@@ -86,7 +86,7 @@ const Form = () => {
           return { name: item.name?._id, role: item.role, rate: item.rate };
         })
       });
-  }, [employees]);
+  }, [projectSelected]);
 
   return (
     <div className={styles.container}>
