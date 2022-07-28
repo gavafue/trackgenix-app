@@ -1,16 +1,16 @@
 import styles from 'Components/SuperAdmin/AdminsList/index.module.css';
-import Table from 'Components/SuperAdmin/Table';
+import Table from 'Components/Shared/Table';
 import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { editAdminStatus, getAdmins } from 'redux/admins/thunks';
-// import DeleteMessage from 'Components/Shared/DeleteMessage';
 import Preloader from 'Components/Shared/Preloader';
-import { showFeedbackMessage, setidFromRow } from 'redux/admins/actions';
+import { showFeedbackMessage, setidFromRow, getSelectedAdmin } from 'redux/admins/actions';
 import FeedbackMessage from 'Components/Shared/FeedbackMessage';
 import { useHistory } from 'react-router-dom';
 import Button from 'Components/Shared/Button';
 import ChangeStatusMessage from 'Components/Shared/ChangeStatusMessage';
+import Input from 'Components/Shared/Input/InputText';
 
 const AdminsList = () => {
   const [showModal, setShowModal] = useState(false);
@@ -21,23 +21,47 @@ const AdminsList = () => {
   const adminSelected = useSelector((state) => state.admins.adminSelected);
   const history = useHistory();
   const dispatch = useDispatch();
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     dispatch(getAdmins());
   }, []);
 
-  // const editData = (row) => {
-  //   dispatch(getSelectedAdmin(row));
-  //   history.push(`/superadmin/form`);
-  // };
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
 
-  const admins = useSelector((state) => state.admins.list).map((admin) => ({
-    ...admin,
-    fullName: `${admin.name} ${admin.lastName}`,
-    location: admin.city,
-    isActive: admin.active ? 'Active' : 'Inactive'
-  }));
-  const changeStatus = adminSelected.active ? 'disable' : 'activate';
+  const admins = useSelector((state) => state.admins.list);
+
+  const adminsData = admins.map((admin) => {
+    if (
+      admins &&
+      search != '' &&
+      admin.lastName?.toLowerCase() &&
+      admin.name?.toLowerCase().includes(search.toLowerCase())
+    ) {
+      return {
+        ...admin,
+        fullName: `${admin.name} ${admin.lastName}`,
+        location: admin.city,
+        isActive: admin.active ? 'Active' : 'Inactive'
+      };
+    } else if (
+      admins &&
+      !search != '' &&
+      admin.lastName.toLowerCase() &&
+      admin.name?.toLowerCase().includes(search.toLowerCase())
+    ) {
+      return {
+        ...admin,
+        fullName: `${admin.name} ${admin.lastName}`,
+        location: admin.city,
+        isActive: admin.active ? 'Active' : 'Inactive'
+      };
+    }
+  });
+
+  const changeStatus = adminSelected.isActive ? 'disable' : 'activate';
 
   console.log(adminSelected);
   const deleteHandler = () => {
@@ -61,17 +85,25 @@ const AdminsList = () => {
   };
   return (
     <section className={styles.container}>
-      <Table
-        data={admins}
-        headers={['fullName', 'location', 'isActive']}
-        headersName={['Name', 'Location', 'Status']}
-        setShowModal={setShowModal}
-        // editData={editData}
-        getIdFromRow={(adminId) => dispatch(setidFromRow(adminId))}
-      />
       <div className={styles.button}>
         <Button label={'Add admin'} onClick={() => history.push(`/superadmin/addAdmin/`)} />
       </div>
+      <div className={styles.searchBar}>
+        <Input
+          label="Search&nbsp;by&nbsp;Admin's&nbsp;name:"
+          id="search"
+          type="text"
+          onChange={handleSearch}
+        />
+      </div>
+      <Table
+        data={adminsData}
+        headers={['fullName', 'location', 'isActive']}
+        headersName={['Name', 'Location', 'Status']}
+        setShowModal={setShowModal}
+        getSelected={(adminId) => dispatch(getSelectedAdmin(adminId))}
+        setidFromRow={(adminId) => dispatch(setidFromRow(adminId))}
+      />
       <Modal
         isOpen={showModal}
         handleClose={() => {

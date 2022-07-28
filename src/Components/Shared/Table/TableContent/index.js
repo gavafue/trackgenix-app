@@ -1,8 +1,17 @@
 import React from 'react';
 import styles from './tableContent.module.css';
 import Button from 'Components/Shared/Button';
-
-const TableContent = ({ headers, data, editData, setShowModal, setidFromRow, lowLogic }) => {
+import { useDispatch } from 'react-redux';
+const TableContent = ({
+  getSelected,
+  headers,
+  data,
+  editData,
+  setShowModal,
+  setidFromRow,
+  lowLogic
+}) => {
+  const dispatch = useDispatch();
   return (
     <tbody className={styles.container}>
       {data.map((row) => {
@@ -21,11 +30,14 @@ const TableContent = ({ headers, data, editData, setShowModal, setidFromRow, low
                   {editData && <Button onClick={() => editData(row)} label="Edit" />}
                   {setidFromRow && (
                     <Button
-                      label={`${lowLogic ? 'Change state' : 'Delete'}`}
+                      label={`${lowLogic ? 'Change status' : 'Delete'}`}
                       theme="secondary"
                       onClick={() => {
                         setShowModal(true);
                         setidFromRow(row._id);
+                        {
+                          getSelected && dispatch(getSelected(row));
+                        }
                       }}
                     />
                   )}
