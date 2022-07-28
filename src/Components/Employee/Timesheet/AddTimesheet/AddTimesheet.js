@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styles from './timesheet.module.css';
-import form from './form.module.css';
+// import styles from './timesheet.module.css';
+import styles from 'Components/Employee/Timesheet/AddTimesheet/addTimesheet.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getTimesheets } from 'redux/timesheet/thunks';
@@ -9,10 +9,10 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { addTimesheet } from 'redux/timesheet/thunks';
 import Input from 'Components/Shared/Input/InputText';
 import timesheetsValidation from 'validations/timesheets';
-import Calendar from '../Calendar';
-import ModalS from 'Components/Shared/Modal2';
+import Calendar from '../../Calendar';
+import WiderModal from 'Components/Shared/WiderModal';
 import EmployeeTable from 'Components/Employee/TableAndContents';
-import ProjectsTableContent from '../TableAndContents/Content/projectsTableContent';
+import ProjectsTableContent from '../../TableAndContents/Content/projectsTableContent';
 import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
 import Preloader from 'Components/Shared/Preloader';
@@ -23,13 +23,8 @@ import { useHistory } from 'react-router-dom';
 const AddNewTimesheet = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  // const [selectedProject, setProjectSelected] = useState({});
-  // const projectSelected = () => {
-  //   setProjectSelected ()
-  // }
   useEffect(() => {
     dispatch(getTimesheets());
-    // dispatch(projectSelected());
   }, []);
   const URL = process.env.REACT_APP_API_URL;
   const selectedProject = useSelector((state) => state.projects.projectSelected);
@@ -39,7 +34,6 @@ const AddNewTimesheet = () => {
   const feedbackInfo = useSelector((state) => state.timesheets.infoForFeedback);
   const showFeedback = useSelector((state) => state.timesheets.showFeedbackMessage);
   const [showForm, setShowForm] = useState(false);
-  console.log('selected', selectedProject);
   const {
     handleSubmit,
     register,
@@ -107,10 +101,10 @@ const AddNewTimesheet = () => {
         timesheetForCalendar={timesheetsFromProjectAndUserLogged}
       />
       <Button label="Go back" onClick={() => history.goBack()} theme="secondary" />
-      <ModalS isOpen={showForm} handleClose={() => setShowForm(false)}>
+      <WiderModal isOpen={showForm} handleClose={() => setShowForm(false)}>
         <div className={styles.container}>
-          <form onSubmit={handleSubmit(onSubmit)} className={form.form}>
-            <div className={form.header}>Add New Timesheet</div>
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+            <div className={styles.header}>Add New Timesheet</div>
             <Input
               label="Project"
               id="project"
@@ -149,12 +143,12 @@ const AddNewTimesheet = () => {
               error={errors.workDescription?.message}
               required
             />
-            <div className={form.submit}>
+            <div className={styles.submit}>
               <Button type="submit" label="Submit" />
             </div>
           </form>
         </div>
-      </ModalS>
+      </WiderModal>
       <Modal
         isOpen={showFeedback}
         handleClose={() => {

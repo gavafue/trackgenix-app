@@ -35,7 +35,7 @@ const Form = () => {
       email: employeeLogged?.email,
       country: employeeLogged?.country,
       city: employeeLogged?.city,
-      zip: employeeLogged?.zip,
+      zip: employeeLogged?.zip?.toString(),
       phone: employeeLogged?.phone,
       birthDate: employeeLogged?.birthDate,
       photo: employeeLogged?.photo,
