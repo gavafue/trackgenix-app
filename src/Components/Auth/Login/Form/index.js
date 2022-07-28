@@ -32,7 +32,7 @@ const Form = () => {
   const onSubmit = (credentials) => {
     dispatch(login(credentials)).then((response) => {
       if (response) {
-        const status = JSON.parse(sessionStorage.getItem('userStatus'));
+        const status = useSelector((state) => state.auth.authenticated.data.active);
         switch (response.payload?.role) {
           case 'EMPLOYEE':
             return history.push(status ? '/employee' : '/accountinactive');
