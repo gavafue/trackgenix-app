@@ -37,8 +37,6 @@ export const tokenListener = () => {
       } = await user.getIdTokenResult();
       const userData = await fetchUser({ role }.role, user.email);
       sessionStorage.setItem('token', token);
-      sessionStorage.setItem('role', { role }.role);
-      sessionStorage.setItem('userStatus', userData?.active);
       store.dispatch(
         setAuthentication({
           token,
@@ -48,8 +46,6 @@ export const tokenListener = () => {
       );
     } else {
       sessionStorage.removeItem('token');
-      sessionStorage.removeItem('role');
-      sessionStorage.removeItem('userStatus');
       store.dispatch(setAuthentication({}));
     }
   });

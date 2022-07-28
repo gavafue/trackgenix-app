@@ -1,0 +1,21 @@
+.container {
+  margin-bottom: 15%;
+  width: 60%;
+  align-items: center;
+  max-height: 500px;
+}
+
+h2{
+  text-align: center;
+  color: #373867;
+  width: 100%;
+}
+
+.eventContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+[role=gridcell]:hover {
+  background: #AACE9B50;
+}
