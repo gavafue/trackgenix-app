@@ -1,10 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: RouteComponent, ...props }) => {
-  const role = sessionStorage.getItem('role');
+  const role = useSelector((state) => state.auth.authenticated.role);
   const token = sessionStorage.getItem('token');
-  const status = JSON.parse(sessionStorage.getItem('userStatus'));
+  const status = useSelector((state) => state.auth.authenticated.data.active);
 
   return (
     <Route
