@@ -52,6 +52,7 @@ const AddNewTimesheet = () => {
         ...acc,
         {
           ...timesheet,
+          date: timesheet.date.slice(0, 10),
           projectName: timesheet?.project?.name || 'Project not found'
         }
       ];

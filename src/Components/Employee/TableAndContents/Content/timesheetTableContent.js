@@ -15,10 +15,10 @@ const TimesheetTableContent = ({ headers, data }) => {
     <tbody>
       {data.map((row) => {
         return (
-          <tr key={row._id} id={row._id}>
+          <tr key={row._id} id={row._id} className={styles.rows}>
             {headers.map((header, index) => {
               return (
-                <td key={index} className={styles.rows}>
+                <td key={index} className={styles.cell}>
                   {row[header]}
                 </td>
               );
