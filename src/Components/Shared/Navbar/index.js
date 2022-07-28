@@ -18,6 +18,8 @@ const Navbar = () => {
   const userName =
     userLogged?.firstName && userLogged?.lastName
       ? `${userLogged?.firstName} ${userLogged?.lastName}`
+      : userLogged?.name && userLogged?.lastName
+      ? `${userLogged?.name} ${userLogged?.lastName}`
       : '';
   return (
     <nav className={styles.navbar}>
