@@ -77,6 +77,7 @@ export const addTimesheet = (options) => {
       .then((res) => {
         if (!res.error) {
           dispatch(addTimesheetsSuccess(res.data));
+          dispatch(getTimesheets());
           dispatch(
             setInfoForFeedback({
               title: 'Request done!',
