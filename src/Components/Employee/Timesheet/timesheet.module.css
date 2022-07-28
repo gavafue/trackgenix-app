@@ -4,9 +4,16 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 5%;
 }
+
 .form{
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.tableContainer{
+  width: 65%;
+  margin-bottom: 5%;
 }
