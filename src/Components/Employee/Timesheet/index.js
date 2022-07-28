@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getTimesheets } from 'redux/timesheet/thunks';
 import TimesheetTableContent from 'Components/Employee/TableAndContents/Content/timesheetTableContent';
 import Preloader from 'Components/Shared/Preloader';
-import Calendario from '../Calendar';
+import Calendar from '../Calendar';
 import { getProjects } from 'redux/projects/thunks';
 
 function EmployeeTimesheets() {
@@ -60,7 +60,7 @@ function EmployeeTimesheets() {
   return (
     <section className={styles.container}>
       <h2>Timesheets</h2>
-      <Calendario timesheetForCalendar={timesheets} />
+      <Calendar timesheetForCalendar={timesheets} />
       <h3>Projects</h3>
       <EmployeeTable headersName={['Project', 'Role', 'Rate', 'Status', 'Client', 'Description']}>
         <TimesheetTableContent

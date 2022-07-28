@@ -65,7 +65,11 @@ const AddNewTimesheet = () => {
     }
     return acc;
   }, []);
-  console.log('timesheets', timesheetsFromProjectAndUserLogged);
+  const arrayOfHoursWorked = timesheetsFromProjectAndUserLogged.map(
+    (timesheet) => timesheet.hoursWorked
+  );
+  const totalHours = arrayOfHoursWorked.reduce((a, b) => a + b, 0);
+
   const onSubmit = (data) => {
     const options = {
       method: 'POST',
@@ -87,6 +91,7 @@ const AddNewTimesheet = () => {
   return (
     <div className={styles.container}>
       <h2>Timesheets for {selectedProject.projectName}</h2>
+      <p>You have {totalHours} hours worked in this project.</p>
       <div className={styles.tableContainer}>
         <EmployeeTable headersName={['Date', 'Hours Worked', 'Task Description']}>
           <ProjectsTableContent
