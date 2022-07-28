@@ -14,6 +14,18 @@ import { showFeedbackMessage } from 'redux/admins/actions';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 const ProfileForm = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const isPending = useSelector((state) => state.admins.isPending);
+  const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
+  const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
+  const adminLogged = useSelector((state) => state.auth.authenticated.data);
+  const URL = process.env.REACT_APP_API_URL;
+  const arrayToMapGender = [
+    { id: 'male', optionContent: 'Male' },
+    { id: 'female', optionContent: 'Female' },
+    { id: 'other', optionContent: 'Other' }
+  ];
   const {
     handleSubmit,
     register,
@@ -23,13 +35,6 @@ const ProfileForm = () => {
     mode: 'onChange',
     resolver: joiResolver(adminsValidation)
   });
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const isPending = useSelector((state) => state.admins.isPending);
-  const feedbackInfo = useSelector((state) => state.admins.infoForFeedback);
-  const showFeedback = useSelector((state) => state.admins.showFeedbackMessage);
-  const adminLogged = useSelector((state) => state.auth.authenticated.data);
-  const URL = process.env.REACT_APP_API_URL;
   const onSubmit = (data) => {
     const options = {
       method: 'PUT',
@@ -51,11 +56,6 @@ const ProfileForm = () => {
     };
     dispatch(editAdmin(options));
   };
-  const arrayToMapGender = [
-    { id: 'male', optionContent: 'Male' },
-    { id: 'female', optionContent: 'Female' },
-    { id: 'other', optionContent: 'Other' }
-  ];
   useEffect(() => {
     reset({
       name: adminLogged?.name,
