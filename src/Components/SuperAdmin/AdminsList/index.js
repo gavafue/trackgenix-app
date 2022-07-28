@@ -39,7 +39,6 @@ const AdminsList = () => {
   }));
   const changeStatus = adminSelected.active ? 'disable' : 'activate';
 
-  console.log(adminSelected);
   const deleteHandler = () => {
     const options = {
       headers: { 'Content-type': 'application/json' },

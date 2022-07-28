@@ -7,17 +7,15 @@ import { useState } from 'react';
 import Modal from 'Components/Shared/Modal';
 import { useLocation } from 'react-router-dom';
 
-const Calendario = ({ timesheetForCalendar, setShowForm, reset }) => {
+const Calendar = ({ timesheetForCalendar, setShowForm, reset }) => {
   const [showEvent, setShowEvent] = useState(false);
   const [eventInfo, setEventInfo] = useState('');
   const location = useLocation().pathname;
   const handleEventClick = (e) => {
     setEventInfo(e.event._def.extendedProps);
-    console.log(e);
     setShowEvent(true);
   };
   const handleDateClick = (event) => {
-    console.log(event);
     const date = event.dateStr;
     reset &&
       reset({
@@ -26,7 +24,6 @@ const Calendario = ({ timesheetForCalendar, setShowForm, reset }) => {
 
     setShowForm && setShowForm(true);
   };
-  console.log('timesheeetForCalendar', timesheetForCalendar);
 
   const eventList = timesheetForCalendar.map((timesheet) => {
     const date = new Date(timesheet.date);
@@ -41,8 +38,6 @@ const Calendario = ({ timesheetForCalendar, setShowForm, reset }) => {
       color: '#aace9b'
     };
   });
-
-  console.log(eventList);
 
   return (
     <div className={styles.container}>
@@ -71,4 +66,4 @@ const Calendario = ({ timesheetForCalendar, setShowForm, reset }) => {
   );
 };
 
-export default Calendario;
+export default Calendar;
