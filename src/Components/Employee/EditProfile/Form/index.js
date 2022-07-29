@@ -43,6 +43,7 @@ const Form = () => {
       active: employeeLogged?.active
     });
   }, [employeeLogged]);
+
   const URL = process.env.REACT_APP_API_URL;
 
   const onSubmit = (data) => {
@@ -183,6 +184,7 @@ const Form = () => {
         isOpen={showFeedback}
         handleClose={() => {
           dispatch(showFeedbackMessage(!showFeedback));
+          window.location.reload(false);
         }}
       >
         <FeedbackMessage infoForFeedback={feedbackInfo} />
