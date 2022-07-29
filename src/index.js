@@ -10,6 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
+        <style>@import url(&quot;http://fonts.cdnfonts.com/css/roboto&quot;)</style>
         <Routes />
       </BrowserRouter>
     </Provider>
