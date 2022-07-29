@@ -25,7 +25,7 @@ function Header() {
     <header>
       <div className={styles.container}>
         <div className={styles.title}>{HeaderTitle[location.pathname] ?? 'TRACKGENIX'}</div>
-        <div>
+        <div className={styles.buttons}>
           {!userLogged && !location.pathname.startsWith('/home') && (
             <Button label="Home" onClick={() => history.push('/home')} theme="secondary" />
           )}
