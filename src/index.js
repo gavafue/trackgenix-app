@@ -8,9 +8,9 @@ import Routes from 'routes';
 
 ReactDOM.render(
   <React.StrictMode>
+    <style>@import url(&quot;http://fonts.cdnfonts.com/css/roboto&quot;)</style>
     <Provider store={store}>
       <BrowserRouter>
-        <style>@import url(&quot;http://fonts.cdnfonts.com/css/roboto&quot;)</style>
         <Routes />
       </BrowserRouter>
     </Provider>
