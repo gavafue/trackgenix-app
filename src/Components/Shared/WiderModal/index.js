@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './modal.module.css';
 
-const ModalS = ({ children, isOpen, handleClose }) => {
+const WiderModal = ({ children, isOpen, handleClose }) => {
   if (!isOpen) {
     return null;
   }
@@ -18,4 +18,4 @@ const ModalS = ({ children, isOpen, handleClose }) => {
   );
 };
 
-export default ModalS;
+export default WiderModal;
