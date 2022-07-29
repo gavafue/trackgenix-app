@@ -61,7 +61,7 @@ const AdminsList = () => {
     }
   });
 
-  const changeStatus = adminSelected.isActive ? 'disable' : 'activate';
+  const changeStatus = adminSelected.active ? 'disable' : 'activate';
   const deleteHandler = () => {
     const options = {
       headers: { 'Content-type': 'application/json' },
