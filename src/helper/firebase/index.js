@@ -37,6 +37,7 @@ export const tokenListener = () => {
       } = await user.getIdTokenResult();
       const userData = await fetchUser({ role }.role, user.email);
       sessionStorage.setItem('token', token);
+      sessionStorage.setItem('status', userData?.active);
       store.dispatch(
         setAuthentication({
           token,
