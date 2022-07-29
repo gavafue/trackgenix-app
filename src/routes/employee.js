@@ -4,6 +4,7 @@ import Home from 'Components/Employee/Home';
 import Profile from 'Components/Employee/EditProfile';
 import Timesheet from 'Components/Employee/Timesheet';
 import Projects from 'Components/Employee/Projects';
+import FormEditProject from 'Components/Projects/Form';
 import AddNewTimesheet from 'Components/Employee/Timesheet/AddTimesheet/AddTimesheet';
 
 const Employee = () => {
@@ -12,7 +13,8 @@ const Employee = () => {
       <Route path="/employee/home" component={Home} />
       <Route exact path="/employee/timesheet" component={Timesheet} />
       <Route path="/employee/timesheet/addNewTimesheet" component={AddNewTimesheet} />
-      <Route path="/employee/projects" component={Projects} />
+      <Route exact path="/employee/projects" component={Projects} />
+      <Route path="/employee/projects/edit" component={FormEditProject} />
       <Route path="/employee/profile" component={Profile} />
       <Route path="/">
         <Redirect to="/employee/home" />
