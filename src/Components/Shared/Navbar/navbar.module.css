@@ -8,7 +8,7 @@
 
 .appName {
   background: #232f3e;
-  color: white;
+  color: #fff;
   display: block;
   width: 100%;
   text-align: center;
@@ -50,7 +50,7 @@
 }
 
 .rutes > li > a {
-  font-size: 1rem;
+  font-size: 1.2rem;
   text-decoration: none;
   text-transform: capitalize;
   color: white;

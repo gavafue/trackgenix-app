@@ -4,8 +4,10 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  background-color: white;
+  background-color: #fff;
+  margin: 0% 5% 0% 5%
 }
+
 .home {
   display: flex;
   flex-direction: column;
@@ -14,10 +16,18 @@
   padding: 1rem;
   border-bottom: 3px solid #c4c4c4;
 }
+
+.home h2{
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  text-shadow: 2px 2px 2px #838383;
+}
+
+
 .home div {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
 }
 .home p {
@@ -42,6 +52,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-bottom: 3%;
 }
 .function {
   display: flex;
@@ -54,18 +65,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
   margin-top: 0.5rem;
 }
 .function p {
-  width: 50%;
-  text-align: center;
+  width: 80%;
+  text-align:left;
   font-size: 1rem;
   font-weight: lighter;
+  margin: 0;
 }
+
+.function h4{
+
+}
+
 .function img {
   width: 80px;
   max-width: max-content;
   height: auto;
+  align-self: center;
 }
 .assetsContainer{
   justify-content: center;
@@ -87,7 +106,6 @@
   width: 100%;
 }
 .asset img {
-  margin: 0.5rem;
   width: 40%;
   max-width: max-content;
   height: auto;
@@ -95,7 +113,6 @@
 }
 .asset p {
   width: 70%;
-  margin: 0.5rem;
   text-align: center;
   font-size: 1rem;
   font-weight: lighter;
@@ -103,6 +120,8 @@
 .formContainer {
   display: flex;
   width: 100%;
+  border-bottom: 3px solid #c4c4c4;
+
 }
 .aboutUs div {
   display: flex;
@@ -111,11 +130,9 @@
   align-items: center;
 }
 .aboutUs div p {
-  width: 80%;
-  margin: 1rem;
   text-align: center;
   font-size: 1.2rem;
-  font-weight: bolder;
+  margin-right: 3%;
 }
 .aboutUs div img {
   width: 80%;
@@ -131,6 +148,7 @@
   align-items: center;
   text-align: center;
   width: 100%;
+  margin-bottom: 2%;
 }
 .lists {
   display: flex;
@@ -174,7 +192,6 @@
     margin-left: 5rem;
   }
   .function div {
-    align-items: flex-start;
     margin-left: 1rem;
   }
   .functions-text {
@@ -187,7 +204,7 @@
     align-items: flex-start;
   }
   .asset p {
-    text-align: left;
+    text-align: center;
   }
   .aboutUs div {
     align-items: flex-start;
@@ -212,7 +229,7 @@
   .functionContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    /* justify-content: space-around; */
   }
   .function {
     width: 50%;
