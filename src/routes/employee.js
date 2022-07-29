@@ -4,6 +4,7 @@ import Home from 'Components/Employee/Home';
 import Profile from 'Components/Employee/EditProfile';
 import Timesheet from 'Components/Employee/Timesheet';
 import Projects from 'Components/Employee/Projects';
+import FormEditProject from 'Components/Projects/Form';
 import AddNewTimesheet from 'Components/Employee/Timesheet/AddTimesheet/AddTimesheet';
 
 const Employee = () => {
